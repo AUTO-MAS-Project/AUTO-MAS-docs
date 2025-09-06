@@ -14,12 +14,17 @@ import { googleAnalytics } from "@theojs/lumen";
 import { DocBox, DocBoxCube, DocLinks, DocPill } from "@theojs/lumen";
 import { DocAsideLogo } from "@theojs/lumen";
 import { Aside_Data } from "../data/AsideData";
+import Matomo from "../components/Matomo.vue";
+import { getMatomoConfig } from "../utils/matomo";
 export default {
   extends: DefaultTheme,
   Layout: () => {
     return h(DefaultTheme.Layout, null, {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
-      "layout-bottom": () => h(HomeFooter, { Footer_Data }),
+      "layout-bottom": () => [
+        h(HomeFooter, { Footer_Data }),
+        h(Matomo, { config: getMatomoConfig() })
+      ],
       "home-hero-info-before": () => h(Announcement),
       "aside-outline-before": () => h(ShareButton),
       "aside-ads-before": () => h(DocAsideLogo, { Aside_Data }),
