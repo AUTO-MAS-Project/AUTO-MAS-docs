@@ -53,8 +53,7 @@ export default defineConfig({
     },
     // 修改链接
     editLink: {
-      //https://github.com/ClozyA/AUTOMAA_docs/blob/master/advanced-features.md
-      pattern: 'https://github.com/ClozyA/AUTOMAA_docs/edit/master/:path',
+      pattern: 'https://github.com/AUTO-MAS-Project/AUTO-MAS-docs/edit/master/:path',
       text: '为此页提供修改建议'
     },
     notFound: {
