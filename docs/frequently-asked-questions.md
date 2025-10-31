@@ -52,4 +52,8 @@ date: 2025-04-27
 
 - 请检查是否正确填写模拟器老板键，并确认是否存在按键冲突情况。
 
+### 可以休眠/睡眠运行AUTO_MAS吗？
+
+- **不能**，AUTO_MAS使用Electron框架，采用前后端分离机制，在v5-alpha测试时，前后端采用websocket互相连接，当休眠或睡眠重新启动时，websocket几乎必定会断开，导致
+
 更多问题请参考 <Pill name="AUTO_MAA GitHub Issues" :image="{ light: '/resource/github.svg', dark: '/resource/github-dark.svg', }" link="https://github.com/DLmaster361/AUTO_MAA/issues"/> 。

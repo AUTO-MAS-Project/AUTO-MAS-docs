@@ -23,7 +23,8 @@ export default defineConfig({
         {
           text: "AUTO_MAA 文档",
           items: [
-            { text: "新手上路", link: "/docs/user-guide" },
+            { text: "开始使用", link: "/docs/user-guide" },
+            { text: "MAA用户指南", link: "/docs/user-guide-maa" },
             { text: "进阶功能", link: "/docs/advanced-features" },
             { text: "多开指南", link: "/docs/multi-instance" },
             { text: "通用调度", link: "/docs/general-manager" },
