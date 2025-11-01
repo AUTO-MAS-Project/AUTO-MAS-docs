@@ -10,8 +10,8 @@ export const Footer_Data: FooterData = {
       color: "rgba(255, 87, 51, 1)",
       links: [
         {
-          name: "AUTO_MAA本体GitHub",
-          link: "https://github.com/DLmaster361/AUTO_MAA",
+          name: "AUTO_MAS本体GitHub",
+          link: "https://github.com/AUTO-MAS-Project/AUTO-MAS",
           icon: "octicon:mark-github-16",
         },
       ],
@@ -22,7 +22,7 @@ export const Footer_Data: FooterData = {
       color: "rgba(255, 87, 51, 1)",
       links: [
         {
-          name: "AUTO_MAA文档站GitHub",
+          name: "AUTO_MAS文档站GitHub",
           icon: "octicon:mark-github-16",
           link: "https://github.com/AUTO-MAS-Project/AUTO-MAS-docs",
         },
