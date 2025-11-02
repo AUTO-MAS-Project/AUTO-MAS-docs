@@ -6,7 +6,7 @@
 
 它能设定**多个脚本**的运行模式，启动软件时自动运行、定时自动运行。
 
-![scheduler](..\img\advanched-features\scheduler.png)
+![scheduler](../img/advanced-features/scheduler.png)
 
 ## 用法
 
