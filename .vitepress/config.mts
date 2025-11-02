@@ -32,10 +32,13 @@ export default defineConfig({
                     items: [
                         {text: "开始使用", link: "/docsV5/user-guide"},
                         {text: "MAA用户指南", link: "/docsV5/user-guide-maa"},
-                        {text: "进阶功能", link: "/docsV5/advanced-features",
-                            items:[
-                                {text: "调度队列", link: "/docsV5/"},
-                            ]},
+                        {
+                            text: "进阶功能",
+                            link: "/docsV5/advanced-features/advanced-features",
+                            items: [
+                                {text: "调度队列", link: "/docsV5/advanced-features/scheduler"},
+                            ]
+                        },
                         {text: "多开指南", link: "/docsV5/multi-instance"},
                         {text: "通用调度", link: "/docsV5/general-manager"},
                         {text: "常见问题", link: "/docsV5/frequently-asked-questions"},
