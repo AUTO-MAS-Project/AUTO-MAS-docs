@@ -31,16 +31,23 @@ export default defineConfig({
                     text: "AUTO_MAS V5 文档 ",
                     items: [
                         {text: "开始使用", link: "/docsV5/user-guide"},
-                        {text: "MAA用户指南", link: "/docsV5/user-guide-maa"},
                         {
-                            text: "进阶功能",
-                            link: "/docsV5/advanced-features/advanced-features",
+                            text: "脚本配置",
+                            link: "docsV5/script-guide/__index",
                             items: [
-                                {text: "调度队列", link: "/docsV5/advanced-features/scheduler"},
+                                {text: "MAA", link: "docsV5/script-guide/maa"},
+                                {text: "其他脚本", link: "docsV5/script-guide/general"},
+                                {text: "三月七", link: "docsV5/script-guide/march7th"},
                             ]
                         },
-                        {text: "多开指南", link: "/docsV5/multi-instance"},
-                        {text: "通用调度", link: "/docsV5/general-manager"},
+                        {
+                            text: "进阶功能",
+                            link: "/docsV5/advanced-features/__index",
+                            items: [
+                                {text: "调度队列", link: "/docsV5/advanced-features/scheduler"},
+                                {text: "多开指南", link: "/docsV5/multi-instance"},
+                            ]
+                        },
                         {text: "常见问题", link: "/docsV5/frequently-asked-questions"},
                         {text: "更新日志", link: "/docsV5/changelog"},
                     ],
