@@ -29,21 +29,21 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 ### 设置脚本实例
 
 1. 打开 `MAA.exe`，在 **设置 > 切换配置** 中，确保当前配置为 **Default**。
-![AUTO_MAA配置2](img/AUTO_MAA-config-2.png)
+![AUTO_MAA配置1](../img/AUTO_MAA-config-2.png)
 2. 关闭 **MAA**，检查 `MAA.exe`，确保其无需以管理员身份运行。即确保 **MAA.exe > 右键 > 属性 > 兼容性 > 设置 > 以管理员身份运行此程序** 处于 **未勾选** 状态。
-![AUTO_MAA配置3](img/AUTO_MAA-config-3.png)
+![AUTO_MAA配置2](../img/AUTO_MAA-config-3.png)
 3. 进入 **脚本管理**，单击 **新建脚本** 并选择 **MAA脚本** 以添加脚本实例管理页面。
-![AUTO_MAA配置4](img\user-guide-maa\AUTO-MAA-1.png)
+![AUTO_MAA配置3](../img/script-guide/maa/AUTO-MAA-1.png)
 4. 在 **打开的脚本配置** 中的 **MAA路径** 单击 **选择文件夹**，打开 MAA 软件所在目录。
-![AUTO_MAA配置5](img\user-guide-maa\AUTO-MAA-2.png)
+![AUTO_MAA配置4](../img/script-guide/maa/AUTO-MAA-2.png)
 5. 在**模拟器管理**中选择模拟器和模拟器实例
 
   如果此处没有模拟器，请先完成[开始使用→模拟器管理配置](/docs/user-guide.html#%E6%A8%A1%E6%8B%9F%E5%99%A8%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE)
 
-  完成后，点击**右下角蓝色保存按钮**保存。![AUTO-MAA-4](img\user-guide-maa\AUTO-MAA-4.png)
+  完成后，点击**右下角蓝色保存按钮**保存。![AUTO_MAA配置5](../img/script-guide/maa/AUTO-MAA-5.png)
 
 6. 点击此处在MAA中配置
-![AUTO-MAA-6](img\user-guide-maa\AUTO-MAA-6.png)
+![AUTO_MAA配置6](../img/script-guide/maa/AUTO-MAA-6.png)
 
 
 7. 参照 [多开指南 > MAA 设置](/docs/multi-instance) 完成 **MAA** 的 **启动设置**，并手动取消勾选 **开机自启动MAA**。
@@ -52,16 +52,16 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 
   公招是否自动点五星，是否启用GPU加速，明日方舟的服务器，启动设置中的“等待模拟器启动时间”（此选项会决定AUTO等待模拟器的启动时间）等
 
-  ![MAA配置](img/MAA-config.png)
+  ![MAA配置](../img/MAA-config.png)
 8. 完成配置后，关闭 **MAA**。并在AUTO中点击保存配置。
-![AUTO_MAA配置7](img\user-guide-maa\AUTO-MAA-7.png)
+![AUTO_MAA配置7](../img/script-guide/maa/AUTO-MAA-6.png)
 
 ### 设置用户配置
 
 1. 在 **脚本管理** 的脚本表格内，单击 **添加用户** 以添加一个用户。
-![AUTO_MAA配置8](img\user-guide-maa\AUTO-MAA-8.png)
+![AUTO_MAA配置8](../img/script-guide/maa/AUTO-MAA-7.png)
 2. 按照设置卡相关提示填写用户信息。
-![AUTO_MAA配置9](img\user-guide-maa\AUTO-MAA-9.png)
+![AUTO_MAA配置9](../img/script-guide/maa/AUTO-MAA-8.png)
 
 ::: info 注意
 开启 **自定义基建** 后需要 **选择配置文件**；**详细** 配置模式下开启 **剿灭任务**、**日常任务** 后需要 **设置具体配置**。
@@ -103,7 +103,8 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
   - 账号1：`DLmaster_361` → 可填写 `master`、`361`
   - 账号2：`黍的XX_1234` → 可填写 `1234`、`的`、`XX`，**不建议填写“黍”或下划线**
   
-  经过这些修改，能够稳定的进行账号切换
+
+经过这些修改，将能够稳定的进行账号切换
 
 :::
 
