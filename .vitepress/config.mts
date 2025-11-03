@@ -52,7 +52,7 @@ export default defineConfig({
                                 {text: "森空岛签到", link: "/docsV5/advanced-features/sklandCheckIn"},
                             ]
                         },
-                        {text: "常见问题", link: "/docsV5/frequently-asked-questions"},
+                        {text: "常见问题", link: "/docsV5/Q&A"},
                         {text: "更新日志", link: "/docsV5/changelog"},
                     ],
                 },
