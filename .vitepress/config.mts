@@ -21,11 +21,11 @@ export default defineConfig({
                     {text: "v4（旧）文档", link: "/docs/user-guide"},
                 ],
             },
+            {text: "开发", link: "/developer/developer.md"},
             {text: "下载", link: "/download/auto-maa"},
         ],
 
         sidebar: {
-
             '/docsV5/': [
                 {
                     text: "AUTO_MAS V5 文档 ",
