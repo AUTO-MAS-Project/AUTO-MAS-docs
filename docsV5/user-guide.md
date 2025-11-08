@@ -1,6 +1,6 @@
 ---
 title: 开始使用
-description: AUTO_MAS 的使用指南
+description: AUTO-MAS 的使用指南
 date: 2025-02-10
 ---
 
@@ -8,23 +8,23 @@ date: 2025-02-10
 
 ## 前置信息
 
-### 什么是 AUTO_MAS？
+### 什么是 AUTO-MAS？
 
-AUTO_MAS 是**基于日志**的多账号管理与自动化软件，通过监听日志和注入配置，结合其他脚本（如MAA） 的能力完成多账号代理。
+**AUTO-MAS** 是基于日志监看的多脚本多配置管理与自动化软件。修改配置文件和通过监听日志，控制其他脚本（如 MAA） 完成多账号代理。
 
-> 我们不实现具体功能，我们只是 脚本软件 的调度器。
+> AUTO-MAS: Make ALL Scripts Auto
 
 ## 使用方法
 
-### 安装 AUTO_MAS
+### 安装 AUTO-MAS
 
 1. 前往 [下载页](/download/auto-maa) 获取最新版本安装包。
-2. 解压 AUTO_MAS 压缩包并双击运行 `AUTO_MAS-Setup.exe`。
-3. 按照安装指引将 AUTO_MAS安装至任意文件夹。
+2. 解压 AUTO-MAS 压缩包并双击运行 `AUTO-MAS-Setup.exe`。
+3. 按照安装指引将 AUTO-MAS安装至任意文件夹。
 
 ### 为软件添加信任
 
-运行软件前，请将 `MAS 安装目录`、`AUTO_MAS 安装目录`、`%TEMP%\AUTO_MAS` 添加入 Windows Defender 排除项以及防病毒软件的信任区或开发者目录，避免被误杀。以下展示 **添加 Windows Defender 排除项** 方法：
+运行软件前，请将 `MAS 安装目录`、`AUTO-MAS 安装目录`、`%TEMP%\AUTO-MAS` 添加入 Windows Defender 排除项以及防病毒软件的信任区或开发者目录，避免被误杀。以下展示 **添加 Windows Defender 排除项** 方法：
 
 快速链接：<Pill name="Windows 安全中心" link="ms-settings:windowsdefender"/>
 
@@ -45,19 +45,19 @@ AUTO_MAS 是**基于日志**的多账号管理与自动化软件，通过监听�
 *这总不需要示意图了吧*
 
 ::: warning 注意
-即使已经安装其它杀毒软件（如：**火绒**、**360极速版**），**Windows Defender** 防病毒功能仍可能会不定时开启，这可能导致您的 `MAA.exe` 或 `AUTO_MAS.exe` 突然消失。因此，您必须确保以上目录被 **Windows Defender** 排除。
+即使已经安装其它杀毒软件（如：**火绒**、**360极速版**），**Windows Defender** 防病毒功能仍可能会不定时开启，这可能导致您的 `MAA.exe` 或 `AUTO-MAS.exe` 突然消失。因此，您必须确保以上目录被 **Windows Defender** 排除。
 :::
 
-### 初始化 AUTO_MAS 
+### 初始化 AUTO-MAS 
 
-1. 若你下载的不是全量包，你需要根据指引自行进行下载部分AUTO_MAS的依赖
+1. 若你下载的不是全量包，你需要根据指引自行进行下载部分AUTO-MAS的依赖
 2. 选择下载渠道
 ![AUTO_初始化](img\user-guide\AUTO-init.png)
 
 ::: tip 有何区别
 - **快速安装**
   
-  - 直接从AUTO_MAS官方提供的服务器下载，也许速度会更快？
+  - 直接从AUTO-MAS官方提供的服务器下载，也许速度会更快？
   
 - **手动安装**。
   

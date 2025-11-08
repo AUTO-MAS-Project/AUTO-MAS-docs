@@ -3,12 +3,12 @@ import {defineConfig} from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     base: "/",
-    title: "AUTO_MAS",
+    title: "AUTO-MAS",
     head: [
         // 添加图标
         ['link', {rel: 'icon', href: '/resource/AUTO_MAA.png'}]
     ],
-    description: "AUTO_MAS",
+    description: "AUTO-MAS",
     themeConfig: {
         logo: {src: '/resource/AUTO_MAA.png', width: 24, height: 24, alt: 'AUTO_MAA LOGO'},
         // https://vitepress.dev/reference/default-theme-config
@@ -28,7 +28,7 @@ export default defineConfig({
         sidebar: {
             '/docsV5/': [
                 {
-                    text: "AUTO_MAS V5 文档 ",
+                    text: "AUTO-MAS V5 文档 ",
                     items: [
                         {text: "开始使用", link: "/docsV5/user-guide"},
                         {

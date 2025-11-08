@@ -1,6 +1,6 @@
 ---
 title: 进阶功能
-description: AUTO_MAS 的高级配置指南
+description: AUTO-MAS 的高级配置指南
 date: 2025-02-10
 ---
 

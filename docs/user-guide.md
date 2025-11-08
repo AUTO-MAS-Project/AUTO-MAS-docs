@@ -8,7 +8,7 @@ date: 2025-02-10
 
 ::: danger V4版本已经过时！
 
-AUTO_MAA已更新**V5**版本，并改名为AUTO_MAS，重构了前端UI系统，带来更流畅舒适的使用体验
+AUTO_MAA已更新**V5**版本，并改名为AUTO-MAS，重构了前端UI系统，带来更流畅舒适的使用体验
 
 可从[AUTO-MAS文档](/docsV5/user-guide)了解
 
