@@ -3,27 +3,65 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: "/",
-  title: "AUTO_MAA",
+  title: "AUTO-MAS",
   head: [
     // 添加图标
     ['link', { rel: 'icon', href: '/resource/AUTO_MAA.png' }]
   ],
-  description: "AUTO_MAA",
+  description: "AUTO-MAS",
   themeConfig: {
     logo: { src: '/resource/AUTO_MAA.png', width: 24, height: 24, alt: 'AUTO_MAA LOGO' },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "首页", link: "/" },
-      { text: "文档", link: "/docs/user-guide" },
+      {
+        text: "文档",
+        items: [
+          { text: "V5 文档", link: "/docsV5/user-guide" },
+          { text: "v4（旧）文档", link: "/docs/user-guide" },
+        ],
+      },
+      { text: "开发", link: "/developer/developer.md" },
       { text: "下载", link: "/download/auto-maa" },
     ],
 
     sidebar: {
+      '/docsV5/': [
+        {
+          text: "AUTO-MAS V5 文档 ",
+          items: [
+            { text: "开始使用", link: "/docsV5/user-guide" },
+            {
+              text: "脚本配置",
+              link: "docsV5/script-guide/__index",
+              items: [
+                { text: "MAA", link: "docsV5/script-guide/maa" },
+                { text: "其他脚本", link: "docsV5/script-guide/general" },
+                { text: "三月七", link: "docsV5/script-guide/march7th" },
+              ]
+            },
+            {
+              text: "进阶功能",
+              link: "/docsV5/advanced-features/__index",
+              items: [
+                { text: "调度队列", link: "/docsV5/advanced-features/scheduler" },
+                { text: "多开指南", link: "/docsV5/advanced-features/multi-instance" },
+                { text: "计划管理", link: "/docsV5/advanced-features/plan" },
+                { text: "推送通知", link: "/docsV5/advanced-features/notification" },
+                { text: "人工排查", link: "/docsV5/advanced-features/inspection" },
+                { text: "森空岛签到", link: "/docsV5/advanced-features/sklandCheckIn" },
+              ]
+            },
+            { text: "常见问题", link: "/docsV5/Q&A" },
+            { text: "更新日志", link: "/docsV5/changelog" },
+          ],
+        },
+      ],
       '/docs/': [
         {
           text: "AUTO_MAA 文档",
           items: [
-            { text: "新手上路", link: "/docs/user-guide" },
+            { text: "开始使用", link: "/docs/user-guide" },
             { text: "进阶功能", link: "/docs/advanced-features" },
             { text: "多开指南", link: "/docs/multi-instance" },
             { text: "通用调度", link: "/docs/general-manager" },
@@ -53,8 +91,7 @@ export default defineConfig({
     },
     // 修改链接
     editLink: {
-      //https://github.com/ClozyA/AUTOMAA_docs/blob/master/advanced-features.md
-      pattern: 'https://github.com/ClozyA/AUTOMAA_docs/edit/master/:path',
+      pattern: 'https://github.com/AUTO-MAS-Project/AUTO-MAS-docs/edit/master/:path',
       text: '为此页提供修改建议'
     },
     notFound: {
