@@ -19,16 +19,16 @@ hero:
       link: /docsV5/user-guide
     - theme: alt
       text: 进阶功能
-      link: /docsV5/advanced-features
+      link: /docsV5/advanced-features/
     - theme: alt
       text: 多开指南
-      link: /docsV5/multi-instance
+      link: /docsV5/advanced-features/multi-instance
     - theme: alt
-      text: 通用调度
-      link: /docsV5/general-manager
+      text: 脚本指南
+      link: /docsV5/script-guide/__index
     - theme: alt
       text: 常见问题
-      link: /docsV5/frequently-asked-questions
+      link: /docsV5/Q&A
 
 features:
   - title: 集中管理
