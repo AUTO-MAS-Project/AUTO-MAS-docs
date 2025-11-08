@@ -16,25 +16,25 @@ hero:
   actions:
     - theme: brand
       text: 新手上路
-      link: /docs/user-guide
+      link: /docsV5/user-guide
     - theme: alt
       text: 进阶功能
-      link: /docs/advanced-features
+      link: /docsV5/advanced-features
     - theme: alt
       text: 多开指南
-      link: /docs/multi-instance
+      link: /docsV5/multi-instance
     - theme: alt
       text: 通用调度
-      link: /docs/general-manager
+      link: /docsV5/general-manager
     - theme: alt
       text: 常见问题
-      link: /docs/frequently-asked-questions
+      link: /docsV5/frequently-asked-questions
 
 features:
   - title: 集中管理
-    details: 一站式管理多个MAA脚本与多个用户配置，和凌乱的散装脚本窗口说再见！
+    details: 一站式管理多个脚本与多个用户配置，和凌乱的散装脚本窗口说再见！
   - title: 无人值守
-    details: 自动处理MAA相关报错，再也不用为代理任务卡死时自己不在电脑旁烦恼啦！
+    details: 自动处理部分意外情况，再也不用为模拟器卡死时自己不在电脑旁烦恼啦！
   - title: 配置灵活
     details: 通过调度队列与脚本的组合，自由实现您能想到的所有调度需求！
   - title: 信息统计
@@ -46,8 +46,8 @@ features:
 **AUTO-MAS** 是一个游戏脚本管理工具，专注于优化 **各种脚本** 多账号功能的使用体验，并增强代理的稳定性。
 
 - **高效稳定**：通过日志监测、异常处理等机制，保障代理任务顺利完成。
-- **简洁易用**：无需手动修改配置文件，实现自动化调度与多开管理。
-- **兼容扩展**：支持 MAA 几乎所有的配置选项，满足不同用户需求。
+- **简洁易用**：无需手动修改配置文件，在可视界面实现自动化调度与多开管理。
+- **兼容扩展**：支持几乎所有MAA及MFA衍生开发程序，只要有日志！
 
 
 Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)
