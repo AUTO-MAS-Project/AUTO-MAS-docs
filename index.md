@@ -19,7 +19,7 @@ hero:
       link: /docsV5/user-guide
     - theme: alt
       text: 进阶功能
-      link: /docsV5/advanced-features/
+      link: /docsV5/advanced-features/__index
     - theme: alt
       text: 多开指南
       link: /docsV5/advanced-features/multi-instance
