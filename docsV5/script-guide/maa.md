@@ -38,7 +38,7 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 ![AUTO_MAS配置4](../img/script-guide/maa/AUTO-MAA-2.png)
 5. 在**模拟器管理**中选择模拟器和模拟器实例
 
-  如果此处没有模拟器，请先完成[模拟器管理](docsV5/advanced-features/emulator-manager.md)
+  如果此处没有模拟器，请先完成[模拟器管理](/docsV5/advanced-features/emulator-manager.md)
 
   完成后，点击**右下角蓝色保存按钮**保存。
 
