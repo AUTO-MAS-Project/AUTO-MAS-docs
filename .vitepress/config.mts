@@ -49,7 +49,7 @@ export default defineConfig({
                                 {text: "计划管理", link: "/docsV5/advanced-features/plan"},
                                 {text: "推送通知", link: "/docsV5/advanced-features/notification"},
                                 {text: "人工排查", link: "/docsV5/advanced-features/inspection"},
-                                {text: "森空岛签到", link: "/docsV5/advanced-features/sklandCheckIn"},
+                                {text: "森空岛签到", link: "/docsV5/advanced-features/skland-checkin"},
                             ]
                         },
                         {text: "常见问题", link: "/docsV5/Q&A"},
