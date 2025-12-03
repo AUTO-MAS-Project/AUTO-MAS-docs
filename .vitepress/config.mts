@@ -26,6 +26,7 @@ export default defineConfig({
         ],
 
         sidebar: {
+            //文档本体
             '/docsV5/': [
                 {
                     text: "AUTO-MAS V5 文档 ",
@@ -57,6 +58,8 @@ export default defineConfig({
                     ],
                 },
             ],
+
+            //旧文档
             '/docs/': [
                 {
                     text: "AUTO_MAA 文档",
@@ -70,6 +73,25 @@ export default defineConfig({
                     ],
                 },
             ],
+
+
+            'developer/': [
+                {
+                    text: "开发者指南",
+                    items: [
+                        {text: "开始", link: "/developer/development-specifications.md"},
+                        {text: "开发者规范", link: "/developer/development-specifications.md"},
+                        {
+                            text: "新功能开发", items: [
+                                {text: "API开发", link: "/developer/API.md"},
+                                {text: "新配置开发", link: "/developer/config.md"},
+                                {text: "专项适配开发", link: "/developer/script.md"},
+                            ]
+                        },
+                    ],
+                },
+            ],
+            //下载站
             '/download/': [
                 {
                     text: "软件下载",
