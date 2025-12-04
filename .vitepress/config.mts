@@ -21,7 +21,7 @@ export default defineConfig({
                     {text: "v4（旧）文档", link: "/docs/user-guide"},
                 ],
             },
-            {text: "开发", link: "/developer/developer.md"},
+            {text: "开发", link: "/developer/getting-start.md"},
             {text: "下载", link: "/download/auto-maa"},
         ],
 
@@ -79,16 +79,17 @@ export default defineConfig({
                 {
                     text: "开发者指南",
                     items: [
-                        {text: "开始", link: "/developer/development-specifications.md"},
+                        {text: "开发起步", link: "/developer/getting-start.md"},
                         {text: "开发者规范", link: "/developer/development-specifications.md"},
-                        {
-                            text: "新功能开发", items: [
-                                {text: "API开发", link: "/developer/API.md"},
-                                {text: "新配置开发", link: "/developer/config.md"},
-                                {text: "专项适配开发", link: "/developer/script.md"},
-                            ]
-                        },
+
                     ],
+                },
+                {
+                    text: "新功能开发", items: [
+                        {text: "API开发", link: "/developer/API.md"},
+                        {text: "新配置开发", link: "/developer/config.md"},
+                        {text: "专项适配开发", link: "/developer/script.md"},
+                    ]
                 },
             ],
             //下载站
