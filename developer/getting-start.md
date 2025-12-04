@@ -379,7 +379,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ## 📄 许可证
 
-本项目采用 [GPL-3.0 License](LICENSE) 开源。
+本项目采用 [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.txt) 开源。
 
 在使用、分发或修改本软件时，请务必遵守 GPL-3.0 协议和项目 README 中的补充条款。
 
