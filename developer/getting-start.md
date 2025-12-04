@@ -5,7 +5,7 @@
 
 ---
 
-## 🛠 技术栈
+##  技术栈
 
 ### 后端
 - **Python**: 3.12+（推荐3.13）
@@ -118,7 +118,7 @@ yarn dev
 
 ---
 
-## 📁 项目结构
+##  项目结构
 
 ```
 AUTO-MAS/
@@ -315,7 +315,7 @@ yarn build
 
 ---
 
-## ❓ 常见问题
+##  常见问题
 
 ### Q: Python 虚拟环境激活失败
 
@@ -350,7 +350,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ---
 
-## 🤝 贡献指南
+##  贡献指南
 
 1. Fork 本仓库
 2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
@@ -368,7 +368,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ---
 
-## 📞 联系与支持
+##  联系与支持
 
 - **QQ 交流群**: [957750551](https://qm.qq.com/q/bd9fISNoME)
 - **GitHub Issues**: [提交问题](https://github.com/AUTO-MAS-Project/AUTO-MAS/issues)
@@ -377,7 +377,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ---
 
-## 📄 许可证
+##  许可证
 
 本项目采用 [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.txt) 开源。
 
