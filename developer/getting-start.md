@@ -3,17 +3,13 @@
 
 欢迎参与 AUTO-MAS 项目开发！本文档将帮助您快速搭建开发环境并了解项目结构。
 
----
-
 ##  技术栈
 
 ### 后端
-- **Python**: 3.12+（推荐3.13）
+- **Python**: 3.12.x
 - **Web 框架**: FastAPI 0.116.1
-- **异步运行时**: Uvicorn 0.35.0
-- **数据验证**: Pydantic 2.11.7
-- **日志系统**: Loguru 0.7.3
 - **实时通信**: WebSockets 15.0.1
+- **日志系统**: Loguru 0.7.3
 - **图像处理**: OpenCV, Pillow, PyAutoGUI
 - **OCR**: RapidOCR (ONNX Runtime)
 
@@ -25,13 +21,12 @@
 - **路由**: Vue Router 4
 - **状态管理**: Pinia 3.x
 
----
 
 ##  环境要求
 
 ### 必需软件
 
-1. **Python 3.12+（推荐3.13）**
+1. **Python 3.12.x**
    - 下载地址: https://www.python.org/downloads/
    - 确保勾选 "Add Python to PATH"
 2. **Node.js 18+**
@@ -42,10 +37,9 @@
    - 使用 Corepack: `corepack enable`
 4. **Git**
    - 下载地址: https://git-scm.com/downloads
-5. VC运行库
+5. **VC运行库**
 	- 下载地址: [最新受支持的 Visual C++ 可再发行程序包](https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 
----
 
 ##  快速开始
 
@@ -58,7 +52,7 @@ cd AUTO-MAS
 
 ### 2. 后端环境搭建
 
-#### 2.1 创建虚拟环境 (推荐)
+1. **创建虚拟环境 (推荐)**
 
 ```powershell
 # Windows PowerShell
@@ -66,57 +60,70 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-#### 2.2 安装 Python 依赖
+2. **安装 Python 依赖**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 2.3 启动后端服务（非必要，仅后端）
-
-```bash
-python main.py
-```
-
-::: tip 启动逻辑
-
-MAS无需先启动后端，在启动前端后（见后文），*会自动从**Github**上拉取**dev**分支上的后端*
-
-后端服务将在 `http://localhost:36163` 启动。
-
-> **注意**: 程序需要管理员权限运行。如果没有管理员权限，程序会提示重新启动。
->
-> 如果你使用jetbrains IDE，你可以直接以管理员权限启动IDE，这样打开的命令行程序也具有管理员权限
-
-:::
-
 ### 3. 前端环境搭建
 
-#### 3.1 进入前端目录
+**进入前端目录并安装依赖**
 
 ```bash
 cd frontend
-```
-
-#### 3.2 安装依赖
-
-```bash
 yarn install
 ```
 
-#### 3.3 启动开发服务器
 
-**启动环境**（无需启动后端）:
+### 4. 启动软件
+
+::: tip 管理员权限
+
+AUTO-MAS 前后端都需要以管理员权限运行。如果没有管理员权限，程序会提示重新启动。
+
+如果你使用 jetbrains IDE 或 VScode，你可以直接以管理员权限启动 IDE，这样打开的命令行程序也具有管理员权限。
+
+您也可以使用 `sudo` 命令以管理员权限运行。
+
+:::
+
+#### 4.1 使用来自远端的后端代码
+
+**进入前端目录并启动开发服务器**
 
 ```bash
+cd frontend
 yarn dev
 ```
 
 前端开发服务器将在 `http://localhost:5173` 启动，Electron 窗口会自动打开。
 
-此后，进行开发，只需要启动`yarn dev`即可
+前端将自动完成后端初始化，后端来自 Github 的 **dev** 分支，后端本地文件位于 `frontend/node_modules/electron/dist` 下。
 
----
+#### 4.2 使用本地的后端代码
+
+1. **启动后端服务**
+
+```bash
+python main.py
+```
+
+后端服务将在 `http://localhost:36163` 启动，可以访问 `http://localhost:36163/docs` 查看接口文档。
+
+2. **启动前端服务**
+
+您需要开启一个新的终端窗口用于运行前端服务。
+
+```bash
+cd frontend
+yarn dev
+```
+
+3. **跳过启动后端**
+
+由于您已经打开用于开发的后端，前端初始化时将在 `启动后端` 步骤失败，此时直接选择 `跳过启动后端` 即可正常进入应用主界面，此时前端所使用的后端服务将是您之前终端窗口中启动的后端。
+
 
 ##  项目结构
 
@@ -184,136 +191,6 @@ AUTO-MAS/
 └── README.md                    # 项目说明
 ```
 
----
-
-##  常见开发方向
-
-#### 日志记录
-
-```python
-from app.utils import get_logger
-
-logger = get_logger("模块名")
-
-logger.info("信息日志")
-logger.warning("警告日志")
-logger.error("错误日志")
-logger.debug("调试日志")
-```
-
-#### 配置管理
-
-```python
-from app.core import Config
-
-# 获取配置
-config = await Config.get_config()
-
-# 保存配置
-await Config.save_config(new_config)
-```
-
-### 前端开发
-
-#### 页面开发流程
-
-1. **在 `frontend/src/views/` 创建页面组件**
-
-```vue
-<template>
-  <div class="my-page">
-    <h1>{{ title }}</h1>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-
-const title = ref('My Page');
-</script>
-
-<style scoped>
-.my-page {
-  padding: 20px;
-}
-</style>
-```
-
-2. **在 `frontend/src/router/index.ts` 注册路由**
-
-```typescript
-{
-  path: '/my-page',
-  name: 'MyPage',
-  component: () => import('@/views/MyPage.vue')
-}
-```
-
----
-
-##  调试与测试
-
-### 后端调试
-
-#### 查看日志
-
-日志文件位于 `debug/app.log
-
-### 前端调试
-
-#### 浏览器开发者工具
-
-- 按 `F12` 打开开发者工具
-- 或在应用菜单中选择"开发者工具"
-
-#### Electron 主进程调试
-
-```bash
-# 查看主进程日志
-yarn dev
-```
-
-主进程日志会在终端输出。
-
----
-
-##  代码规范
-
-请见[开发者规范](/developer/development-specifications.md)
-
----
-
-##  构建与发布
-
-### 开发构建
-
-```bash
-cd frontend
-yarn build
-```
-
-构建产物位于 `frontend/dist/`
-
-### 发布流程
-
-1. 更新版本号
-   - `pyproject.toml` 中的 `version`
-   - `frontend/package.json` 中的 `version`
-   - `app/__init__.py` 中的 `__version__`
-
-2. 更新 `res/version.json`
-
-3. 提交并打 tag
-   ```bash
-   git add .
-   git commit -m "chore: release v5.0.0"
-   git tag v5.0.0
-   git push origin main --tags
-   ```
-
-5. 在 GitHub 上创建 Release 并上传构建产物
-
----
 
 ##  常见问题
 
@@ -348,34 +225,6 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 2. 后端服务是否正常启动（`http://localhost:36163`）
 3. 查看终端输出的错误信息
 
----
-
-##  贡献指南
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'feat: Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交 Pull Request
-
-### Pull Request 检查清单
-
-- [ ] 代码遵循项目规范
-- [ ] 已运行代码检查和格式化
-- [ ] 已测试新功能/修复
-- [ ] 已更新相关文档
-- [ ] 提交信息清晰明确
-
----
-
-##  联系与支持
-
-- **QQ 交流群**: [957750551](https://qm.qq.com/q/bd9fISNoME)
-- **GitHub Issues**: [提交问题](https://github.com/AUTO-MAS-Project/AUTO-MAS/issues)
-- **官方文档**: [https://doc.auto-mas.top](https://doc.auto-mas.top)
-- **官方网站**: [https://auto-mas.top](https://auto-mas.top)
-
----
 
 ##  许可证
 

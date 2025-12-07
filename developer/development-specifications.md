@@ -1,14 +1,40 @@
 # 开发规范
 
-## Git提交信息
+## Git 分支
 
-Git提交采用Conventional Commits 标准，即
+### 1. 主分支
+
+- 分支名：`main`
+- 作用：主分支，用于存储稳定版代码，保证所有功能稳定，能够直接跑通。
+
+
+### 2. 主开发分支
+
+- 分支名：`dev`
+- 作用：主开发分支，用于存储包含当前最新功能的代码，所有完成开发且通过测试的代码 *（包括各种 pr）*，合并到该分支，保证能够直接跑通。
+
+
+### 3. 发行版分支
+
+- 分支名：`release/{version}`
+- 作用：由版本发布工作流自动创建，用于存储各个发行版的最新后端代码，各个发行版软件持续会从各自对应的发行版分支拉取最新后端代码，以实现部分功能更新与问题修复的热更。
+
+
+### 4. 开发分支
+
+- 分支名：`随意~`
+- 作用：开发分支，项目核心开发者用于存储开发中的功能，不一定能跑通，当功能开发完成后，将会合并到 `dev` 分支。
+
+
+## Git 提交信息
+
+Git 提交采用Conventional Commits 标准，即：
 
 ```
 <type>(<scope>): <subject>
 ```
 
-### type
+### 1. type
 
 | 类型         | 说明                                     |
 | ------------ | ---------------------------------------- |
@@ -23,25 +49,27 @@ Git提交采用Conventional Commits 标准，即
 | **build**    | 影响构建系统或外部依赖的变更             |
 | **ci**       | CI/CD 配置修改                           |
 
-### scope
+### 2. scope
 
-#### 情况1：只修改了某个文件
+1. **只修改了某个文件**
 
-**填入去掉后缀的修正文件名称**，**大小写需要保留**
+    填入去掉后缀的修正文件名称，保留大小写。
 
-如logger，就写logger
+    - 例如：修改 `logger.py`，使用 `logger`
 
-fix(logger): 修改logger日志等级 
+        ```fix(logger): 修改logger日志等级 ```
 
-#### 情况2：新增/修改了某个具体的功能
+2. **修改了多个文件**
 
-比如，后端的api（新增api）、task（新增专项适配）。前端的scheduler（调度中心界面），queue（调度队列，这里有很多子页面）
+    填入修正文件的 **父文件夹名**，涉及多个文件夹时，填入所有发生修改文件夹的 **父文件夹名**。
 
-那就填 **父文件夹名**，比如api、task等
+    - 例如：修改 `app/api/a.py`、`app/api/b.py`，使用 `api`
 
-### subject
+        ```fix(api): 修改api模块 ```
 
-**一句话省流**，并可选详细内容
+### 3. subject
+
+**所做修改的一句话总结**，可隔一行书写详细修改内容
 
 ```
 feat(core): 改进数据库连接模块
@@ -51,51 +79,76 @@ feat(core): 改进数据库连接模块
 - 修复可能导致连接泄漏的问题
 ```
 
-比如
 
+## 版本记录
+
+本项目依靠 `res/version.json` 文件记录版本信息，文件格式为：
+
+```json
+{
+    "main_version": "5.0.0.0",      # 当前版本号
+    "version_info": {               # 新版本更新记录
+        "5.0.0.0": {                # 版本条目
+            "新增功能": [           # 修改类型
+                "全新架构升级",      # 修改条目
+                ... 
+            ],
+            "修复BUG": [
+                ...
+            ],
+            "程序优化": [
+                ...
+            ]
+        },
+        "5.0.0.1": {
+            ...
+        }
+        ...
+    }
+}
 ```
-feat(login): 添加用户登录功能
-fix(build): 修复打包时路径错误
-chore(deps): 更新 electron 到 33.0.0
-docs(readme): 补充安装说明
-refactor(core): 优化数据加载逻辑
-style(ui): 调整按钮样式和间距
-test(api): 新增接口单元测试
-```
+
+- 版本更新信息与公告都根据该文件生成，为了保证您所做的修改被正确登记，当您完成某项任务时，需要自行修改该文件并提交。
+- 若 `当前版本号` 已经完成发布，您不能直接在对应版本条目下新增 `修改条目`，也无需修改 `main_version` 字段，而应该在 `version_info` 中添加下个版本的版本条目，并在新版本条目下添加您的 `修改条目`。
+
 
 ## 后端注释
 
+::: tip 总览
 后端注释应该采用 **Google Python Style Guide – Docstring Conventions**，简称 **Google Docstring** 。
+:::
 
-比如
+### 方法注释
 ```
-    def add_numbers(a: int, b: int) -> int:
-        """
-    	## (一句话简介，当然长点也无所谓）
-        相加两个数字并返回他们的和.
-    	
-    	## 形参解释
-        Args:
-            a (int): 第一个数字.
-            b (int): 第二个数字.
-    	
-    	## 返回值解释
-        Returns:
-            int: 数字之和.
-    	
-    	## 报错类型解释
-        Raises:
-            ValueError: 输入的数字不是int.
-        """
-        
-        ## 逻辑代码
-        if not all(isinstance(x, int) for x in (a, b)):
-            raise ValueError("形参必须是integers.")
-        return a + b
+def add_numbers(a: int, b: int) -> int:
+    """
+    ## (一句话简介，当然长点也无所谓）
+    相加两个数字并返回他们的和.
+    
+    ## 形参解释
+    Args:
+        a (int): 第一个数字.
+        b (int): 第二个数字.
+    
+    ## 返回值解释
+    Returns:
+        int: 数字之和.
+    
+    ## 报错类型解释
+    Raises:
+        ValueError: 输入的数字不是int.
+    """
+    
+    ## 逻辑代码
+    if not all(isinstance(x, int) for x in (a, b)):
+        raise ValueError("形参必须是integers.")
+    return a + b
 
 ```
 
-另外，如果一个类不是一个**方法**，而是一个**配置**，应该给**每一个Configitem**添加解释，并根据Item做好分类
+### 配置类注释
+
+`ConfigBase` 的子类为 **配置类**。配置类需要为 **每一个ConfigItem** 添加解释，并根据 `Group` 做好分类。
 
 ```
 class GlobalConfig(ConfigBase):
@@ -130,7 +183,11 @@ class GlobalConfig(ConfigBase):
 
 
 
-## 后端调用
+## 后端函数调用
+
+::: tip 总览
+能一眼理解的用位置参数；否则用关键字参数。布尔和多参数强制使用关键字。
+:::
 
 为了提高代码可读性、减少误用、提升协作效率，项目中调用函数时应该遵循以下规则：
 
@@ -187,9 +244,5 @@ send_notification(enable=True, urgent=False)
 connect(host="localhost", port=3306, timeout=5)
 ```
 
-------
 
-##  总结（一句话）
-
-> **能一眼理解的用位置参数；否则用关键字参数。布尔和多参数强制使用关键字。**
 

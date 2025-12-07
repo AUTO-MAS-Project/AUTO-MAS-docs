@@ -41,7 +41,7 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 
 ### 安装 AUTO_MAA
 
-1. 前往 [下载页](/download/auto-maa) 获取最新版本安装包。
+1. 前往 [下载页](/download/auto-mas) 获取最新版本安装包。
 2. 解压 AUTO_MAA 压缩包并双击运行 `AUTO_MAA-Setup.exe`。
 3. 按照安装指引将 AUTO_MAA 安装至任意文件夹。
 

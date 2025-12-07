@@ -18,7 +18,7 @@ date: 2025-02-10
 
 ### 安装 AUTO-MAS
 
-1. 前往 [下载页](/download/auto-maa) 获取最新版本安装包。
+1. 前往 [下载页](/download/auto-mas) 获取最新版本安装包。
 2. 解压 AUTO-MAS 压缩包并双击运行 `AUTO-MAS-Setup.exe`。
 3. 按照安装指引将 AUTO-MAS安装至任意文件夹。
 

@@ -1,4 +1,4 @@
-import {defineConfig} from "vitepress";
+import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -6,23 +6,23 @@ export default defineConfig({
     title: "AUTO-MAS",
     head: [
         // 添加图标
-        ['link', {rel: 'icon', href: '/resource/AUTO_MAA.png'}]
+        ['link', { rel: 'icon', href: '/resource/AUTO_MAA.png' }]
     ],
     description: "AUTO-MAS",
     themeConfig: {
-        logo: {src: '/resource/AUTO_MAA.png', width: 24, height: 24, alt: 'AUTO_MAA LOGO'},
+        logo: { src: '/resource/AUTO_MAA.png', width: 24, height: 24, alt: 'AUTO_MAA LOGO' },
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-            {text: "首页", link: "/"},
+            { text: "首页", link: "/" },
             {
                 text: "文档",
                 items: [
-                    {text: "V5 文档", link: "/docsV5/user-guide"},
-                    {text: "v4（旧）文档", link: "/docs/user-guide"},
+                    { text: "V5 文档", link: "/docsV5/user-guide" },
+                    { text: "v4（旧）文档", link: "/docs/user-guide" },
                 ],
             },
-            {text: "开发", link: "/developer/getting-start.md"},
-            {text: "下载", link: "/download/auto-maa"},
+            { text: "开发", link: "/developer/getting-start.md" },
+            { text: "下载", link: "/download/auto-mas" },
         ],
 
         sidebar: {
@@ -31,30 +31,30 @@ export default defineConfig({
                 {
                     text: "AUTO-MAS V5 文档 ",
                     items: [
-                        {text: "开始使用", link: "/docsV5/user-guide"},
+                        { text: "开始使用", link: "/docsV5/user-guide" },
                         {
                             text: "脚本配置",
                             link: "docsV5/script-guide/__index",
                             items: [
-                                {text: "MAA", link: "docsV5/script-guide/maa"},
-                                {text: "其他脚本", link: "docsV5/script-guide/general"},
-                                {text: "三月七", link: "docsV5/script-guide/march7th"},
+                                { text: "MAA", link: "docsV5/script-guide/maa" },
+                                { text: "其他脚本", link: "docsV5/script-guide/general" },
+                                { text: "三月七", link: "docsV5/script-guide/march7th" },
                             ]
                         },
                         {
                             text: "进阶功能",
                             link: "/docsV5/advanced-features/__index",
                             items: [
-                                {text: "调度队列", link: "/docsV5/advanced-features/scheduler"},
-                                {text: "多开指南", link: "/docsV5/advanced-features/multi-instance"},
-                                {text: "计划管理", link: "/docsV5/advanced-features/plan"},
-                                {text: "推送通知", link: "/docsV5/advanced-features/notification"},
-                                {text: "人工排查", link: "/docsV5/advanced-features/inspection"},
-                                {text: "森空岛签到", link: "/docsV5/advanced-features/skland-checkin"},
+                                { text: "调度队列", link: "/docsV5/advanced-features/scheduler" },
+                                { text: "多开指南", link: "/docsV5/advanced-features/multi-instance" },
+                                { text: "计划管理", link: "/docsV5/advanced-features/plan" },
+                                { text: "推送通知", link: "/docsV5/advanced-features/notification" },
+                                { text: "人工排查", link: "/docsV5/advanced-features/inspection" },
+                                { text: "森空岛签到", link: "/docsV5/advanced-features/skland-checkin" },
                             ]
                         },
-                        {text: "常见问题", link: "/docsV5/Q&A"},
-                        {text: "更新日志", link: "/docsV5/changelog"},
+                        { text: "常见问题", link: "/docsV5/Q&A" },
+                        { text: "更新日志", link: "/docsV5/changelog" },
                     ],
                 },
             ],
@@ -64,12 +64,12 @@ export default defineConfig({
                 {
                     text: "AUTO_MAA 文档",
                     items: [
-                        {text: "开始使用", link: "/docs/user-guide"},
-                        {text: "进阶功能", link: "/docs/advanced-features"},
-                        {text: "多开指南", link: "/docs/multi-instance"},
-                        {text: "通用调度", link: "/docs/general-manager"},
-                        {text: "常见问题", link: "/docs/frequently-asked-questions"},
-                        {text: "更新日志", link: "/docs/changelog"},
+                        { text: "开始使用", link: "/docs/user-guide" },
+                        { text: "进阶功能", link: "/docs/advanced-features" },
+                        { text: "多开指南", link: "/docs/multi-instance" },
+                        { text: "通用调度", link: "/docs/general-manager" },
+                        { text: "常见问题", link: "/docs/frequently-asked-questions" },
+                        { text: "更新日志", link: "/docs/changelog" },
                     ],
                 },
             ],
@@ -79,16 +79,16 @@ export default defineConfig({
                 {
                     text: "开发者指南",
                     items: [
-                        {text: "开发起步", link: "/developer/getting-start.md"},
-                        {text: "开发者规范", link: "/developer/development-specifications.md"},
-
+                        { text: "开发起步", link: "/developer/getting-start.md" },
+                        { text: "开发规范", link: "/developer/development-specifications.md" },
+                        { text: "构筑与发布", link: "/developer/build-and-publish.md" },
                     ],
                 },
                 {
-                    text: "新功能开发", items: [
-                        {text: "API开发", link: "/developer/API.md"},
-                        {text: "新配置开发", link: "/developer/config.md"},
-                        {text: "专项适配开发", link: "/developer/script.md"},
+                    text: "开发文档", items: [
+                        { text: "API 开发", link: "/developer/API.md" },
+                        { text: "配置管理", link: "/developer/config.md" },
+                        { text: "专项适配", link: "/developer/script_task.md" },
                     ]
                 },
             ],
@@ -97,7 +97,7 @@ export default defineConfig({
                 {
                     text: "软件下载",
                     items: [
-                        {text: "AUTO_MAA", link: "/download/auto-maa"},
+                        { text: "AUTO-MAS", link: "/download/auto-mas" },
                     ],
                 },
             ],
@@ -106,11 +106,11 @@ export default defineConfig({
             provider: 'local'
         },
         socialLinks: [
-            {icon: "github", link: "https://github.com/DLmaster361/AUTO_MAA"},
+            { icon: "github", link: "https://github.com/DLmaster361/AUTO_MAA" },
         ],
         lastUpdated: {
             text: '最后更新于',
-            formatOptions: {dateStyle: 'full', timeStyle: 'full', hourCycle: 'h24'}
+            formatOptions: { dateStyle: 'full', timeStyle: 'full', hourCycle: 'h24' }
         },
         // 修改链接
         editLink: {
@@ -124,7 +124,7 @@ export default defineConfig({
             linkText: '返回首页',
             code: '404'
         },
-        docFooter: {prev: '上一篇', next: '下一篇'},
+        docFooter: { prev: '上一篇', next: '下一篇' },
         // 移动端 - 返回顶部
         returnToTopLabel: '返回顶部',
 
