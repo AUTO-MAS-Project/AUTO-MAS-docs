@@ -92,17 +92,13 @@
 
 :root {
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(
-    120deg,
-    #bd34fe 30%,
-    #41d1ff
-  );
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg,
+      #bd34fe 30%,
+      #41d1ff);
 
-  --vp-home-hero-image-background-image: linear-gradient(
-    -45deg,
-    #bd34fe 50%,
-    #47caff 50%
-  );
+  --vp-home-hero-image-background-image: linear-gradient(-45deg,
+      #bd34fe 50%,
+      #47caff 50%);
   --vp-home-hero-image-filter: blur(44px);
 }
 
@@ -137,3 +133,23 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+/**
+ * Component: Aside SVG Icons
+ * -------------------------------------------------------------------------- */
+
+/* 为侧边栏中的 SVG 图标添加主题色支持 */
+/* 使用文本强调色(text-1),自动适配亮色/暗色模式 */
+img.icon[src*="simple-icons"] {
+  /* 亮色模式: #3c3c43 */
+  filter: brightness(0) saturate(100%) invert(24%) sepia(8%) saturate(1042%) hue-rotate(201deg) brightness(95%) contrast(91%);
+}
+
+/* 暗色模式: #dfdfd6 */
+.dark img.icon[src*="simple-icons"] {
+  filter: brightness(0) saturate(100%) invert(89%) sepia(6%) saturate(295%) hue-rotate(19deg) brightness(95%) contrast(88%);
+}
+
+/* 调整悬停时图标放大倍率 */
+.link:hover img.icon[src*="simple-icons"] {
+  transform: scale(1.35) !important;
+}
