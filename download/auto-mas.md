@@ -5,7 +5,7 @@ function updateGithubIcon() {
   const isDark = document.documentElement.classList.contains('dark')
   const githubImg = document.querySelector('img[data-icon="github"]')
   if (githubImg) {
-    githubImg.src = isDark ? '/resource/github-dark.svg' : '/resource/github.svg'
+    githubImg.src = isDark ? '/icons/github-dark.svg' : '/icons/github.svg'
   }
 }
 
@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
 
   <div class="download-card">
     <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1.2rem;">
-      <img data-icon="github" src="/resource/github.svg" alt="GitHub" style="width:48px;height:48px;">
+      <img data-icon="github" src="/icons/github.svg" alt="GitHub" style="width:48px;height:48px;">
     </div>
     <div class="download-card-title">GitHub 仓库</div>
     <div class="download-card-desc">从 GitHub Release 直接下载最新版本<br>适用于能够直接访问 GitHub 的用户</div>

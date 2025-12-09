@@ -27,7 +27,7 @@
   name="GitHub"
   link="#"
   :image="{
-    light: '/resource/github.svg',
-    dark: '/resource/github-dark.svg'
+    light: '/icons/github.svg',
+    dark: '/icons/github-dark.svg'
   }"
 />

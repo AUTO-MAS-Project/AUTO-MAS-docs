@@ -16,13 +16,13 @@ date: 2025-11-08
 
 <Box :items="[
 { name: '三月七小助手 官网', link: 'https://m7a.top/#/', image: 'https://m7a.top/assets/screenshot/March7th.png', },
-{ name: '三月七小助手 GitHub', link: 'https://github.com/moesnow/March7thAssistant', image: { light: '/resource/github.svg', dark: '/resource/github-dark.svg', }, },]"/>
+{ name: '三月七小助手 GitHub', link: 'https://github.com/moesnow/March7thAssistant', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },]"/>
 
 ## 
 
 ### 安装 三月七
 
-1. 前往 <Pill name="三月七小助手 官网" image="https://m7a.top/assets/screenshot/March7th.png" link="https://m7a.top/#/"/>、<Pill name="三月七小助手 仓库" :image="{ light: '/resource/github.svg', dark: '/resource/github-dark.svg', }" link="https://github.com/moesnow/March7thAssistant/releases/"/> 或 <Pill name="Mirror 酱" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?scouce=AUTO_MAA-Web&rid=March7thAssistant&channel=stable"/> 下载软件压缩包。
+1. 前往 <Pill name="三月七小助手 官网" image="https://m7a.top/assets/screenshot/March7th.png" link="https://m7a.top/#/"/>、<Pill name="三月七小助手 仓库" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/moesnow/March7thAssistant/releases/"/> 或 <Pill name="Mirror 酱" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?scouce=AUTO_MAA-Web&rid=March7thAssistant&channel=stable"/> 下载软件压缩包。
 2. 将 三月七小助手 压缩包解压至任意文件夹。
 
 ::: warning 温馨提醒

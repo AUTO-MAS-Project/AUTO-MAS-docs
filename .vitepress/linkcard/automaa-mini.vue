@@ -3,7 +3,7 @@
   name="AUTO_MAA GitHub"
   link="https://github.com/DLmaster361/AUTO_MAA"
   :image="{
-    light: '/resource/github.svg',
-    dark: '/resource/github-dark.svg',
+    light: '/icons/github.svg',
+    dark: '/icons/github-dark.svg',
   }"
 />

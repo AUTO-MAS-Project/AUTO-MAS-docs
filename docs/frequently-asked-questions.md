@@ -56,4 +56,4 @@ date: 2025-04-27
 
 - **不能**，AUTO-MAS使用Electron框架，采用前后端分离机制，在v5-alpha测试时，前后端采用websocket互相连接，当休眠或睡眠重新启动时，websocket几乎必定会断开，导致
 
-更多问题请参考 <Pill name="AUTO_MAA GitHub Issues" :image="{ light: '/resource/github.svg', dark: '/resource/github-dark.svg', }" link="https://github.com/DLmaster361/AUTO_MAA/issues"/> 。
+更多问题请参考 <Pill name="AUTO_MAA GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/DLmaster361/AUTO_MAA/issues"/> 。
