@@ -126,7 +126,7 @@ onBeforeUnmount(() => {
       <img src="https://pan.quark.cn/favicon.ico" alt="夸克网盘图标" style="width:48px;height:48px;">
     </picture>
     <div class="download-card-title">夸克网盘</div>
-    <div class="download-card-desc">从夸克网盘免费下载最新版本<br>您的转存行为能为 AUTO-MAS 项目组带来少量收益</div>
+    <div class="download-card-desc">从夸克网盘免费下载最新版本<br>您的转存行为能为项目组带来少量收益</div>
     <a href="https://pan.quark.cn/s/5003e30dc69b" target="_blank">访问网盘</a>
   </div>
 
