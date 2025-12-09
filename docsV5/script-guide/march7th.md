@@ -1,3 +1,9 @@
+---
+title: 三月七用户指南
+description: 在AUTO中调度三月七
+date: 2025-11-08
+---
+
 # 三月七小助手用户指南
 
 ## 在AUTO中调度三月七
@@ -49,6 +55,22 @@
 脚本配置一栏会在选择脚本根目录以后自动修正，请不要在不理解这个功能有什么作用的时候贸然修改，以便给自己在使用AUTO-MAS的过程中带来不愉快。
 :::
 
+6. 选择完 三月七小助手 的目录以后会自动修正**脚本配置**一栏的路径，无需手动选择。同时我们需要点击右下方的保存按钮
+![AUTO_MAS配置6](../img/script-guide/March7thAssistan/AUTO-MAA-6.png)
+
+7. 点击**添加用户**，需要自己给添加的用户进行命名（在用户名一栏输入你想要的用户名（这仅仅只是个命名而已）），同时点击右上方的**创建用户**按钮
+![AUTO_MAS配置7](../img/script-guide/March7thAssistan/AUTO-MAA-7.png)
+
+8. 找到刚刚创建的用户，点击**编辑**，进入**通用脚本**配置界面
+![AUTO_MAS配置8](../img/script-guide/March7thAssistan/AUTO-MAA-8.png)
+
+9. 找到右上方的**通用配置**并点击，当出现正在配置通用脚本配置的界面并唤醒三月七小助手的时候，说明已经可以正常配置通用脚本了
+![AUTO_MAS配置9](../img/script-guide/March7thAssistan/AUTO-MAA-9.png)
+
+10. 当配置完**三月七小助手**以后点击**保存配置**，然后再次点击**保存修改**就完成了对**三月七小助手**的在MAS内的全部配置
+![AUTO_MAS配置10](../img/script-guide/March7thAssistan/AUTO-MAA-10.png)
+
+11. 如果需要全自动定时启动**三月七小助手**请查阅[调度队列](../../docsV5/advanced-features/scheduler)
 
 现在立刻马上就要切换账号的功能？你可以试试[StarRailAutoLogin: 一个在AUTO-MAS项目中使用的崩坏：星穹铁道自动登录脚本](https://github.com/Alirea10/StarRailAutoLogin)
 
