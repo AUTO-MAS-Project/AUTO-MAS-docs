@@ -47,7 +47,9 @@ openapi --input http://127.0.0.1:36163/openapi.json --output ./src/api --client 
 ```
 如果没有输出，代表已经生成完成了；如果报错了，请自行查阅报错内容。
 
-由于后端部分接口使用了不兼容的类型定义，可能有部分 `枚举类` 生成错误，这是正常现象，自行撤销修改即可。
+3. 撤销对 `frontend/src/api/core/CancelablePromise.ts` 的修改
+
+由于前端采用了自己实现的日志记录方法 `logger`，而`openapi-generator-typescript` 生成的代码使用的是默认的 `console` 日志记录方法，所以需要您手动撤销对 `frontend/src/api/core/CancelablePromise.ts` 的修改。
 
 ::: warning 注意
 当你阅读至此，说明你正在开发一个新的 API，请你牢记，你直接使用 `yarn dev` 时，后端实际上使用的是 GitHub 上 `dev` 分支中的后端代码，而非你当前开发的后端。
