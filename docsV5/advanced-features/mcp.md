@@ -8,7 +8,9 @@ MCP（Model Context Protocol）是一种开放协议，旨在为 AI 模型提供
 
 ## 配置 MCP 服务
 
-对于任何支持 SSE 的 MCP 客户端，您只需提供 MCP 的网址即可。所有最流行的MCP客户端（Claude Desktop、Cursor 和 Windsurf）都支持使用以下配置：
+对于任何支持 SSE 的 MCP 客户端，您只需提供 AUTO-MAS 的 MCP 的网址 `http://localhost:36163/mcp` 即可。
+
+此外，常见的 MCP 客户端（Claude Desktop、Cursor 和 Windsurf）支持使用以下配置：
 
 ```json
 {
