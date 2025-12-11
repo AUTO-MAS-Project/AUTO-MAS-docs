@@ -47,7 +47,7 @@ openapi --input http://127.0.0.1:36163/openapi.json --output ./src/api --client 
 ```
 如果没有输出，代表已经生成完成了；如果报错了，请自行查阅报错内容。
 
-3. 撤销对 `frontend/src/api/core/CancelablePromise.ts` 的修改
+3. **撤销对 `frontend/src/api/core/CancelablePromise.ts` 的修改**
 
 由于前端采用了自己实现的日志记录方法 `logger`，而`openapi-generator-typescript` 生成的代码使用的是默认的 `console` 日志记录方法，所以需要您手动撤销对 `frontend/src/api/core/CancelablePromise.ts` 的修改。
 

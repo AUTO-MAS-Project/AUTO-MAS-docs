@@ -38,7 +38,7 @@ export default defineConfig({
                             items: [
                                 { text: "MAA", link: "docsV5/script-guide/maa" },
                                 { text: "其他脚本", link: "docsV5/script-guide/general" },
-                                 { text: "通用调度配置", link: "docsV5/script-guide/Universal" },
+                                { text: "通用调度配置", link: "docsV5/script-guide/Universal" },
                                 { text: "三月七", link: "docsV5/script-guide/march7th" },
                             ]
                         },
@@ -52,6 +52,7 @@ export default defineConfig({
                                 { text: "推送通知", link: "/docsV5/advanced-features/notification" },
                                 { text: "人工排查", link: "/docsV5/advanced-features/inspection" },
                                 { text: "森空岛签到", link: "/docsV5/advanced-features/skland-checkin" },
+                                { text: "MCP 服务", link: "/docsV5/advanced-features/mcp" },
                             ]
                         },
                         { text: "常见问题", link: "/docsV5/Q&A" },
