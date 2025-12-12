@@ -6,11 +6,11 @@ export default defineConfig({
     title: "AUTO-MAS",
     head: [
         // 添加图标
-        ['link', { rel: 'icon', href: '/resource/AUTO_MAA.png' }]
+        ['link', { rel: 'icon', href: '/icons/AUTO-MAS.ico' }]
     ],
     description: "AUTO-MAS",
     themeConfig: {
-        logo: { src: '/resource/AUTO_MAA.png', width: 24, height: 24, alt: 'AUTO_MAA LOGO' },
+        logo: { src: '/icons/AUTO-MAS.ico', width: 24, height: 24, alt: 'AUTO-MAS LOGO' },
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             { text: "首页", link: "/" },
