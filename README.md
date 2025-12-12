@@ -1,7 +1,7 @@
-# AUTOMAA Docs
+# AUTO-MAS Docs
 
 ## 📖 项目简介
-AUTOMAA Docs 是一个基于 **VitePress** 构建的文档站点，提供 **[AUTO_MAA](https://github.com/DLmaster361/AUTO_MAA)** 项目的详细使用说明。
+AUTO-MAS Docs 是一个基于 **VitePress** 构建的文档站点，提供 **[AUTO-MAS](https://github.com/AUTO-MAS-Project/AUTO-MAS)** 项目的详细使用说明。
 
 
 📌 **技术栈**：
