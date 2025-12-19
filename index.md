@@ -47,7 +47,7 @@ features:
 
 - **高效稳定**：通过日志监测、异常处理等机制，保障代理任务顺利完成。
 - **简洁易用**：无需手动修改配置文件，在可视界面实现自动化调度与多开管理。
-- **兼容扩展**：支持几乎所有MAA及MFA衍生开发程序，只要有日志！
+- **兼容扩展**：支持几乎所有自动化软件，仅要求支持启动时运行任务并能够打印日志。
 
 
 Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)

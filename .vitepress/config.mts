@@ -29,7 +29,7 @@ export default defineConfig({
             //文档本体
             '/docsV5/': [
                 {
-                    text: "AUTO-MAS V5 文档 ",
+                    text: "AUTO-MAS 文档 ",
                     items: [
                         { text: "开始使用", link: "/docsV5/user-guide" },
                         {
@@ -37,26 +37,20 @@ export default defineConfig({
                             link: "docsV5/script-guide/__index",
                             items: [
                                 { text: "MAA", link: "docsV5/script-guide/maa" },
-                                { text: "其他脚本", link: "docsV5/script-guide/general" },
-                                { text: "通用调度配置", link: "docsV5/script-guide/Universal" },
+                                { text: "通用脚本", link: "docsV5/script-guide/general" },
                                 { text: "三月七", link: "docsV5/script-guide/march7th" },
                             ]
                         },
+                        { text: "任务调度", link: "/docsV5/task-scheduler" },
                         {
                             text: "进阶功能",
                             link: "/docsV5/advanced-features/__index",
                             items: [
-                                { text: "调度队列", link: "/docsV5/advanced-features/scheduler" },
-                                { text: "多开指南", link: "/docsV5/advanced-features/multi-instance" },
-                                { text: "计划管理", link: "/docsV5/advanced-features/plan" },
                                 { text: "推送通知", link: "/docsV5/advanced-features/notification" },
-                                { text: "人工排查", link: "/docsV5/advanced-features/inspection" },
-                                { text: "森空岛签到", link: "/docsV5/advanced-features/skland-checkin" },
                                 { text: "MCP 服务", link: "/docsV5/advanced-features/mcp" },
                             ]
                         },
-                        { text: "常见问题", link: "/docsV5/Q&A" },
-                        { text: "更新日志", link: "/docsV5/changelog" },
+                        { text: "常见问题", link: "/docsV5/FAQ" },
                     ],
                 },
             ],

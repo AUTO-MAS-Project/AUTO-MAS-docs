@@ -1,14 +1,6 @@
----
-title: MAA用户指南
-description: 在AUTO里使用MAA指南
-date: 2025-02-10
----
+# MAA 配置方法
 
-# MAA用户指南
-
-## 在AUTO中调度MAA
-
-### 什么是 MAA？
+## 什么是 MAA？
 
 MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常代理、肉鸽存钱等重复性无趣工作。
 
@@ -18,67 +10,46 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 { name: 'MAA 官网', link: 'https://maa.plus/', image: 'https://maa.plus/favicon.ico', },
 { name: 'MAA GitHub', link: 'https://github.com/MaaAssistantArknights/MaaAssistantArknights', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },]"/>
 
-## 
-
-### 安装 MAA
+## 安装 MAA
 
 1. 前往 <Pill name="MAA 官网" image="https://maa.plus/favicon.ico" link="https://maa.plus"/>、<Pill name="MAA 仓库" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaAssistantArknights/MaaAssistantArknights/releases/latest"/> 或 <Pill name="Mirror 酱" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?rid=MAA&scouce=AUTO_MAA-Web"/> 下载软件压缩包。
 2. 将 MAA 压缩包解压至任意文件夹。
 
 
-### 设置脚本实例
+## 配置脚本
 
-1. 打开 `MAA.exe`，在 **设置 > 切换配置** 中，确保当前配置为 **Default**。
-![AUTO_MAS配置1](../img/AUTO_MAA-config-2.png)
-2. 关闭 **MAA**，检查 `MAA.exe`，确保其无需以管理员身份运行。即确保 **MAA.exe > 右键 > 属性 > 兼容性 > 设置 > 以管理员身份运行此程序** 处于 **未勾选** 状态。
-![AUTO_MAS配置2](../img/AUTO_MAA-config-3.png)
-3. 进入 **脚本管理**，单击 **新建脚本** 并选择 **MAA脚本** 以添加脚本实例管理页面。
-![AUTO_MAS配置3](../img/script-guide/maa/AUTO-MAA-1.png)
-4. 在 **打开的脚本配置** 中的 **MAA路径** 单击 **选择文件夹**，打开 MAA 软件所在目录。
-![AUTO_MAS配置4](../img/script-guide/maa/AUTO-MAA-2.png)
-5. 在**模拟器管理**中选择模拟器和模拟器实例
+1. 进入 **脚本管理**，单击 **新建脚本** 并选择 **MAA脚本** 以添加脚本实例管理页面。
+![AUTO_MAS配置3](/docsV5/img/script-guide/maa/AUTO-MAA-1.png)
 
-  如果此处没有模拟器，请先完成[模拟器管理](/docsV5/advanced-features/emulator-manager.md)
+2. 在 **打开的脚本配置** 中的 **MAA路径** 单击 **选择文件夹**，打开 MAA 软件所在目录。
+![AUTO_MAS配置4](/docsV5/img/script-guide/maa/AUTO-MAA-2.png)
 
-  完成后，点击**右下角蓝色保存按钮**保存。
+3. 在 **模拟器管理** 中选择模拟器和模拟器实例。
+> 如果此处没有模拟器，请先完成 [模拟器管理配置](/docsV5/advanced-features/emulator-manager.md)
 
-6. 点击此处在MAA中配置
-![AUTO_MAS配置5](../img/script-guide/maa/AUTO-MAA-5.png)
+4. 点击 **配置 MAA** 在 MAA 中配置。
+![AUTO_MAS配置5](/docsV5/img/script-guide/maa/AUTO-MAA-5.png)
 
+5. 手动取消勾选 **开机自启动MAA**，并完成 ADB 连接相关配置，其余配置可以根据您的喜好设置。
 
-7. 参照 [多开指南 > MAA 设置](/docsV5/advanced-features/multi-instance.md) 完成 **MAA** 的 **启动设置**，并手动取消勾选 **开机自启动MAA**。
+6. 完成配置后，关闭 **MAA**，并在 AUTO-MAS 中点击 **保存配置**。
+![AUTO_MAS配置6](/docsV5/img/script-guide/maa/AUTO-MAA-6.png)
 
-  同时根据你的偏好，你可以设置各种比如：
-
-  公招是否自动点五星，是否启用GPU加速，明日方舟的服务器，启动设置中的“等待模拟器启动时间”（此选项会决定AUTO等待模拟器的启动时间）等
-
-8. 完成配置后，关闭 **MAA**。并在AUTO中点击保存配置。
-![AUTO_MAS配置6](../img/script-guide/maa/AUTO-MAA-6.png)
-
-### 设置用户配置
+## 配置用户
 
 1. 在 **脚本管理** 的脚本表格内，单击 **添加用户** 以添加一个用户。
-![AUTO_MAS配置7](../img/script-guide/maa/AUTO-MAA-7.png)
+![AUTO_MAS配置7](/docsV5/img/script-guide/maa/AUTO-MAA-7.png)
 2. 按照设置卡相关提示填写用户信息。
-![AUTO_MAS配置8](../img/script-guide/maa/AUTO-MAA-8.png)
+![AUTO_MAS配置8](/docsV5/img/script-guide/maa/AUTO-MAA-8.png)
 
 ::: info 注意
-开启 **自定义基建** 后需要 **选择配置文件**；**详细** 配置模式下开启 **剿灭任务**、**日常任务** 后需要 **设置具体配置**。
-
-用户名：该用户在脚本的名字，无实际作用，仅用作展示用户和日志分类
-
-账号id：游戏的**绑定手机号（官服）**或**昵称（B服）**
-
-密码：无实际作用，仅用作防止遗忘。该密码会在本地DPAPI加密保存，基于TPM，移动AUTO文件夹至其他电脑或刷机，均会导致密码无法解密和失效，具有强安全性，可根据自己实际情况使用。
-
-其余配置请查看软件内tips。
-
+**详细** 配置模式下不要忘了 **设置具体配置**。
 :::
-::: tip 提示
+::: tip 账号 ID 小贴士
 
 由于 MAA 在 **B服账号切换** 功能中使用的 OCR（文字识别）技术准确率有限，我们建议如下填写方式以提高识别和切换成功率：
 
-### 通用建议
+#### 通用建议
 
 - MAA 的账号切换功能只需**成功识别一个唯一片段**即可完成切换。
 - 请填写**仅该账号独有的部分片段**，避免与其他账号重复。
@@ -101,12 +72,56 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 - 示例：
   - 账号1：`DLmaster_361` → 可填写 `master`、`361`
   - 账号2：`黍的XX_1234` → 可填写 `1234`、`的`、`XX`，**不建议填写“黍”或下划线**
-  
 
 经过这些修改，你应该能够稳定的进行账号切换
-
 :::
 
-至此，你的MAA已经配置完成。
+## 计划表
 
-你可以：[创造调度队列，设置定时任务](/docsV5/advanced-features/scheduler)
+依靠计划表，您可以以周为单位定制关卡代理方案。
+
+![plan](..\img\advanced-features\plan-1.png)
+
+十分通俗易懂！
+
+切换配置模式为周计划模式后，你就可以决定不同时间刷什么。
+
+切换为简化视图，可以拥有类似 mower 的编辑体验。
+
+之后，你可以在 MAA 用户界面的关卡配置模式中选择计划表。
+
+![plan](..\img\advanced-features\plan-2.png)
+
+## 森空岛自动签到
+
+::: warning 注意
+AUTO-MAS 在本地处理签到请求，不会将 Token 上传至第三方服务器。
+
+自动签到有一定风险，AUTO-MAS 不对自动签到所造成的任何结果负责。使用此功能代表您同意自行承担相关风险。
+:::
+
+### 获取鹰角网络通行证登录凭证
+
+1. 登录[森空岛网页端](https://www.skland.com/)。
+
+2. 访问此[网址](https://web-api.skland.com/account/info/hg)。
+
+   返回如下信息
+
+   ```json
+   {
+     "code": 0,
+     "data": {
+       "content": "<Token>"
+     },
+     "msg": "接口会返回您的鹰角网络通行证账号的登录凭证，此凭证可以用于鹰角网络账号系统校验您登录的有效性。泄露登录凭证属于极度危险操作，为了您的账号安全，请勿将此凭证以任何形式告知他人！"
+   }
+   ```
+
+3. 将 `<Token>` 输入到软件对应选项卡中。
+
+4. 若您需要连续获取多个账号的 **鹰角网络通行证登录凭证**，请通过 **清理浏览器 cookie** 清除登录状态。直接在网页端退出登录将导致 Token 过期失效。
+
+::: tip 提醒
+注意不要把包裹 `content` 内容的引号，或是页面返回的整个内容输入到选项卡中！
+:::
