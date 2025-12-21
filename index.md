@@ -18,17 +18,17 @@ hero:
       text: 新手上路
       link: /docsV5/user-guide
     - theme: alt
+      text: 脚本配置
+      link: /docsV5/script-guide/__index
+    - theme: alt
+      text: 任务调度
+      link: /docsV5/task-scheduler
+    - theme: alt
       text: 进阶功能
       link: /docsV5/advanced-features/__index
     - theme: alt
-      text: 多开指南
-      link: /docsV5/advanced-features/multi-instance
-    - theme: alt
-      text: 脚本指南
-      link: /docsV5/script-guide/__index
-    - theme: alt
       text: 常见问题
-      link: /docsV5/Q&A
+      link: /docsV5/FAQ
 
 features:
   - title: 集中管理
