@@ -52,7 +52,7 @@ const trackCustomEvent = (category: string, action: string, name?: string) => {
 }
 
 // 使用示例
-trackCustomEvent('Downloads', 'Click', 'AUTO_MAA')
+trackCustomEvent('Downloads', 'Click', 'AUTO-MAS')
 ```
 
 ### 跟踪下载链接

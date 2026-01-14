@@ -80,7 +80,7 @@ export default defineConfig({
             provider: 'local'
         },
         socialLinks: [
-            { icon: "github", link: "https://github.com/DLmaster361/AUTO_MAA" },
+            { icon: "github", link: "https://github.com/AUTO-MAS-Project/AUTO-MAS" },
         ],
         lastUpdated: {
             text: '最后更新于',

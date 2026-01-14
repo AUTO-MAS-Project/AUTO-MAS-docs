@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
     </div>
     <div class="download-card-title">GitHub 仓库</div>
     <div class="download-card-desc">从 GitHub Release 直接下载最新版本<br>适用于能够直接访问 GitHub 的用户</div>
-    <a href="https://github.com/DLmaster361/AUTO_MAA/releases/latest" target="_blank">前往下载</a>
+    <a href="https://github.com/AUTO-MAS-Project/AUTO-MAS/releases/latest" target="_blank">前往下载</a>
   </div>
 
   <div class="download-card">
@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
     </picture>
     <div class="download-card-title">Mirror 酱</div>
     <div class="download-card-desc">从 Mirror 酱高速下载最新版本<br>适用于已有 Mirror 酱 CDK 的富裕用户</div>
-    <a href="https://mirrorchyan.com/zh/projects?rid=AUTO_MAA&scource=AUTO_MAA-Web" target="_blank">高速下载</a>
+    <a href="https://mirrorchyan.com/zh/projects?rid=AUTO_MAS&scource=AUTO-MAS-Web" target="_blank">高速下载</a>
   </div>
 
   <div class="download-card">

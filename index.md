@@ -7,9 +7,9 @@ hero:
   text: "游戏脚本多账号管理与自动化软件"
   tagline: "优化脚本多账号体验，提高代理稳定性"
   prelink:
-    title: 'AUTO_MAA v5.0.0 已发布'
+    title: 'AUTO-MAS v5.0 已发布'
     content: '🚀点击前往 GitHub 进行下载🚀'
-    link: https://github.com/DLmaster361/AUTO_MAA/releases/latest
+    link: https://github.com/AUTO-MAS-Project/AUTO-MAS/releases/latest
   image:
     src: /icons/AUTO-MAS.ico
     alt: "AUTO-MAS Logo"
@@ -34,11 +34,11 @@ features:
   - title: 集中管理
     details: 一站式管理多个脚本与多个用户配置，和凌乱的散装脚本窗口说再见！
   - title: 无人值守
-    details: 自动处理部分意外情况，再也不用为模拟器卡死时自己不在电脑旁烦恼啦！
+    details: 监看脚本日志并自动处理报错，再也不用为代理任务卡死时自己不在电脑旁烦恼啦！
   - title: 配置灵活
-    details: 通过调度队列与脚本的组合，自由实现您能想到的所有调度需求！
-  - title: 信息统计
-    details: 自动统计用户的公招与关卡掉落物，看看这个月您的收益是多少！
+    details: 通过调度队列与脚本的组合设计调度队列，自由实现您能想到的所有调度需求！
+  - title: 代理记录
+    details: 记录所有代理记录与日志片段，定位问题更快更准更方便！
 ---
 
 ## 为什么选择 AUTO-MAS？
