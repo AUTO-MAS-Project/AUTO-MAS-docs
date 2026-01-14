@@ -16,7 +16,7 @@
 如果确定要使用，请仔细并认真阅读本文档后再进行提问。
 :::
 
-![scheduler](/docsV5/img/advanced-features/scheduler.png)
+![scheduler](/docs/img/advanced-features/scheduler.png)
 
 ### 用法
 
@@ -32,7 +32,7 @@
 :::
 
 3. 点击添加定时，设定你需要运行脚本的时间，设置此项时 **别忘了将定时运行状态改为启用**
-4. 添加任务，此处的 **任务** 为 **脚本管理** 内已经配置好的脚本任务，若没有可选的任务，请查阅 [脚本配置](/docsV5/script-guide/__index)
+4. 添加任务，此处的 **任务** 为 **脚本管理** 内已经配置好的脚本任务，若没有可选的任务，请查阅 [脚本配置](/docs/script-guide/__index)
 
 
 ## 自动代理策略

@@ -19,28 +19,28 @@ MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常�
 ## 配置脚本
 
 1. 进入 **脚本管理**，单击 **新建脚本** 并选择 **MAA脚本** 以添加脚本实例管理页面。
-![AUTO_MAS配置3](/docsV5/img/script-guide/maa/AUTO-MAA-1.png)
+![AUTO_MAS配置3](/docs/img/script-guide/maa/AUTO-MAA-1.png)
 
 2. 在 **打开的脚本配置** 中的 **MAA路径** 单击 **选择文件夹**，打开 MAA 软件所在目录。
-![AUTO_MAS配置4](/docsV5/img/script-guide/maa/AUTO-MAA-2.png)
+![AUTO_MAS配置4](/docs/img/script-guide/maa/AUTO-MAA-2.png)
 
 3. 在 **模拟器管理** 中选择模拟器和模拟器实例。
 > 如果此处没有模拟器，请先完成 **模拟器管理配置**
 
 4. 点击 **配置 MAA** 在 MAA 中配置。
-![AUTO_MAS配置5](/docsV5/img/script-guide/maa/AUTO-MAA-5.png)
+![AUTO_MAS配置5](/docs/img/script-guide/maa/AUTO-MAA-5.png)
 
 5. 手动取消勾选 **开机自启动MAA**，并完成 ADB 连接相关配置，其余配置可以根据您的喜好设置。
 
 6. 完成配置后，关闭 **MAA**，并在 AUTO-MAS 中点击 **保存配置**。
-![AUTO_MAS配置6](/docsV5/img/script-guide/maa/AUTO-MAA-6.png)
+![AUTO_MAS配置6](/docs/img/script-guide/maa/AUTO-MAA-6.png)
 
 ## 配置用户
 
 1. 在 **脚本管理** 的脚本表格内，单击 **添加用户** 以添加一个用户。
-![AUTO_MAS配置7](/docsV5/img/script-guide/maa/AUTO-MAA-7.png)
+![AUTO_MAS配置7](/docs/img/script-guide/maa/AUTO-MAA-7.png)
 2. 按照设置卡相关提示填写用户信息。
-![AUTO_MAS配置8](/docsV5/img/script-guide/maa/AUTO-MAA-8.png)
+![AUTO_MAS配置8](/docs/img/script-guide/maa/AUTO-MAA-8.png)
 
 ::: info 注意
 **详细** 配置模式下不要忘了 **设置具体配置**。

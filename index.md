@@ -16,19 +16,19 @@ hero:
   actions:
     - theme: brand
       text: 新手上路
-      link: /docsV5/user-guide
+      link: /docs/user-guide
     - theme: alt
       text: 脚本配置
-      link: /docsV5/script-guide/__index
+      link: /docs/script-guide/__index
     - theme: alt
       text: 任务调度
-      link: /docsV5/task-scheduler
+      link: /docs/task-scheduler
     - theme: alt
       text: 进阶功能
-      link: /docsV5/advanced-features/__index
+      link: /docs/advanced-features/__index
     - theme: alt
       text: 常见问题
-      link: /docsV5/FAQ
+      link: /docs/FAQ
 
 features:
   - title: 集中管理

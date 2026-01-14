@@ -14,77 +14,55 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             { text: "首页", link: "/" },
-            {
-                text: "文档",
-                items: [
-                    { text: "V5 文档", link: "/docsV5/user-guide" },
-                    { text: "v4（旧）文档", link: "/docs/user-guide" },
-                ],
-            },
-            { text: "开发", link: "/developer/getting-start.md" },
+            { text: "文档", link: "/docs/user-guide" },
+            { text: "开发", link: "/developer/getting-start" },
             { text: "下载", link: "/download/auto-mas" },
         ],
 
         sidebar: {
-            //文档本体
-            '/docsV5/': [
+            //文档
+            '/docs/': [
                 {
                     text: "AUTO-MAS 文档 ",
                     items: [
-                        { text: "开始使用", link: "/docsV5/user-guide" },
+                        { text: "开始使用", link: "/docs/user-guide" },
                         {
                             text: "脚本配置",
-                            link: "docsV5/script-guide/__index",
+                            link: "docs/script-guide/__index",
                             items: [
-                                { text: "MAA", link: "docsV5/script-guide/maa" },
-                                { text: "通用脚本", link: "docsV5/script-guide/general" },
-                                { text: "三月七", link: "docsV5/script-guide/march7th" },
+                                { text: "MAA", link: "docs/script-guide/maa" },
+                                { text: "通用脚本", link: "docs/script-guide/general" },
+                                { text: "三月七", link: "docs/script-guide/march7th" },
                             ]
                         },
-                        { text: "任务调度", link: "/docsV5/task-scheduler" },
+                        { text: "任务调度", link: "/docs/task-scheduler" },
                         {
                             text: "进阶功能",
-                            link: "/docsV5/advanced-features/__index",
+                            link: "/docs/advanced-features/__index",
                             items: [
-                                { text: "推送通知", link: "/docsV5/advanced-features/notification" },
-                                { text: "MCP 服务", link: "/docsV5/advanced-features/mcp" },
+                                { text: "推送通知", link: "/docs/advanced-features/notification" },
+                                { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
                             ]
                         },
-                        { text: "常见问题", link: "/docsV5/FAQ" },
+                        { text: "常见问题", link: "/docs/FAQ" },
                     ],
                 },
             ],
-
-            //旧文档
-            '/docs/': [
-                {
-                    text: "AUTO_MAA 文档",
-                    items: [
-                        { text: "开始使用", link: "/docs/user-guide" },
-                        { text: "进阶功能", link: "/docs/advanced-features" },
-                        { text: "多开指南", link: "/docs/multi-instance" },
-                        { text: "通用调度", link: "/docs/general-manager" },
-                        { text: "常见问题", link: "/docs/frequently-asked-questions" },
-                        { text: "更新日志", link: "/docs/changelog" },
-                    ],
-                },
-            ],
-
-
+            //开发者指南
             'developer/': [
                 {
                     text: "开发者指南",
                     items: [
-                        { text: "开发起步", link: "/developer/getting-start.md" },
-                        { text: "开发规范", link: "/developer/development-specifications.md" },
-                        { text: "构筑与发布", link: "/developer/build-and-publish.md" },
+                        { text: "开发起步", link: "/developer/getting-start" },
+                        { text: "开发规范", link: "/developer/development-specifications" },
+                        { text: "构筑与发布", link: "/developer/build-and-publish" },
                     ],
                 },
                 {
                     text: "开发文档", items: [
-                        { text: "API 开发", link: "/developer/API.md" },
-                        { text: "配置管理", link: "/developer/config.md" },
-                        { text: "专项适配", link: "/developer/script_task.md" },
+                        { text: "API 开发", link: "/developer/API" },
+                        { text: "配置管理", link: "/developer/config" },
+                        { text: "专项适配", link: "/developer/script_task" },
                     ]
                 },
             ],
