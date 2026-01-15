@@ -8,7 +8,7 @@ AUTO-MAS 提供丰富的 **通知** 功能，您可以配置想要推送的通�
 
 根据你的推送设置，任何时候都发送通知
 
-![notification-1](..\img\advanced-features\notification-1.png)
+![notification-1](\docs\img\advanced-features\notification-1.png)
 
 ## 用户通知
 
@@ -16,7 +16,7 @@ AUTO-MAS 提供丰富的 **通知** 功能，您可以配置想要推送的通�
 
 > 该通知不会覆盖全局设置，而是在发送全局通知后额外再发一份给指定用户。
 
-![notification-2](..\img\advanced-features\notification-2.png)
+![notification-2](\docs\img\advanced-features\notification-2.png)
 
 ## SMTP 邮件推送渠道
 
