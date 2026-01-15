@@ -6,10 +6,6 @@ hero:
   name: "AUTO-MAS"
   text: "游戏脚本多账号管理与自动化软件"
   tagline: "优化脚本多账号体验，提高代理稳定性"
-  prelink:
-    title: 'AUTO-MAS v5.0 已发布'
-    content: '🚀点击前往 GitHub 进行下载🚀'
-    link: https://github.com/AUTO-MAS-Project/AUTO-MAS/releases/latest
   image:
     src: /icons/AUTO-MAS.ico
     alt: "AUTO-MAS Logo"
@@ -19,13 +15,13 @@ hero:
       link: /docs/user-guide
     - theme: alt
       text: 脚本配置
-      link: /docs/script-guide/__index
+      link: /docs/script-guide
     - theme: alt
       text: 任务调度
       link: /docs/task-scheduler
     - theme: alt
       text: 进阶功能
-      link: /docs/advanced-features/__index
+      link: /docs/advanced-features
     - theme: alt
       text: 常见问题
       link: /docs/FAQ

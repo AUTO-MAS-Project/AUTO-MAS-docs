@@ -15,30 +15,31 @@ export default defineConfig({
         nav: [
             { text: "首页", link: "/" },
             { text: "文档", link: "/docs/user-guide" },
-            { text: "开发", link: "/developer/getting-start" },
+            { text: "开发", link: "/developer" },
             { text: "下载", link: "/download/auto-mas" },
+            { text: "公示", link: "/disclosure" },
         ],
 
         sidebar: {
             //文档
             '/docs/': [
                 {
-                    text: "AUTO-MAS 文档 ",
+                    text: "使用文档 ",
                     items: [
                         { text: "开始使用", link: "/docs/user-guide" },
                         {
                             text: "脚本配置",
-                            link: "docs/script-guide/__index",
+                            link: "/docs/script-guide",
                             items: [
-                                { text: "MAA", link: "docs/script-guide/maa" },
-                                { text: "通用脚本", link: "docs/script-guide/general" },
-                                { text: "三月七", link: "docs/script-guide/march7th" },
+                                { text: "MAA", link: "/docs/script-guide/maa" },
+                                { text: "通用脚本", link: "/docs/script-guide/general" },
+                                { text: "三月七", link: "/docs/script-guide/march7th" },
                             ]
                         },
                         { text: "任务调度", link: "/docs/task-scheduler" },
                         {
                             text: "进阶功能",
-                            link: "/docs/advanced-features/__index",
+                            link: "/docs/advanced-features",
                             items: [
                                 { text: "推送通知", link: "/docs/advanced-features/notification" },
                                 { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
@@ -49,9 +50,10 @@ export default defineConfig({
                 },
             ],
             //开发者指南
-            'developer/': [
+            '/developer/': [
                 {
                     text: "开发者指南",
+                    link: "/developer/",
                     items: [
                         { text: "开发起步", link: "/developer/getting-start" },
                         { text: "开发规范", link: "/developer/development-specifications" },
@@ -66,12 +68,22 @@ export default defineConfig({
                     ]
                 },
             ],
-            //下载站
+            //下载渠道
             '/download/': [
                 {
                     text: "软件下载",
                     items: [
                         { text: "AUTO-MAS", link: "/download/auto-mas" },
+                    ],
+                },
+            ],
+            //下载渠道
+            '/disclosure/': [
+                {
+                    text: "信息公开",
+                    link: "/disclosure/",
+                    items: [
+                        { text: "项目收支", link: "/disclosure/income-and-expenditures" },
                     ],
                 },
             ],

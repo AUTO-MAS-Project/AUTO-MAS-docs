@@ -14,7 +14,7 @@ yarn build
 1. 更新版本号
    - `res/version.json` 中的 `main_version`
    - `frontend/package.json` 中的 `version`
-   - `app/core/config.py"` 中的 `AppConfig.VERSION`
+   - `app/core/config.py` 中的 `AppConfig.VERSION`
 
 2. 检查 `res/version.json` 中的版本信息
 
