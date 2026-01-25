@@ -74,6 +74,7 @@ export default defineConfig({
                     text: "软件下载",
                     items: [
                         { text: "AUTO-MAS", link: "/download/auto-mas" },
+                        { text: "MaaZFA", link: "/download/maa-zfa" },
                     ],
                 },
             ],
