@@ -6,12 +6,6 @@
 
 ## 疑问解答
 
-### **AUTO-MAS 与 MAA 有什么关系？**
-
-- AUTO-MAS 原名 AUTO-MAS，最初是 MAA 的多账号调度工具，v5 版本后开始尝试调度一切脚本。
-- AUTO-MAS 项目组与 MAA 项目组是完全独立的两班人马。
-- AUTO-MAS 代码与 MAA 或 MFW 完全无关，设计思路、用途与架构都完全不同。
-
 ### **AUTO-MAS 利好代肝吗？**
 
 - 代肝用 AUTO-MAS 就是利好代肝，用户用 AUTO-MAS 就是利好用户。
@@ -41,23 +35,28 @@
 
 ## 故障排查
 
-### **后端启动失败，跳过后应用内不停报错 Network Error**
+### 后端启动失败，跳过后应用内不停报错 Network Error
 
 打开 `debug/frontend.log` 查看错误信息。
 
-- [Errno 10048] error while attempting to bind on address ('0.0.0.0', 36163): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。
+- **[Errno 10048] error while attempting to bind on address ('0.0.0.0', 36163): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。**
 
   **端口被占用**，AUTO-MAS 后端默认端口为 `36163`，请检查端口是否被占用。
 
-- ModuleNotFoundError: No module named 'xxx'
+- **ModuleNotFoundError: No module named 'xxx'**
 
   **缺少依赖**，删除软件根目录下 `environment/.requirements_hash` 文件并重启软件，仍无法解决请删除 `environment` 文件夹并重启软件。
 
-- ImportError: DLL load failed while importing onnxruntime_pybind11_state: 动态链接库(DLL)初始化例程失败。
+- **ImportError: DLL load failed while importing onnxruntime_pybind11_state: 动态链接库(DLL)初始化例程失败。**
 
   **缺少系统环境**，AUTO-MAS 运行依赖于 **Microsoft Visual C++** 系统环境，若缺失该环境，您需要手动从 [Microsoft Visual C++](https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version) 或直接从 [Microsoft Visual C++ x64](https://aka.ms/vc14/vc_redist.x64.exe) 中下载并安装。
 
-### **为什么 AUTO-MAS 无法打开 MAA 设置窗口？**
+
+### 模拟器启动失败
+
+AUTO-MAS 启动的所有脚本与应用都将带有 **管理员权限**。由于模拟器多开时，一部分模拟器实例无管理员权限时，无法以管理员权限启动新的模拟器实例，您需要保证当前所有模拟器实例都以管理员权限启动，包括模拟器多开器。
+
+### 为什么 AUTO-MAS 无法打开 MAA 设置窗口？
 
 - 若您在 MAA 中启用了 **启动 MAA 后直接最小化** 与 **最小化时隐藏至托盘**，请您从托盘区找到 MAA 后继续配置。若您认为该操作过于费时，可尝试启用 **静默模式**。
 

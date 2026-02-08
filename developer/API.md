@@ -43,6 +43,7 @@ python main.py
 2. **使用 openapi-generator-typescript 生成前端代码**
 
 ```bash
+cd frontend
 openapi --input http://127.0.0.1:36163/openapi.json --output ./src/api --client axios
 ```
 如果没有输出，代表已经生成完成了；如果报错了，请自行查阅报错内容。
