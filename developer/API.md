@@ -54,7 +54,7 @@ openapi --input http://127.0.0.1:36163/openapi.json --output ./src/api --client 
 因此，为了在前端测试你的 API，你必须先在本地启动后端，再运行前端，您可以参考 [使用来自本地的后端](/developer/getting-start#_4-2-使用本地的后端代码)。
 :::
 
-##  3. 在前端调用 API
+##  4. 在前端调用 API
 
 使用新生成的 frontend/src/api/services/Service.ts，即可调用api：
 
