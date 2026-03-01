@@ -37,7 +37,7 @@
 
 ### 后端启动失败，跳过后应用内不停报错 Network Error
 
-打开 `debug/frontend.log` 查看错误信息。
+打开 `debug/app.log` 查看错误信息。
 
 - **[Errno 10048] error while attempting to bind on address ('0.0.0.0', 36163): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。**
 

@@ -28,7 +28,10 @@ const records = [
   { name: '下载站服务器开支', description: '10-12月统一结算', amount: -30.00, date: '2025年12月31日' },
   { name: '下载站服务器开支', description: '1-6月统一结算', amount: -300.00, date: '2026年1月9日' },
   { name: '开发者福利快递费', description: '单件平均 5', amount: -40.00, date: '2026年1月9日' },
-  { name: '用户捐赠', description: 'Chainsmoker捐赠（微信收款）', amount: 20.00, date: '2026年1月16日' }
+  { name: '用户捐赠', description: 'Chainsmoker捐赠（微信收款）', amount: 20.00, date: '2026年1月16日' },
+  { name: 'Mirror酱分成', description: '12月份结算', amount: 155.19, date: '2025年12月31日' },
+  { name: 'Mirror酱分成', description: '1月份结算', amount: 51.38, date: '2025年12月31日' },
+  { name: 'Mirror酱分成', description: '2月份结算', amount: 57.29, date: '2025年12月31日' },
 ]
 
 const totalAmount = computed(() => {

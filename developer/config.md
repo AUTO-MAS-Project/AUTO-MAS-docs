@@ -32,8 +32,6 @@ Group_Name = ConfigItem("Group", "Name", "默认值", [Validator()])
 
 **含义：** 定义了一个配置字段，字段名为 `Name`，字段所属分组为 `Group`，字段默认值为 `"默认值"`，字段使用 *`Validator()`* 进行校验与修正。
 
-**注意：** 配置字段变量名与 `ConfigItem` 中的 `Name`、`Group` 参数必须严格对应，配置字段变量名必须符合 `{Group}_{Name}` 格式。
-
 ### 配置字段校验器
 
 定义配置字段校验器后，配置管理模块会自动调用该校验器对配置字段进行校验与修正，有时也被用来实现特殊的字段逻辑。
@@ -70,7 +68,7 @@ Group_Name = ConfigItem("Group", "Name", "默认值", [Validator()])
 
 8. 虚拟配置字段验证器
     - 定义：`VirtualConfigValidator(function)`
-    - 作用：用于定义一个虚拟配置字段。该配置字段的 `value` 实例属性将被视为配置字段的内部变量，可以被 `function` 使用。在保存内容到字段时，将会直接将内容保存到 `value` 变量中；在获取该字段的值时，将会调用 `function` 并返回该回调函数的返回值。这与 `Python` 装饰器 `@property` 的功能类似，目标是让程序能用调用配置项的方法获取一个 `function` 的返回值。
+    - 作用：用于定义一个虚拟配置字段。无法设置虚拟配置字段的值，在获取该字段的值时，将会调用 `function` 并返回该回调函数的返回值。这与 `Python` 装饰器 `@property` 的功能类似，目标是让程序能用调用配置项的方法获取一个 `function` 的返回值。
 
 9. 布尔值验证器
     - 定义：`BoolValidator()`
@@ -102,11 +100,11 @@ class ConfigModel(ConfigBase):
     ... # 类属性
 
     def __init__(self) -> None:
-        super().__init__()
 
         self.Group_Name = ConfigItem("Group", "Name", "默认值", [Validator()])
         self.MultiConfig = MultipleConfig([ConfigModel]) # 多配置管理实例
         ... # 实例属性
+        super().__init__()
 ```
 
 **关于类属性与实例属性**
@@ -114,10 +112,10 @@ class ConfigModel(ConfigBase):
 - 若将配置项设为类属性, 则所有实例都会共享同一份配置项数据。
 - 若将配置项设为实例属性, 则每个实例都会有独立的配置项数据。
 
-**关于多配置管理实例的 `if_save_needed` 字段**
+**关于 `super().__init__()` 的调用位置**
 
-- `True`：**单配置管理实例**保存到配置文件时，该 **多配置管理实例** 也会被保存到同一个配置文件中；从该配置文件导入配置时，该 **多配置管理实例** 也会被一并导入。
-- `False`：该 **多配置管理实例** 仅是一个属性，可以通过成员运算符直接访问，但不会被保存到配置文件，也不能从对应配置文件中导入。
+- `super().__init__()` 之前定义的配置项将视为 **单配置管理实例** 的配置字段。
+- `super().__init__()` 之后定义的配置项不会被视为 **单配置管理实例** 的配置字段，无法通过 `set()` 等方法访问，也不会被保存到配置文件。
 
 ### 使用单配置管理实例
 
