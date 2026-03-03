@@ -1,6 +1,6 @@
 # 常见问题
 
-更多问题请参考 <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/DLmaster361/AUTO-MAS/issues"/> 。
+更多问题请参考 <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/AUTO-MAS-Project/AUTO-MAS/issues"/> 。
 
 脚本软件问题请阅读脚本文档或咨询脚本开发者
 
