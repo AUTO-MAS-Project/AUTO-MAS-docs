@@ -37,7 +37,7 @@
 
 ### 后端启动失败，跳过后应用内不停报错 Network Error
 
-打开 `debug/app.log` 查看错误信息。
+在前端报错页面或打开 `debug/app.log` 查看错误信息。
 
 - **[Errno 10048] error while attempting to bind on address ('0.0.0.0', 36163): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。**
 
@@ -51,6 +51,20 @@
 
   **缺少系统环境**，AUTO-MAS 运行依赖于 **Microsoft Visual C++** 系统环境，若缺失该环境，您需要手动从 [Microsoft Visual C++](https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version) 或直接从 [Microsoft Visual C++ x64](https://aka.ms/vc14/vc_redist.x64.exe) 中下载并安装。
 
+::: tip 注意
+
+若前端报错页面与日志文件中均为发现报错日志，请以管理员身份运行终端（或 PowerShell、CMD），执行以下命令：
+
+```bash
+cd {AUTO-MAS 根目录}
+.\environment\python\python.exe main.py
+```
+
+其中 `{AUTO-MAS 根目录}` 需要自行替换为 AUTO-MAS 安装目录位置。
+
+此时终端会输出错误日志，请据此进行故障排查。
+
+:::
 
 ### 模拟器启动失败
 
