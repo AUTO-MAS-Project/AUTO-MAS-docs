@@ -78,13 +78,14 @@ export default defineConfig({
                     ],
                 },
             ],
-            //下载渠道
+            //信息公开
             '/disclosure/': [
                 {
                     text: "信息公开",
                     link: "/disclosure/",
                     items: [
                         { text: "项目收支", link: "/disclosure/income-and-expenditures" },
+                        { text: "耻辱柱", link: "/disclosure/pillar-of-shame" },
                     ],
                 },
             ],
