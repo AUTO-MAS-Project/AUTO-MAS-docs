@@ -34,8 +34,9 @@ const records = [
   { name: 'Mirror酱分成', description: '2月份结算', amount: 57.29, date: '2026年1月16日' },
   { name: 'Mirror酱分成', description: '3月份结算', amount: 41.93, date: '2026年4月2日' },
   { name: '夸克网盘任推邦分成', description: '1-3月份结算', amount: 27.50, date: '2026年4月2日' },
-  { name: '开发者开发工具订阅报销', description: '个人申报比例报销', amount: -50, date: '2026年4月2日' }
-  { name: 'B站小店获赠', description: '1-3月统一结算', amount: 299.58, date: '2026年4月2日' }
+  { name: '开发者开发工具订阅报销', description: '个人申报比例报销', amount: -50, date: '2026年4月2日' },
+  { name: 'B站小店获赠', description: '1-3月统一结算', amount: 299.58, date: '2026年4月2日' },
+  { name: '用户捐赠', description: 'delaube捐赠（QQ收款）', amount: 30, date: '2026年4月3日' },
 ]
 
 const totalAmount = computed(() => {
