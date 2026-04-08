@@ -52,21 +52,30 @@ export default defineConfig({
             //开发者指南
             '/developer/': [
                 {
-                    text: "开发者指南",
+                    text: "MAS主程序开发者指南",
                     link: "/developer/",
                     items: [
                         { text: "开发起步", link: "/developer/getting-start" },
                         { text: "开发规范", link: "/developer/development-specifications" },
                         { text: "构筑与发布", link: "/developer/build-and-publish" },
+                        {
+                            text: "开发文档", items: [
+                                { text: "API 开发", link: "/developer/API" },
+                                { text: "配置管理", link: "/developer/config" },
+                                { text: "专项适配", link: "/developer/script_task" },
+                            ]
+                        },
                     ],
-                },
-                {
-                    text: "开发文档", items: [
-                        { text: "API 开发", link: "/developer/API" },
-                        { text: "配置管理", link: "/developer/config" },
-                        { text: "专项适配", link: "/developer/script_task" },
+                },{
+                    text: "插件开发者指南",
+                    items:[
+                        { text: "开发起步", link: "/developer/plugin/start/getting-start" },
+                        { text: "配置文件", link: "/developer/plugin/start/config" },
+                        { text: "启动与脚本", link: "/developer/plugin/start/script" },
+                        { text: "工作区开发", link: "/developer/plugin/start/workspace" },
+                        { text: "发布插件", link: "/developer/plugin/start/publish" },
                     ]
-                },
+                }
             ],
             //下载渠道
             '/download/': [
