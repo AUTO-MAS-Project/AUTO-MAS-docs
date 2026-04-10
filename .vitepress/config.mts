@@ -41,6 +41,7 @@ export default defineConfig({
                             text: "进阶功能",
                             link: "/docs/advanced-features",
                             items: [
+                                { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                                 { text: "推送通知", link: "/docs/advanced-features/notification" },
                                 { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
                             ]
