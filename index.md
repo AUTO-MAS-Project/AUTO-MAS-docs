@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "AUTO-MAS"
+  name: "AUTO-MAS 预览版"
   text: "游戏脚本多账号管理与自动化软件"
   tagline: "优化脚本多账号体验，提高代理稳定性"
   image:
