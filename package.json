@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "docs:dev": "vitepress dev",
+    "docs:dev": "vitepress dev --port 5174",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
   },
