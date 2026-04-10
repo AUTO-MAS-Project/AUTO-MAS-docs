@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     base: "/",
-    title: "AUTO-MAS",
+    title: "AUTO-MAS 预览版",
     head: [
         // 添加图标
         ['link', { rel: 'icon', href: '/icons/AUTO-MAS.ico' }]
