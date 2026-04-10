@@ -69,10 +69,9 @@ export default defineConfig({
                 },{
                     text: "插件开发者指南",
                     items:[
-                        { text: "开发起步", link: "/developer/plugin/start/getting-start" },
+                        { text: "开发起步", link: "/developer/plugin/start/start" },
                         { text: "配置文件", link: "/developer/plugin/start/config" },
-                        { text: "启动与脚本", link: "/developer/plugin/start/script" },
-                        { text: "工作区开发", link: "/developer/plugin/start/workspace" },
+                        { text: "工作区开发", link: "/developer/plugin/start/develop" },
                         { text: "发布插件", link: "/developer/plugin/start/publish" },
                     ]
                 }
