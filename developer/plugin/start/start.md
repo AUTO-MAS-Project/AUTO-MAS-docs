@@ -4,7 +4,7 @@
 
 ## 选择适合你的开发软件
 
-MAS后端及插件系统采用Python3.12，桌面采用Electron，详细请看 [技术栈](/developer/getting-start)。
+MAS后端及插件系统采用Python3.12，桌面采用Electron，详细请看 [技术栈](../../getting-start)。
 
 插件系统将尽其所能的避免让插件开发者为了配置项处理前端，因此你理论上只需要会使用Python即可开发MAS插件。
 
@@ -95,7 +95,7 @@ CNB我们正在尝试支持下载，但Git的提交可能并不是最新的，�
 
 :::
 
-项目结构大致为这样[项目结构](http://localhost:5173/developer/getting-start.html#项目结构)
+项目结构大致为这样[项目结构](../../getting-start#项目结构)
 
 ## 后端python环境
 
