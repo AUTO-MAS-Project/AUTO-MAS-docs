@@ -246,8 +246,8 @@ yarn install
 出现
 
 ```
-2026-04-07 18:46:23.001 | INFO     | 主程序 | Application startup complete.
-2026-04-07 18:46:23.003 | INFO     | 主程序 | Uvicorn running on http://0.0.0.0:36163 (Press CTRL+C to quit)
+| 主程序 | Application startup complete.
+| 主程序 | Uvicorn running on http://0.0.0.0:36163 (Press CTRL+C to quit)
 ```
 
 即为启动成功
