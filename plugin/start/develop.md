@@ -110,7 +110,7 @@ where = ["src"]
 
 ## 启用插件
 
-![](../../img/add_plugin.png)
+![](../img/add_plugin.png)
 
 来到插件管理，新增实例，选择ces插件，将其启用。观察后端日志，应该能看到如下日志
 

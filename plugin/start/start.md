@@ -4,7 +4,7 @@
 
 ## 选择适合你的开发软件
 
-MAS后端及插件系统采用Python3.12，桌面采用Electron，详细请看 [技术栈](../../getting-start)。
+MAS后端及插件系统采用Python3.12，桌面采用Electron，详细请看 [技术栈](../../developer/getting-start)。
 
 插件系统将尽其所能的避免让插件开发者为了配置项处理前端，因此你理论上只需要会使用Python即可开发MAS插件。
 
@@ -14,7 +14,7 @@ MAS后端及插件系统采用Python3.12，桌面采用Electron，详细请看 [
 
 MAS理所当然需要[Python](https://www.python.org/downloads/)，目前我们规定使用3.12的python，尽管你似乎可以使用±1版本的python来成功运行后端，但是3.13的版本可能存在潜在的兼容问题，而过早的版本可能导致部分库无法运行，因此如果你打算长期开发MAS插件，我们不建议你使用除了3.12以外的其他版本。
 
-![img](/developer/img/python_download_page.png)
+![img](../img/python_download_page.png)
 
 点击Download下载，随后根据安装包流程完成安装。
 
@@ -32,7 +32,7 @@ MAS使用了Electron37.0.0，需要Node 22.16.0或更高的版本。
 
 前往[Node.js官网](https://nodejs.org/zh-cn/download)选择适合的版本（推荐使用LTS版本），下载并安装
 
-![img](/developer/img/nodejs_download_page.png)
+![img](../img/nodejs_download_page.png)
 
 安装完成后，打开命令行工具（CMD/powershell等)，输入
 
@@ -95,7 +95,7 @@ CNB我们正在尝试支持下载，但Git的提交可能并不是最新的，�
 
 :::
 
-项目结构大致为这样[项目结构](../../getting-start#项目结构)
+项目结构大致为这样[项目结构](../../developer/getting-start#项目结构)
 
 ## 后端python环境
 
@@ -276,7 +276,7 @@ yarn dev
 
 为了方便你后续启动后端和前端，你可以在此处配置launch.json。
 
-![img](/developer/img/vscode_run_and_debug.png)
+![img](../img/vscode_run_and_debug.png)
 
 ```json
 {
