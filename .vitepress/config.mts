@@ -72,7 +72,7 @@ export default defineConfig({
                     items:[
                         { text: "开发起步", link: "/developer/plugin/start/start" },
                         { text: "配置文件", link: "/developer/plugin/start/config" },
-                        { text: "工作区开发", link: "/developer/plugin/start/develop" },
+                        { text: "插件开发", link: "/developer/plugin/start/develop" },
                         { text: "发布插件", link: "/developer/plugin/start/publish" },
                     ]
                 }
