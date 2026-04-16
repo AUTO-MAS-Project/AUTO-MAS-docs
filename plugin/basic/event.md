@@ -8,7 +8,9 @@
 
 ### 事件对象结构
 
-标准事件对象包含以下结构：
+标准事件对象包含以下结构，我们将其称为**载荷（payload）**：
+
+*此处以task.start举例，data字段不完整*
 
 ```json
 {
@@ -31,7 +33,23 @@
 
 task.* 事件通常把任务字段放在 data 内；script.* 事件会把脚本上下文字段提升到顶层。
 
-script.exit 示例：
+task.start 示例（任务字段主要在 data 内）：
+
+```json
+{
+  "event": "task.start",
+  "event_version": "1",
+  "source": "core.task_manager",
+  "timestamp": "2026-03-22T01:23:45+08:00",
+  "data": {
+    "task_id": "task-001",
+    "mode": "AutoProxy",
+    "queue_id": "queue-001"
+  }
+}
+```
+
+script.exit 示例（脚本字段提升到顶层）：
 
 ```json
 {
@@ -53,6 +71,11 @@ script.exit 示例：
 }
 ```
 
+对照结论：
+
+- task.*：重点字段一般在 data 内读取，例如 data.task_id、data.mode。
+- script.*：重点字段一般在顶层读取，例如 task_id、script_id、script_name、result。
+
 开发建议：
 
 - 处理 task.* 时，优先从 payload["data"] 读取 task_id 等字段。
@@ -60,20 +83,20 @@ script.exit 示例：
 
 ## 系统提供的标准事件
 
-### 任务维度事件
+### Task事件
 
 - task.start：任务启动。
 - task.progress：任务进度快照。
 - task.log：当前脚本日志快照。
-- task.exit：任务结束收口。
+- task.exit：任务结束。
 
-### 脚本维度事件
+### Script事件
 
 - script.start：脚本开始。
 - script.success：脚本成功完成。
 - script.error：脚本失败。
-- script.cancelled：脚本被取消。
-- script.exit：脚本生命周期收口事件（推荐优先监听）。
+- script.cancelled：脚本被人工取消。
+- script.exit：脚本生命周期结束（推荐优先监听）。
 
 ::: tip 有什么区别？
 
@@ -83,18 +106,14 @@ task是script的集合，一个task任务中可以包含多个script。
 
 :::
 
-推荐策略：
-
-- 需要对每个脚本做统一收口时，优先监听 script.exit，再根据 result 分支处理。
-
-## 监听器声明与签名规范
+## 事件监听
 
 ### 装饰器参数
 
 示例：
 
 ```python
-from app.core.plugins import on_event
+from mas.plugins import on_event
 
 @on_event("script.exit", scope="global", priority=0, once=False)
 async def on_script_exit(payload, ctx):
@@ -104,9 +123,9 @@ async def on_script_exit(payload, ctx):
 参数说明：
 
 - event：事件名，不能为空。
-- scope：global 或 instance。
-- priority：数值越大，越先执行。
-- once：触发一次后自动解绑。
+- scope：作用域，global（全局） 或 instance（插件内）。
+- priority：优先级，数值越大，越先执行。
+- once：是否触发一次后自动解绑。
 - error_policy：continue 或 raise，None 表示继承事件级策略。
 
 ### 处理函数允许的签名
@@ -123,9 +142,7 @@ async def on_script_exit(payload, ctx):
 
 事件总线对同步函数会放到线程执行。若你在同步监听器内直接调用 asyncio.create_task，常见报错为 no running event loop。
 
-建议：
-
-- 需要创建异步任务时，将监听器定义为 async def。
+因此，需要创建异步任务时，需要将监听器定义为 async def。
 
 ## 作用域、优先级、错误策略
 
@@ -157,9 +174,11 @@ async def on_script_exit(payload, ctx):
 
 ```python
 def read_task_payload(payload: dict) -> tuple[str, str]:
+    # 可选类型检测
     data = payload.get("data") if isinstance(payload, dict) else None
     if not isinstance(data, dict):
         return "", ""
+    
     task_id = str(data.get("task_id") or "").strip()
     mode = str(data.get("mode") or "").strip()
     return task_id, mode
@@ -177,16 +196,11 @@ def read_script_payload(payload: dict) -> tuple[str, str, str]:
     return script_name, script_id, result
 ```
 
-### 常见字段错位问题
-
-- 错误方式：在 script.exit 的 data 中找 script_name。
-- 正确方式：先读顶层 script_name、script_id、result，再读 data 扩展字段。
-
 ## 最小可用实现模板
 
 ```python
 from typing import Any
-from app.core.plugins import on_event
+from mas.plugins import on_event
 
 
 class Plugin:
@@ -225,16 +239,6 @@ class Plugin:
             self.ctx.logger.warning(f"处理 script.exit 失败: {type(e).__name__}: {e}")
 ```
 
-## 调试与验证流程
-
-- 确认插件实例已加载且状态正常。
-- 确认监听器事件名完全匹配（如 script.exit）。
-- 确认 scope 设置正确（监听核心事件应为 global）。
-- 在处理函数第一行打印 payload 结构，核对字段层级。
-- 对 result 做完整分支（success/error/cancelled），避免漏处理。
-- 增加去重签名，避免重复事件引起副作用。
-- 对处理逻辑加总兜底异常捕获，保证总线稳定。
-
 ## 常见问题
 
 ### 监听器没有触发
@@ -250,19 +254,6 @@ class Plugin:
 可能原因：
 
 - 把 task.* 当成 script.* 读取，或反过来。
-- 未做 isinstance(payload, dict) 与 data 字段判空。
-
-### 监听器内部起异步任务报错
-
-典型报错：no running event loop。
-
-原因：
-
-- 监听器是同步函数，实际在线程执行。
-
-处理：
-
-- 将监听器改成 async def，再创建后台任务。
 
 ## 事件样例
 
