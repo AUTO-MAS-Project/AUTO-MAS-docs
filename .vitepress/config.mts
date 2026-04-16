@@ -60,18 +60,16 @@ export default defineConfig({
                     text: "插件开发者指南",
                     items: [
 
-                        {text: "开发起步", link: "/developer/plugin/start/start"},
-                        {text: "配置文件", link: "/developer/plugin/start/config"},
-                        {text: "插件开发", link: "/developer/plugin/start/develop"},
-                        {text: "发布插件", link: "/developer/plugin/start/publish"},
+                        {text: "开发起步", link: "/plugin/start/start"},
+                        {text: "配置文件", link: "/plugin/start/config"},
+                        {text: "插件开发", link: "/plugin/start/develop"},
+                        {text: "发布插件", link: "/plugin/start/publish"},
                     ]
                 }, {
                     text: "开发基础",
                     items: [
-                        {text: "开发起步", link: "/developer/plugin/start/start"},
-                        {text: "配置文件", link: "/developer/plugin/start/config"},
-                        {text: "插件开发", link: "/developer/plugin/start/develop"},
-                        {text: "发布插件", link: "/developer/plugin/start/publish"},
+                        {text: "核心能力", link: "/plugin/basic/core"},
+                        {text: "事件系统", link: "/plugin/basic/event"},
                     ]
                 }
             ],
@@ -92,8 +90,7 @@ export default defineConfig({
                             ]
                         },
                     ],
-                }
-                ,
+                },
             ],
             //下载渠道
             '/download/': [
