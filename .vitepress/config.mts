@@ -70,6 +70,8 @@ export default defineConfig({
                     items: [
                         {text: "核心能力", link: "/plugin/basic/core"},
                         {text: "事件系统", link: "/plugin/basic/event"},
+                        {text: "配置声明", link: "/plugin/basic/schema"},
+                        {text: "服务系统", link: "/plugin/basic/service"},
                     ]
                 }
             ],
