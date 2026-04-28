@@ -36,9 +36,10 @@ export default defineConfig({
                             text: "脚本配置",
                             link: "/docs/script-guide",
                             items: [
-                                {text: "MAA", link: "/docs/script-guide/maa"},
-                                {text: "通用脚本", link: "/docs/script-guide/general"},
-                                {text: "三月七", link: "/docs/script-guide/march7th"},
+                                { text: "MAA", link: "/docs/script-guide/maa" },
+                                { text: "MAAEND", link: "/docs/script-guide/maaend" },
+                                { text: "通用脚本", link: "/docs/script-guide/general" },
+                                { text: "三月七", link: "/docs/script-guide/march7th" },
                             ]
                         },
                         {text: "任务调度", link: "/docs/task-scheduler"},
