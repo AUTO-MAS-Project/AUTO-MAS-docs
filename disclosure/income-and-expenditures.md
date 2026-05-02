@@ -37,6 +37,8 @@ const records = [
   { name: '开发者开发工具订阅报销', description: '个人申报比例报销', amount: -50, date: '2026年4月2日' },
   { name: 'B站小店获赠', description: '1-3月统一结算', amount: 179.18, date: '2026年4月2日' },
   { name: '用户捐赠', description: 'delaube捐赠（QQ收款）', amount: 30, date: '2026年4月3日' },
+  { name: 'Mirror酱分成', description: '4月份结算', amount: 83.5, date: '2026年5月2日' },
+  { name: '开发者夏日回馈奖品', description: '购置白名单通行证抱2盒与捆物', amount: -304.20, date: '2026年5月2日' },
 ]
 
 const totalAmount = computed(() => {
