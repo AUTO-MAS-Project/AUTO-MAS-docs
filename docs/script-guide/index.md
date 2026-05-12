@@ -23,6 +23,16 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 
 ---
 
+### [M9A](/docs/script-guide/m9a)
+
+1999（亿韭韭韭） - M9A
+
+- 支持日常代理、活动刷取、自动深眠等
+- 支持 MuMu 与 雷电模拟器
+- 仅支持 MFAAvalonia 界面
+
+---
+
 ### [通用调度](/docs/script-guide/general)
 
 适用于所有支持启动时运行任务且能够打印日志的脚本
@@ -36,5 +46,6 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 ## 选择建议
 
 - **新手推荐**：从 [MAA 用户指南](/docs/script-guide/maa) 开始（如果玩明日方舟）
+- **1999 玩家**：查看 [M9A 配置方法](/docs/script-guide/m9a) 快速上手
 - **其他游戏**：查看 [通用调度](/docs/script-guide/general) 并使用现成模板
 - **高级用户**：深入了解[通用调度](/docs/script-guide/general)的配置管理逻辑，自定义您的调度方案
