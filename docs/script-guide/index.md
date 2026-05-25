@@ -2,7 +2,7 @@
 
 AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 AUTO-MAS 中使用各类脚本。
 
-## 指南列表
+## 指南目录
 
 ### [MAA](/docs/script-guide/maa)
 
@@ -12,14 +12,13 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 - 官服与 B服 支持管理多账号
 - 支持使用计划表定制关卡配置
 
----
+### [MaaEnd](/docs/script-guide/maaend)
 
-### [三月七小助手](/docs/script-guide/march7th)
+明日方舟：终末地 - MaaEnd 终末地小助手
 
-崩坏：星穹铁道 - March7thAssistant
-
-- 🚀 开发中，敬请期待
-- 🔐 可配合自动登录脚本使用
+- 支持协议空间快速调整与自动签到
+- 支持 PC 与模拟器控制（推荐 PC）
+- 支持使用计划表定制关卡配置（内测中）
 
 ---
 
@@ -43,7 +42,16 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 
 ---
 
-## 选择建议
+### [三月七小助手](/docs/script-guide/march7th)
+
+崩坏：星穹铁道 - March7thAssistant
+
+- 🚀 开发中，敬请期待
+- 🔐 可配合自动登录脚本使用
+
+---
+
+## 阅读建议
 
 - **新手推荐**：从 [MAA 用户指南](/docs/script-guide/maa) 开始（如果玩明日方舟）
 - **1999 玩家**：查看 [M9A 配置方法](/docs/script-guide/m9a) 快速上手
