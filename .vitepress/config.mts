@@ -39,6 +39,7 @@ export default defineConfig({
                                 { text: "MAA", link: "/docs/script-guide/maa" },
                                 { text: "MAAEND", link: "/docs/script-guide/maaend" },
                                 { text: "M9A", link: "/docs/script-guide/m9a" },
+                                { text: "OK-WW", link: "/docs/script-guide/okww" },
                                 { text: "通用脚本", link: "/docs/script-guide/general" },
                                 { text: "三月七", link: "/docs/script-guide/march7th" },
                             ]
