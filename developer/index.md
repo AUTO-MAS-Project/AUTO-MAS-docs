@@ -2,6 +2,11 @@
 
 欢迎参与 AUTO-MAS 项目开发！参与开发前，您必须了解以下内容。
 
+## 开发与协作规范
+
+- [开发规范](/developer/development-specifications)：分支、提交信息、版本记录、后端注释与函数调用风格。
+- [仓库分工与 Agent 规范](/developer/agent-and-repository-rules)：主仓、文档站、skills 仓库的职责边界，以及 AI 助手撰写 Issue / PR 正文的规则。
+
 ## AUTO-MAS 开发者社区授权协议
 
 您通过任意方式提交代码到 **AUTO-MAS-Project** 下属任意仓库，即代表您理解并同意以下条款：
