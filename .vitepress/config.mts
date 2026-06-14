@@ -86,6 +86,7 @@ export default defineConfig({
                     items: [
                         { text: "开发起步", link: "/developer/getting-start" },
                         { text: "开发规范", link: "/developer/development-specifications" },
+                        { text: "仓库与 Agent 规范", link: "/developer/agent-and-repository-rules" },
                         { text: "构筑与发布", link: "/developer/build-and-publish" },
                         {
                             text: "开发文档", items: [
