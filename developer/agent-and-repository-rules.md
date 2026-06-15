@@ -1,16 +1,15 @@
 # 仓库分工与 Agent 规范
 
-AUTO-MAS 将应用主体、开发文档与 Agent Skill 分开维护。分仓是项目的长期规范，目标是让每个仓库只承担自己的权威内容，避免同一规则在多个地方漂移。
+AUTO-MAS 将应用主体、开发文档与 Agent Skill 分层维护。文档站负责贡献流程，主程序仓库负责应用代码与项目附属 Skills，目标是让每类规则只有一个权威入口，避免同一规则在多个地方漂移。
 
 ## 仓库分工
 
 | 仓库 | 职责 | 权威内容 |
 |------|------|----------|
-| `AUTO-MAS-Project/AUTO-MAS` | 主程序、构建配置、最小 Agent 入口 | 应用代码与仓内入口 |
+| `AUTO-MAS-Project/AUTO-MAS` | 主程序、构建配置、最小 Agent 入口、项目附属 Agent Skills | 应用代码、`AGENTS.md`、`.agents/skills` |
 | `AUTO-MAS-Project/AUTO-MAS-docs` | 用户文档、开发文档、贡献流程 | 分支、提交、版本记录、Issue/PR 正文规范 |
-| `AUTO-MAS-Project/skills` | Agent Skill 与工程规则 | `mas-*` Skill、专项适配路由、Agent 执行清单 |
 
-主程序仓库不维护完整文档站或完整 Skill 副本。若本地为了开发方便检出了 `AUTO-MAS-docs` 或 `skills`，它们只应作为相邻仓库或本地缓存存在，不应随主程序提交。
+主程序仓库不维护完整文档站；开发文档仍以本文档站为准。Agent 工程规则以内置在主仓的 `.agents/skills` 为准，不再要求额外检出独立 skills 仓库。
 
 ## 贡献流程
 
@@ -29,9 +28,11 @@ AUTO-MAS 将应用主体、开发文档与 Agent Skill 分开维护。分仓是�
 AI 助手在 AUTO-MAS 相关仓库工作时：
 
 - 先读当前仓库的 `AGENTS.md` 最小入口。
+- 必须确认存在并加载 `.agents/skills/mas-skills/SKILL.md`。若缺少该文件，应明确提示用户缺少项目附属 Skills，并拒绝开工。
 - 开发规范、分支、提交、版本记录以本文档站为准。
-- 工程细则、代码风格、模块边界、专项适配以 `AUTO-MAS-Project/skills` 中的 `mas-*` Skill 为准。
-- 选择最小必要 Skill；不要把所有 Skill 套到每个任务上。
+- 工程细则、代码风格、模块边界、专项适配以主仓 `.agents/skills` 中的 `mas-*` Skill 为准。
+- 先加载 `mas-skills`，再按任务选择最小必要 Skill；不要把所有 Skill 套到每个任务上。
+- `frontend` 指主仓前端目录和前端任务；涉及 `frontend`、Vue、UI、组件、路由或前端 API 时，按 `.agents/skills` 中的前端 Skill 执行。
 - 本地工具权限不等于项目授权。即使工具允许 push、checkout 或发布 PR，也必须遵守仓库规范和用户授权。
 - 不要回滚、覆盖或格式化与当前任务无关的用户改动。
 
@@ -73,5 +74,5 @@ Closes #
 若多个仓库中的规则发生冲突：
 
 1. 分支、提交、版本、Issue/PR 正文规则以文档站为准。
-2. Agent Skill、工程路由、专项适配规则以 `AUTO-MAS-Project/skills` 为准。
+2. Agent Skill、工程路由、专项适配规则以主仓 `.agents/skills` 为准。
 3. 主程序仓库的 `AGENTS.md` 只作为入口和指路牌，不作为完整权威规范。

@@ -12,11 +12,13 @@ yarn build
 ## 软件发布流程
 
 1. 更新版本号
-   - `res/version.json` 中的 `main_version`
+   - `res/version.json` 中的 `version`
    - `frontend/package.json` 中的 `version`
    - `app/core/config.py` 中的 `AppConfig.VERSION`
 
-2. 检查 `res/version.json` 中的版本信息
+2. 检查 `res/version.json` 中的 `version_info`
+   - 用户可见变更需要登记到对应版本条目。
+   - 已发布版本不要继续追加条目，应新增下一个版本条目。
 
 3. 提交修改到仓库
 

@@ -33,8 +33,8 @@
    - 下载地址: https://nodejs.org/
    - 推荐使用 LTS 版本
 3. **Yarn**(推荐)
-   - 安装命令: `npm install -g yarn`
-   - 使用 Corepack: `corepack enable`
+   - 项目使用 Yarn 4，推荐通过 Corepack 启用：`corepack enable`
+   - 进入 `frontend` 后可直接使用仓库声明的 Yarn 版本
 4. **Git**
    - 下载地址: https://git-scm.com/downloads
 5. **VC运行库**
@@ -49,6 +49,12 @@
 git clone https://github.com/AUTO-MAS-Project/AUTO-MAS.git
 cd AUTO-MAS
 ```
+
+::: tip Agent 开发前置要求
+
+如果使用 AI 助手参与开发，必须先确认主仓存在并加载 `.agents/skills/mas-skills/SKILL.md`。缺少项目附属 Skills 时，应先补齐主仓内容，不能直接让 AI 助手开工。
+
+:::
 
 ### 2. 后端环境搭建
 
@@ -103,6 +109,8 @@ yarn dev
 
 #### 4.2 使用本地的后端代码
 
+方式一：分别启动后端与前端。
+
 1. **启动后端服务**
 
 ```bash
@@ -123,6 +131,15 @@ yarn dev
 3. **跳过启动后端**
 
 由于您已经打开用于开发的后端，前端初始化时将在 `启动后端` 步骤失败，此时直接选择 `跳过启动后端` 即可正常进入应用主界面，此时前端所使用的后端服务将是您之前终端窗口中启动的后端。
+
+方式二：使用前端脚本同时启动本地后端与前端。
+
+```bash
+cd frontend
+yarn dev:fullstack
+```
+
+该命令会运行本地 `main.py`、Vite 开发服务器和 Electron 开发窗口，适合需要同时调试前后端联动的场景。
 
 
 ##  项目结构
@@ -187,7 +204,6 @@ AUTO-MAS/
 │
 ├── main.py                       # 后端入口
 ├── requirements.txt              # Python 依赖
-├── pyproject.toml               # Python 项目配置
 └── README.md                    # 项目说明
 ```
 

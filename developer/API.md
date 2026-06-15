@@ -44,9 +44,13 @@ python main.py
 
 ```bash
 cd frontend
-openapi --input http://127.0.0.1:36163/openapi.json --output ./src/api --client axios
+yarn openapi
 ```
 如果没有输出，代表已经生成完成了；如果报错了，请自行查阅报错内容。
+
+::: warning 注意
+`frontend/src/api` 由 OpenAPI 生成器维护。后端 schema 或 API 契约变更后，只能重新生成该目录，不要为了修类型或接口手动修改生成文件。
+:::
 
 ::: warning 注意
 当你阅读至此，说明你正在开发一个新的 API，请你牢记，你直接使用 `yarn dev` 时，后端实际上使用的是 GitHub 上 `dev` 分支中的后端代码，而非你当前开发的后端。
@@ -56,14 +60,25 @@ openapi --input http://127.0.0.1:36163/openapi.json --output ./src/api --client 
 
 ##  4. 在前端调用 API
 
-使用新生成的 frontend/src/api/services/Service.ts，即可调用api：
+前端业务代码不要在页面组件中直接散落调用生成的 `Service.ts`。应先在 `frontend/src/composables` 中封装面向业务的 composable，再由页面或组件调用该 composable。
+
+生成的 `frontend/src/api/services/Service.ts` 只作为底层 API 客户端使用：
 
 ```typescript
-import { MyEndpointRequest, MyEndpointResponse, MyEndpoint } from '@/api/services/Service.ts';
-const requestData: MyEndpointRequest = {
-    param1: 'value',
-    param2: 123,
-};
-const response: MyEndpointResponse = await MyEndpoint(requestData);
-console.log(response.data);
+import { Service } from '@/api';
+
+export function useMyApi() {
+    const submitMyRequest = async (param1: string, param2: number) => {
+        return Service.myEndpoint({
+            param1,
+            param2,
+        });
+    };
+
+    return {
+        submitMyRequest,
+    };
+}
 ```
+
+页面组件只负责组织交互、加载态、错误提示和数据展示；API 参数整理、响应兼容处理和复用逻辑放在 composable 中。
