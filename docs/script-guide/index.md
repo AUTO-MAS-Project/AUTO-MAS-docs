@@ -42,6 +42,17 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 
 ---
 
+### [HSR](/docs/script-guide/hsr)
+
+崩坏：星穹铁道 - HSR 专项（M7A / SRA 双引擎）
+
+- 同时支持三月七小助手（M7A）与 StarRailAssistant（SRA）双引擎
+- 覆盖日常清体力、奖励领取、差分宇宙、货币战争等任务
+- 体力 / 奖励 / 差分 / 货币 四个模块可独立选择 M7A 或 SRA 执行
+- 失败任务自动补跑，外部脚本配置零污染
+
+---
+
 ### [通用调度](/docs/script-guide/general)
 
 适用于所有支持启动时运行任务且能够打印日志的脚本
@@ -66,5 +77,6 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 - **新手推荐**：从 [MAA 用户指南](/docs/script-guide/maa) 开始（如果玩明日方舟）
 - **鸣潮玩家**：查看 [OK-WW 配置方法](/docs/script-guide/okww) 快速上手
 - **1999 玩家**：查看 [M9A 配置方法](/docs/script-guide/m9a) 快速上手
+- **星穹铁道玩家**：查看 [HSR 配置方法](/docs/script-guide/hsr) 快速上手
 - **其他游戏**：查看 [通用调度](/docs/script-guide/general) 并使用现成模板
 - **高级用户**：深入了解[通用调度](/docs/script-guide/general)的配置管理逻辑，自定义您的调度方案
