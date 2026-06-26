@@ -57,6 +57,7 @@ export default defineConfig({
                             ]
                         },
                         { text: "常见问题", link: "/docs/FAQ" },
+                        { text: "提问的艺术", link: "/docs/howtoask" },
                     ],
                 },
             ],
