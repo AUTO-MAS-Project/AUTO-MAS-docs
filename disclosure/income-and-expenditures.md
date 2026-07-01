@@ -40,6 +40,7 @@ const records = [
   { name: 'Mirror酱分成', description: '4月份结算', amount: 83.5, date: '2026年5月2日' },
   { name: '开发者夏日回馈奖品', description: '购置白名单通行证抱2盒与捆物', amount: -304.20, date: '2026年5月2日' },
   { name: 'Mirror酱分成', description: '5月份结算', amount: 141.5, date: '2026年6月1日' },
+  { name: '主站服务器开支', description: '2026年度', amount: -99.00, date: '2026年6月23日' },
 ]
 
 const totalAmount = computed(() => {

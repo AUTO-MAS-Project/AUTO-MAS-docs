@@ -10,7 +10,7 @@ export default defineConfig({
     title: "AUTO-MAS",
     head: [
         // 添加图标
-        ['link', { rel: 'icon', href: '/icons/AUTO-MAS.ico' }]
+        ["link", { rel: "icon", href: "/icons/AUTO-MAS.ico" }],
     ],
     description: "AUTO-MAS",
     vite: {

@@ -14,13 +14,15 @@ import { googleAnalytics } from "@theojs/lumen";
 import { DocBox, DocBoxCube, DocLinks, DocPill } from "@theojs/lumen";
 import { DocAsideLogo } from "@theojs/lumen";
 import { asideData } from "../data/AsideData";
+import { getLocaleKey, themeLocaleData } from "../data/themeLocaleData";
 import Matomo from "../components/Matomo.vue";
 import { getMatomoConfig } from "../utils/matomo";
 export default {
   extends: DefaultTheme,
   Layout: () => {
     const { lang } = useData();
-    const locale = lang.value.startsWith("en") ? "en" : "root";
+    const locale = getLocaleKey(lang.value);
+    const localeText = themeLocaleData[locale];
 
     return h(DefaultTheme.Layout, null, {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
@@ -29,10 +31,7 @@ export default {
         h(Matomo, { config: getMatomoConfig() })
       ],
       "home-hero-info-before": () => h(Announcement),
-      "aside-outline-before": () => h(ShareButton, {
-        buttonText: locale === "en" ? "Share this page" : "分享此页面",
-        copiedText: locale === "en" ? "Link copied!" : "链接已复制!",
-      }),
+      "aside-outline-before": () => h(ShareButton, localeText.shareButton),
       "aside-ads-before": () => h(DocAsideLogo, { Aside_Data: asideData[locale] }),
     });
   },

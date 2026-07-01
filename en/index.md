@@ -14,13 +14,13 @@ hero:
       link: /en/docs/user-guide
     - theme: alt
       text: Script Configuration
-      link: /en/docs/script-guide
+      link: /en/docs/script-guide/
     - theme: alt
       text: Task Scheduler
       link: /en/docs/task-scheduler
     - theme: alt
       text: Advanced Features
-      link: /en/docs/advanced-features
+      link: /en/docs/advanced-features/
     - theme: alt
       text: FAQ
       link: /en/docs/FAQ

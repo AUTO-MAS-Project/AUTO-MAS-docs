@@ -40,6 +40,7 @@ const records = [
   { name: 'MirrorChyan revenue share', description: 'April settlement', amount: 83.5, date: 'May 2, 2026' },
   { name: 'Developer summer reward prize', description: 'Purchased two whitelist pass boxes and bundles', amount: -304.20, date: 'May 2, 2026' },
   { name: 'MirrorChyan revenue share', description: 'May settlement', amount: 141.5, date: 'June 1, 2026' },
+  { name: 'Main site server expense', description: '2026 annual expense', amount: -99.00, date: 'June 23, 2026' },
 ]
 
 const totalAmount = computed(() => {

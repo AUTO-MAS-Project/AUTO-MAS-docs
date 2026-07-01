@@ -23,7 +23,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                     { text: "Getting Started", link: "/en/docs/user-guide" },
                     {
                         text: "Script Configuration",
-                        link: "/en/docs/script-guide",
+                        link: "/en/docs/script-guide/",
                         items: [
                             { text: "MAA", link: "/en/docs/script-guide/maa" },
                             { text: "MAAEND", link: "/en/docs/script-guide/maaend" },
@@ -37,7 +37,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                     { text: "Task Scheduler", link: "/en/docs/task-scheduler" },
                     {
                         text: "Advanced Features",
-                        link: "/en/docs/advanced-features",
+                        link: "/en/docs/advanced-features/",
                         items: [
                             { text: "Emulator Management", link: "/en/docs/advanced-features/emulator" },
                             { text: "Notifications", link: "/en/docs/advanced-features/notification" },
@@ -45,6 +45,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                         ],
                     },
                     { text: "FAQ", link: "/en/docs/FAQ" },
+                    { text: "How to Ask Questions", link: "/en/docs/howtoask" },
                 ],
             },
         ],

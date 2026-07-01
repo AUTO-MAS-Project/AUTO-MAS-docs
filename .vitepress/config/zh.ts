@@ -23,7 +23,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                     { text: "开始使用", link: "/docs/user-guide" },
                     {
                         text: "脚本配置",
-                        link: "/docs/script-guide",
+                        link: "/docs/script-guide/",
                         items: [
                             { text: "MAA", link: "/docs/script-guide/maa" },
                             { text: "MAAEND", link: "/docs/script-guide/maaend" },
@@ -37,7 +37,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                     { text: "任务调度", link: "/docs/task-scheduler" },
                     {
                         text: "进阶功能",
-                        link: "/docs/advanced-features",
+                        link: "/docs/advanced-features/",
                         items: [
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
@@ -45,6 +45,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                         ],
                     },
                     { text: "常见问题", link: "/docs/FAQ" },
+                    { text: "提问的智慧", link: "/docs/howtoask" },
                 ],
             },
         ],
