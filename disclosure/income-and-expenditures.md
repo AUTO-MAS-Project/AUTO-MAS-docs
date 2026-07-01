@@ -41,6 +41,9 @@ const records = [
   { name: '开发者夏日回馈奖品', description: '购置白名单通行证抱2盒与捆物', amount: -304.20, date: '2026年5月2日' },
   { name: 'Mirror酱分成', description: '5月份结算', amount: 141.5, date: '2026年6月1日' },
   { name: '主站服务器开支', description: '2026年度', amount: -99.00, date: '2026年6月23日' },
+  { name: '夸克网盘任推邦分成', description: '4-6月份结算', amount: 73.57, date: '2026年6月26日' },
+  { name: 'Mirror酱分成', description: '6月份结算', amount: 228.55, date: '2026年7月1日' },
+  { name: 'B站小店获赠', description: '4-6月份结算', amount: 114.41, date: '2026年7月1日' },
 ]
 
 const totalAmount = computed(() => {
