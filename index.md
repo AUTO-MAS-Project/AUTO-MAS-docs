@@ -15,13 +15,13 @@ hero:
       link: /docs/user-guide
     - theme: alt
       text: 脚本配置
-      link: /docs/script-guide
+      link: /docs/script-guide/
     - theme: alt
       text: 任务调度
       link: /docs/task-scheduler
     - theme: alt
       text: 进阶功能
-      link: /docs/advanced-features
+      link: /docs/advanced-features/
     - theme: alt
       text: 常见问题
       link: /docs/FAQ
