@@ -31,6 +31,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "OK-WW", link: "/docs/script-guide/okww" },
                             { text: "HSR", link: "/docs/script-guide/hsr" },
                             { text: "通用脚本", link: "/docs/script-guide/general" },
+                            { text: "SRA", link: "/docs/script-guide/sra" },
                             { text: "三月七", link: "/docs/script-guide/march7th" },
                         ],
                     },
