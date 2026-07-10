@@ -127,7 +127,7 @@ onBeforeUnmount(() => {
     </picture>
     <div class="download-card-title">B 站小店</div>
     <div class="download-card-desc">从 B 站小店购买并下载稳定版本<br>适用于希望额外打赏开发者的富裕用户</div>
-    <a href="https://mall.bilibili.com/neul-next/detailuniversal/detail.html?itemsId=40352459" target="_blank">前往商品页</a>
+    <a href="https://mall.bilibili.com/neul-next/detailuniversal/detail.html?itemsId=40352459&msource=comments_" target="_blank">前往商品页</a>
   </div>
 
 </div>
