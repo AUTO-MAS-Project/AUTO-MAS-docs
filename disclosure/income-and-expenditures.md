@@ -44,6 +44,7 @@ const records = [
   { name: '夸克网盘任推邦分成', description: '4-6月份结算', amount: 73.57, date: '2026年6月26日' },
   { name: 'Mirror酱分成', description: '6月份结算', amount: 228.55, date: '2026年7月1日' },
   { name: 'B站小店获赠', description: '4-6月份结算', amount: 114.41, date: '2026年7月1日' },
+  { name: '开发者开发工具订阅报销', description: '个人申报全额报销', amount: -272.4, date: '2026年7月10日' },
 ]
 
 const totalAmount = computed(() => {
