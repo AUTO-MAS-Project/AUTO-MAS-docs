@@ -31,6 +31,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                             { text: "OK-WW", link: "/en/docs/script-guide/okww" },
                             { text: "HSR", link: "/en/docs/script-guide/hsr" },
                             { text: "General Scripts", link: "/en/docs/script-guide/general" },
+                            { text: "SRA", link: "/en/docs/script-guide/sra" },
                             { text: "March 7th", link: "/en/docs/script-guide/march7th" },
                         ],
                     },
