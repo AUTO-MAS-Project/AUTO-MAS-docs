@@ -33,7 +33,7 @@ const records = [
   { name: 'MirrorChyan revenue share', description: 'January settlement', amount: 51.38, date: 'January 16, 2026' },
   { name: 'MirrorChyan revenue share', description: 'February settlement', amount: 57.29, date: 'January 16, 2026' },
   { name: 'MirrorChyan revenue share', description: 'March settlement', amount: 41.93, date: 'April 2, 2026' },
-  { name: 'Quark Cloud Drive RenTuibang share', description: 'January-March settlement', amount: 27.50, date: 'April 2, 2026' },
+  { name: 'Quark Cloud Drive RenTuibang revenue share', description: 'January-March settlement', amount: 27.50, date: 'April 2, 2026' },
   { name: 'Developer tool subscription reimbursement', description: 'Reimbursed by personal claim ratio', amount: -50, date: 'April 2, 2026' },
   { name: 'Bilibili shop gift income', description: 'January-March combined settlement', amount: 179.18, date: 'April 2, 2026' },
   { name: 'User donation', description: 'Donation from delaube through QQ payment', amount: 30, date: 'April 3, 2026' },
@@ -41,6 +41,12 @@ const records = [
   { name: 'Developer summer reward prize', description: 'Purchased two whitelist pass boxes and bundles', amount: -304.20, date: 'May 2, 2026' },
   { name: 'MirrorChyan revenue share', description: 'May settlement', amount: 141.5, date: 'June 1, 2026' },
   { name: 'Main site server expense', description: '2026 annual expense', amount: -99.00, date: 'June 23, 2026' },
+  { name: 'Quark Cloud Drive RenTuibang revenue share', description: 'April-June settlement', amount: 73.57, date: 'June 26, 2026' },
+  { name: 'MirrorChyan revenue share', description: 'June settlement', amount: 228.55, date: 'July 1, 2026' },
+  { name: 'Bilibili shop gift income', description: 'April-June settlement', amount: 114.41, date: 'July 1, 2026' },
+  { name: 'Developer tool subscription reimbursement', description: 'Fully reimbursed by personal claim', amount: -272.4, date: 'July 10, 2026' },
+  { name: 'Download site server expense', description: '2026 annual renewal', amount: -459.00, date: 'July 25, 2026' },
+  { name: 'MirrorChyan revenue share', description: 'July settlement', amount: 251.93, date: 'August 1, 2026' },
 ]
 
 const totalAmount = computed(() => {
