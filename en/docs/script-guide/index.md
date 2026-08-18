@@ -36,9 +36,11 @@ Reverse: 1999 - M9A
 
 Wuthering Waves - OK-WW
 
-- Supports daily tasks, Echo tasks, roguelike tasks, Forgery Challenges, Nightmare Nest, Simulation Training, Tacet Fields, and more
+- Wuthering Waves project in the ok-script family, configured separately from OkNte for Neverness to Everness
+- The MAS entry currently handles DailyTask and MultiAccountDailyTask (`-t 1` and `-t 7`)
 - Supports full automatic game lifecycle management in MAS, including startup and shutdown
-- Supports both simple and detailed configuration modes
+- Provides Script, User, and Direct control sources, with optional quick configuration for high-frequency fields
+- Uses only official Wuthering Waves resources and launcher; WeGame is not supported
 
 ---
 
