@@ -13,7 +13,7 @@
 | MXU 线 | MaaEnd + MXU、`mxu-*.json`、ScriptConfig 遮罩 | `MaaEnd` |
 | MFAA 线 | M9A / MFAA 任务队列 JSON，不套 ScriptConfig 壳 | `M9A` |
 | General | 通用路径、进程、日志监控 | `General` |
-| ok-script 线 | `-t` / `-e` CLI + 表单化配置编辑器 | `Okww` |
+| ok-script 家族 | `-t` / `-e` CLI + 表单化配置编辑器 | `Okww`（鸣潮）、`OkNte`（异环），按子项目分别确认契约 |
 
 推荐先让用户提供脚本或 GUI 壳的仓库 URL，再根据 README、启动参数、配置落盘方式和 Release 产物判断架构线。没有仓库时，应先向用户确认脚本形态、正式 `ScriptType`、展示文案、图标来源、自启动方式和配置落盘方式。
 

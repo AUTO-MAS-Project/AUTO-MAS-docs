@@ -13,7 +13,7 @@ Before adding or refactoring a `ScriptType`, identify which architecture line th
 | MXU line | MaaEnd + MXU, `mxu-*.json`, ScriptConfig overlay | `MaaEnd` |
 | MFAA line | M9A / MFAA task queue JSON without ScriptConfig wrapper | `M9A` |
 | General | Generic paths, processes, and log monitoring | `General` |
-| ok-script line | `-t` / `-e` CLI plus form-based configuration editor | `Okww` |
+| ok-script family | `-t` / `-e` CLI plus form-based configuration editor | `Okww` (Wuthering Waves) and `OkNte` (Neverness to Everness); confirm each project's contract separately |
 
 Ask the user for the upstream script or GUI wrapper repository URL first. Then determine the architecture line based on README, launch arguments, configuration persistence method, and release artifacts. If no repository is available, confirm the script shape, formal `ScriptType`, display text, icon source, startup method, and configuration persistence method with the user.
 
