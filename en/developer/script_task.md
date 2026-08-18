@@ -6,14 +6,14 @@ Specialized script adaptation must connect configuration, schema, API, task sche
 
 Before adding or refactoring a `ScriptType`, identify which architecture line the external script belongs to:
 
-| Architecture line | Typical shape | Reference in this repository |
-|-------------------|---------------|------------------------------|
-| MAA line | MAA-style configuration sessions, plans, stage/sanity configuration | `MAA` |
-| SRC line | Alas / SRC-style large forms and sections | `SRC` |
-| MXU line | MaaEnd + MXU, `mxu-*.json`, ScriptConfig overlay | `MaaEnd` |
-| MFAA line | M9A / MFAA task queue JSON without ScriptConfig wrapper | `M9A` |
-| General | Generic paths, processes, and log monitoring | `General` |
-| ok-script family | `-t` / `-e` CLI plus form-based configuration editor | `Okww` (Wuthering Waves) and `OkNte` (Neverness to Everness); confirm each project's contract separately |
+| Architecture line | Reference in this repository |
+|-------------------|------------------------------|
+| MAA line | `MAA` |
+| SRC line | `SRC` |
+| MXU line | `MaaEnd` |
+| MFAA line | `M9A` |
+| General | `General` |
+| ok-script family | `Okww` (Wuthering Waves) and `OkNte` (Neverness to Everness); confirm each project's contract separately |
 
 Ask the user for the upstream script or GUI wrapper repository URL first. Then determine the architecture line based on README, launch arguments, configuration persistence method, and release artifacts. If no repository is available, confirm the script shape, formal `ScriptType`, display text, icon source, startup method, and configuration persistence method with the user.
 
