@@ -1,7 +1,7 @@
 ---
 title: MaaEnd Configuration Guide
 description: "Arknights: Endfield - MaaEnd assistant configuration guide"
-date: 2026-04-28
+date: 2026-08-18
 ---
 
 # MaaEnd Configuration Guide
@@ -23,24 +23,26 @@ MaaEnd is a third-party automation tool for Arknights: Endfield. Based on visual
 
 ::: warning Reminder
 Do not extract MaaEnd into a path containing Chinese characters to avoid unnecessary errors.
+
+Like other scripts, MaaEnd must not be placed in the MAS root directory to avoid the risk of accidental deletion.
 :::
 
 ## Configure the Script
 
-1. Go to **Script Management**, click **New Script**, and select **Create new script -> MaaEnd Script** to add a script instance management page.
+1. Go to **Script Management**, click **New Script**, and select **MaaEnd Script**.
 ![Create MaaEnd script](/docs/img/script-guide/maaend/选择脚本.png)
 
 2. In the opened script configuration, click **Select folder** for **MaaEnd path**, then open the directory where MaaEnd is located.
-<!-- ![Set MaaEnd path](/docs/img/script-guide/maaend/maaend-2.png) -->
+![Script configuration](/docs/img/script-guide/maaend/脚本配置.png)
 
 3. Adjust the following configuration as needed:
 
    | Configuration | Description |
    | --- | --- |
-   | **Controller type** | Select the control method. This overrides the setting configured in MaaEnd. We recommend using the PC client instead of an emulator. |
-   | **Game path** | Path to the Endfield game executable |
-   | **Game launch arguments** | Extra command-line arguments when launching the game. Leave empty if not needed. |
-   | **Wait time after game startup** | How many seconds to wait after launching the game before automation starts. Default is 60 seconds. |
+   | **Controller type** | Select the control method. This overrides the setting configured in MaaEnd. We recommend using the PC client. Emulators require an update to v5.4.0 or the public beta to be usable. |
+   | **Game path (PC)** | Path to the Endfield game executable |
+   | **Game launch arguments (PC)** | Extra command-line arguments when launching the game. Leave empty if not needed. |
+   | **Wait time after game startup (PC)** | How many seconds to wait after launching the game before automation starts. Default is 60 seconds. |
    | **Close game after task completion** | Whether to close the game automatically after the last user task completes |
    | **Proxy timeout limit** | Consider the task timed out if logs do not change for this many minutes. Default is 10 minutes. |
    | **Daily proxy count limit** | Maximum number of automation runs per user per day. `0` means unlimited. |
@@ -51,6 +53,7 @@ Do not extract MaaEnd into a path containing Chinese characters to avoid unneces
 ::: info About Emulators
 
 - **ADB**: controls Android emulators through the ADB protocol. The emulator must be configured in **Emulator Management**.
+- Due to a change in the upstream MFW naming rules, you need to update to v5.4.0 or the public beta so that emulator parameters are passed correctly.
 :::
 
 ## Configure Users
@@ -58,7 +61,7 @@ Do not extract MaaEnd into a path containing Chinese characters to avoid unneces
 1. In the script table under **Script Management**, click **Add user** to add a user.
 
 2. Fill in user information according to the hints on the settings card.
-![User information](/docs/img/script-guide/maaend/用户配置.png)
+![User information](/docs/img/script-guide/maaend/用户配置-1.png)
 
 ### User Configuration Fields
 
@@ -69,69 +72,33 @@ Do not extract MaaEnd into a path containing Chinese characters to avoid unneces
 | **Username** | Display name used to distinguish accounts |
 | **Enabled status** | Whether the user participates in automation. Disabled users are skipped. |
 | **Account ID** | Endfield login phone number, 11 digits. Leave empty to skip account switching. |
-| **Password** | Endfield login password, stored encrypted. Required for PC account switching. |
-| **Configuration mode** | `Simple` uses global MaaEnd configuration; `Detailed` uses this user's independent MaaEnd configuration |
-| **Server** | Currently only `Official server` is supported |
+| **Password** | Endfield login password, stored encrypted. Has no effect. |
+| **Configuration source** | `Script-level` uses the script-level MaaEnd configuration; `User-level` uses that user's independent MaaEnd configuration |
+| **Take over specific game configuration** | When disabled, the task configuration below is unavailable and automation only runs according to the saved configuration file. |
 | **Remaining days** | Remaining valid automation days. `-1` means unlimited. After each successful automation, it decreases by 1. When it reaches 0, the user is skipped. |
 | **Notes** | Free-form notes |
 
-::: tip Account Switching Notes
-
-- Account ID is an 11-digit phone number, and the password is used for automatic login on PC.
-- If Account ID is left empty, AUTO-MAS uses the currently logged-in account directly and does not switch accounts.
-- Passwords are stored locally in encrypted form and are not uploaded to any server.
-:::
-
 #### Task Configuration
 
-MAS can currently help control the "Protocol Space" farming type in MaaEnd.
+MAS will try to enable/disable tasks according to your settings; tasks that do not exist are skipped.
 
-After configuring it in MAS, you still need to manually add the "Protocol Space" task when configuring MaaEnd. MAS will automatically overwrite the first "Protocol Space" task.
+##### Sanity Task Options
+Only appears when the sanity task is enabled, allowing you to quickly modify the sanity task within MAS.
+![Sanity task](/docs/img/script-guide/maaend/理智任务.png)
+
+::: tip Account Switching Notes
+We recommend using "MAS built-in account switching", which generally offers better stability; if it fails, you can also try switching to MaaEnd account switching. MAS will automatically add the account-switching task for you, so you do not need to add it manually.
+:::
 
 ## Skland Automatic Check-In
 
-::: warning Note
-AUTO-MAS processes check-in requests locally and does not upload tokens to third-party servers.
+Migrated to the check-in tool.
 
-Automatic check-in has risks. AUTO-MAS is not responsible for any results caused by automatic check-in. Using this feature means you agree to bear the related risks yourself.
-:::
+### Result Push Explanation
 
-### Get Hypergryph Account Login Credentials
+If you have enabled mechanism filtering for the matrix farming task, MAS will additionally push the matrix farming results to you.
 
-1. Log in to the [Skland web page](https://www.skland.com/).
-
-2. Visit this [URL](https://web-api.skland.com/account/info/hg).
-
-   It returns information similar to:
-
-   ```json
-   {
-     "code": 0,
-     "data": {
-       "content": "<Token>"
-     },
-     "msg": "The API returns the login credential of your Hypergryph account. This credential can be used by the Hypergryph account system to verify login validity. Leaking login credentials is extremely dangerous. For account security, do not disclose this credential to anyone in any form."
-   }
-   ```
-
-3. Enter `<Token>` into the **Skland check-in** area of the user configuration and enable the check-in switch.
-
-4. If you need to obtain **Hypergryph account login credentials** for multiple accounts in a row, clear browser cookies to remove login state. Logging out directly from the web page will make the token expire.
-
-::: tip Reminder
-Do not enter the quotation marks around `content`, and do not enter the entire returned page content into the option tab.
-:::
-
-### Configuration Notes
-
-The following describes AUTO-MAS configuration behavior for MaaEnd in **auto-proxy** mode.
-
-1. Configuration items shown on the user configuration page take priority.
-2. Users run sequentially according to the user list. Each user starts the game and MaaEnd process independently.
-3. In **simple** configuration mode, all users share MaaEnd global settings in **script configuration**. In **detailed** configuration mode, each user uses an independent MaaEnd configuration file.
-4. During automation, AUTO-MAS automatically writes MaaEnd configuration, including Protocol Space tasks and controller type, then restores the original configuration after the task completes.
-5. **Skland check-in** runs before automation tasks. Each account checks in only once per day.
-6. Each user's automation result, including success, failure, and proxy count, is recorded automatically and displayed as tags in the UI.
+If you have enabled gacha count calculation, MAS will additionally push the gacha count calculation results to you.
 
 ## FAQ
 
