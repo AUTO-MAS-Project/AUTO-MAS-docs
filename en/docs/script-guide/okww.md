@@ -22,7 +22,7 @@ The AUTO-MAS adaptation handles the repetitive parts: starting a task, monitorin
 3. Set **ok-ww path** to the directory containing `ok-ww.exe`, not the executable itself.
 4. On the user page, click **Configure OK-WW** to open the native OK-WW GUI and save its basic configuration once. Complex settings are also edited there.
 5. If MAS should manage the game lifecycle, enable **Game Configuration** and select the official Wuthering Waves `launcher.exe`.
-6. Add a user, choose a configuration source, and decide whether to enable quick configuration.
+6. Add a user, choose a configuration source, and decide whether to enable task configuration takeover.
 7. Save the script and add it to the schedule.
 
 ## The Three Configuration Sources
@@ -37,16 +37,16 @@ The user editor offers **Script**, **User**, and **Direct control**:
 
 As a shortcut: choose **Script** for shared settings, **User** for per-account high-frequency settings, and **Direct control** when you want to keep the native OK-WW configuration and let MAS mainly schedule it.
 
-> **Direct control does not mean that MAS never reads or writes files.** It means that MAS prefers the script's existing configuration. When quick configuration is enabled, MAS still applies a temporary override to the high-frequency fields for that run.
+> **Direct control does not mean that MAS never reads or writes files.** It means that MAS prefers the script's existing configuration. When task configuration takeover is enabled, MAS still applies a temporary override to the high-frequency fields for that run.
 
-## Quick Configuration
+## Task Configuration Takeover
 
-The **Enable quick configuration** switch controls the high-frequency task panel shown below it:
+The **Take over task configuration** switch controls the high-frequency task panel shown below it:
 
 - **Enabled**: regardless of the selected source, the panel overrides the high-frequency fields for the next run.
 - **Disabled**: the task uses the complete settings from the selected source. Direct control keeps the full native OK-WW configuration.
 
-Quick configuration only covers fields exposed by MAS. It does not replace the full OK-WW configuration. To run entirely from complex settings in the OK-WW GUI, choose **Direct control** and disable quick configuration.
+Task configuration takeover only covers fields exposed by MAS. It does not replace the full OK-WW configuration. To run entirely from complex settings in the OK-WW GUI, choose **Direct control** and disable this option.
 
 ## When Configuration Is Restored
 
@@ -81,7 +81,7 @@ MAS always appends `-e`, which makes OK-WW exit after the task finishes. For oth
 
 The old **Simple/Detailed** names were replaced by **Script/User/Direct control**. Existing configurations are migrated for compatibility; use the new names for new settings.
 
-### Did quick configuration overwrite my original OK-WW settings?
+### Did task configuration takeover overwrite my original OK-WW settings?
 
 No. It only overrides settings during the current task. MAS restores the original configuration after success, failure, an exception, or a stop.
 
