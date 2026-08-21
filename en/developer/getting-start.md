@@ -80,7 +80,7 @@ cd frontend
 yarn install
 ```
 
-If the Electron binary download is slow or fails, use the npmmirror for a one-shot install:
+If the Electron binary download is slow or fails, use npmmirror for a one-shot install:
 
 ```bash
 yarn cross-env ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" yarn install
