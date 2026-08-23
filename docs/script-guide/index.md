@@ -55,6 +55,17 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 
 ---
 
+### [BetterGI](/docs/script-guide/bettergi)
+
+原神 - BetterGI
+
+- 原生 GUI 直控，账号由 BetterGI 原生管理，复杂设置在 BetterGI 界面完成
+- 为每个用户独立管理「一条龙」内置配置组（8 个可开关）与自定义配置组
+- 支持填写领取奖励队伍、通用战斗队伍与自动战斗策略，自动读取 `User/AutoFight` 下的战斗脚本
+- 切换账号、通知、额外脚本均可独立配置
+
+---
+
 ### [通用调度](/docs/script-guide/general)
 
 适用于所有支持启动时运行任务且能够打印日志的脚本
@@ -80,5 +91,6 @@ AUTO-MAS 支持多种游戏脚本的管理与调度。本节将介绍如何在 A
 - **鸣潮玩家**：查看 [OK-WW 配置方法](/docs/script-guide/okww) 快速上手
 - **1999 玩家**：查看 [M9A 配置方法](/docs/script-guide/m9a) 快速上手
 - **星穹铁道玩家**：查看 [HSR 配置方法](/docs/script-guide/hsr) 快速上手
+- **原神玩家**：查看 [BetterGI 配置方法](/docs/script-guide/bettergi) 快速上手
 - **其他游戏**：查看 [通用调度](/docs/script-guide/general) 并使用现成模板
 - **高级用户**：深入了解[通用调度](/docs/script-guide/general)的配置管理逻辑，自定义您的调度方案

@@ -55,6 +55,17 @@ Honkai: Star Rail - HSR specialization, with M7A and SRA dual engines
 
 ---
 
+### [BetterGI](/en/docs/script-guide/bettergi)
+
+Genshin Impact - BetterGI
+
+- Native GUI direct control; accounts are managed natively by BetterGI, complex settings are done in BetterGI's interface
+- Manages the One Dragon built-in config groups (8 toggles) and custom config groups independently per user
+- Supports reward party, combat party, and auto-battle strategy fields, auto-reading combat scripts under `User/AutoFight`
+- Account switching, notifications, and extra scripts can each be configured independently
+
+---
+
 ### [General Scheduling](/en/docs/script-guide/general)
 
 For scripts that can run tasks on startup and print logs
@@ -80,5 +91,6 @@ Honkai: Star Rail - March7thAssistant
 - **Wuthering Waves players**: read the [OK-WW guide](/en/docs/script-guide/okww)
 - **Reverse: 1999 players**: read the [M9A guide](/en/docs/script-guide/m9a)
 - **Honkai: Star Rail players**: read the [HSR guide](/en/docs/script-guide/hsr)
+- **Genshin Impact players**: read the [BetterGI guide](/en/docs/script-guide/bettergi)
 - **Other games**: read [General Scheduling](/en/docs/script-guide/general) and use an existing template
 - **Advanced users**: learn the configuration management model in [General Scheduling](/en/docs/script-guide/general) and customize your scheduling plan
