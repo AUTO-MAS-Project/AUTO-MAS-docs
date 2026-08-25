@@ -1,49 +1,35 @@
 # Emulator Management
 
-Emulator management is a distinctive MAS feature. It is designed to solve common bugs caused by emulator behavior and emulator adaptation once and for all.
+Register your emulator here once and AUTO-MAS fills in the emulator settings for every script, so you do not have to match them up script by script. That usually clears up the old problems with multi-instance setups and failed connections.
+
+Put plainly, it is a multi-instance manager: it queries the emulator over the command line for instance details (port, instance number, and so on) and fills them into each script's config automatically.
 
 ![emulator management](/docs/img/advanced-features/emulator-1.png)
 
-*The screenshot shows example content. It will look like this only after configuration.*
+*The screenshot shows example content. You need to configure it yourself.*
 
-## Search for Emulators
+## Adding an Emulator
 
-During initial configuration, you can use automatic search or manual search. If you use automatic multi-instance manager search, one click is enough.
+Just use automatic search. AUTO-MAS scans the **default installation paths**.
 
-MAS automatically searches for emulators installed under their **default installation paths**.
+If you changed the install location when you set up the emulator, automatic search will not find it and you have to add it manually.
 
-If you changed the default path, MAS cannot find the emulator automatically and you need to add it manually.
+## Filling In the Settings
 
-First, understand the configuration fields.
+| Setting | What to enter |
+| --- | --- |
+| **Emulator name** | Anything you like. It is only shown to you inside AUTO-MAS |
+| **Emulator type** | Pick which emulator you use from the dropdown, such as MuMu or LDPlayer |
+| **Emulator path** | Select the **multi-instance manager**, not the emulator's main program |
+| **Maximum wait time** | How long to wait for the emulator to start. The script only launches once the emulator is up, so raise this on a slow machine |
+| **Boss key** | In silent mode, AUTO-MAS presses this key to hide the emulator |
 
-## Configuration Explanation
-
-**Emulator name**: a display name used only inside MAS.
-
-**Emulator type**: the emulator software name, such as MuMu emulator or LDPlayer. Select it from the dropdown.
-
-::: tip Best Practice
-
-AUTO-MAS strongly recommends MuMu 12 or LDPlayer because they have good performance, reliable screenshots, and mature multi-instance manager support. If you are installing an emulator from scratch, consider one of them.
-
+::: tip Common multi-instance manager paths
+- MuMu 12 v4: `MuMu installation directory\shell\MuMuManager.exe`
+- MuMu 12 v5: `MuMu installation directory\nx_main\MuMuManager.exe`
+- LDPlayer: `LDPlayer installation directory\LDPlayer9\dnplayer.exe`
 :::
 
-**Emulator path**: the directory of the emulator **multi-instance manager** for the corresponding software.
-
-::: tip Common Emulator Paths
-
-MuMu 12 v4: `MuMu installation directory\shell\MuMuManager.exe`
-
-MuMu 12 v5: `MuMu installation directory\nx_main\MuMuManager.exe`
-
-LDPlayer: `LDPlayer installation directory\LDPlayer9\dnplayer.exe`
-
+::: tip No emulator yet? Pick MuMu 12 or LDPlayer
+Both perform well and capture screenshots reliably, and their multi-instance manager support is the most complete, so AUTO-MAS works best with them. Other emulators may land you on problems nobody has hit before.
 :::
-
-**Maximum wait time**: how long AUTO-MAS waits for the emulator to start when a script uses this emulator. The script program starts only after the emulator starts.
-
-**Boss key**: pressed automatically when silent mode is used.
-
-## Notes
-
-Emulator management is essentially a multi-instance manager integration. AUTO-MAS uses a series of command-line commands to obtain emulator information and then fills the corresponding script configuration fields automatically.

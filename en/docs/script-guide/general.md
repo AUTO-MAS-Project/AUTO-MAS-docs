@@ -6,145 +6,164 @@ date: 2025-07-16
 
 # General Scheduling
 
-::: warning Before You Start
-General scheduling has a learning curve. To configure a general script on your own, you need to understand the behavior of the script itself.
+::: tip Start here: most people never configure this by hand
+AUTO-MAS ships with a set of ready-made templates. Go to **New general script > Create from template**, pick a template, fill in one script path, and you are done.
 
-If you do not know much about the script you want to schedule, you can import a configuration shared by another user. However, general scheduling cannot guarantee the same stability as a dedicated script integration. Do not blame configuration contributors too harshly.
-
-If you decide to use this feature, read this document carefully before asking questions.
+March7thAssistant, SRC, zzzOD, M9A and other common scripts all have mature templates. Check the list before you build anything yourself.
 :::
 
-::: tip Tip
+::: warning Configuring from scratch means knowing your script
+If your script is not in the template list, you have to write the monitoring rules yourself. That means knowing what its log looks like and how it starts up. If you are not familiar with it, import a config someone else has shared instead.
 
-AUTO-MAS already includes many ready-to-use templates. You can configure them through **New General Script > Create from Template** and only need to fill in the script software path.
-
-Currently, mature templates are available for common scripts such as March7thAssistant, SRC, zzzOD, and M9A.
-
-If you run into problems, join the user group and discuss them with developers and template contributors.
-
+General scheduling is also usually less stable than a script AUTO-MAS supports directly. That is how the mechanism works, so go easy on the people who share configs.
 :::
 
-## Scheduling Model
+## How It Works
 
-Before using this feature, understand the basic mechanism of **general scheduling**. This makes later troubleshooting much easier.
+Understand these two things and you can diagnose most problems yourself.
 
-### Configuration Management
+### Config Handling: Borrow and Return
 
-AUTO-MAS manages configuration by directly saving script configuration files or folders. Before a task starts, the corresponding configuration files are imported into the target script location as-is. After the task ends, the original configuration files inside the script are restored.
+AUTO-MAS does not parse the script's config format. It keeps the whole config instead. Before a task starts, it copies your saved config into the script's directory as-is. After the task ends, it puts the script's original config back.
 
-### Script Monitoring
+So every user runs with its own config, and nothing you set by hand inside the script gets polluted.
 
-AUTO-MAS determines script status through **log text**, **log timestamps**, and **whether the script process has ended**. The logic is:
+### Success and Failure: Watching the Log
 
-- Success: If **task success logs** are configured and any success log text appears in the **log text**, the task is considered successful. If **task success logs** are empty, and no **task error log** appears in the **log text** when the **script process ends**, the task is considered successful.
-- Failure: If the last **log timestamp** exceeds the **auto-proxy timeout limit**, the task is considered failed due to timeout. If a **task error log** appears before a **task success log**, the task is considered failed. If **task success logs** are configured, but no success log appears in the **log text** when the **script process ends**, the task is considered failed.
+AUTO-MAS cannot read the script's UI. It watches three things only: **what text appears in the log**, **when the log was last written to**, and **whether the script process has exited**.
+
+Which rules apply depends on whether you filled in **task success logs**:
+
+| You filled in a success keyword | You left the success keyword blank |
+| --- | --- |
+| The success keyword appears in the log -> **success** | The script exits on its own and no error keyword ever appeared -> **success** |
+| The script exits but the success keyword never appeared -> **failure** | An error keyword appeared before the script exited -> **failure** |
+
+Two more rules always apply:
+
+- An error keyword appears before the success keyword -> **failure**
+- The log goes untouched for longer than the **auto-proxy timeout limit** -> treated as a hang, **timeout failure**
 
 Using MAA as an example:
 ![AUTO workflow](/docs/img/AUTO工作逻辑.png)
 
 ## Script Settings
 
-To let AUTO-MAS schedule a general script correctly, users need to configure script properties accurately. These settings directly affect automation stability.
+These settings decide how AUTO-MAS handles your script. Getting them right is what makes automation stable.
 
 ### Script Root Directory
 
-- **Type**: folder
+Pick the **folder** the script lives in. Fill this in first; the other paths depend on it.
 
-- **Description**: This setting helps users relocate the script program. When the script program location changes, you only need to reset the root directory, and other paths will update automatically.
+If you move the script later, change this one setting and the paths below follow automatically. No need to reselect them one by one.
 
 ### Script Path
 
-- **Type**: executable file
+Pick the script's **main executable**, the file you would normally double-click to start it.
 
-- **Description**: The script's main program. Both script configuration and task execution require this file.
-
-- **Common issues**:
-
-  - **The program says the selected path is not under the script root directory**: this means exactly what it says. Check the script root directory.
-  - **The script cannot start during configuration or auto-proxy**: check whether the path and launch arguments are correct. Specific errors can be found in `debug/AUTO-MAS.log`.
+- **"The selected path is not under the script root directory"**: exactly what it says. Go back and check the script root directory.
+- **The script will not start**: either the path or the launch arguments are wrong. Check `debug/AUTO-MAS.log` for the actual error.
 
 ### Script Launch Arguments
 
-- **Type**: text segments separated by `|`, `%`, and spaces
+**Most scripts do not need this. Leave it empty and try that first.**
 
-- **Description**: This setting adds extra commands when starting a script task. Some scripts do not provide a `run immediately after startup` option in the UI, but support the same behavior through command-line arguments. For those scripts, configure this item so the script runs its task after startup.
+Some scripts have no "start running as soon as it opens" option in their UI and can only do it through command-line arguments. Those are the ones that need this field.
 
-- **How to configure**: Read the script software's official website or documentation, find sections such as **CLI run**, **command-line startup**, or similar, then fill in the required arguments. Make sure the script can run its task automatically with the entered launch arguments. If the arguments for running a task are different from those for configuring the script, enter both and separate them with `|`. If the executable used for running a task is different from the executable used for configuration, enter the executable path relative to the `script path` before the corresponding arguments, separated by `%`.
+**How to find them**: check the script's website or docs for a **command line** or **CLI** section, and copy the arguments that make it run a task on startup.
 
-- **Format**: `{auto-proxy executable path relative to script path}%{auto-proxy task arguments}|{configuration executable path relative to script path}%{configuration task arguments}`
+You only need the separators if your script is one of these two special cases:
+
+- **Configuring and running a task take different arguments** -> separate the two sets with `|`. Task arguments first, config arguments second.
+- **Configuring and running a task use different executables** -> put that executable's path relative to the `script path` in front of the arguments, separated by `%`.
+
+The full format looks like this (leave out the parts you do not need):
+
+```text
+{task executable}%{task arguments}|{config executable}%{config arguments}
+```
 
 ### Track Script Child Processes
 
-- **Type**: toggle
+**Leave this on the default. Only change it if something goes wrong.**
 
-- **Description**: Determines whether child processes are considered when judging **whether the script process has ended**. Some scripts must be opened through a **launcher**. After the main program starts, the launcher exits automatically, so the launcher process alone cannot represent whether the whole script is still running. Enable this option for such scripts.
+Some scripts work like this: a launcher starts the main program, then the launcher exits. Watching only the launcher process would make AUTO-MAS think the script already finished. Turn this on for those scripts so child processes are watched too.
 
-- **Common issues**:
+- **The script closed but AUTO-MAS still thinks it is running** -> turn this off.
+- **The script is still running but AUTO-MAS says it exited** -> turn this on.
 
-  - **After manually closing the script, the app does not detect that the script has closed**: try disabling this option.
-  - **The script is still running, but the app incorrectly reports that it has exited**: try enabling this option.
+### Script Config File Path
 
-### Script Configuration File Path
+Pick the file or folder where the script stores its config.
 
-- **Type**: any file or folder
-
-- **Description**: The file or folder where the script stores configuration.
-
-- **How to configure**: Open the script directory. Usually there is a file or folder named `config`; this is very likely the **script configuration file**.
+**How to find it**: open the script directory and look for a file or folder with `config` in the name. That is usually the one.
 
 ### Script Log File Path
 
-- **Type**: any file
+Pick the file the script writes its log to.
 
-- **Description**: The file where the script stores logs.
+**How to find it**: open the script directory and look for a folder like `debug` or `log`.
 
-- **How to configure**: Open the script directory and check whether a folder named `debug`, `log`, or similar exists:
-  - If it exists, enter that folder and look for files whose names do not include date information, such as `log.txt` or `gui.log`:
-    - If such a file exists, select it.
-    - If not, select any file that stores log information, usually with a `.log` or `.txt` extension, then configure **script log file name format**.
-  - If no such folder exists, check whether the script root contains `.txt` or `.log` files. If so, open them and confirm whether they contain script logs, then select the correct file.
+- **That folder exists**: go in and pick a `.log` or `.txt` file.
+  - The filename has **no date** in it (`log.txt`, `gui.log`) -> select it and you are done.
+  - The filename **has a date** in it (`2025-06-29.log`) -> select it too, then also fill in **script log file name format** below.
+- **No such folder**: look for `.txt` or `.log` files in the script root, open them to confirm they hold log output, and select the right one.
 
 ### Script Log File Name Format
 
-- **Type**: text indicating a date/time format
+**If the log filename has no date in it, leave this empty.**
 
-- **Description**: Indicates the naming format of real-time log files. Some scripts do not write logs to one fixed file, but write them to different files by date. For these scripts, configure the log file name format so AUTO-MAS can locate the actual log file.
+Some scripts create a new log file every day with the date in the filename. AUTO-MAS needs to know the naming pattern to find today's file.
 
-- **How to configure**: Copy any script log file name into this field, then replace date and time elements with the corresponding symbols according to the [common date/time format symbol reference](/en/docs/advanced-features/#common-date-time-format-symbol-reference). Example: `2019-05-01` -> `%Y-%m-%d`.
+**How to fill it in**: copy one log filename in here, then replace the date and time parts with symbols. For example, `2019-05-01` becomes `%Y-%m-%d`. See the [date and time format symbol table](/en/docs/advanced-features/#common-date-time-format-symbol-reference) for what each symbol means.
 
 ### Script Log Timestamp Start/End Position
 
-- **Type**: number
+This tells AUTO-MAS which character each log line's timestamp starts and ends at. It uses that to tell whether the script has stopped moving.
 
-- **Description**: Locates the start and end positions of the timestamp in each log line so the app can parse it.
+**How to count**: take any log line with a timestamp and count characters from `1`. For example:
 
-- **How to configure**: Find any log line with a timestamp. Count from `1` to the first character of the timestamp; that number is the start value. Continue counting to the last character of the timestamp; that number is the end value. For example, in `[2025-06-29 20:00:35.909][INF] <1><> Start task`, the start value is `2` and the end value is `24`.
+```text
+[2025-06-29 20:00:35.909][INF] <1><> 开始任务
+```
+
+`[` is position 1, so the timestamp starts at position 2 and ends at position 24. Enter `2` for start and `24` for end.
 
 ### Script Log Time Format
 
-- **Type**: text indicating a date/time format
+Write that timestamp out in symbols so AUTO-MAS can read the time from it.
 
-- **Description**: Indicates the format of log timestamps so the app can parse them.
-
-- **How to configure**: Copy any script log timestamp into this field, then replace date and time elements with the corresponding symbols according to the [common date/time format symbol reference](/en/docs/advanced-features/#common-date-time-format-symbol-reference). Example: `2019-05-01 16:00:00.000` -> `%Y-%m-%d %H:%M:%S.%f`.
+For example, `2019-05-01 16:00:00.000` becomes `%Y-%m-%d %H:%M:%S.%f`. See the [date and time format symbol table](/en/docs/advanced-features/#common-date-time-format-symbol-reference) for what each symbol means.
 
 ### Script Success/Failure Logs
 
-- **Type**: text segments separated by `|`
+Enter keywords. When AUTO-MAS spots one in the log, it calls the task a success or a failure. You can enter several, separated by `|`.
 
-- **Description**: Reference text for judging script runtime status. Multiple entries are supported and separated by `|`.
+**How to find them**: run the script once by hand, open its log file, and find the line it prints when it finishes (something like "All tasks complete"). Copy a short, unchanging fragment of that line into **success logs**. Do the same with the line it prints on an error and put that in **failure logs**.
 
-- **How to configure**: Customize this based on your experience and the script log content.
+Pick something that only shows up on success. Do not pick a generic message the script prints on every run, or you will get false results.
 
-## Configuration Management
+## Sharing and Importing Configs
 
-Because general scheduling has a learning curve, general scripts support quick configuration import and export. You can export configuration to a `JSON file` and share it with other users, import a `JSON file` shared by another user, or upload your configuration to the `AUTO-MAS Configuration Sharing Center`. After review, all users can import it with one click.
+Once you have a script configured, you can export it as a JSON file and share it. You can import someone else's JSON the same way. To get it in front of more people, submit it to the **AUTO-MAS config sharing centre**; once it passes review, every user can import your config with one click.
 
-::: warning Note
-- To prevent privacy leaks, the script root directory will be replaced with `C:/ScriptRoot`. Users must reselect it after importing.
-- `Game/emulator paths` are not replaced automatically. Check whether these paths may expose personal information.
+::: warning Check your paths yourself before sharing
+Exporting and uploading both scrub the config, but **only some of the paths**. You have to check the rest.
+
+Handled automatically:
+
+- The **script root directory** is replaced with the placeholder `C:/脚本根目录`. (That string is hardcoded in Chinese and is not translated.) So **the first thing to do after importing someone else's config is reselect your own script root directory**.
+- The **script path, config file path, log file path, and tracked process path** are rewritten relative to the placeholder if they sit under the script root directory. If they sit under `AppData` instead — SRA's config directory, for example — they are rewritten as `%APPDATA%/...`, so your Windows username does not leak.
+
+You have to check these yourself:
+
+- The **game and emulator path is not scrubbed**. It is exported as-is.
+- Those four script paths are also exported as-is if they are under neither the script root directory nor `AppData`.
+
+So open the exported JSON and skim it before sharing. If you see a path with your real name in it, such as `C:/Users/YourName/...`, edit it out first.
 :::
 
 ## Subordinate Users
 
-**Subordinate users** work the same way as **subordinate users** in MAA scripts. Each sub-configuration runs similarly to the detailed mode of MAA user configuration. Each sub-configuration must be configured separately, using the same method as MAA configuration.
+One general script can hold several users. Each user stores its own copy of the script config, and AUTO-MAS swaps them in one at a time as it runs tasks. It works the same way as users under a MAA script, and each user has to be configured separately.
+

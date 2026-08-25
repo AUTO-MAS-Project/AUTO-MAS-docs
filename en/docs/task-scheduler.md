@@ -2,58 +2,47 @@
 
 ## Scheduling Queues
 
-A **scheduling queue** is the AUTO-MAS module that organizes script tasks. It can define the run order for **multiple scripts**, run tasks automatically when the app starts, and run tasks on a schedule.
+A **scheduling queue** is a to-do list: you put the scripts you want to run into it in order, and AUTO-MAS works down the list one script at a time. You can also have it start running when the app launches, or at set times.
 
-::: warning Reminder
-Scheduling queues run scripts in sequence, which means the next script starts only after the previous script finishes.
+::: warning Two things to get straight first
+**Scripts in a queue run one after another.** The next one starts only after the previous one finishes. If you see several scripts running at the same time, check your general script settings.
 
-If scripts in a single queue appear to run in parallel, check the general script settings.
-
-Different start times in the same queue are not per-script start times.
-
-Running a queue starts all scripts in that queue.
-
-If you plan to use this feature, read this document carefully before asking questions.
+**A queue can have several scheduled times, but those times don't belong to individual scripts.** At each scheduled time, the whole queue runs from the top. They are not "run script A at this time, script B at that time".
 :::
 
 ![scheduler](/docs/img/advanced-features/scheduler.png)
 
 ### Usage
 
-1. Click **New Queue** in the upper-right corner to create a queue.
-2. Enable **Run on startup** and/or **Scheduled run** according to your needs.
+1. Click **New Queue** in the upper-right corner.
+2. Turn on **Run on startup** or **Scheduled run** as needed.
+3. Click **Add schedule** and set the time. **Remember to switch the scheduled run status to Enabled**, or it won't fire.
+4. Click **Add task** and add scripts you have already configured to the queue. If there's nothing to choose from here, you haven't configured any scripts yet. Start with [Script Configuration](/en/docs/script-guide/).
 
-::: tip Tips
-You can set AUTO-MAS to start with Windows and enable **Run on startup** in the scheduling queue. This lets scripts for emulators, such as MAA, run automatically when you start your computer.
-
-If you have a machine that never stops, you can enable scheduled runs and let AUTO-MAS perform automation at the selected times.
-
-If you have special login requirements, such as MAA custom infrastructure tasks, you can start MAA automatically before the custom infrastructure takes effect so MAA can switch infrastructure layouts.
+::: tip Three common setups
+- **Run everything at boot**: set AUTO-MAS to start with Windows and enable **Run on startup** on the queue. It finishes the batch after boot with nothing from you.
+- **Run at set times**: if your computer stays on, use **Scheduled run** to pick a few times for it to run on its own.
+- **Pair with MAA custom infrastructure**: schedule MAA to start shortly before an infrastructure layout takes effect, so MAA swaps the shift over while it's there.
 :::
 
-3. Click **Add schedule** and set the time when scripts should run. Remember to change the scheduled run status to **Enabled**.
-4. Add tasks. A **task** here refers to a script task already configured in **Script Management**. If no tasks are available, read [Script Configuration](/en/docs/script-guide/).
+## Run order in auto-proxy mode
 
-## Auto-Proxy Strategy
+In **auto-proxy** mode, tasks are nested like this:
 
-The following describes AUTO-MAS task scheduling behavior in **auto-proxy** mode.
-
-- Each **user** contains two subtasks: **Annihilation** and **Daily**. In simple mode, **Daily** is enabled by default. The app does not check whether the same user is running elsewhere. Scheduling order: **Annihilation > Daily**. This item applies only to MAA scripts.
-- Each **script instance** contains multiple users. A **script instance task** is the sum of all tasks for its users. The same **script instance** cannot be started repeatedly. If it is already running, a new **script instance task** will be skipped. Scheduling order: **ascending user index**.
-- Each **scheduling queue** contains multiple **script instance tasks**. A **scheduling queue task** is the sum of all **script instance tasks** in its task queue. The same **scheduling queue** can be started repeatedly. Scheduling order: **ascending task instance index**.
-- Each **scheduler console** can run and display one **scheduling queue task**. Create multiple **scheduler consoles** to run multiple queues.
+- **One user** = all the tasks that user has selected. For MAA scripts, a user's tasks split into **Annihilation** and **Daily**, with Annihilation first; simple mode has Daily on by default.
+- **One script** = the tasks of all users under it, run in the order the users appear in the list. The same script can't run twice at once. If it's already running, starting it again is skipped.
+- **One queue** = the tasks of all scripts in the queue, run in queue order. The same queue can be started more than once.
+- **One scheduler console** runs one queue at a time. To run several queues in parallel, open more consoles.
 
 ## Manual Review
 
-**Manual review** is a mode for checking user automation status. It reviews users one by one and records the review result.
+The batch has finished, but you want to see with your own eyes whether each account really got everything done. That's what **manual review** is for: AUTO-MAS logs in to each account in turn, you take a look, and it records the result.
 
-::: info Help me, developer
-
-Currently only MAA is supported. More may come later.
-
+::: info Only MAA is supported for now
+Other scripts aren't supported yet.
 :::
 
-- Select **Manual review mode**, then click **Start task**.
-- The app starts MAA and logs in to each user account in order.
-- **After PRTS login completes**, manually check the automation status and confirm unfinished tasks.
-- After the review ends, the system records the result in the status information section on the **User Management** page.
+1. Select **Manual review mode** and click **Start task**.
+2. The app starts MAA and logs in to each account in order.
+3. **After each PRTS login finishes**, check that account's run yourself and manually confirm anything that didn't get done.
+4. When the review ends, the results are recorded in the status information on the **User Management** page.

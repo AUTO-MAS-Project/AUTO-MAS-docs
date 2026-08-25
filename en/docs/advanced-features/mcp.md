@@ -1,20 +1,14 @@
 # MCP Service
 
-Through the MCP service, AI clients can call tools and features provided by AUTO-MAS.
+Once MCP is connected, you can just tell an AI "run the dailies on all my accounts today" and it drives AUTO-MAS to get it done. Almost anything you can click in the UI, the AI can do for you.
 
-## What is MCP?
+MCP (Model Context Protocol) is a common interface for AI to call external tools. You do not need to know how it works. Just put the address below into your AI client.
 
-MCP (Model Context Protocol) is an open protocol designed to provide standardized interfaces for AI models, allowing them to connect to external data sources and tools. With MCP, AI can safely and efficiently call features without needing to understand the underlying implementation details.
+## Configuration
 
-## Configure the MCP Service
+If your AI client supports MCP, enter this address: `http://localhost:36163/mcp`
 
-For any MCP client that supports SSE, provide the AUTO-MAS MCP URL:
-
-```text
-http://localhost:36163/mcp
-```
-
-Common MCP clients such as Claude Desktop, Cursor, and Windsurf also support the following configuration:
+Clients like Claude Desktop, Cursor, and Windsurf take it as a config file instead:
 
 ```json
 {
@@ -26,6 +20,10 @@ Common MCP clients such as Claude Desktop, Cursor, and Windsurf also support the
 }
 ```
 
-## Use the MCP Service
+## Usage
 
-After configuration, start the AUTO-MAS app. The AI client will discover and connect to this MCP service automatically, then call tools provided by AUTO-MAS to perform almost all tasks supported by AUTO-MAS.
+Once it is set up, **keep AUTO-MAS running**. The AI connects on its own, and from there you direct it in plain language.
+
+::: warning The AI cannot connect if AUTO-MAS is not running
+That address is a service AUTO-MAS provides itself. Close the app and the service goes with it, so the AI will report a connection failure.
+:::

@@ -1,6 +1,8 @@
 # Script Management
 
-AUTO-MAS supports managing and scheduling multiple game scripts. This section explains how to use different scripts in AUTO-MAS.
+Find the game you play below, open its guide, and follow along.
+
+Your game is not in the list? See [General Scheduling](/en/docs/script-guide/general). As long as the script can start running a task on startup and writes a log, AUTO-MAS can manage it.
 
 ## Guide Index
 
@@ -36,22 +38,20 @@ Reverse: 1999 - M9A
 
 Wuthering Waves - OK-WW
 
-- Wuthering Waves project in the ok-script family, configured separately from OkNte for Neverness to Everness
-- The MAS entry currently handles DailyTask and MultiAccountDailyTask (`-t 1` and `-t 7`)
-- Supports full automatic game lifecycle management in MAS, including startup and shutdown
-- Provides Script, User, and Direct control sources, with optional task configuration takeover for high-frequency fields
-- Uses only official Wuthering Waves resources and launcher; WeGame is not supported
+- Currently supports daily tasks and multi-account dailies
+- AUTO-MAS can start and close the game for you
+- Complex settings stay in OK-WW's own UI; AUTO-MAS only takes over the high-frequency ones
+- Supports the official launcher only, not WeGame
 
 ---
 
 ### [HSR](/en/docs/script-guide/hsr)
 
-Honkai: Star Rail - HSR specialization, with M7A and SRA dual engines
+Honkai: Star Rail - March7thAssistant (M7A) + StarRailAssistant (SRA)
 
-- Supports both March7thAssistant (M7A) and StarRailAssistant (SRA)
-- Covers daily Trailblaze Power consumption, reward collection, Divergent Universe, Currency Wars, and more
-- Allows the Trailblaze Power, reward, divergent, and currency modules to independently choose M7A or SRA
-- Automatically retries failed tasks and avoids polluting external script configuration
+- You can mix both scripts and decide which one handles which task
+- Covers Trailblaze Power, reward collection, Divergent Universe, and Currency Wars
+- Retries failed tasks automatically and will not break your existing script config
 
 ---
 
@@ -60,7 +60,7 @@ Honkai: Star Rail - HSR specialization, with M7A and SRA dual engines
 For scripts that can run tasks on startup and print logs
 
 - Supports most mainstream scripts, including March7thAssistant, SRC, zzzOD, and M9A
-- Provides ready-made configuration templates for quick setup
+- Ready-made config templates you can use straight away
 - Supports flexible custom script management plans
 
 ---
@@ -71,14 +71,3 @@ Honkai: Star Rail - March7thAssistant
 
 - Under development
 - Can be used together with automatic login scripts
-
----
-
-## Reading Recommendations
-
-- **New users**: start with the [MAA guide](/en/docs/script-guide/maa) if you play Arknights
-- **Wuthering Waves players**: read the [OK-WW guide](/en/docs/script-guide/okww)
-- **Reverse: 1999 players**: read the [M9A guide](/en/docs/script-guide/m9a)
-- **Honkai: Star Rail players**: read the [HSR guide](/en/docs/script-guide/hsr)
-- **Other games**: read [General Scheduling](/en/docs/script-guide/general) and use an existing template
-- **Advanced users**: learn the configuration management model in [General Scheduling](/en/docs/script-guide/general) and customize your scheduling plan

@@ -23,10 +23,8 @@ March7thAssistant is a third-party tool for Honkai: Star Rail. It can handle rep
 1. Download the archive from <Pill name="March7thAssistant Website" image="https://m7a.top/assets/screenshot/March7th.png" link="https://m7a.top/#/"/>, <Pill name="March7thAssistant Repository" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/moesnow/March7thAssistant/releases/"/>, or <Pill name="MirrorChyan" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?scouce=AUTO-MAS-Web&rid=March7thAssistant&channel=stable"/>.
 2. Extract the March7thAssistant archive to any folder.
 
-::: warning Reminder
-Do not extract March7thAssistant or other general scripts you need into Chinese-named folders such as **脚本**.
-
-This helps avoid unnecessary errors.
+::: warning Don't Unpack Into a Non-English Path
+Keep March7thAssistant, and any other general script, out of folders with non-ASCII characters in the name, such as `D:\脚本\`. Those paths cause failures that are hard to diagnose. Use a plain English path like `D:\M7A`.
 :::
 
 ### Configure the Script Instance
@@ -50,8 +48,8 @@ The script configuration opens shortly:
 5. In the opened script configuration, click **Select folder** for **Script root directory**, then open the March7thAssistant software directory.
 ![AUTO-MAS configuration 5](/docs/img/script-guide/March7thAssistan/AUTO-MAA-5.png)
 
-::: warning Reminder
-The script configuration field is automatically corrected after selecting the script root directory. Do not change it casually unless you understand what it does.
+::: warning Don't Edit the Paths Below by Hand
+Once you pick the script root directory, the paths under **script configuration** are filled in automatically by the template. Leave them alone unless you know what each one does. Wrong values break automation in confusing ways.
 :::
 
 6. After selecting the March7thAssistant directory, the **script configuration** path is corrected automatically and does not need manual selection. Click the save button in the lower-right corner.
