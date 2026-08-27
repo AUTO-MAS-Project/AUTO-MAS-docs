@@ -62,7 +62,7 @@ The 8 **capsule toggles** below turn the One Dragon built-in config groups **run
 | 3 | Auto Ley Line Outcrop |
 | 4 | Auto Domain |
 | 5 | Auto world boss hunting |
-| 6 | Auto Arcalanos crisis war |
+| 6 | Auto Stygian Onslaught |
 | 7 | Claim daily rewards |
 | 8 | Claim Serenitea Pot rewards |
 
@@ -78,7 +78,7 @@ The party name used when collecting rewards. **Leaving it empty does not overrid
 
 ### Combat party
 
-The party name used in general combat. Leaving it empty does not override BetterGI's existing settings; when filled, it is applied to the four combat tasks (**Auto Ley Line Outcrop, Auto Domain, Auto world boss hunting, Auto Arcalanos crisis war**), replacing BetterGI's default party for those tasks.
+The party name used in general combat. Leaving it empty does not override BetterGI's existing settings; when filled, it is applied to the four combat tasks (**Auto Ley Line Outcrop, Auto Domain, Auto world boss hunting, Auto Stygian Onslaught**), replacing BetterGI's default party for those tasks.
 
 ### Combat strategy
 
