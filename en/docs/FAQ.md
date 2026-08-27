@@ -20,12 +20,16 @@ That encryption is tied to your Windows login account, which means:
 - The app can only decrypt the data while you are signed in to that Windows account on that computer.
 - Even if someone copies the whole config folder, they can't decrypt it on another computer.
 
-::: warning The tradeoff: change environments and it can't be decrypted
-In the three cases below, your old credential data stops working and you'll have to enter it again. This is not a bug:
+::: warning Warning
+Existing data may fail to decrypt in the following cases:
 
-1. **You reinstalled Windows, or switched to a new Windows account** — the key from the old account is gone.
-2. **You reset your Windows login password by bypassing Windows** (offline password editors, system repair tools, and the like) — changing your password normally from inside Windows is fine; going around Windows to do it loses the key.
-3. **You copied the configuration to another computer or another Windows account** — the encrypted data is only valid under the original account on the original computer.
+1. **Changing or reinstalling the system**
+   If you reinstall Windows or use a new computer account, the encryption key from the original account is lost and the app cannot read old data.
+2. **Deleting or resetting the user account password**
+   DPAPI encryption keys are bound to your Windows login credentials.
+   If you reset the password abnormally, such as through offline modification or system repair tools, Windows cannot decrypt old encrypted files.
+3. **Copying data to another computer or account**
+   DPAPI-encrypted data is valid only on the original account and computer. Data copied to another environment cannot be decrypted if the key does not match.
 :::
 
 ## Troubleshooting
