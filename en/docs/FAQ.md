@@ -1,99 +1,92 @@
 # FAQ
 
-For more issues, see <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/AUTO-MAS-Project/AUTO-MAS/issues"/> .
+If your question isn't here, have a look through <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/AUTO-MAS-Project/AUTO-MAS/issues"/> .
 
-For script-specific issues, read the script documentation or contact the script developers.
+If the problem is in the script itself (MAA failing to recognize a stage, for example), that's the script's business. Check that script's documentation or ask its author. AUTO-MAS only schedules them.
 
 ## Questions
 
-### Does AUTO-MAS benefit paid account runners?
+### **Does AUTO-MAS benefit paid account runners?**
 
 - When paid account runners use AUTO-MAS, it benefits paid account runners. When regular users use AUTO-MAS, it benefits regular users.
-- The wider AUTO-MAS spreads, the more it benefits users. Consider helping promote AUTO-MAS.
+- And the wider AUTO-MAS spreads, the more it benefits users, so go help spread the word.
 
-### Is my data, such as account passwords, safe?
+### Are my account passwords safe?
 
-To keep sensitive information, such as login credentials and access tokens, stored securely on your local machine, AUTO-MAS uses the **Windows Data Protection API (DPAPI)**.
+Yes. The passwords and tokens you enter are encrypted with Windows' own encryption (DPAPI) and stored on your machine. AUTO-MAS never uploads them to any server.
 
-**DPAPI** is a Windows mechanism for encrypting and decrypting sensitive local data. Its master key is derived from the user's login password or system startup key and protected by the operating system kernel, so it is not exposed to applications in plaintext. This means:
+That encryption is tied to your Windows login account, which means:
 
-- Only you can decrypt the data when logged in to your **Windows account**.
-- Even if someone copies your configuration files, they cannot decrypt the data on another computer or account.
-- Encryption, decryption, and key management are handled by Windows automatically.
+- The app can only decrypt the data while you are signed in to that Windows account on that computer.
+- Even if someone copies the whole config folder, they can't decrypt it on another computer.
 
-::: warning Warning
-Existing data may fail to decrypt in the following cases:
+::: warning The tradeoff: change environments and it can't be decrypted
+In the three cases below, your old credential data stops working and you'll have to enter it again. This is not a bug:
 
-1. **Changing or reinstalling the system**
-   If you reinstall Windows or use a new computer account, the encryption key from the original account is lost and the app cannot read old data.
-2. **Deleting or resetting the user account password**
-   DPAPI encryption keys are bound to your Windows login credentials.
-   If you reset the password abnormally, such as through offline modification or system repair tools, Windows cannot decrypt old encrypted files.
-3. **Copying data to another computer or account**
-   DPAPI-encrypted data is valid only on the original account and computer. Data copied to another environment cannot be decrypted if the key does not match.
+1. **You reinstalled Windows, or switched to a new Windows account** — the key from the old account is gone.
+2. **You reset your Windows login password by bypassing Windows** (offline password editors, system repair tools, and the like) — changing your password normally from inside Windows is fine; going around Windows to do it loses the key.
+3. **You copied the configuration to another computer or another Windows account** — the encrypted data is only valid under the original account on the original computer.
 :::
 
 ## Troubleshooting
 
-### Backend startup fails, then the app keeps reporting Network Error
+### The app keeps showing Network Error
 
-Check the frontend error page or open `debug/app.log` for the error details.
+That means the backend didn't start. First find the actual error, either on the error page in the app or in `debug/app.log`, then match it against the list below:
 
-- **[Errno 10048] error while attempting to bind on address ('0.0.0.0', 36163): Only one usage of each socket address is normally permitted.**
+- **`[Errno 10048] error while attempting to bind on address ('0.0.0.0', 36163)`**
 
-  **The port is occupied.** The default AUTO-MAS backend port is `36163`. Check whether the port is already in use.
+  Another program has taken the port. The AUTO-MAS backend uses port `36163`. Find what's holding it and close that.
 
-- **ModuleNotFoundError: No module named 'xxx'**
+- **`ModuleNotFoundError: No module named 'xxx'`**
 
-  **A dependency is missing.** Delete `environment/.requirements_hash` under the app root and restart the app. If the issue remains, delete the `environment` folder and restart the app.
+  Dependencies are incomplete. Delete `environment/.requirements_hash` in the install directory and restart the app so it reinstalls them. If that doesn't help, delete the whole `environment` folder and restart.
 
-- **ImportError: DLL load failed while importing onnxruntime_pybind11_state: A dynamic link library (DLL) initialization routine failed.**
+- **`ImportError: DLL load failed while importing onnxruntime_pybind11_state`**
 
-  **A system runtime is missing.** AUTO-MAS depends on the **Microsoft Visual C++** runtime. If it is missing, download and install it from [Microsoft Visual C++](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version) or directly from [Microsoft Visual C++ x64](https://aka.ms/vc14/vc_redist.x64.exe).
+  Your system is missing the **Microsoft Visual C++** runtime. Installing it fixes this: [download the x64 build directly](https://aka.ms/vc14/vc_redist.x64.exe), or pick a version from the [Microsoft page](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version).
 
-::: tip Note
+::: tip When neither the error page nor the log shows an error
 
-If neither the frontend error page nor the log file shows an error, run a terminal, PowerShell, or CMD as administrator and execute:
+Run the backend by hand to force the error out. Open a terminal (PowerShell or CMD) as administrator and run:
 
 ```bash
 cd {AUTO-MAS root directory}
 .\environment\python\python.exe main.py
 ```
 
-Replace `{AUTO-MAS root directory}` with the AUTO-MAS installation directory.
-
-The terminal will print error logs that can be used for troubleshooting.
+Replace `{AUTO-MAS root directory}` with your actual install path. Whatever the terminal prints is your lead.
 
 :::
 
-### Emulator startup fails
+### The emulator fails to start
 
-- All scripts and apps started by AUTO-MAS run with **administrator privileges**. When emulator multi-instance mode is used, some emulator instances may not have administrator privileges and therefore cannot start new emulator instances with administrator privileges. Make sure all current emulator instances and the emulator multi-instance manager are running as administrator:
+This is almost always mismatched privileges. Everything AUTO-MAS launches runs as administrator, but if an emulator instance is already open without administrator rights, a new instance can no longer be started as administrator. So **one instance opened with normal privileges is enough to break every additional instance after it**.
 
-  1. Close all emulator instances and the emulator multi-instance manager.
-  2. Restart the task in AUTO-MAS and check whether it runs normally. If it still fails, restart the computer and start the task directly from AUTO-MAS.
-  3. When using the emulator or its multi-instance manager later, **right-click > Run as administrator**. For convenience, you can create a shortcut and enable **Right-click > Properties > Shortcut > Advanced > Run as administrator**.
+1. Close every emulator instance and the multi-instance manager.
+2. Go back to AUTO-MAS and start the task again. If it still fails, restart the computer and start it straight from AUTO-MAS, without opening the emulator by hand in between.
+3. From then on, when you open the emulator or the multi-instance manager yourself, use **right-click > Run as administrator**. If that gets tedious, make a shortcut and set **right-click > Properties > Shortcut > Advanced > Run as administrator**, so double-clicking it always runs as administrator.
 
-### Why can't AUTO-MAS open the MAA settings window?
+### I clicked configure MAA, but the MAA window never appeared
 
-- If **minimize MAA immediately after startup** and **hide to tray when minimized** are enabled in MAA, find MAA in the tray area and continue configuring it there. If this is too time-consuming, try enabling **silent mode**.
+MAA has probably hidden itself in the tray. If you enabled **minimize immediately after startup** plus **hide to tray when minimized** in MAA, this is what happens. Find it in the tray at the bottom right and click it to keep configuring. If that gets old, switch to **silent mode**.
 
-### Script configuration reports: the main program must be a subpath of the script root directory
+### Error: the main program must be a subpath of the script root directory
 
-- Check whether the **script root directory** option is correct. You must set this value before setting paths such as the main program path.
+The **script root directory** is unset or wrong. Every other path is measured from it, so you have to set it correctly before you can set the main program path.
 
-### How do I safely save MAA settings?
+### How do I know MAA's settings actually saved?
 
-- Configure MAA in AUTO-MAS and click **Save configuration** after finishing.
+Open MAA from inside AUTO-MAS, configure it, then come back to AUTO-MAS and click **Save configuration**. Settings you change by opening MAA directly, bypassing AUTO-MAS, are not recorded.
 
-### The emulator still does not minimize automatically after silent mode is enabled
+### Silent mode is on but the emulator doesn't minimize
 
-- Check whether the emulator boss key is configured correctly and whether there are key conflicts.
+Check that the emulator's **boss key** is set correctly, and that no other software has claimed that key combination.
 
-### Why did the scheduling queue not run automatically?
+### The scheduling queue didn't run at its scheduled time
 
-- Confirm that **Scheduled run** is **enabled** for the scheduling queue and that the app has not been closed unexpectedly. AUTO-MAS cannot run during sleep or hibernation.
+Two things to check: whether **Scheduled run** is actually enabled, and whether the app was closed or the computer went to sleep or hibernation (see below).
 
-### Can AUTO-MAS run during sleep or hibernation?
+### Can it run while the computer is asleep or hibernating?
 
-- **No.** Known scripts do not support running during sleep or hibernation.
+**No.** Sleep and hibernation stop the program entirely, and no current script supports being used that way. For scheduled runs, the computer has to stay awake.

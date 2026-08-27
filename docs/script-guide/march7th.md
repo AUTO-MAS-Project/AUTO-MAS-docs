@@ -25,10 +25,8 @@ date: 2025-11-08
 1. 前往 <Pill name="三月七小助手 官网" image="https://m7a.top/assets/screenshot/March7th.png" link="https://m7a.top/#/"/>、<Pill name="三月七小助手 仓库" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/moesnow/March7thAssistant/releases/"/> 或 <Pill name="Mirror 酱" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?scouce=AUTO-MAS-Web&rid=March7thAssistant&channel=stable"/> 下载软件压缩包。
 2. 将 三月七小助手 压缩包解压至任意文件夹。
 
-::: warning 温馨提醒
-请不要将三月七小助手以及其他需要使用的通用脚本解压在中文文件夹，比如**脚本**等等。
-
-以便出现不必要的异常。
+::: warning 别解压到中文路径
+三月七小助手（以及其他通用脚本）都不要放在带中文的文件夹里，比如 `D:\脚本\`。中文路径容易引发莫名其妙的报错，用 `D:\M7A` 这样的纯英文路径。
 :::
 
 
@@ -52,8 +50,8 @@ date: 2025-11-08
 
 5. 在 **打开的脚本配置** 中的 **脚本根目录** 单击 **选择文件夹**，打开 三月七小助手 软件所在目录。
 ![AUTO_MAS配置5](/docs/img/script-guide/March7thAssistan/AUTO-MAA-5.png)
-::: warning 温馨提示
-脚本配置一栏会在选择脚本根目录以后自动修正，请不要在不理解这个功能有什么作用的时候贸然修改，以便给自己在使用AUTO-MAS的过程中带来不愉快。
+::: warning 下面那些路径别手动改
+选好脚本根目录之后，**脚本配置** 一栏的各个路径会自动填好。模板已经帮你配对了，不清楚每项是什么意思就别动它，改错了代理会各种出问题。
 :::
 
 6. 选择完 三月七小助手 的目录以后会自动修正**脚本配置**一栏的路径，无需手动选择。同时我们需要点击右下方的保存按钮

@@ -1,16 +1,14 @@
 # MCP 服务
 
-利用 MCP 服务，AI 可以调用 AUTO-MAS 提供的各类工具和功能。
+接上 MCP 之后，你可以直接对 AI 说"帮我把今天的号都代理一遍"，由 AI 去调用 AUTO-MAS 完成——几乎所有能在界面上点的操作，AI 都能替你做。
 
-## 什么是 MCP
+MCP（Model Context Protocol）是一套让 AI 调用外部工具的通用接口。你不需要了解它怎么工作，只要把下面的地址填进你的 AI 客户端就行。
 
-MCP（Model Context Protocol）是一种开放协议，旨在为 AI 模型提供标准化的接口，使其能够连接外部数据源和工具。通过 MCP，AI 可以安全、高效地调用各种功能，而无需关心底层实现细节。
+## 配置
 
-## 配置 MCP 服务
+只要你的 AI 客户端支持 MCP，填这个地址即可：`http://localhost:36163/mcp`
 
-对于任何支持 SSE 的 MCP 客户端，您只需提供 AUTO-MAS 的 MCP 的网址 `http://localhost:36163/mcp` 即可。
-
-此外，常见的 MCP 客户端（Claude Desktop、Cursor 和 Windsurf）支持使用以下配置：
+Claude Desktop、Cursor、Windsurf 这类客户端用配置文件的形式填写：
 
 ```json
 {
@@ -23,6 +21,10 @@ MCP（Model Context Protocol）是一种开放协议，旨在为 AI 模型提供
 ```
 
 
-## 使用 MCP 服务
+## 使用
 
-配置完成后，启动 AUTO-MAS 应用，AI 会自动发现并连接到该 MCP 服务，并可以调用 AUTO-MAS 提供的工具，执行几乎所有 AUTO-MAS 支持的任务。
+配好之后，**保持 AUTO-MAS 开着**，AI 会自动连上，之后直接用自然语言指挥它就行。
+
+::: warning AUTO-MAS 没开的话连不上
+这个地址是 AUTO-MAS 自己提供的服务，软件关了服务就没了，AI 会提示连接失败。
+:::

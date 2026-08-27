@@ -23,18 +23,23 @@ StarRailAssistant是一个崩坏星穹铁道的第三方软件，能够轻松完
 1. 前往 <Pill name="SRA 官网" image="https://starrailassistant.top/img/SRAico.png" link="https://starrailassistant.top/#/"/>、<Pill name="SRA 仓库" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/Shasnow/StarRailAssistant/releases/"/> 或 <Pill name="Mirror 酱" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?scouce=AUTO-MAS-Web&rid=StarRailAssistant&channel=stable"/> 下载软件压缩包。
 2. 将 SRA 压缩包解压至任意文件夹。
 
-::: warning 温馨提醒
-请不要将SRA以及其他需要使用的通用脚本解压在中文文件夹，比如**脚本**等等。
-
-以便出现不必要的异常。
+::: warning 别解压到中文路径
+SRA（以及其他通用脚本）都不要放在带中文的文件夹里，比如 `D:\脚本\`。中文路径容易引发莫名其妙的报错，用 `D:\SRA` 这样的纯英文路径。
 :::
 
 
 ## 设置脚本实例
 
-由于 SRA 和 AUTO-MAS 都提供了多用户功能，因此在 AUTO-MAS 中调度 SRA 有两种方式：
+SRA 自己能管多账号，AUTO-MAS 也能管多账号，所以这里有两条路可走。**先选一条，别两边都配**：
 
-### 方式一：基于AUTO-MAS的多用户功能
+| | 谁来管账号 | 适合 |
+| --- | --- | --- |
+| **方式一** | AUTO-MAS 管 | 想在 AUTO-MAS 里看到每个号的代理结果、单独启停某个号 |
+| **方式二** | SRA 管 | 已经在 SRA 里配好多个账号了，不想重新配一遍 |
+
+两种方式的区别见页面底部的[对比图](#差异)。
+
+### 方式一：用 AUTO-MAS 的多用户功能
 
 1. 打开 **AUTO-MAS**，进入 **脚本管理**，单击 **新建脚本** 并选择 **通用脚本** 以添加脚本实例管理页面。
    ![SRA配置1](/docs/img/script-guide/March7thAssistan/AUTO-MAA-1.png)
@@ -45,8 +50,8 @@ StarRailAssistant是一个崩坏星穹铁道的第三方软件，能够轻松完
    ![SRA配置3](/docs/img/script-guide/sra/mas1.png)
 5. 在 **打开的脚本配置** 中的 **脚本根目录** 单击 **选择文件夹**，打开 SRA 软件所在目录。
    ![SRA配置4](/docs/img/script-guide/sra/mas2.png)
-   ::: warning 温馨提示
-   脚本配置一栏会在选择脚本根目录以后自动修正，请不要在不理解这个功能有什么作用的时候贸然修改，以便给自己在使用AUTO-MAS的过程中带来不愉快。
+   ::: warning 下面那些路径别手动改
+   选好脚本根目录之后，**脚本配置** 一栏的各个路径会自动填好。模板已经帮你配对了，不清楚每项是什么意思就别动它，改错了代理会各种出问题。
    :::
 6. 选择完 SRA 的目录以后会自动修正**脚本配置**一栏的路径，无需手动选择。
    ![SRA配置5](/docs/img/script-guide/sra/mas3.png)
@@ -55,25 +60,25 @@ StarRailAssistant是一个崩坏星穹铁道的第三方软件，能够轻松完
 8. 脚本配置将自动保存，接下来退出脚本配置页面。
 9. 点击**添加用户**，需要自己给添加的用户进行命名（在用户名一栏输入你想要的用户名（这仅仅只是个命名而已）），然后点击右上方的**通用配置**按钮
    ![SRA配置7](/docs/img/script-guide/sra/mas5.png)
-10. 这将启动 SRA 窗口，用户可以在此界面中进行 SRA 的相关配置。
-   ::: warning 温馨提示
-   使用基于AUTO-MAS的多用户功能时，请勿修改配置文件名称，保持配置文件名称为默认的 `Default`
+10. 这会启动 SRA 窗口，在里面配置 SRA 本身。
+   ::: warning 配置文件名保持 Default
+   用 AUTO-MAS 管多用户时，不要改配置文件名，保持默认的 `Default`。
    :::
    ![SRA配置8](/docs/img/script-guide/sra/sra1.png)
 11. 配置完成后，点击SRA窗口主页启动按钮右侧的箭头，展开启动选项，选择**仅保存配置**
    ![SRA配置9](/docs/img/script-guide/sra/sra2.png)
 12. 点击**仅保存配置**后，关闭 SRA 窗口并点击 AUTO-MAS 中的保存配置按钮，就完成了一个用户的配置。
    ![SRA配置10](/docs/img/script-guide/sra/sra3.png)
-13. 如果要添加更多用户，请重复步骤 8-12，您可能注意到当第10步启动 SRA 窗口时，SRA 会自动加载上一次的配置文件，这是正常现象，您只需为新用户修改配置即可。
-   ::: warning 温馨提示
-   使用基于AUTO-MAS的多用户功能时，请勿修改配置文件名称，保持配置文件名称为默认的 `Default`
+13. 要加更多用户就重复步骤 9-12。第 10 步启动 SRA 时，它会自动载入上一次的配置，这是正常的，你只要改成新用户的设置就行。
+   ::: warning 每个用户都一样
+   配置文件名统一保持默认的 `Default`，不要改。
    :::
 
-### 方式二：基于SRA的多用户功能
+### 方式二：用 SRA 的多用户功能
 
-步骤1-7与方式一相同。
+前 7 步和方式一一样，从第 8 步开始不同。
 
-8. 修改启动参数一栏，改为 `-e task run`，这将使 SRA 在启动时运行所有配置，而不是单独运行某个配置文件。
+8. 把 **启动参数** 改成 `-e task run`。这样 SRA 启动后会把它自己保存的所有配置跑一遍，而不是只跑某一个。
    ![修改启动参数](/docs/img/script-guide/sra/mas6.png)
 9. 配置将自动保存，接下来退出脚本配置页面。
 10. 点击**添加用户**，需要自己给添加的用户进行命名（在用户名一栏输入你想要的用户名（这仅仅只是个命名而已）)，然后点击右上方的**通用配置**按钮
@@ -89,5 +94,8 @@ StarRailAssistant是一个崩坏星穹铁道的第三方软件，能够轻松完
 
 ### 差异
 
-下面的图片展示了两种方式的逻辑差异：
+两种方式的区别一图说明：
+
 ![对比](/docs/img/script-guide/sra/compare.png)
+
+简单说：方式一是 AUTO-MAS 每次换上一个用户的配置、启动 SRA 跑一轮；方式二是 AUTO-MAS 只启动 SRA 一次，由 SRA 自己把所有配置跑完。

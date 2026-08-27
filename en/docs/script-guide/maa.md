@@ -78,28 +78,29 @@ Because MAA's **Bilibili server account switching** uses OCR with limited accura
 With these changes, account switching should become more stable.
 :::
 
-### Configuration Notes
+### Which MAA Settings Does AUTO-MAS Override?
 
-The following describes AUTO-MAS configuration behavior for MAA in **auto-proxy** mode.
+During an auto-proxy run, AUTO-MAS takes over some MAA settings, so whatever you set in MAA is overwritten. Knowing which ones saves you a lot of "but I definitely set that" confusion:
 
-1. Configuration items shown on the user configuration page take priority.
-2. In **Annihilation** tasks, only **Start wakeup** and **Use sanity** are enabled. In **Use sanity**, only **Annihilation mode** stage automation is performed, and task configuration is generated automatically from user settings. In **Daily** tasks, tasks enabled in **Task configuration** are enabled, and task order is fixed.
-3. **Scheduled execution** remains disabled. **Behavior after task completion**, **behavior after MAA startup**, **MAA minimization settings**, and **update settings** are automatically adjusted according to actual configuration and execution.
-4. In **simple** configuration mode, other settings use **MAA global settings**. In **detailed** configuration mode, other settings use the **user-specific configuration**. In task configuration, only the first task of each type takes effect. If no task of that type is found, the default value is used.
+- **Options shown on the user configuration page always win.**
+- **Annihilation task**: only **Start wakeup** and **Use sanity** are enabled, only annihilation stages are farmed, and the details are generated automatically from your user settings.
+- **Daily task**: runs whatever you ticked in **Task configuration**. **The order is fixed and cannot be changed.**
+- **Scheduled execution** is force-disabled, because scheduling belongs to the AUTO-MAS queue. Behavior after task completion, behavior after MAA startup, minimization, and update settings are also adjusted automatically.
 
-## Plans
+Anything not taken over follows your configuration mode: **simple** mode uses MAA's global settings, **detailed** mode uses that user's own configuration.
 
-With plans, you can customize stage automation by week.
+::: tip Only the First Task of Each Type Is Used
+If you queued two tasks of the same type in MAA, for example two **Use sanity** tasks, AUTO-MAS uses only the first one. If there are none, defaults apply.
+:::
+
+## Weekly Plans: Farm Different Stages Each Day
+
+Want to farm EXP midweek and credits on the weekend? A weekly plan sets stages day by day.
 
 ![plan](/docs/img/advanced-features/plan-1.png)
 
-It is designed to be easy to understand.
-
-After switching the configuration mode to weekly plan mode, you can decide what to farm at different times.
-
-Switching to simplified view provides an editing experience similar to mower.
-
-Then, in the MAA user interface, select the plan in the stage configuration mode.
+1. Switch the configuration mode to **weekly plan mode**, then fill in what to farm each day. If the table takes up too much room, switch to **simplified view** for an editing experience similar to mower.
+2. Back on the MAA user page, select your plan under **stage configuration mode**.
 
 ![plan](/docs/img/advanced-features/plan-2.png)
 
