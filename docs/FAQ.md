@@ -1,6 +1,6 @@
 # 常见问题
 
-这里没有的问题，去 <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/AUTO-MAS-Project/AUTO-MAS/issues"/> 翻一下。
+更多问题请参考 <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/AUTO-MAS-Project/AUTO-MAS/issues"/> 。
 
 如果问题出在脚本本身（比如 MAA 识别不出关卡），请查阅对应脚本的文档或联系脚本作者——AUTO-MAS 只负责调度脚本。
 
