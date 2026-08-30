@@ -2,7 +2,7 @@
 
 这里没有的问题，去 <Pill name="AUTO-MAS GitHub Issues" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/AUTO-MAS-Project/AUTO-MAS/issues"/> 翻一下。
 
-如果问题出在脚本本身（比如 MAA 识别不出关卡），那是脚本的事，请查该脚本的文档或问脚本作者——AUTO-MAS 只负责调度它们。
+如果问题出在脚本本身（比如 MAA 识别不出关卡），请查阅对应脚本的文档或联系脚本作者——AUTO-MAS 只负责调度脚本。
 
 ## 疑问解答
 
@@ -13,7 +13,7 @@
 
 ### 我的账号密码安全吗？
 
-安全。你填的密码、Token 这类东西，是交给 Windows 自带的加密功能（DPAPI）加密后存在本地的，AUTO-MAS 不会把它们传到任何服务器。
+账号密码、Token 等敏感信息由 Windows 自带的加密功能（DPAPI）加密后保存在本地，AUTO-MAS 不会把它们上传到任何服务器。
 
 这套加密和你的 Windows 登录账号绑在一起，所以：
 
@@ -44,7 +44,7 @@
 
 - **`ModuleNotFoundError: No module named 'xxx'`**
 
-  依赖没装全。删掉安装目录下的 `environment/.requirements_hash` 再重启软件，让它重装一遍。还不行就把整个 `environment` 文件夹删掉重启。
+  依赖没装全。删掉安装目录下的 `environment/.requirements_hash` 后重启软件，重新安装依赖；还不行就删除整个 `environment` 文件夹再重启。
 
 - **`ImportError: DLL load failed while importing onnxruntime_pybind11_state`**
 
@@ -52,7 +52,7 @@
 
 ::: tip 报错页面和日志里都看不到错误怎么办
 
-手动跑一次后端，把错误逼出来。以管理员身份打开终端（PowerShell 或 CMD），执行：
+手动跑一次后端，让错误直接显示在终端里。以管理员身份打开终端（PowerShell 或 CMD），执行：
 
 ```bash
 cd {AUTO-MAS 根目录}
