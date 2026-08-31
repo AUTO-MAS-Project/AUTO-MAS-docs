@@ -109,6 +109,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                 text: "Disclosure",
                 link: "/en/disclosure/",
                 items: [
+                    { text: "Visual Assets License Agreement", link: "/en/disclosure/assets-license" },
                     { text: "Cloud Service Agreement", link: "/en/disclosure/cloud-service-agreement" },
                     { text: "Income and Expenses", link: "/en/disclosure/income-and-expenditures" },
                     { text: "Pillar of Shame", link: "/en/disclosure/pillar-of-shame" },

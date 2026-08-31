@@ -109,6 +109,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                 text: "信息公开",
                 link: "/disclosure/",
                 items: [
+                    { text: "图像与美术资源许可协议", link: "/disclosure/assets-license" },
                     { text: "云端服务用户协议", link: "/disclosure/cloud-service-agreement" },
                     { text: "项目收支", link: "/disclosure/income-and-expenditures" },
                     { text: "耻辱柱", link: "/disclosure/pillar-of-shame" },

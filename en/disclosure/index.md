@@ -2,6 +2,10 @@
 
 To support the sustainable and healthy development of AUTO-MAS and its related community, the following information is disclosed.
 
+## Visual Assets License Agreement
+
+Images, icons, illustrations, and other visual assets of this software are **not** covered by the code open-source license. For the full ownership inventory, redistribution duties, third-party compliance templates, and commercial authorization contacts, see the [Visual Assets License Agreement](assets-license.md). That Agreement is an inseparable part of any distribution and must not be stripped when redistributing or using the assets alone.
+
 ## Cloud Service User Agreement
 
 To improve user experience, we deploy several cloud services, including announcement distribution, package mirrors, and general configuration sharing. To regulate the operation of the project's cloud service platform, ensure stable operation of cloud services, protect the legitimate rights of all users, and clarify the rights and obligations between the platform and users, the project team has prepared the [Cloud Service User Agreement](cloud-service-agreement.md).
