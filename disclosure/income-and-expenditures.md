@@ -47,6 +47,8 @@ const records = [
   { name: '开发者开发工具订阅报销', description: '个人申报全额报销', amount: -272.4, date: '2026年7月10日' },
   { name: '下载站服务器开支', description: '2026年度续费', amount: -459.00, date: '2026年7月25日' },
   { name: 'Mirror酱分成', description: '7月份结算', amount: 251.93, date: '2026年8月1日' },
+  { name: 'Mirror酱分成', description: '8月份结算', amount: 245.47, date: '2026年9月1日' },
+  { name: '开发者福利快递费', description: '单件平均 5', amount: -65.00, date: '2026年9月1日' },
 ]
 
 const totalAmount = computed(() => {

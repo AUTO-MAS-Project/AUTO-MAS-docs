@@ -47,6 +47,8 @@ const records = [
   { name: 'Developer tool subscription reimbursement', description: 'Fully reimbursed by personal claim', amount: -272.4, date: 'July 10, 2026' },
   { name: 'Download site server expense', description: '2026 annual renewal', amount: -459.00, date: 'July 25, 2026' },
   { name: 'MirrorChyan revenue share', description: 'July settlement', amount: 251.93, date: 'August 1, 2026' },
+  { name: 'MirrorChyan revenue share', description: 'August settlement', amount: 245.47, date: 'September 1, 2026' },
+  { name: 'Developer benefit shipping fee', description: 'Average 5 per item', amount: -65.00, date: 'September 1, 2026' },
 ]
 
 const totalAmount = computed(() => {
