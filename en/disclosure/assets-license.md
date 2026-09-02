@@ -160,55 +160,203 @@ For any image, binary, or visual file present in a repository but **not yet list
 2. Contact the commercial rights contact to verify status; only after verification and completed authorization may an asset be moved into Section 4.1.
 3. Until verified, such resources may exist only as placeholders in internal build processes and must not be redistributed or publicly displayed.
 
-## 5. Third-Party Compliance Kit
+## 5. Third-Party Compliance Guide
 
-The following templates are for redistributors, documentation sites, app-store pages, video introductions, and web embeds. Replace bracketed placeholders as appropriate.
+Copy-ready summaries and embed templates for visual assets in which the AUTO-MAS project team holds rights, for **non-commercial use** only.
 
-### 5.1 Short credit (About page or README summary)
+> **Important**
+>
+> - Templates are for convenience only and **do not** narrow or replace obligations under this Agreement. Users must still comply with the Agreement in full.
+> - These templates **cover non-commercial use only**; commercial use requires prior written authorization from the commercial rights contact.
+> - These templates **do not apply** to Section 4.2 external resources (follow each resource’s original license).
+> - Resources with rights status pending verification under Section 4.3 **must not** appear in any public distribution or public template.
+> - When citing multiple assets, you may use a table, but each item must retain its own asset ID and copyright holder.
+
+### Full Software redistribution
+
+Use when redistributing, mirroring, or repackaging AUTO-MAS as a whole (including all bundled visual assets).
+
+**Text**
 
 ```text
-Visual assets in this distribution are not licensed under GNU AGPL.
-Copyright and related rights: https://doc.auto-mas.top/disclosure/assets-license
-When redistributing or using those assets alone, keep this Agreement or this link intact; do not remove it separately.
+Source code in this distribution is under GNU AGPL; visual assets in which the AUTO-MAS
+project team holds rights are not under AGPL. Their use is governed by the AUTO-MAS Visual
+Assets License Agreement.
+
+This redistribution/use is non-commercial.
+
+When using visual assets in this distribution, you must:
+1. Retain this notice and the Agreement link; do not delete, obscure, or replace them;
+2. Retain each resource’s copyright holder credit and source identifiers;
+3. Not use the visual assets for any commercial purpose; commercial use requires prior
+   written authorization (contact: DLmaster_361@163.com);
+4. Not use brand-mark assets in a way that implies sponsorship, endorsement, or official
+   partnership with the AUTO-MAS project team;
+5. If you adapt any visual asset, state the fact of adaptation and the adapter’s identity.
+
+Full terms: AUTO-MAS Visual Assets License Agreement
+https://doc.auto-mas.top/disclosure/assets-license
 ```
 
-### 5.2 Per-asset credit (recommended for docs or third-party integration notes)
-
-```text
-[Asset name] ([Asset ID])
-Copyright holder: [name]
-Rights allocation: [RA-01/02/03]
-Source: [upstream project or grant note]
-Agreement: https://doc.auto-mas.top/disclosure/assets-license
-```
-
-### 5.3 HTML snippet
+**HTML**
 
 ```html
-<aside class="auto-mas-assets-license" data-notice-version="[version]">
-  <p>
-    <strong>Visual assets agreement (inseparable):</strong>
-    AUTO-MAS-related images and artwork used on this page / in this software
-    are not licensed under GNU AGPL. Full ownership and use terms:
-    <a
-      href="https://doc.auto-mas.top/disclosure/assets-license"
-      rel="license noopener noreferrer"
-      target="_blank"
-      >AUTO-MAS Visual Assets License Agreement</a
-    >.
-    Copying, redistributing, or using those assets alone requires this
-    Agreement or its working link; do not delete or conceal it.
-  </p>
-</aside>
+<!-- AUTO-MAS visual assets compliance notice · full redistribution -->
+<p>
+  Source code in this distribution is under GNU AGPL; visual assets in which the AUTO-MAS
+  project team holds rights are not under AGPL. Their use is governed by the AUTO-MAS Visual
+  Assets License Agreement. This redistribution/use is non-commercial.
+</p>
+<p>When using visual assets in this distribution, you must:</p>
+<ol>
+  <li>Retain this notice and the Agreement link; do not delete, obscure, or replace them;</li>
+  <li>Retain each resource’s copyright holder credit and source identifiers;</li>
+  <li>
+    Not use the visual assets for any commercial purpose; commercial use requires prior
+    written authorization (contact:
+    <a href="mailto:DLmaster_361@163.com">DLmaster_361@163.com</a>);
+  </li>
+  <li>
+    Not use brand-mark assets in a way that implies sponsorship, endorsement, or official
+    partnership with the AUTO-MAS project team;
+  </li>
+  <li>If you adapt any visual asset, state the fact of adaptation and the adapter’s identity.</li>
+</ol>
+<p>
+  Full terms:
+  <a
+    href="https://doc.auto-mas.top/disclosure/assets-license"
+    rel="license noopener noreferrer"
+    target="_blank"
+    >AUTO-MAS Visual Assets License Agreement</a
+  >.
+</p>
 ```
 
-### 5.4 Markdown snippet
+**Markdown**
 
 ```markdown
-> **Visual assets agreement (inseparable)**  
-> Not under GNU AGPL. Full terms and itemized inventory:  
-> <https://doc.auto-mas.top/disclosure/assets-license>.  
-> Keep this Agreement or the link above when redistributing or using assets alone; do not strip it.
+Source code in this distribution is under GNU AGPL; visual assets in which the AUTO-MAS project team holds rights are not under AGPL. Their use is governed by the AUTO-MAS Visual Assets License Agreement. This redistribution/use is non-commercial.
+
+When using visual assets in this distribution, you must:
+
+1. Retain this notice and the Agreement link; do not delete, obscure, or replace them;
+2. Retain each resource’s copyright holder credit and source identifiers;
+3. Not use the visual assets for any commercial purpose; commercial use requires prior written authorization (contact: DLmaster_361@163.com);
+4. Not use brand-mark assets in a way that implies sponsorship, endorsement, or official partnership with the AUTO-MAS project team;
+5. If you adapt any visual asset, state the fact of adaptation and the adapter’s identity.
+
+Full terms: [AUTO-MAS Visual Assets License Agreement](https://doc.auto-mas.top/disclosure/assets-license).
+```
+
+### Partial visual asset citation
+
+Use when citing or embedding specific visual assets in which the AUTO-MAS project team holds rights in your own project, article, or demo—not when distributing the entire Software.
+
+> **Asset ID fields**
+>
+> - `[Asset ID]`: from the Section 4.1 main table (e.g. `ASSET-ICON-001`).
+> - If an asset has no formal ID yet due to a version update, temporarily use “file path + asset name” and note “pending formal inventory entry”.
+> - `[Asset name]` and `[Copyright holder]`: also from the Section 4.1 main table.
+
+**Text**
+
+```text
+This citation uses visual assets in which the AUTO-MAS project team holds rights:
+  Asset ID: [Asset ID from Section 4.1 main table; if none yet, file path and asset name]
+  Asset name: [asset name]
+  Copyright holder: [copyright holder]
+
+This asset is not under GNU AGPL. Non-commercial use only.
+Do not use this asset for any commercial purpose; commercial use requires prior written
+authorization (contact: DLmaster_361@163.com).
+
+When using this asset, you must:
+1. Retain this notice and the Agreement link; do not delete, obscure, or replace them;
+2. Retain the copyright holder credit and source identifiers;
+3. Not use it in a way that implies sponsorship, endorsement, or official partnership with the AUTO-MAS project team;
+4. If you adapt the asset, state the fact of adaptation and the adapter’s identity.
+
+Full terms: AUTO-MAS Visual Assets License Agreement
+https://doc.auto-mas.top/disclosure/assets-license
+```
+
+**HTML**
+
+```html
+<!-- AUTO-MAS visual assets compliance notice · partial citation -->
+<p>This citation uses visual assets in which the AUTO-MAS project team holds rights:</p>
+<ul>
+  <li>
+    Asset ID: [Asset ID from Section 4.1 main table; if none yet, file path and asset name]
+  </li>
+  <li>Asset name: [asset name]</li>
+  <li>Copyright holder: [copyright holder]</li>
+</ul>
+<p>
+  This asset is not under GNU AGPL, <strong>non-commercial use only</strong>. Do not use this
+  asset for any commercial purpose; commercial use requires prior written authorization
+  (contact:
+  <a href="mailto:DLmaster_361@163.com">DLmaster_361@163.com</a>).
+</p>
+<p>When using this asset, you must:</p>
+<ol>
+  <li>Retain this notice and the Agreement link; do not delete, obscure, or replace them;</li>
+  <li>Retain the copyright holder credit and source identifiers;</li>
+  <li>
+    Not use it in a way that implies sponsorship, endorsement, or official partnership with the
+    AUTO-MAS project team;
+  </li>
+  <li>If you adapt the asset, state the fact of adaptation and the adapter’s identity.</li>
+</ol>
+<p>
+  Full terms:
+  <a
+    href="https://doc.auto-mas.top/disclosure/assets-license"
+    rel="license noopener noreferrer"
+    target="_blank"
+    >AUTO-MAS Visual Assets License Agreement</a
+  >.
+</p>
+```
+
+**Markdown**
+
+```markdown
+This citation uses visual assets in which the AUTO-MAS project team holds rights:
+
+- Asset ID: [Asset ID from Section 4.1 main table; if none yet, file path and asset name]
+- Asset name: [asset name]
+- Copyright holder: [copyright holder]
+
+This asset is not under GNU AGPL, **non-commercial use only**. Do not use this asset for any commercial purpose; commercial use requires prior written authorization (contact: DLmaster_361@163.com).
+
+When using this asset, you must:
+
+1. Retain this notice and the Agreement link; do not delete, obscure, or replace them;
+2. Retain the copyright holder credit and source identifiers;
+3. Not use it in a way that implies sponsorship, endorsement, or official partnership with the AUTO-MAS project team;
+4. If you adapt the asset, state the fact of adaptation and the adapter’s identity.
+
+Full terms: [AUTO-MAS Visual Assets License Agreement](https://doc.auto-mas.top/disclosure/assets-license).
+```
+
+### Multiple asset citation
+
+When citing multiple assets, you may use a table; each row must list asset ID and copyright holder separately:
+
+```markdown
+The following visual assets in which the AUTO-MAS project team holds rights are cited here. None are under GNU AGPL; **non-commercial use only**:
+
+| Asset ID       | Asset name                            | Copyright holder |
+| -------------- | ------------------------------------- | ---------------- |
+| ASSET-ICON-001 | AUTO-MAS app icon · large             | NARINpopo        |
+| ASSET-HOME-001 | Home illustration · Ptilopsis coding  | NARINpopo        |
+
+Do not use these assets for any commercial purpose; commercial use requires prior written authorization (contact: DLmaster_361@163.com).
+Retain credits and this notice; do not imply sponsorship or endorsement by the AUTO-MAS project team. If you adapt any asset, state the fact of adaptation and the adapter’s identity.
+
+Full terms: [AUTO-MAS Visual Assets License Agreement](https://doc.auto-mas.top/disclosure/assets-license).
 ```
 
 ## 6. Commercial Authorization Contact
