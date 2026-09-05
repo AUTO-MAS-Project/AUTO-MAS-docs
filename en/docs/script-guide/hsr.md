@@ -260,6 +260,12 @@ Once configured, add the script to a [task queue](/en/docs/task-scheduler) and i
 
 If the problem looks like it is in one of the scripts, attach that script's own log as well (see its documentation for the location).
 
+::: tip Check before you share a log
+AUTO-MAS forwards M7A / SRA output into its own log verbatim, so it may contain your in-game UID (the scripts pick it up while doing OCR). Account and password are redacted; the UID is not. Search for your UID and mask it before posting to a public issue.
+
+Also note that with March7th's log level set to DEBUG the forwarded volume gets very large — a thousand lines for one run is normal. Set March7th's own `log_level` back to `INFO` for a tidier log.
+:::
+
 ## FAQ
 
 ### There is no HSR option when creating a script
