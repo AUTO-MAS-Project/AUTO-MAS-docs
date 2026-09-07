@@ -49,6 +49,9 @@ const records = [
   { name: 'MirrorChyan revenue share', description: 'July settlement', amount: 251.93, date: 'August 1, 2026' },
   { name: 'MirrorChyan revenue share', description: 'August settlement', amount: 245.47, date: 'September 1, 2026' },
   { name: 'Developer benefit shipping fee', description: 'Average 5 per item', amount: -65.00, date: 'September 1, 2026' },
+  { name: 'Main site server expense', description: '2027 annual expense', amount: -99.00, date: 'September 7, 2026' },
+  { name: 'PackyCode sponsorship', description: 'First month: ¥150 in AI API credits', amount: 0.00, date: 'September 7, 2026' },
+  { name: 'Developer tool subscription reimbursement', description: 'Fully reimbursed by personal claim', amount: -50, date: 'September 7, 2026' },
 ]
 
 const totalAmount = computed(() => {
