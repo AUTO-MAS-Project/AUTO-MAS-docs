@@ -47,5 +47,8 @@ features:
 - **省事**：不用手动改配置文件，界面上点几下就行。
 - **通吃**：几乎所有自动化脚本都能接，只要它能"启动后自动开跑"并且会写日志。
 
+## 特别声明
 
-Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)
+免费代码签名由 [SignPath.io](https://signpath.io/) 提供，证书由 [SignPath Foundation](https://signpath.org/) 提供。
+
+开发者 AI API 额度由 <a href="https://www.packyapi.ai/register?aff=zKkA"><img src="https://camo.githubusercontent.com/c6e2cac1447e67d9f6c882b2faf234aed2e4d8a14fdc5bc1071d335cb6b5a32c/68747470733a2f2f7777772e7061636b796170692e61692f6c6f676f2d66756c6c2e737667" alt="PackyCode" style="display:inline-block;width:120px;height:auto;vertical-align:middle;"></a> 赞助。PackyCode 是一家稳定、高效的 API 中转服务商，提供 Claude Code、Codex、Gemini 等多种中转服务，具备自动故障转移、智能路由和无限并发等功能。[免费注册 PackyCode](https://www.packyapi.ai/register?aff=zKkA)。

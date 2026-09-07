@@ -46,5 +46,8 @@ If you run several accounts, you know how this goes: editing script configs one 
 - **Less work**: no hand-editing config files. A few clicks in the interface covers it.
 - **Works with almost anything**: any automation script fits, as long as it starts running on launch and writes logs.
 
+## Special Notice
 
-Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)
+Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
+
+Developer AI API credits are sponsored by <a href="https://www.packyapi.ai/register?aff=zKkA"><img src="https://camo.githubusercontent.com/c6e2cac1447e67d9f6c882b2faf234aed2e4d8a14fdc5bc1071d335cb6b5a32c/68747470733a2f2f7777772e7061636b796170692e61692f6c6f676f2d66756c6c2e737667" alt="PackyCode" style="display:inline-block;width:120px;height:auto;vertical-align:middle;"></a>. PackyCode is a stable, high-performance API relay provider offering relay services for Claude Code, Codex, Gemini, and more, with automatic failover, smart routing, and unlimited concurrency. [Register for free on PackyCode](https://www.packyapi.ai/register?aff=zKkA).
