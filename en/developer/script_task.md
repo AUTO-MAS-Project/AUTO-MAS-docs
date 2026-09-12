@@ -2,6 +2,20 @@
 
 Specialized script adaptation must connect configuration, schema, API, task scheduling, frontend entry points, and runtime verification. The detailed engineering rules for the current project are defined by the Skill built into the main repository at `.agents/skills/mas-script-specialized-adapter`. This document keeps only the workflow entry points most likely to be missed by developers.
 
+## Black-Box Premise
+
+Decide capability ownership first: **work the script owns** (in-game actions, task execution and verdicts, script config semantics) may only be reused through upstream entry points; **MAS-owned domains** (accounts, multi-script scheduling, plans, notifications, statistics, emulator lifecycle, cross-script orchestration) may be implemented in MAS; **upstream private formats** (config internals, plans/queues/run records, resource files) may only be passed through. The adapter depends only on upstream outward contracts, which limits breakage when upstream changes.
+
+- **Order of work**: lower the configuration barrier first (remove manual install/import, path picking, first-run setup, and high-frequency task arrangement steps; cut the number of options users must adjust), and only then fill a gap in the script itself (the gap must belong to a MAS-owned domain and upstream must offer no equivalent entry point). Before starting, state which manual step the change removes; moving an upstream configuration panel into MAS does not count as lowering the barrier.
+- **Allowed dependencies**: CLI arguments and exit codes, upstream-documented JS/API, the native GUI and configuration sessions, process and directory structure, logs and run reports.
+- **Forbidden: copying**: do not build a MAS semantic layer on top of upstream private layouts — field-mapping tables over upstream configuration fields, format copies of plans/queues/run records, re-parsing of internal resource files, or self-invented success signals that replace the upstream result surface (marking and parsing your own output for a task upstream executes). The test is who owns execution and verdicts, and whether you write upstream fields or a MAS model — not whether an upstream file is read or written. Writing upstream fields with execution and verdicts still owned by upstream is pass-through, which is allowed.
+- **Work the script owns**: reuse the upstream entry point when it exists; when it does not, mark the capability unsupported or request it upstream — an upstream gap is not a licence for MAS to implement it. Once upstream ships the same entry point, the existing implementation is treated as a violation: switch to reuse and remove the adapter implementation together with its config items, frontend entries, and verdict logic.
+- **MAS-owned domains**: may be implemented in MAS, but must not read or infer upstream internal state. "Filling in" is legitimate only inside MAS-owned domains.
+- **Warn on a hit**: when a change implements work the script owns, builds MAS semantics on top of upstream private formats, or keeps an implementation upstream has since duplicated, the loaded skill reports "This may violate the MAS development norms" with the matched item, evidence, and an alternative. The warning does not block work; the developer decides whether to continue.
+- **Exception**: parse upstream internal fields only when evidence shows upstream offers no equivalent entry point (CLI, documented API, logs, exit codes) and the coupling is confined to a single module with its failure mode recorded.
+
+See the main repository at `.agents/skills/mas-script-specialized-adapter/references/blackbox-boundary.md` for the full criteria, the allow/deny lists, and the reporting requirement.
+
 ## Confirm the Architecture First
 
 Before adding or refactoring a `ScriptType`, identify which architecture line the external script belongs to:
@@ -62,6 +76,6 @@ Specialized adaptation should follow the order "frontend surface first, then bac
 When an AI assistant performs specialized adaptation, it should load `.agents/skills/mas-script-specialized-adapter/SKILL.md` from the main repository and read the following as needed:
 
 - `references/script-frontend-architectures.md`
+- `references/blackbox-boundary.md`
 - `references/adapter-code-norms.md`
-- `references/examples-frontend-surfaces.md`
 - `examples-*.md` for the corresponding architecture line
