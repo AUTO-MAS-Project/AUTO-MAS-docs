@@ -44,7 +44,7 @@ MAA is a third-party Arknights tool that can handle repetitive tasks such as dai
 ![AUTO-MAS configuration 8](/docs/img/script-guide/maa/AUTO-MAA-8.png)
 
 ::: info Note
-In **detailed** configuration mode, do not forget to **set specific configuration**.
+In **user** configuration mode, do not forget to **set specific configuration**.
 :::
 
 ::: tip Account ID Tips
@@ -87,7 +87,7 @@ During an auto-proxy run, AUTO-MAS takes over some MAA settings, so whatever you
 - **Daily task**: runs whatever you ticked in **Task configuration**. **The order is fixed and cannot be changed.**
 - **Scheduled execution** is force-disabled, because scheduling belongs to the AUTO-MAS queue. Behavior after task completion, behavior after MAA startup, minimization, and update settings are also adjusted automatically.
 
-Anything not taken over follows your configuration mode: **simple** mode uses MAA's global settings, **detailed** mode uses that user's own configuration.
+Anything not taken over follows your configuration mode: **script** mode uses MAA's global settings, **user** mode uses that user's own configuration.
 
 ::: tip Only the First Task of Each Type Is Used
 If you queued two tasks of the same type in MAA, for example two **Use sanity** tasks, AUTO-MAS uses only the first one. If there are none, defaults apply.

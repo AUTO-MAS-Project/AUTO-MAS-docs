@@ -29,7 +29,7 @@ A **scheduling queue** is a to-do list: you put the scripts you want to run into
 
 In **auto-proxy** mode, tasks are nested like this:
 
-- **One user** = all the tasks that user has selected. For MAA scripts, a user's tasks split into **Annihilation** and **Daily**, with Annihilation first; simple mode has Daily on by default.
+- **One user** = all the tasks that user has selected. For MAA scripts, a user's tasks split into **Annihilation** and **Daily**, with Annihilation first; script mode has Daily on by default.
 - **One script** = the tasks of all users under it, run in the order the users appear in the list. The same script can't run twice at once. If it's already running, starting it again is skipped.
 - **One queue** = the tasks of all scripts in the queue, run in queue order. The same queue can be started more than once.
 - **One scheduler console** runs one queue at a time. To run several queues in parallel, open more consoles.
