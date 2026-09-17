@@ -80,6 +80,14 @@ cd frontend
 yarn install
 ```
 
+If the Electron binary download is slow or fails, use npmmirror for a one-shot install:
+
+```bash
+yarn cross-env ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" yarn install
+```
+
+This command sets the download source only for this `yarn install` run and does not change global configuration.
+
 ### 4. Start the App
 
 ::: tip Administrator Privileges
@@ -221,6 +229,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 1. Clear cache: `yarn cache clean`
 2. Delete `node_modules` and `yarn.lock`
 3. Install again: `yarn install`
+4. If the Electron binary download is slow or fails, install once through the mirror:
+   `yarn cross-env ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" yarn install`
 
 ### Q: Backend startup fails due to insufficient permissions
 

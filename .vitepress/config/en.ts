@@ -41,6 +41,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                         text: "Advanced Features",
                         link: "/en/docs/advanced-features/",
                         items: [
+                            { text: "Game Check-in", link: "/en/docs/advanced-features/game-sign" },
                             { text: "Emulator Management", link: "/en/docs/advanced-features/emulator" },
                             { text: "Notifications", link: "/en/docs/advanced-features/notification" },
                             { text: "MCP Service", link: "/en/docs/advanced-features/mcp" },
@@ -109,6 +110,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                 text: "Disclosure",
                 link: "/en/disclosure/",
                 items: [
+                    { text: "Visual Assets License Agreement", link: "/en/disclosure/assets-license" },
                     { text: "Cloud Service Agreement", link: "/en/disclosure/cloud-service-agreement" },
                     { text: "Income and Expenses", link: "/en/disclosure/income-and-expenditures" },
                     { text: "Pillar of Shame", link: "/en/disclosure/pillar-of-shame" },

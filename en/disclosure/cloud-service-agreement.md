@@ -66,4 +66,5 @@
 ### 8. Governing Law and Dispute Resolution
 
 1. **Governing law**: Formation, validity, interpretation, performance, and dispute resolution of this agreement are governed by **the laws of Mainland China of the People's Republic of China**.
-2. **Jurisdiction**: For disputes arising from this agreement, both parties should first negotiate amicably. **If negotiation fails, either party may file a lawsuit with the people's court having jurisdiction where the Project Team is located.**
+2. **Jurisdiction**: For disputes arising from this agreement, the parties should first negotiate amicably. **If negotiation fails, either party may file a lawsuit with the people's court having jurisdiction where the Project Team is located.**
+3. **Severability**: If any provision of this agreement is held invalid or unenforceable by a competent authority, the remaining provisions continue in effect.

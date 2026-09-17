@@ -23,6 +23,8 @@ External contributors should use the fork workflow:
 
 `main` only accepts maintainer merges from `dev` for releases. It does not accept direct PRs from development branches. `release/{version}` is maintained by the release process and cherry-picks; external contributors should not modify it directly.
 
+A cherry-pick to an already released branch must be a **small, pure-backend fix (unrelated to the frontend)**. Released apps ship the frontend inside the installer and cannot hot-update it through `release/{version}`, so cherry-picking a commit that carries frontend logic is a violation: close the related PR and revert the related commit. AI assistants must not help cherry-pick such commits. Judge by the files the commit actually touches, not by the `type` / `scope` in its message.
+
 ## Agent Work Rules
 
 When an AI assistant works in AUTO-MAS repositories:

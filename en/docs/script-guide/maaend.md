@@ -21,10 +21,9 @@ MaaEnd is a third-party automation tool for Arknights: Endfield. Based on visual
 1. Download the archive from <Pill name="MaaEnd Website" image="https://maaend.com/favicon.ico" link="https://maaend.com/"/> or <Pill name="MaaEnd Repository" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaEnd/MaaEnd/releases/latest"/>.
 2. Extract the MaaEnd archive to any folder.
 
-::: warning Reminder
-Do not extract MaaEnd into a path containing Chinese characters to avoid unnecessary errors.
-
-Like other scripts, MaaEnd must not be placed in the MAS root directory to avoid the risk of accidental deletion.
+::: warning Two Places Not to Extract It
+- **Not into a path with non-ASCII characters in it.** Those paths cause failures that are hard to diagnose. Use a plain English path like `D:\MaaEnd`.
+- **Not inside the AUTO-MAS root directory.** Like other scripts, anything in there risks being deleted by accident.
 :::
 
 ## Configure the Script
@@ -37,23 +36,24 @@ Like other scripts, MaaEnd must not be placed in the MAS root directory to avoid
 
 3. Adjust the following configuration as needed:
 
-   | Configuration | Description |
+   | Configuration | What to enter |
    | --- | --- |
-   | **Controller type** | Select the control method. This overrides the setting configured in MaaEnd. We recommend using the PC client. Emulators require an update to v5.4.0 or the public beta to be usable. |
-   | **Game path (PC)** | Path to the Endfield game executable |
-   | **Game launch arguments (PC)** | Extra command-line arguments when launching the game. Leave empty if not needed. |
-   | **Wait time after game startup (PC)** | How many seconds to wait after launching the game before automation starts. Default is 60 seconds. |
-   | **Close game after task completion** | Whether to close the game automatically after the last user task completes |
-   | **Proxy timeout limit** | Consider the task timed out if logs do not change for this many minutes. Default is 10 minutes. |
-   | **Daily proxy count limit** | Maximum number of automation runs per user per day. `0` means unlimited. |
-   | **Maximum retry count per run** | Maximum retries after automation failure. Default is 3. |
+   | **Controller type** | PC client or emulator. **The PC client is recommended.** What you pick here overrides the setting inside MaaEnd. |
+   | **Game path (PC)** | Pick `Endfield.exe`, **not** the Hypergryph launcher |
+   | **Game launch arguments (PC)** | Leave empty |
+   | **Wait time after game startup (PC)** | How many seconds to wait after launching the game before automation starts. Default is 60. |
+   | **Close game after task completion** | Whether to close the game automatically once every user has finished |
+   | **Proxy timeout limit** | How many minutes without log activity counts as a hang. Default is 10. |
+   | **Daily proxy count limit** | Maximum runs per user per day. `0` means unlimited. |
+   | **Maximum retry count per run** | How many times to retry after a failure. Default is 3. |
 
 4. Click **Save Configuration**.
 
-::: info About Emulators
+::: warning Using an Emulator? Check the Version First
+Two prerequisites when you set the controller type to emulator (ADB):
 
-- **ADB**: controls Android emulators through the ADB protocol. The emulator must be configured in **Emulator Management**.
-- Due to a change in the upstream MFW naming rules, you need to update to v5.4.0 or the public beta so that emulator parameters are passed correctly.
+- Configure the emulator under **Emulator Management** first, or it won't connect.
+- **MaaEnd must be v5.4.0 or the public beta.** Upstream MFW changed its naming rules, and older versions won't receive the emulator parameters AUTO-MAS passes them.
 :::
 
 ## Configure Users
@@ -67,43 +67,56 @@ Like other scripts, MaaEnd must not be placed in the MAS root directory to avoid
 
 #### Basic Information
 
-| Configuration | Description |
+| Configuration | What to enter |
 | --- | --- |
-| **Username** | Display name used to distinguish accounts |
-| **Enabled status** | Whether the user participates in automation. Disabled users are skipped. |
-| **Account ID** | Endfield login phone number, 11 digits. Leave empty to skip account switching. |
-| **Password** | Endfield login password, stored encrypted. Has no effect. |
-| **Configuration source** | `Script-level` uses the script-level MaaEnd configuration; `User-level` uses that user's independent MaaEnd configuration |
-| **Take over specific game configuration** | When disabled, the task configuration below is unavailable and automation only runs according to the saved configuration file. |
-| **Remaining days** | Remaining valid automation days. `-1` means unlimited. After each successful automation, it decreases by 1. When it reaches 0, the user is skipped. |
-| **Notes** | Free-form notes |
+| **Username** | A display name you'll recognize |
+| **Enabled status** | Disabled users are skipped |
+| **Account ID** | Endfield login phone number, 11 digits. Leave it empty to skip switching and use whichever account is already logged in. |
+| **Password** | Has no effect right now. You can leave it empty. |
+| **Configuration source** | `Script-level` shares one MaaEnd config across all users; `User-level` gives this user its own |
+| **Take over specific game configuration** | Turn this on to use the task configuration below. Leave it off to run purely from the saved config file. |
+| **Remaining days** | How many days of automation are left. `-1` means unlimited. Each successful run subtracts a day; at 0 the user is skipped. |
+| **Notes** | Anything you like |
 
 #### Task Configuration
 
-MAS will try to enable/disable tasks according to your settings; tasks that do not exist are skipped.
+AUTO-MAS enables and disables tasks in MaaEnd according to your settings. **Tasks your MaaEnd doesn't have are simply skipped** — that isn't an error.
 
 ##### Sanity Task Options
-Only appears when the sanity task is enabled, allowing you to quickly modify the sanity task within MAS.
+
+These only appear when the sanity task is enabled. They let you change the sanity task settings without opening MaaEnd.
+
 ![Sanity task](/docs/img/script-guide/maaend/理智任务.png)
 
-::: tip Account Switching Notes
-We recommend using "MAS built-in account switching", which generally offers better stability; if it fails, you can also try switching to MaaEnd account switching. MAS will automatically add the account-switching task for you, so you do not need to add it manually.
+::: tip Prefer MAS Built-in Account Switching
+Of the two methods, **MAS built-in account switching** is generally more stable, so try that first. If switching fails, change to MaaEnd account switching — once you do, AUTO-MAS adds the account-switching task for you, so you don't have to add it inside MaaEnd yourself.
 :::
 
 ## Skland Automatic Check-In
 
-Migrated to the check-in tool.
+This moved to the [Game Check-in tool](/en/docs/advanced-features/game-sign). Configure it there.
 
-### Result Push Explanation
+## Extra Result Notifications
 
-If you have enabled mechanism filtering for the matrix farming task, MAS will additionally push the matrix farming results to you.
+Turn either of these on and the notification carries an extra report:
 
-If you have enabled gacha count calculation, MAS will additionally push the gacha count calculation results to you.
+- **Mechanism filtering on the matrix farming task** - adds the matrix farming results.
+- **Gacha count calculation** - adds the gacha count results.
 
 ## FAQ
 
-1. Endfield takes a relatively long time to start. We recommend not lowering the default wait time of 60 seconds.
-2. Foreground mode fully occupies the mouse. Operating the keyboard or mouse during automation may cause automation to fail.
-3. Make sure the game path points to `Endfield.exe`, not the Hypergryph launcher.
-4. In fullscreen mode, resolution is determined by monitor resolution settings. Changing it inside the game is meaningless. MaaEnd requires a 16:9 resolution ratio.
-5. Do not enable frame interpolation or similar features, as they may cause MaaEnd screenshots to fail.
+### A run failed partway through
+
+Check whether it was one of these:
+
+- **You were using the computer during the run.** Foreground mode takes over the mouse completely, so touching the keyboard or mouse interrupts it. If you need the machine while it runs, switch to an emulator.
+- **You lowered the wait time.** Endfield is slow to start. Don't go below the default 60 seconds — if automation begins before the game finishes loading, it will fail.
+- **Frame interpolation or picture enhancement is on.** That breaks MaaEnd's screenshots. Turn it off.
+
+### How should I set the resolution?
+
+MaaEnd requires a **16:9** ratio. Note that in fullscreen the actual resolution comes from your **monitor settings**, so changing it inside the game achieves nothing.
+
+### Which exe is the game path?
+
+`Endfield.exe`, **not the Hypergryph launcher**. This is the most common mistake.

@@ -64,16 +64,16 @@ This prevents one user's quick settings from affecting the next user and prevent
 - The game path must be the official `launcher.exe`; **WeGame resources and the WeGame launcher are not supported**.
 - If MAS should not manage game startup and shutdown, disable **Game Configuration**. This does not change the official-resource requirement for OK-WW.
 
-## Startup Tasks Currently Supported
+## Which Tasks Can Run Right Now
 
-The MAS OK-WW entry currently takes over only these tasks:
+AUTO-MAS handles just these two:
 
-| Index | Arguments | Description |
-| --- | --- | --- |
-| 1 | `-t 1 -e` | `DailyTask` |
-| 7 | `-t 7 -e` | `MultiAccountDailyTask` |
+- The **daily task**
+- The **multi-account daily task**
 
-MAS always appends `-e`, which makes OK-WW exit after the task finishes. For other OK-WW tasks, use the native OK-WW entry instead of selecting an unsupported task index in MAS.
+When a task finishes, AUTO-MAS makes OK-WW exit on its own, so there is nothing for you to do.
+
+OK-WW's other tasks are not wired up yet. If you need one, open OK-WW and run it there.
 
 ## FAQ
 

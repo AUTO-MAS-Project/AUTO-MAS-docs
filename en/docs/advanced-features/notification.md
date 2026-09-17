@@ -1,26 +1,24 @@
 # Notifications
 
-AUTO-MAS provides flexible **notification** features. You can configure which notifications to send and which channels to use.
+Get told when a run finishes or an account fails. AUTO-MAS can send that news over email, ServerChan, or a WeCom group bot.
 
-## Global Notifications
+## Two Levels: Global and Per-User
 
-Global notifications can be configured in **Settings > Notification Settings**.
-
-According to your push settings, notifications can be sent at any time.
+**Global notifications** are configured in **Settings > Notification Settings** and cover every task. For most people this is the only one you need.
 
 ![notification-1](/docs/img/advanced-features/notification-1.png)
 
-## User Notifications
+**Per-user notifications** are configured in **User Configuration > Notification Settings** and let you name a separate recipient for one account. Typical case: you run accounts for a friend and he wants his own results.
 
-You can also configure user-level notifications in **User Configuration > Notification Settings**, allowing each user to have an independent notification plan.
-
-> User notifications do not override global settings. They send one extra notification to the specified user after the global notification is sent.
+::: tip A Per-User Notification Adds a Copy, It Does Not Change the Recipient
+Once a per-user notification is set, the global notification still goes to you, and an extra copy goes to the address that user specifies. It does not replace the global setting.
+:::
 
 ![notification-2](/docs/img/advanced-features/notification-2.png)
 
-## SMTP Email Notification Channel
+## Email Notifications
 
-**SMTP** is a reliable email transfer protocol. AUTO-MAS uses **SMTP-SSL** to send email notifications.
+To receive notifications by email you need three things: an **SMTP server address**, a **sending address**, and an **authorization code**. Here is how to get each one.
 
 ::: tip **AUTO-MAS private-domain email is available**
 
@@ -43,7 +41,7 @@ You can also configure user-level notifications in **User Configuration > Notifi
 
 ### SMTP Server Address
 
-Select the correct SMTP server address according to the email service provider of the sender mailbox.
+Find the provider of your sending address and copy the matching row.
 
 | Email service provider | SMTP server address |
 | ---------------------- | ------------------- |
@@ -53,18 +51,22 @@ Select the correct SMTP server address according to the email service provider o
 | **Outlook/Hotmail** | smtp-mail.outlook.com |
 | **Yahoo Mail** | smtp.mail.yahoo.com |
 
-If your email service is not listed, visit its help center or search for its SMTP server address.
+If your email service is not listed, search its help center for "SMTP server address".
 
 ### Get an Authorization Code
 
-An **authorization code** is a special password used instead of your mailbox password for third-party client login. You need to fill in the authorization code of the sender mailbox. Common steps are:
+**An authorization code is not your mailbox login password.** It is a separate code your provider issues for third-party software, and you have to go and generate it yourself. Getting this wrong is the most common reason email notifications fail.
+
+Providers name it differently: QQ Mail and 163 Mail call it an authorization code, while Gmail, Outlook, and Yahoo call it an **app password**. It is the same thing, and it goes in the same field.
+
+Where each provider hides it:
 
 1. **QQ Mail**
 
 <Pill name="QQ Mail official guide" image="https://res.wx.qq.com/t/webmail/webmail/res/static/images/projects/login/loginpage/qqmail_logo_default_35h.e071fb4.png" link="https://service.mail.qq.com/detail/0/75"/>
 
 - Log in to your [QQ Mail Account and Security Center](https://wx.mail.qq.com/account).
-- Go to **Account and Security > Security Settings > SMTP/IMAP Service**, enable the service, and obtain the authorization code.
+- Go to **Account and Security > Security Settings > SMTP/IMAP Service**, enable the service, and get the authorization code.
 
 2. **163 Mail**
 
@@ -73,14 +75,14 @@ An **authorization code** is a special password used instead of your mailbox pas
 - Log in to [163 Mail](https://email.163.com).
 - Go to **Settings > POP3/SMTP/IMAP**, find **IMAP/SMTP Service**, and enable it.
 - In the popup, click **Continue enabling** and follow the instructions to send an SMS from your phone.
-- The popup generates an **authorization password**, which is your authorization code.
+- The popup generates an **authorization password**. That is the code you need.
 
 3. **Gmail**
 
 - Log in to [Gmail](https://mail.google.com).
 - Go to **Settings > See all settings > Forwarding and POP/IMAP > IMAP access**, then select **Enable IMAP**.
 - Go to **User > Manage your Google Account > Security > 2-Step Verification** and enable **2-Step Verification**.
-- Go to **2-Step Verification > App passwords** and create an **app password**. This password is your authorization code.
+- Go to **2-Step Verification > App passwords** and create an **app password**. That is the code you need.
 
 4. **Outlook/Hotmail**
 
@@ -94,53 +96,45 @@ An **authorization code** is a special password used instead of your mailbox pas
 - Go to the account's **Security settings**.
 - Find **Generate app password** or a similar option to create an app password.
 
-::: warning Note
-
-- For your security, do not share authorization codes with others, and rotate them regularly.
-- Some mailbox authorization codes are shown only once. Save them immediately. Some authorization codes expire; replace them before expiration.
-- AUTO-MAS encrypts local authorization code data with **Windows DPAPI**. This encryption uses the current user's login credentials as part of the encryption key, which means only the same user on the same computer can decrypt the data. If you need to migrate configuration files across devices, re-enter the authorization code.
-- The SMTP email notification service **allows the sender mailbox and recipient mailbox to be the same**. If you do not have an extra mailbox, use the same email address for both sender and recipient.
+::: tip One Mailbox Is Enough
+The sending address and the recipient address can be the same. Mailing yourself works fine.
 :::
 
-## ServerChan Notification Channel
+::: warning About the Authorization Code
 
-**ServerChan** is a communication tool between a **phone** and a **server or smart device**. Its main purpose is:
+- Do not share it with anyone, and rotate it now and then.
+- Some providers show it **only once**, so save it as soon as you get it. Some expire, and notifications silently stop when they do, so replace it before then.
+- It is stored encrypted on your machine, tied to your Windows account. **After changing computers or reinstalling Windows, you have to enter it again.**
+:::
 
-- Let servers, routers, and other devices push messages to a phone.
-- In AUTO-MAS, it is used to **push messages to your phone after automation succeeds**.
+## ServerChan (Push to Your Phone)
 
-More information:
+**ServerChan** is a relay service that forwards messages to your phone. Enter the key it gives you into AUTO-MAS and your run results get pushed to your phone.
 
 <Box :items="[
 { name: 'ServerChan Turbo', link: 'https://sct.ftqq.com/', image: 'https://the7.ft07.com/sct/images/favicon.png' },
 { name: 'ServerChan³', link: 'https://sc3.ft07.com/', image: 'https://the7.ft07.com/sct/images/favicon.png' },
 ]"/>
 
-::: warning Note
-In 2024, ServerChan introduced a new App push channel. It differs from the original **ServerChan Turbo** (SCT) and was renamed **ServerChan³** (SC3).
+::: warning There Are Two Versions, Don't Mix Them Up
+ServerChan released a new version in 2024, and the two are separate products:
 
-In the following configuration, **SCT** refers to **ServerChan Turbo**, and **SC3** refers to **ServerChan³**.
+- **SCT** = ServerChan Turbo, the older version. It supports many channels, including WeChat, DingTalk, and Feishu.
+- **SC3** = ServerChan³, the newer version. **It only pushes to its own app.**
+
+Some of the settings below apply to just one version, so check before you fill them in.
 :::
 
-### SendKey
+### SendKey (Required)
 
-**SendKey** is the authentication method used by the **ServerChan** platform. AUTO-MAS can push messages precisely to your device only when a **SendKey** is provided.
+The SendKey is how ServerChan identifies you, and messages have nowhere to go without it. Get yours from the page for your version. **Pick one platform, not both:**
 
-SCT platform key:
-<Pill name="SCT SendKey" image="https://the7.ft07.com/sct/images/favicon.png" link="https://sct.ftqq.com/sendkey"/>
+- SCT users: <Pill name="SCT SendKey" image="https://the7.ft07.com/sct/images/favicon.png" link="https://sct.ftqq.com/sendkey"/>
+- SC3 users: <Pill name="SC3 SendKey" image="https://the7.ft07.com/sct/images/favicon.png" link="https://sc3.ft07.com/sendkey"/>
 
-SC3 platform key:
-<Pill name="SC3 SendKey" image="https://the7.ft07.com/sct/images/favicon.png" link="https://sc3.ft07.com/sendkey"/>
+### Channel Code (SCT Only)
 
-::: warning Note
-You only need to choose one of these two platforms. Pick according to your actual use case.
-:::
-
-#### ServerChanChannel Code
-
-**SC3 supports only App push**, so the **ServerChanChannel code** is available only for the SCT platform.
-
-The following are **available message channel codes**. Fill in the corresponding numeric code.
+To push messages to WeChat, DingTalk, and similar destinations, enter the matching numeric code. **SC3 users skip this** — SC3 only has app push.
 
 | Channel | Code |
 | ------- | ---- |
@@ -155,47 +149,36 @@ The following are **available message channel codes**. Fill in the corresponding
 | PushDeer | 18 |
 | Fangtang service account | 9 |
 
-::: tip **Multiple channel format**
-Separate multiple channels with `|`, as shown below:
-
-- Incorrect: `1 | 0 | 9`
+::: tip No Spaces When You List Several Channels
 - Correct: `1|0|9`
+- Incorrect: `1 | 0 | 9`
 
-If the format is incorrect, the system will use the **default push channel**.
+A wrong format does not raise an error. It silently falls back to the **default channel**, so you may think your setting took effect when it did not.
 :::
 
-### Tag Content
+### Tag (SC3 Only)
 
-This is a **new SC3 platform feature** and applies only to **SC3**.
+Tags label your push messages so you can sort them in the app. **SCT users skip this.**
 
-::: tip **Tag format**
-Separate multiple tags with `|`, as shown below:
-
-- Incorrect: `AUTO-MAS | Status`
+::: tip No Spaces Here Either
 - Correct: `AUTO-MAS|Status`
+- Incorrect: `AUTO-MAS | Status`
 
-If left empty or formatted incorrectly, push messages will not include tag information.
+Left empty or formatted wrong, messages simply arrive without tags. Pushing itself still works.
 :::
 
-## WeCom Group Bot Notification Channel
+## WeCom Group Bot (Push to WeChat)
 
-::: info Tip
-This method only needs to be configured once in WeCom. After that, messages can be received directly in WeChat.
+::: info Set It Up Once, Then Read Messages in WeChat
+You do have to register WeCom, but that is a one-time step just to obtain a bot address. After that, messages arrive in your normal WeChat.
 :::
 
-1. Register an enterprise account
-   - Open the <Pill name="WeCom official website" link="https://work.weixin.qq.com/" image="https://open.work.weixin.qq.com/favicon.ico" /> on a computer and follow the instructions to register an enterprise account.
-   - After registration, log in to the WeCom client using the WeChat account or phone number bound during registration.
+1. **Register an enterprise account**: open the <Pill name="WeCom official website" link="https://work.weixin.qq.com/" image="https://open.work.weixin.qq.com/favicon.ico" /> on a computer, follow the instructions, then log in to the WeCom client with the WeChat account you bound.
 
-2. Add a group bot
-   - **Desktop**: enter an internal group chat, click the **...** menu in the upper-right corner, and select **Add group bot**.
-   - **Mobile**: enter an internal group chat, tap the **...** menu in the upper-right corner, and select **Add group bot**.
-   - The bot name and avatar can be filled in freely.
+2. **Create a group and add a bot**: open the group chat, click the **...** menu in the upper-right corner, and select **Add group bot**. Name and avatar are up to you. This works on desktop and mobile alike.
 
-3. Get the group bot Webhook URL
-   - The bot creator can view the corresponding Webhook URL in the bot information.
-   - **Mobile**: enter the group chat, tap the **...** menu in the upper-right corner, select **Group bot**, then tap the corresponding bot to see the Webhook URL.
-   - **Desktop**: in the group chat, right-click the corresponding bot and select **View profile** to get the Webhook URL.
+3. **Get the Webhook URL**:
+   - Desktop: right-click the bot in the group chat and select **View profile**.
+   - Mobile: group chat, **...** menu in the upper-right corner, **Group bot**, then tap the bot.
 
-4. Configure push
-   - Fill the obtained Webhook URL into AUTO-MAS **Push WeCom bot notification** configuration to enable message push.
+4. **Enter it in AUTO-MAS**: paste the Webhook URL into **Push WeCom bot notification**. Done.

@@ -1,33 +1,26 @@
 ---
-title: HSR Honkai Star Rail User Guide
+title: HSR Honkai Star Rail Configuration Guide
 description: "Schedule Honkai: Star Rail external scripts in AUTO-MAS with M7A and SRA"
 date: 2026-06-17
 ---
 
-# HSR Honkai Star Rail User Guide
+# HSR Honkai Star Rail Configuration Guide
 
-::: tip Scope
-The HSR specialization is used to schedule Honkai: Star Rail external scripts in AUTO-MAS. It was introduced with [AUTO-MAS PR #249](https://github.com/AUTO-MAS-Project/AUTO-MAS/pull/249) and corresponds to the built-in AUTO-MAS script type **HSR**.
-:::
+## What the HSR Script Type Is For
 
-## What Is the HSR Specialization?
+Honkai: Star Rail has two widely used third-party scripts, and each is better at different things:
 
-The HSR specialization is a built-in AUTO-MAS script adapter that connects two mainstream third-party PC tools for Honkai: Star Rail:
+- **March7th Assistant (M7A)**: better at Trailblaze Power stages and weekly tasks.
+- **StarRailAssistant (SRA)**: better at collecting daily rewards and at Divergent Universe.
 
-- **March7th Assistant (M7A)**: the M7A route, good at stamina farming scripts and weekly tasks.
-- **StarRailAssistant (SRA)**: the SRA route, good at daily rewards, Divergent Universe, and related tasks.
+That is the point of the HSR script type: **you do not have to choose one**. Run both under a single script and decide task by task which one handles it. AUTO-MAS starts the game, calls the scripts in order, retries failures, and remembers whether this week's weekly tasks are already done.
 
-With the HSR specialization, AUTO-MAS can mix both engines under one script and automatically manage game startup, script invocation, failure retries, and weekly/monthly progress.
+**What it can run** (exact coverage depends on the script versions you install):
 
-**Supported gameplay coverage** depends on the script version you use:
-
-- Stamina stages: Calyx (Golden), Calyx (Crimson), Cavern of Corrosion, Planar Ornament Extraction
+- Trailblaze Power stages: Calyx (Golden), Calyx (Crimson), Cavern of Corrosion, Ornament Extraction
 - Echo of War, reset weekly
-- Daily tasks and rewards, such as redemption codes, mail, assignments, Nameless Honor, and Daily Training
-- Weekly tasks: Divergent Universe (PVE mode), Currency Wars (PVP mode)
-- Monthly tasks: the three endgame modes, Memory of Chaos / Pure Fiction / Apocalyptic Shadow
-
-> **About the three endgame modes**: AUTO-MAS has reserved configuration entries and snapshot import capability for these modes, but during PR #249 the user-page switch is temporarily disabled and marked as "Future feature". Availability and stability depend on your current AUTO-MAS version. Do **not** treat this as a stable feature yet.
+- Daily tasks and rewards: redemption codes, mail, assignments, Nameless Honor, Daily Training, and more
+- Weekly: Divergent Universe, Currency Wars
 
 **For more information, see:**
 
@@ -38,254 +31,282 @@ With the HSR specialization, AUTO-MAS can mix both engines under one script and 
 { name: 'SRA GitHub', link: 'https://github.com/Shasnow/StarRailAssistant', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },
 ]"/>
 
-## Prerequisites
+## Before You Start
 
-Before creating your first HSR script in AUTO-MAS, complete these steps:
+Get these out of the way first. It removes about half the problems people run into later.
 
-1. **Install AUTO-MAS**: use a version that includes the HSR specialization, meaning a version after PR #249 was merged.
-2. **Install March7th Assistant (M7A)**: after extraction, **open it manually at least once** and wait for initialization to complete. The first launch creates files such as `config.yaml`. Confirm that the directory contains `March7th Assistant.exe`.
-3. **Install StarRailAssistant (SRA)**: after extraction, **open it manually at least once** so SRA can generate `settings.json`, `configs`, and related directories. Confirm that the directory contains `SRA-cli.exe`.
-4. **Install the Honkai: Star Rail PC client**: the CN official client is supported. Confirm that the directory contains `StarRail.exe`.
-5. **Add antivirus and Defender trust entries**: add AUTO-MAS, M7A, SRA, and the Honkai: Star Rail game directory to Windows Defender or third-party antivirus trust lists to avoid external scripts being blocked.
-6. **Avoid Chinese paths**: place all directories under plain English paths, such as `D:\AUTO-MAS`, `D:\M7A`, `D:\SRA`, and `D:\StarRail`. Chinese paths and paths with spaces have historically caused image recognition and path parsing issues.
+1. **Install the scripts you want to use.** At least one of M7A and SRA. Install both if you want to mix them.
+2. **Open each script manually once.** A script only writes its own configuration file on first launch (`config.yaml` for March7th, a profile under `%APPDATA%\SRA\configs` for SRA). AUTO-MAS reads it to fill in the options on the right side of "Tasks managed by MAS", and script-direct control cannot even pass the pre-run check without it. If SRA has not written one after you open it, just save any setting inside SRA.
+3. **Install the Honkai: Star Rail PC client**, the CN official client.
+4. **Add everything to your antivirus allowlist**: AUTO-MAS, M7A, SRA, and the game directory. Otherwise the scripts get blocked and tasks fail for no visible reason.
+5. **Keep paths free of non-English characters and spaces**, for example `D:\M7A` and `D:\SRA`. Such paths have a long history of breaking image recognition and path parsing.
 
-::: warning Reminder
-When saving paths, AUTO-MAS automatically checks whether the selected directory contains the expected `exe`:
+::: warning Pick the folder, not the exe
+When you save, AUTO-MAS checks that the folder you picked contains the matching exe. Pick the wrong thing and a popup stops you right there:
 
-- March7th path: must contain `March7th Assistant.exe`
-- SRA path: must contain `SRA-cli.exe`
-- Game path: must contain `StarRail.exe`
-
-If you select the wrong directory, the frontend blocks it with a popup and asks you to reselect.
+| For this field | The folder must contain |
+| --- | --- |
+| March7th path | `March7th Assistant.exe` |
+| SRA path | `SRA-cli.exe` |
+| Game path | `StarRail.exe` |
 :::
 
 ## Create an HSR Script
 
-### 1. Create a Script
+### 1. Create the script
 
-1. Go to **Script Management**.
-2. Click **New Script**.
-3. In the script type list, select **HSR Script** (type ID: HSR).
-4. Click OK. AUTO-MAS creates an HSR script instance and opens the script configuration page.
+Go to **Script Management** → **New Script** → pick **HSR Script** → confirm. The app jumps to the script configuration page.
 
-### 2. Configure Basic Script Information
+### 2. Script and game configuration
 
-Fill in the **HSR Script Configuration** page:
+| Field | What to enter |
+|---|---|
+| **Script name** | Any name you will recognize, such as "Main Star Rail account" |
+| **March7th path** | The **folder** M7A lives in |
+| **SRA path** | The **folder** SRA lives in |
+| **SRA config profile** | SRA can keep several configuration profiles; this picks which one to use. Defaults to "auto", see below |
+| **MAS manages the game** | Lets AUTO-MAS launch the game, restart it when switching scripts, and watch the game process. Defaults to "Yes"; a game that is already running is detected and the launch is skipped, so you do not need to turn this off for that. **Only pick "No" for script-direct control with the cloud client**; turning it off disables all three behaviours at once |
+| **Game path** | The **folder** Honkai: Star Rail lives in. Required when "MAS manages the game" is "Yes" |
+| **Maximum game launch wait** | Seconds to wait after launching before the client is considered ready. Default 60, raise it on slower machines |
+| **Run in 1920×1080 windowed mode** | Temporarily rewrites the registry before a task so the game runs at 1920×1080 windowed, and restores it afterwards. The scripts' image recognition is tuned for this resolution, so turn it on if your aspect ratio differs |
+| **Redeem codes run only when they change** | On by default. Skips the redemption code step when the codes have not changed, so it does not run pointlessly every day |
 
-| Configuration | Description | Notes |
-|---|---|---|
-| **Script name** | Give this script instance an easy-to-recognize name | For example, "Main HSR account" or "Official daily" |
-| **March7th path** | M7A installation directory containing `March7th Assistant.exe` | Validates the exe; can be cleared with one click |
-| **SRA path** | SRA installation directory containing `SRA-cli.exe` | Validates the exe; can be cleared with one click |
-| **Game path** | Honkai: Star Rail installation directory containing `StarRail.exe` | Validates the exe |
-| **Maximum game startup wait time** | Seconds AUTO-MAS waits after starting the game before the client is considered operable | Default is 60 seconds; increase it for slower machines |
-| **Game startup arguments** | Extra command-line arguments passed when starting `StarRail.exe` | Usually left empty |
-
-::: tip Notes
-- At least one of the M7A and SRA paths must be configured. Leaving the other side empty is allowed; that side will not appear in **Module Script Assignment**.
-- After any path is changed, Module Script Assignment (TaskMapping) is automatically reshuffled according to the currently configured paths.
+::: tip One script is enough
+Fill in only M7A or only SRA and leave the other empty. The empty one will not appear as an engine choice on the user page.
 :::
 
-### 3. Configure Execution Limits
+::: tip About SRA configuration profiles
+SRA stores its settings as one or more profiles under `%APPDATA%\SRA\configs`. Which one you pick decides three things: what the options under "Tasks managed by MAS" show, which profile script-direct control runs, and which one gets copied when you pin a snapshot.
 
-| Configuration | Description | Default |
+Leaving it on "auto" prefers `Default` and otherwise takes the first profile in filename order — which is exactly what AUTO-MAS always did before. If the profile you picked is later deleted or renamed, AUTO-MAS falls back to auto and says so on both the script page and the user page, rather than switching silently.
+:::
+
+::: warning Change the resolution while the game is closed
+"Run in 1920×1080 windowed mode" works by writing the registry, which does not take effect while the game is already running. AUTO-MAS logs a note asking you to close the game and run again; the current round still proceeds, just without the resolution change.
+:::
+
+### 3. Set retries and timeouts
+
+These control timeout and retry behavior. The defaults suit most setups; adjust them for your machine.
+
+| Field | What it does | Default |
 |---|---|---|
-| **Maximum failed task retries** | Upper limit for automatic retries after a task fails | 3 |
-| **Daily task timeout limit (minutes)** | Maximum duration for one daily, stamina, or reward task | 20 |
-| **Weekly task timeout limit (minutes)** | Maximum duration for one weekly task such as Divergent Universe or Currency Wars | 60 |
-| **Monthly task timeout limit (minutes)** | Maximum duration for one monthly task such as the three endgame modes | 60 |
-| **Enable low-performance compatibility mode** | Only affects March7th Divergent Universe and maps to `weekly_divergent_stable_mode` | Disabled |
+| **Maximum attempts for a failed task** | How many attempts a task gets in **total**, first one included. The default 3 means the first run plus at most 2 retries | 3 |
+| **Daily task timeout (minutes)** | Cap for daily / Trailblaze Power / reward tasks | 20 |
+| **Weekly task timeout (minutes)** | Cap for Divergent Universe and Currency Wars | 60 |
+| **Enable low-performance compatibility mode** | Only affects M7A running Divergent Universe. Turn it on if M7A runs it unreliably | Off |
 
-### 4. Module Script Assignment (TaskMapping)
-
-The HSR specialization can assign four modules to M7A or SRA separately:
-
-| Module | Meaning | Default engine |
-|---|---|---|
-| **Stamina** | Trailblaze Power farming, Echo of War, and related tasks | SRA |
-| **Daily tasks and rewards** | Redemption codes, mail, assignments, Nameless Honor, Daily Training, and more | SRA |
-| **Divergent Universe** | Divergent Universe PVE mode | SRA |
-| **Currency Wars** | Currency Wars PVP mode | SRA |
-
-> TaskMapping options change dynamically based on configured M7A / SRA paths. You can choose between both only when both paths are configured. If only one path is configured, only that engine is available.
-
-When a different engine is selected, the **Weekly Task Execution Strategy** area displays the concrete parameters for that engine. **The user page no longer requires you to fill in these parameters manually**:
-
-- **Divergent Universe**
-  - SRA: Divergent Universe adventure notes / farm first stage mode / 20 runs / enable points reward
-  - March7th: enable points reward / cyclical extrapolation / low-performance compatibility follows the script-page switch; team, blessings, and extrapolation strategy are decided by the M7A client
-- **Currency Wars**
-  - SRA: standard game / lowest difficulty / first strategy saved in SRA / 2 runs
-  - March7th: enable points reward / standard game / lowest rank / Aglaea strategy / accept restart for specific entries
-
-::: warning SRA Currency Wars Note
-After SRA finishes Currency Wars, it **does not automatically claim points rewards**. Claim them manually in game. Other engines handle rewards according to their own client rules.
+::: tip Task assignment is not on this page
+Which script runs which task is decided **per user**, on the user page, not here. Two users under the same script can use different engines.
 :::
 
 ## Create an HSR User
 
-Add a user under the HSR script:
+In the **Script Management** table, click **Add a user**, then fill in the basics:
 
-1. In the **Script Management** table, click **Add User**, or open the created HSR script and click **Add User** there.
-2. Fill in **Basic Information**:
-
-| Field | Description |
+| Field | What to enter |
 |---|---|
-| **Username** | Display name for the user. It is also written to M7A / SRA as the "Trailblazer name" for Currency Wars |
-| **Enabled** | Whether the user participates in automation. Disabled users are skipped |
-| **Account** | Login account, such as a phone number. Only used when automatic login/account switching is required |
-| **Password** | Login password. Only used when automatic login/account switching is required |
-| **Server** | Currently only the official CN server (CN-Official) is supported |
-| **Remaining days** | Remaining valid automation days. `-1` means unlimited, `0` means expires today, and a positive value is the remaining day count |
-| **Notes** | Free-form notes |
+| **User name** | Display name. It is also sent to the script as the "Trailblazer name" for Currency Wars |
+| **Enabled** | Disabled users are skipped |
+| **Account** | Phone number or similar login. Only needed when SRA has to switch accounts for you |
+| **Password** | Login password, same condition |
+| **Server** | CN official only for now |
+| **Days remaining** | How many more days to run this user. `-1` means no limit. It **drops by at most one per day**, and only once at least one module has succeeded in that day's daily phase. The user is skipped at 0. Direct-control users never count down, but they are still skipped at 0 |
+| **Note** | Anything you want |
 
-::: warning Account and Password Security
-- Accounts and passwords are stored locally and encrypted automatically by AUTO-MAS when saved.
-- **If the SRA path is not configured, or TaskMapping does not assign a module to SRA, the account and password are not used for account switching**. They are only reserved fields.
-- **Do not publicly share your `data/` directory or script configuration JSON files**, because they contain encrypted credentials.
+::: warning About the account and password
+They are stored locally and encrypted automatically. Nothing is uploaded.
+
+**They only appear when the script page has an SRA path and this user is in MAS-managed mode.** Whether they are actually used for login or account switching further depends on one of your enabled modules being assigned to SRA; otherwise they sit unused.
+
+Also, do not share your `data/` directory or script configuration JSON with anyone. They contain your encrypted credentials.
 :::
 
-### Task Switches
+## Run Mode: MAS Managed or Script-Direct Control
 
-Configure which modules this user should run:
+Every user picks a **run mode**, which decides who is in charge:
 
-| Switch | Description | Default |
+| Mode | Who decides what runs | Who it suits |
 |---|---|---|
-| **Stamina** | Whether to run stamina stages and Echo of War | Disabled |
-| **Daily tasks and rewards** | Whether to run redemption codes, mail, assignments, Nameless Honor, Daily Training, and more | Disabled |
-| **Three endgame modes** (monthly, all three run together) | The current UI marks this as **disabled**. Whether it is available depends on your actual version | Disabled |
-| **Divergent / Currency** | Three-way choice: Off / Divergent Universe / Currency Wars | Disabled |
+| **MAS managed** (default) | AUTO-MAS. Task switches, engines, stages and every option are set on this page | People who want to manage every account from one place |
+| **Script-direct control** | M7A / SRA themselves. AUTO-MAS only launches them on schedule | People already comfortable in the scripts who just want a scheduler |
 
-The UI shows the execution strategy for the engine selected in TaskMapping, consistent with the script page.
+### Script-direct control
 
-## Configure Stamina Stages
+Direct control needs **no configuration in AUTO-MAS at all**. Whatever you set up in M7A / SRA is exactly what runs, and changes take effect immediately — there is nothing to sync back here.
 
-In the **Stamina Configuration** area, you can see four independent dropdowns:
+Two steps: pick the run mode, then switch on the scripts you want to run.
 
-| Channel | Corresponding stage type |
+::: warning Direct control ignores the rest of this page
+Task switches, account and password, stages, and the options under "Tasks managed by MAS" have **no effect** in direct control. They belong to managed mode, and so does the "Progress and reset" area further down.
+
+Direct control also has no automatic retry (whatever the script does is the result), a fixed two-hour cap per run, and works only through the automatic proxy — you cannot run a single direct-control user on its own from the scheduler.
+:::
+
+#### When you actually need "pin as a snapshot"
+
+Exactly one situation: **several game accounts under the same HSR script, and you want each to run a different plan**.
+
+Direct control runs whichever configuration the script currently has in effect, so multiple direct-control users share it. In that case, open one user and click **Pin the current configuration as a snapshot (optional)**. AUTO-MAS copies the script's configuration as it is right now and stores it under that user, who then runs that copy independently of the others.
+
+::: warning A snapshot is frozen
+Once pinned, a snapshot **does not follow later changes in the script**. Change a setting in SRA and the pinned user still runs the old copy. Click **Re-pin to the current configuration** to refresh it, or **Switch back to the script's current configuration** to drop it.
+
+With only one user, skip snapshots — the default live configuration is simpler.
+:::
+
+## Configure Trailblaze Power Stages
+
+The **Trailblaze Power** area has four dropdowns, one per stage type. Leave a dropdown empty for stages you do not want to farm:
+
+| Dropdown | What it farms |
 |---|---|
 | **Calyx (Golden)** | Character EXP / Light Cone EXP / Credits |
-| **Calyx (Crimson)** | Trace materials. Golden and Crimson selections do not overwrite each other and can be saved at the same time |
-| **Cavern of Corrosion** | Relic stages |
-| **Planar Ornament Extraction** | Planar Ornament stages |
+| **Calyx (Crimson)** | Trace materials |
+| **Cavern of Corrosion** | Relics |
+| **Ornament Extraction** | Planar ornaments |
 
-Each channel is independently selectable. Leave stages empty if you do not want to farm them.
+Golden and Crimson are independent and can both be saved at once.
 
-The following fields are also available:
+Below that:
 
-- **Stage to farm**: choose the channel to farm this time, such as Golden, Crimson, Relic, or Ornament. This writes to `Stage.Channel`.
-- **Current active stage**: the UI displays the stage name or stage ID corresponding to `Stage.ScriptStage`.
-- **Echo of War**: choose one Echo of War stage read from the external script. Leave empty if you do not want to run it.
-- **Echo of War start day**: Monday through Sunday. Once the start day is reached and this week is not complete, AUTO-MAS asks M7A / SRA to try completing it. After logs confirm completion, it will not run again that week.
+- **Farm stages**: which of the four types this run actually farms.
+- **Active stage**: shows the stage you selected, for confirmation only.
+- **Echo of War**: pick one of the stages read from the script, or leave it empty to skip.
+- **Echo of War start day**: pick a weekday. From that day on, if this week's run has not happened yet, it runs. Once done, it does not repeat that week.
 
-### Where Do Stage Options Come From?
+::: tip Stage options follow the engine
+These stage options are not written by AUTO-MAS — they are **read out of your M7A / SRA**, from whichever engine handles Trailblaze Power. The two lists differ, so **your stage choice is stored per engine**. Switch engines and you have to pick again; switch back and your earlier choice is still there.
+:::
 
-Stamina stage options **only come from the stage configuration exposed by the external script**, read dynamically according to the engine selected for the **Stamina** module in TaskMapping:
+## Tasks Managed by MAS
 
-- M7A: read from `instance_names.json`
-- SRA: read from `trailblaze_power.toml`
+This is the main area of managed mode: the four task modules on the left, and the selected module's detailed options on the right.
 
-If a dropdown is empty, common causes are:
+| Module | What it covers | Switch default |
+|---|---|---|
+| **Trailblaze Power and cultivation targets** | Trailblaze Power stages, Echo of War | On |
+| **Daily tasks and rewards** | Redemption codes, mail, assignments, Nameless Honor, Daily Training, and more | On |
+| **Divergent Universe** | Divergent Universe | Off |
+| **Currency Wars** | Currency Wars | Off |
 
-1. The external script, M7A or SRA, has not been initialized. Open it manually once first.
-2. The external script path is wrong, so AUTO-MAS cannot find configuration files.
-3. You changed the Stamina execution engine in TaskMapping, for example from SRA to M7A, and need to **reselect stages**.
+Divergent Universe and Currency Wars are two independent switches. Turn both on if you want both.
 
-> When the Stamina execution engine is changed, the Stamina Configuration area displays a yellow notice: "The stamina execution script has changed. Please reselect stages."
+Each module picks its own **engine** (SRA or March7th Assistant). With only one script path filled in, that is the only choice.
 
-## Weekly and Monthly Notes
+### Where the detailed options come from
 
-HSR weekly and monthly progress is recorded automatically by AUTO-MAS. **The user page does not require manual choices such as "Divergent Universe 1 / Divergent Universe 2"**:
+The options on the right are **not defined by AUTO-MAS**. They are read live out of your SRA / March7th Assistant configuration file, showing whatever the script has saved right now. When you change one here, AUTO-MAS records **only the fields you changed** (its "overrides"); everything else keeps following the script.
 
-- **Divergent Universe and Currency Wars**: weekly tasks. Completion is recorded by ISO week, such as `2025-W23`. If the weekly task is already complete this week, the next run skips it.
-- **Three endgame modes**: monthly tasks. They run once per month and consist of three snapshots, Memory of Chaos / Pure Fiction / Apocalyptic Shadow. Completion is recorded by calendar month, such as `2025-06`.
-- **Echo of War**: reset by ISO week. Users can specify an **Echo of War start day**. It is only attempted after that day is reached, and it will not repeat after completion this week.
+That has a few direct consequences:
 
-### Progress and Reset
+- New options added by a script update show up here on their own — you do not have to wait for an AUTO-MAS update.
+- **Switching the engine swaps the entire set of options**, because the two engines do not share field names. Values you changed under the current engine are not carried over, but they are kept, so switching back brings them along.
+- Some things are deliberately left to the script, such as SRA's redemption code list. Those can only be entered in the script's own UI.
 
-The **Progress and Reset** area at the bottom of the user page provides three manual controls:
+::: warning Two kinds of settings are force-disabled by AUTO-MAS
+In managed mode, AUTO-MAS forces the script's own **notifications** and **after-task action** off in the temporary configuration (March7th's `after_finish`, SRA's `missionAccomplished`).
 
-- **Echo of War**: shows "completed this week / not completed" and the latest completion date. Provides **Mark Complete** and **Reset** buttons.
-- **Weekly**: same behavior, judged by ISO week.
-- **Three endgame modes**: judged by calendar month. Provides **Mark Complete This Month** and **Reset** buttons.
+The reason is that those actions close the game, or the whole computer. March7th closes the game on the way out whenever `after_finish` is anything but "None", which forces the rest of that phase to stop and go to a retry; set to "Shutdown" it really does shut the machine down 60 seconds later. Notifications are sent by AUTO-MAS itself instead.
 
-> These buttons only modify the local `Data` field and **do not actually drive external scripts**. They are used to quickly synchronize state when an external script has already completed the task, or when you want to force a rerun.
+This only affects the run AUTO-MAS performs in managed mode — your own settings are restored afterwards. **Direct control leaves both of these alone**: whatever you set is what runs. The one exception is SRA's Windows toast notifications, which are turned off for the whole run whenever an SRA path is configured, and restored when it ends.
+:::
 
-### About the Three Endgame Modes
+### Reset to the source configuration
 
-AUTO-MAS has prepared a complete pipeline for the three endgame modes, including:
+**Reset to the source configuration**, at the top right of the module list, **deletes every override this user has in AUTO-MAS** (all modules, all fields). Everything then displays and runs according to the script's current configuration. The source configuration file itself is not touched.
 
-- User page: switch ForgottenHall and import three snapshots in the UI
-- Script page: import three snapshots from M7A `config.yaml` in one click: Memory of Chaos / Pure Fiction / Apocalyptic Shadow
+The action cannot be undone, so it asks for confirmation first.
 
-However, **during PR #249 the user-page switch for these modes is disabled** to avoid misuse before sufficient testing. It will be opened gradually in later versions. Use the actual AUTO-MAS UI as the source of truth.
+### What "N stale overrides" means
 
-## Runtime and Logs
+After a script update, or after switching SRA configuration profiles, a field you once changed may no longer exist, or its type may no longer match. Such an override is marked stale:
 
-After configuring scripts and users, add the script to the task scheduler queue for execution. Daily-use notes:
+- **It is ignored at run time and the source value is used instead.** It never causes an error or interrupts the task.
+- The detail panel lists which ones, why they became invalid, and the value you had saved.
+- **Remove stale overrides** takes them out of this user's configuration. That too only touches the AUTO-MAS side, never the source file.
 
-- **AUTO-MAS restarts the game when switching between M7A and SRA**. This avoids state pollution between external scripts and is expected behavior.
-- **AUTO-MAS does not destroy M7A / SRA's own configuration**. Before running, it backs up `config.yaml`, `settings.json`, `cache.json`, and `configs`, then restores them automatically after the run.
-- **Automatic retry after failure**: when one task inside a module fails, AUTO-MAS retries according to **Maximum failed task retries**. Before retrying, AUTO-MAS restarts the game.
+## AUTO-MAS Handles Weekly Progress for You
 
-### Log Locations
+AUTO-MAS keeps its own records for these:
 
-When troubleshooting, provide:
+- **Echo of War**: tracked on its own, per week.
+- **Divergent Universe and Currency Wars**: these two **share a single "weekly" record**. Once either one is confirmed complete in the log, the whole weekly slot counts as done and the other will not run that week — worth knowing if you enable both.
 
-- `debug/app.log`: AUTO-MAS main process log
-- `debug/frontend.log`: frontend log
+Both reset by ISO week and unlock again on Monday (midnight in the game server's timezone, not the in-game 4 a.m. rollover).
 
-If the issue is related to a specific external script, also include the M7A / SRA runtime log directory. See each script's official documentation for its location.
+### Changing progress by hand
+
+The **Progress and reset** area at the bottom of the user page (managed mode only) shows whether Echo of War and the weekly tasks are done this week, with **Mark as done** and **Reset** for each.
+
+Two uses: you already did it yourself in game and want AUTO-MAS to stop trying, or you want to force a re-run.
+
+::: tip These buttons only change records
+They only touch AUTO-MAS's own bookkeeping. They **do not make the scripts run anything**.
+:::
+
+## Running and Logs
+
+Once configured, add the script to a [task queue](/en/docs/task-scheduler) and it runs automatically. Three things worth knowing:
+
+- **The game may restart repeatedly**: three things trigger it — switching between the two scripts for one user, that user moving from the daily phase into the weekly phase (regardless of which script), and each retry round. All deliberate, to keep script state from interfering. All three only happen while "MAS manages the game" is on.
+- **Your M7A / SRA configuration is safe**: AUTO-MAS backs it up before running and restores it afterwards.
+- **Failures are retried**: according to your "maximum attempts for a failed task", restarting the game before each retry.
+
+### Which logs to attach when reporting a problem
+
+- `debug/app.log` — the AUTO-MAS backend log
+- `debug/frontend.log` — the UI log
+
+If the problem looks like it is in one of the scripts, attach that script's own log as well (see its documentation for the location).
+
+::: tip Check before you share a log
+AUTO-MAS forwards M7A / SRA output into its own log verbatim, so it may contain your in-game UID (the scripts pick it up while doing OCR). Account and password are redacted; the UID is not. Search for your UID and mask it before posting to a public issue.
+
+Also note that with March7th's log level set to DEBUG the forwarded volume gets very large — a thousand lines for one run is normal. Set March7th's own `log_level` back to `INFO` for a tidier log.
+:::
 
 ## FAQ
 
-### The HSR script type cannot be found
+### There is no HSR option when creating a script
 
-- Confirm that your AUTO-MAS version has merged [PR #249](https://github.com/AUTO-MAS-Project/AUTO-MAS/pull/249).
-- Restart AUTO-MAS so the frontend OpenAPI client is regenerated.
+Your AUTO-MAS is too old to have the HSR script type. Update from the [download page](/en/download/auto-mas) and restart the app afterwards.
 
-### Path validation fails
+### The path is rejected no matter what I enter
 
-- The **March7th path** points to the wrong directory. It must contain `March7th Assistant.exe`.
-- The **SRA path** points to the wrong directory. It must contain `SRA-cli.exe`.
-- The **Game path** points to the wrong directory. It must contain `StarRail.exe`.
-- Note: select the **directory** (folder), not the `exe` file itself.
+**You probably selected the exe itself. This field wants the folder.** Make sure the folder directly contains the matching exe: `March7th Assistant.exe` for M7A, `SRA-cli.exe` for SRA, `StarRail.exe` for the game. Do not select a subfolder either.
 
-### Stage list is empty
+### The stage list is empty
 
-- Confirm that M7A / SRA has been opened manually once and initialized `config.yaml` / `settings.json`.
-- Confirm that the script path points to the external script **root directory**, not a subdirectory.
-- If you just switched the execution engine for the **Stamina** module, follow the page notice and reselect stages.
+Stage options are read from the lists shipped inside the scripts themselves (`assets\config\instance_names.json` for March7th, `tasks\config\trailblaze_power.toml` for SRA). They exist as soon as you unzip, so **this has nothing to do with whether you have opened the script**. That leaves two causes: the **path does not point at the script's root folder** (most common — those folders must be visible inside it), or you **just switched the engine for Trailblaze Power** — the two lists differ, so you have to pick again, and the page says so.
 
-### Task completion status is unexpected
+### Task status is wrong, things run that shouldn't or don't run that should
 
-- Check whether the **Daily Tasks** and **Weekly/Monthly** switches match your expectations.
-- Weekly tasks reset by ISO week, and monthly tasks reset by calendar month. State resets automatically after week/month changes.
-- Check `debug/app.log` for M7A / SRA subprocess exit codes and marker judgment logs.
-- In **Progress and Reset**, you can manually mark completion or reset state to synchronize it.
+- Check the task switches on the user page first.
+- Weekly tasks reset weekly; crossing into a new week clears them automatically.
+- **Progress and reset** lets you mark or reset a task to fix the state immediately.
+- If it is still wrong, check `debug/app.log` for how the script exited.
 
-### M7A Divergent Universe seems unstable
+### M7A runs Divergent Universe unreliably
 
-- Enable **Low-performance compatibility mode** on the script page.
-- Team, blessings, and extrapolation strategy are decided by the M7A client. Configure them in M7A itself in advance.
+Turn on **Enable low-performance compatibility mode** on the script page. Team, blessings and simulation strategy are outside AUTO-MAS's control — set those up in M7A beforehand.
 
-### SRA Currency Wars finishes but there are no points
+### SRA finished Currency Wars but there are no points
 
-- This is known behavior. SRA **does not automatically claim points rewards** after Currency Wars completes. Claim them manually in game.
+Known behavior: SRA does not collect them automatically, so collect them in game. Hand Currency Wars to M7A instead if you want to skip that step.
 
-### The game restarts repeatedly during scheduling
+### The game keeps restarting
 
-- When different modules for the same user are handled by different engines, for example one by M7A and one by SRA, AUTO-MAS restarts the game during engine switches to avoid script state pollution. This is expected.
-- To reduce restarts, assign multiple modules to the same engine in TaskMapping.
+Three sources: switching between scripts, finishing the daily phase and moving into the weekly one, and each retry round. All deliberate, to prevent script state from interfering.
 
-### A task fails but logs show no M7A / SRA output
+Assigning everything to one script removes the first, but as long as Divergent Universe or Currency Wars is enabled, the restart after the daily phase is unavoidable. To keep AUTO-MAS away from the game entirely, turn off "MAS manages the game" on the script page — at the cost of handling launching, switching and process monitoring yourself.
 
-- Confirm that Windows Defender or antivirus software did not block the subprocess.
-- Confirm that external script paths do not contain Chinese characters, spaces, or symbolic links.
-- Add the M7A, SRA, and Honkai: Star Rail installation directories to the antivirus trust list and try again.
+### A task failed, but there is no script output in the log
+
+That means the script never started, which is almost always antivirus. Add the M7A, SRA and game directories to your antivirus allowlist and try again. Also confirm the paths contain no non-English characters, spaces or symbolic links.
 
 ## Feedback and Help
 
-- AUTO-MAS issue feedback: [GitHub Issues](https://github.com/AUTO-MAS-Project/AUTO-MAS/issues)
+- AUTO-MAS issues: [GitHub Issues](https://github.com/AUTO-MAS-Project/AUTO-MAS/issues)
 - March7th Assistant: [m7a.top](https://m7a.top/) / [GitHub](https://github.com/moesnow/March7thAssistant)
 - StarRailAssistant: [starrailassistant.top](https://starrailassistant.top/) / [GitHub](https://github.com/Shasnow/StarRailAssistant)

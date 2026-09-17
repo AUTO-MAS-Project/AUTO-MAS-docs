@@ -1,12 +1,12 @@
 # M9A Configuration Guide
 
 ::: tip Tip
-M9A adaptation is still under development. Bugs may exist during this period. Keep your original general script configuration while using the dedicated script.
+M9A support is still under development, so bugs are possible. Keep your existing general script configuration around while you try the dedicated script.
 :::
 
 ## What is M9A?
 
-M9A is a third-party tool for Reverse: 1999. It can handle repetitive tasks such as daily automation, automatic Artificial Somnambulism, and event farming.
+M9A is a third-party tool for Reverse: 1999. It handles repetitive work such as daily automation, Artificial Somnambulism, and event farming.
 
 It is powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework) image recognition technology.
 
@@ -30,51 +30,45 @@ It is powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework) image re
 ## Configure the Script
 
 1. Go to **Script Management**, click **New Script**, and select **M9A Script** to add a script instance management page.
-2. In the opened script configuration, click **Select folder** for **M9A path**, then open the directory where M9A is located.
-3. In **Emulator Management**, select the emulator and emulator instance.
+2. In the script configuration that opens, click **Select folder** for **M9A path** and open the directory M9A is in.
+3. In **Emulator Management**, select the emulator and the emulator instance.
 
 > If no emulator appears here, complete **Emulator Management** configuration first.
 
 ### Runtime Configuration
 
-The M9A script provides the following runtime control parameters:
-
 | Configuration | Description | Default |
 |---------------|-------------|---------|
-| Proxy count limit | Maximum automation runs per user per day. `0` means unlimited. | 0 |
-| Run count limit | Maximum retry count when a task fails unexpectedly | 3 |
-| Runtime limit | Maximum runtime for a single task in minutes. Timeout forces termination. | 10 |
-| Auto update after queue ends | After batch tasks complete, automatically update M9A resources if a new version is detected | Disabled |
+| Proxy count limit | Maximum automation runs per user per day. `0` means unlimited | 0 |
+| Run count limit | How many times a failed task is retried | 3 |
+| Runtime limit | Maximum minutes for a single task. It is forced to stop on timeout | 10 |
+| Auto update after queue ends | After the queue finishes, update M9A resources if a new version is detected | Disabled |
 
-> Tip: After enabling "Auto update after queue ends", AUTO-MAS starts a virtual user after all real user tasks are completed to update resources. Desktop and Webhook notifications are sent after successful update.
->
-> Important: Before using auto update, manually open M9A and separately enable a resource update channel in M9A settings, either MirrorChyan or GitHub. Otherwise auto update cannot work correctly.
-
-## Preparation Before First Run
-
-::: warning Important
-Before using M9A in AUTO-MAS for the first time, manually start M9A once and complete the following initialization steps.
+::: warning Auto update needs an update channel enabled inside M9A first
+**Auto update after queue ends** relies on M9A's own update feature. Open M9A by hand and **enable a resource update channel** in its settings, either MirrorChyan or GitHub. Without that, this switch does nothing.
 :::
 
-1. Manually start the M9A main program, `M9A.exe`.
-2. Wait for M9A initialization to complete. After logs show "AgentServer started", wait until "all tasks completed" appears.
-3. In M9A settings:
-   - Configure **resource download source**, choosing MirrorChyan or GitHub.
-   - Fill in **CDK** or **Token** for resource updates.
-4. Decide in M9A whether to enable **auto update** and choose the **update channel**.
-5. Close M9A after confirmation.
+## Required Before the First Run
 
-After completing these steps, return to AUTO-MAS and click **Save Configuration**.
+Before you use M9A from AUTO-MAS the first time, you **must open M9A by hand once** so it can initialize itself:
+
+1. Launch `M9A.exe`.
+2. Wait for initialization to finish. The log shows "AgentServer started", then wait for "all tasks completed".
+3. In M9A settings, configure the **resource download source** (MirrorChyan or GitHub) and the matching **CDK / Token**.
+4. While you are there, decide whether to enable M9A's own **auto update**. That is up to you.
+5. Close M9A.
+
+Back in AUTO-MAS, click **Save Configuration** and you are ready to go.
 
 ## Configure Users
 
 1. In the script table under **Script Management**, click **Add user** to add a user.
-2. Fill in user information according to the hints on the settings card.
-3. You can add multiple users. AUTO-MAS runs each user's task queue sequentially according to the user list.
+2. Fill in the user information following the hints on the settings card.
+3. You can add several users. AUTO-MAS runs each user's task queue in the order they appear in the list.
 
 ### Task Queue Configuration
 
-M9A supported tasks include, depending on the actual software version:
+M9A supports the following tasks, depending on the version you have:
 
 | Task | Description |
 | ---- | ----------- |
@@ -87,143 +81,69 @@ M9A supported tasks include, depending on the actual software version:
 | Bank Shopping | Automatically shop in the bank |
 | Claim Rewards | Automatically claim various rewards |
 
-On the user configuration page, select tasks from the task list, add them to the task queue, and adjust execution order.
+On the user configuration page, pick the tasks you want from the task list, add them to the task queue, and adjust the execution order.
 
 ### Preset Template
 
-When the task queue is empty, the system shows the **Daily - Idle** preset template. One click adds common tasks to the queue.
+Do not feel like adding tasks one at a time? While the task queue is empty, a **Daily - Idle** template appears. One click adds the common tasks: Collect Wilderness, Daily Psychube (Insight Analysis), Regular Battle, Auto Artificial Somnambulism, Auto Anecdote, Bank Shopping, Claim Rewards, and Use Redemption Code. It suits ordinary days with no event running, or when you have already cleared the event shop.
 
-The **Daily - Idle** template includes the following tasks, suitable for daily farming when no event is active or the event shop has been cleared:
+You can still add, remove, and reorder tasks afterwards. Any task in the template that your M9A version does not have is skipped automatically.
 
-| Task | Description |
-|------|-------------|
-| Collect Wilderness | Collect Wilderness resources |
-| Daily Psychube, Insight Analysis | Automatically complete insight analysis |
-| Regular Battle | Daily stage battles |
-| Auto Artificial Somnambulism | Automatically complete Artificial Somnambulism challenges |
-| Auto Anecdote | Automatically complete Anecdote |
-| Bank Shopping | Automatically shop in the bank |
-| Claim Rewards | Automatically claim various rewards |
-| Use Redemption Code | Automatically use redemption codes |
+### Automatic Account Switching
 
-> Tip: Preset templates are only helper entries for quickly adding tasks. You can still manually build task queues through **Add task**, or modify tasks after adding the preset. If some tasks do not have matching script definitions, they are skipped automatically during one-click add.
+**Only the official server supports this.** Other servers cannot, because of an M9A limitation.
 
-### Account Switching
+Fill in the target account under **Account information** on the user configuration page and you are done. AUTO-MAS then inserts a **Switch account** task at the front of the queue, after Start game and before your own tasks. Leave it empty if you do not need to switch accounts.
 
-M9A supports automatic account switching for multi-account management:
+### What Is Supported
 
-1. Fill in the target account in the **Account information** field on the user configuration page. This works only for the official server.
-2. When server resource is **Official server** and account information is provided, AUTO-MAS automatically inserts a **Switch account** task at the beginning of the task queue.
-3. The account switching task runs after **Start game** and before user-defined tasks.
+| | Status |
+|---|---|
+| Official server | Supported, and the only server where accounts switch automatically |
+| Bilibili and other servers | Supported, but no automatic account switching (an M9A limitation) |
+| MuMu emulator / LDPlayer | Supported |
+| Other emulators | Untested, may have problems |
+| MXU GUI | Not supported. Only MFAAvalonia is supported |
 
-> Tip: If account switching is not needed, leave account information empty. Other servers do not support account switching for now.
+## Will Your M9A Configuration Get Wrecked?
 
-### Known Limitations
+No. Before running, AUTO-MAS backs up M9A's whole `config` directory. While running, it touches exactly one file, the instance configuration at `config/instances/default.json`. Your global `config.json` is never modified. When the run ends, the original configuration is put back.
 
-- Official server: supported, and it is the only server supporting account switching.
-- Bilibili server: supported, but account switching is not supported due to M9A limitations.
-- Other servers: supported, but account switching is not supported due to M9A limitations.
-- MuMu emulator: supported.
-- LDPlayer: supported.
-- General emulator: untested.
-- MXU GUI: not supported. M9A adaptation supports only MFAAvalonia.
+If you want to compare configurations afterwards, every run's actual configuration is kept at `data/script_id/test*.json`, with the last 5 retained.
 
-## Configuration Notes
+### How the Task Queue Is Built
 
-The following describes AUTO-MAS configuration behavior for M9A in **auto-proxy** mode.
+The tasks you arrange in the UI are not handed to M9A as-is. AUTO-MAS fills in both ends:
 
-1. Configuration items shown on the user configuration page take priority.
-2. AUTO-MAS automatically builds M9A instance configuration files according to the configured task queue.
-3. **Task queue auto-build rules**:
-   - Automatically add **Start game** at the beginning of the queue.
-   - If the server is official and account information is provided, automatically insert **Switch account** after **Start game**.
-   - Automatically filter user-added **Start game**, **Close game**, and **Switch account** tasks to avoid duplication.
-   - Automatically add **Close game** at the end of the queue.
-   - Automatically skip standalone tasks marked as `standalone`.
-   - Final execution order: `Start game -> [Switch account] -> User-defined tasks -> Close game`.
-4. **Configuration safety**:
-   - AUTO-MAS automatically backs up the entire M9A `config` directory before running.
-   - During execution, only `config/instances/default.json` is modified.
-   - Your global `config.json` is not modified.
-   - Original configuration is restored after the task ends.
+```text
+Start game -> [Switch account] -> your tasks -> Close game
+```
 
-## Configuration Isolation
+So two things are not your problem:
 
-### How It Works
+- **Do not add Start game and Close game yourself.** They are added for you. If you add them manually, they get filtered out, so nothing runs twice.
+- **Do not add Switch account either.** It is inserted automatically on the official server when account information is filled in.
 
-AUTO-MAS implements a complete configuration isolation mechanism to keep your original M9A configuration safe:
+## How Auto Update Works
 
-1. **Backup before run**: back up the entire `config` directory to a temporary path.
-2. **Runtime isolation**: modify only the instance configuration file while keeping global configuration unchanged.
-3. **Restore after run**: fully restore the original configuration state.
+With **Auto update after queue ends** enabled, the sequence goes like this. While the first user runs, AUTO-MAS glances at the M9A log for a new-version notice. If there is one, it waits until every user has finished, then does one separate update run, with no emulator connected, purely to update resources. When that is done, it sends you a notification with the result.
 
-### Benefits
-
-- Configuration safety: no need to worry about configuration pollution.
-- Automatic restoration: every run starts from a clean state.
-- Debug-friendly: historical configuration backups are saved automatically under `data/script_id/test*.json`.
-
-## M9A Auto Update
-
-### Feature Description
-
-When **Auto update after queue ends** is enabled, AUTO-MAS automatically detects and updates M9A resources after all real user tasks complete:
-
-1. **Version detection**: during the first user run, AUTO-MAS monitors M9A logs and detects whether a new version is available.
-2. **Virtual user update**: if a new version is detected, the system starts a virtual user without connecting an emulator, used only for resource update.
-3. **Update monitoring**: the update process is monitored in real time for network interruption, HTTP errors, timeout, and other exceptions.
-4. **Notifications**: after update succeeds or fails, desktop and Webhook notifications are sent.
-
-### Update Failure Handling
-
-If update fails, the system:
-
-- Records detailed error logs under `data/script_id/`.
-- Sends a notification containing the failure reason, such as network interruption or HTTP request failure.
-- Keeps the current version and does not affect the next normal run.
-
-### Notes
-
-- M9A automatically restarts during update. This is normal.
-- Update timeout is 10 minutes.
-- Enable auto update only in a stable network environment.
+- M9A restarts itself during the update. That is normal.
+- The update waits at most 10 minutes.
+- Do not enable this on a flaky connection. A failure does not affect your next run, but you waited for nothing. The reason is written to the `data/script_id/` directory and included in the notification.
 
 ## FAQ
 
-### Q: Can I add multiple users under one script?
+### Can I add multiple users under one script?
 
-A: Check your M9A version first. Newer M9A versions support specified account switching, so you can build account switching tasks based on newer M9A. AUTO-MAS supports managing multiple users under one script and runs each user's task queue sequentially.
+Yes. AUTO-MAS runs each user's task queue in list order. Automatic account switching needs a newer M9A version, the kind that supports switching to a specified account, and works only on the official server.
 
-### Q: Which emulators are supported?
+### A task failed. How do I investigate?
 
-A: **MuMu emulator** and **LDPlayer** have been tested. Other emulators are untested and may have compatibility issues.
+In order: check whether the emulator is connected, then look through the log for the error, and if that is still unclear, open `data/script_id/` and compare the configuration this run actually used against the last successful one.
 
-### Q: Is the MXU GUI supported?
+### Why isn't the proxy count going up?
 
-A: No. M9A adaptation supports only the **MFAAvalonia** GUI.
+**The count uses dates in the UTC+4 timezone**, so it can be several hours off from your computer's date. The rollover point is not your local midnight.
 
-### Q: Will my M9A configuration be modified?
-
-A: No. AUTO-MAS only modifies `config/instances/default.json` and fully restores your original configuration after the task ends.
-
-### Q: How do I view previously run configurations for debugging?
-
-A: Each run configuration is saved to `data/script_id/test*.json`, keeping up to the latest 5 backups.
-
-### Q: What should I do if task execution fails?
-
-1. Check emulator connection status during runtime.
-2. Check log files to analyze the error reason.
-3. Compare historical configurations under `data/script_id/`.
-
-### Q: Do I need to manually add "Start game" and "Close game" to the task queue?
-
-A: No. AUTO-MAS automatically adds **Start game** at the beginning and **Close game** at the end. If you add these tasks manually, the system filters them to avoid duplicate execution.
-
-### Q: How does "Auto update after queue ends" work?
-
-A: After it is enabled, the system checks whether M9A has a new version after all real user tasks complete. If a new version exists, a virtual user is started, without connecting an emulator, to download and apply the latest M9A resource package. A notification is sent after update completes.
-
-### Q: Why did my proxy count not increase?
-
-A: Proxy count uses the date in the UTC+4 timezone. If the day's count has already reached the **proxy count limit** in script configuration, later users are skipped. The counter resets automatically on the first automation run each day.
+Also, once the day's count reaches the **proxy count limit**, later users are skipped outright. The counter resets on the day's first automation run.

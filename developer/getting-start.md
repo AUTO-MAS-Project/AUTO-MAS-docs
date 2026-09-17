@@ -81,6 +81,14 @@ cd frontend
 yarn install
 ```
 
+如果 Electron 二进制下载缓慢或失败，可以使用 npmmirror 镜像执行一次性安装：
+
+```bash
+yarn cross-env ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" yarn install
+```
+
+该命令只为本次 `yarn install` 设置下载源，不会修改全局配置。
+
 
 ### 4. 启动软件
 
@@ -225,6 +233,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 1. 清理缓存: `yarn cache clean`
 2. 删除 `node_modules` 和 `yarn.lock`
 3. 重新安装: `yarn install`
+4. Electron 二进制下载缓慢或失败时，使用镜像执行一次性安装:
+   `yarn cross-env ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" yarn install`
 
 ### Q: 后端启动失败提示权限不足
 

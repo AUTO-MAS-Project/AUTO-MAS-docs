@@ -27,23 +27,28 @@ hero:
       link: /docs/FAQ
 
 features:
-  - title: 集中管理
-    details: 一站式管理多个脚本与多个用户配置，和凌乱的散装脚本窗口说再见！
-  - title: 无人值守
-    details: 监看脚本日志并自动处理报错，再也不用为代理任务卡死时自己不在电脑旁烦恼啦！
-  - title: 配置灵活
-    details: 通过调度队列与脚本的组合设计调度队列，自由实现您能想到的所有调度需求！
-  - title: 代理记录
-    details: 记录所有代理记录与日志片段，定位问题更快更准更方便！
+  - title: 多账号统一管理
+    details: 多个脚本、多个账号的配置都在一处，不用再开一堆窗口来回切。
+  - title: 异常自动重试
+    details: 持续监看脚本日志，发现报错或卡死自动重试，无人值守也能跑完。
+  - title: 灵活的调度队列
+    details: 用调度队列排好执行顺序，支持开机自动运行与定时运行。
+  - title: 结果全程留痕
+    details: 每次代理的结果和关键日志都留档，哪个号哪一步出错一目了然。
 ---
 
 ## 为什么选择 AUTO-MAS？
 
-**AUTO-MAS** 是一个游戏脚本管理工具，专注于优化 **各种脚本** 多账号功能的使用体验，并增强代理的稳定性。
+如果你有好几个号要代理，你大概经历过这些：一个个手动改脚本配置、跑到一半卡住了没人管、第二天发现某个号漏了但不知道为什么。
 
-- **高效稳定**：通过日志监测、异常处理等机制，保障代理任务顺利完成。
-- **简洁易用**：无需手动修改配置文件，在可视界面实现自动化调度与多开管理。
-- **兼容扩展**：支持几乎所有自动化软件，仅要求支持启动时运行任务并能够打印日志。
+**AUTO-MAS** 不替代 MAA、M9A 这些脚本，而是负责调度它们：切换账号配置、按顺序启动、根据日志判断成功或失败、失败自动重试，并记录每次运行结果。
 
+- **稳**：全程监看日志并处理异常，尽量让任务真的跑完，而不是看起来跑完了。
+- **省事**：不用手动改配置文件，界面上点几下就行。
+- **通吃**：几乎所有自动化脚本都能接，只要它能"启动后自动开跑"并且会写日志。
 
-Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)
+## 特别声明
+
+免费代码签名由 [SignPath.io](https://signpath.io/) 提供，证书由 [SignPath Foundation](https://signpath.org/) 提供。
+
+开发者 AI API 额度由 <a href="https://www.packyapi.ai/register?aff=zKkA"><img src="https://camo.githubusercontent.com/c6e2cac1447e67d9f6c882b2faf234aed2e4d8a14fdc5bc1071d335cb6b5a32c/68747470733a2f2f7777772e7061636b796170692e61692f6c6f676f2d66756c6c2e737667" alt="PackyCode" style="display:inline-block;width:120px;height:auto;vertical-align:middle;"></a> 赞助。PackyCode 是一家稳定、高效的 API 中转服务商，提供 Claude Code、Codex、Gemini 等多种中转服务，具备自动故障转移、智能路由和无限并发等功能。[免费注册 PackyCode](https://www.packyapi.ai/register?aff=zKkA)。

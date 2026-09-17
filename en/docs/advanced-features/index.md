@@ -1,10 +1,17 @@
 # Advanced Features
 
-After learning the basic usage, you can follow the guides in this section to configure more advanced features. Use the sidebar to browse available topics.
+Once the basics are working, these features make life easier:
+
+- [Emulator Management](./emulator) - register your emulator once and AUTO-MAS fills in the emulator settings for every script. Set this up first if you use an emulator.
+- [Push Notifications](./notification) - sends a message to your email or phone when automation finishes.
+- [Game Check-in](./game-sign) - takes care of the daily check-ins on each game's community site while it is at it.
+- [MCP Service](./mcp) - lets an AI operate AUTO-MAS for you.
 
 ## Reference
 
 ### Common Date/Time Format Symbol Reference
+
+You will need this when configuring [General Scheduling](/en/docs/script-guide/general): rewrite the date and time in your log using the symbols below.
 
 | Symbol | Meaning | Example |
 |--------|---------|---------|
