@@ -19,6 +19,15 @@
 - **Branch name**: `release/{version}`
 - **Description**: stores the latest backend code for each release. It is created automatically by the release workflow. Each released app pulls the latest backend code from its corresponding release branch to support hot updates for some features and fixes.
 - **Rules**: after submitting feature updates or fixes to `dev`, synchronize changes to release branches through `cherry-pick`.
+- **Cherry-pick rules**: AUTO-MAS separates its frontend and backend, and released apps hot-update backend code from the `release/{version}` branch, while the frontend ships inside the installer and cannot be hot-updated through that branch. Only small `dev` fixes that are **pure backend (unrelated to any frontend code)** may be cherry-picked to an already released `release/{version}` branch. Cherry-picking a commit that carries frontend logic is a **violation**.
+
+  Handle a violation as follows, with no exemption for the change being otherwise correct:
+
+  1. Close the related PR.
+  2. Revert the related commit.
+  3. If the violating commit has already shipped in a release, roll the released code back and explain the situation to users.
+
+  Judge by the files the commit actually touches, not by the `type` or `scope` in its message: a commit that touches both frontend paths (such as `frontend/`) and backend paths (such as `app/`) carries frontend logic and must not be cherry-picked to a release branch.
 
 ### 4. Development Branch
 
