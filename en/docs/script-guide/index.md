@@ -30,7 +30,7 @@ Reverse: 1999 - M9A
 
 - Supports daily automation, event farming, automatic Artificial Somnambulism, and more
 - Supports MuMu and LDPlayer emulators
-- Supports only the MFAAvalonia UI
+- Added as an MFW script: the directory is recognised automatically, start / close game and official-server account switching are inserted for you
 
 ---
 
@@ -39,7 +39,7 @@ Reverse: 1999 - M9A
 Any MaaFramework project that ships an `interface.json`
 
 - Runs the task queue straight from the interface without starting the project's own UI
-- Optional "embedded copy": AUTO-MAS copies only what is needed to run into its own directory and never touches the original
+- Runs on AUTO-MAS's own copy: the original directory is never touched and can be deleted after import; one project can back several scripts running at the same time
 - Project updates from GitHub or MirrorChyan, automatically before or after a run
 
 ---
