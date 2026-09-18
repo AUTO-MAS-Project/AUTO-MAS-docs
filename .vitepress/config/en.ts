@@ -28,6 +28,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                             { text: "MAA", link: "/en/docs/script-guide/maa" },
                             { text: "MAAEND", link: "/en/docs/script-guide/maaend" },
                             { text: "M9A", link: "/en/docs/script-guide/m9a" },
+                            { text: "MFW Projects", link: "/en/docs/script-guide/maafw" },
                             { text: "OK-WW", link: "/en/docs/script-guide/okww" },
                             { text: "HSR", link: "/en/docs/script-guide/hsr" },
                             { text: "BetterGI", link: "/en/docs/script-guide/bettergi" },

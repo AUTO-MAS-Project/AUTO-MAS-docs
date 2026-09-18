@@ -28,6 +28,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "MAA", link: "/docs/script-guide/maa" },
                             { text: "MAAEND", link: "/docs/script-guide/maaend" },
                             { text: "M9A", link: "/docs/script-guide/m9a" },
+                            { text: "MFW 项目", link: "/docs/script-guide/maafw" },
                             { text: "OK-WW", link: "/docs/script-guide/okww" },
                             { text: "HSR", link: "/docs/script-guide/hsr" },
                             { text: "BetterGI", link: "/docs/script-guide/bettergi" },

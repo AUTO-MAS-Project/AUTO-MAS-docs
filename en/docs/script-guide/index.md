@@ -34,6 +34,16 @@ Reverse: 1999 - M9A
 
 ---
 
+### [MFW Projects](/en/docs/script-guide/maafw)
+
+Any MaaFramework project that ships an `interface.json`
+
+- Runs the task queue straight from the interface without starting the project's own UI
+- Optional "embedded copy": AUTO-MAS copies only what is needed to run into its own directory and never touches the original
+- Project updates from GitHub or MirrorChyan, automatically before or after a run
+
+---
+
 ### [OK-WW](/en/docs/script-guide/okww)
 
 Wuthering Waves - OK-WW
@@ -90,6 +100,7 @@ Honkai: Star Rail - March7thAssistant
 - **New users**: start with the [MAA guide](/en/docs/script-guide/maa) if you play Arknights
 - **Wuthering Waves players**: read the [OK-WW guide](/en/docs/script-guide/okww)
 - **Reverse: 1999 players**: read the [M9A guide](/en/docs/script-guide/m9a)
+- **Other MaaFramework projects**: read the [MFW project guide](/en/docs/script-guide/maafw)
 - **Honkai: Star Rail players**: read the [HSR guide](/en/docs/script-guide/hsr)
 - **Genshin Impact players**: read the [BetterGI guide](/en/docs/script-guide/bettergi)
 - **Other games**: read [General Scheduling](/en/docs/script-guide/general) and use an existing template

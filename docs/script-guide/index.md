@@ -34,6 +34,16 @@
 
 ---
 
+### [MFW 项目](/docs/script-guide/maafw)
+
+任何带 `interface.json` 的 MaaFramework 项目
+
+- 不启动项目自己的界面，直接按 interface 跑任务队列
+- 可选「内嵌运行」：AUTO-MAS 只复制运行需要的部分到自己的目录，原目录一个字节不动
+- 项目更新走 GitHub 或 Mirror 酱，可配成运行前 / 运行后自动更新
+
+---
+
 ### [OK-WW](/docs/script-guide/okww)
 
 鸣潮（Wuthering Waves） - OK-WW
@@ -90,6 +100,7 @@
 - **新手推荐**：从 [MAA 用户指南](/docs/script-guide/maa) 开始（如果玩明日方舟）
 - **鸣潮玩家**：查看 [OK-WW 配置方法](/docs/script-guide/okww) 快速上手
 - **1999 玩家**：查看 [M9A 配置方法](/docs/script-guide/m9a) 快速上手
+- **其他 MaaFramework 项目**：查看 [MFW 项目配置方法](/docs/script-guide/maafw)
 - **星穹铁道玩家**：查看 [HSR 配置方法](/docs/script-guide/hsr) 快速上手
 - **原神玩家**：查看 [BetterGI 配置方法](/docs/script-guide/bettergi) 快速上手
 - **其他游戏**：查看 [通用调度](/docs/script-guide/general) 并使用现成模板
