@@ -88,6 +88,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                             items: [
                                 { text: "API Development", link: "API" },
                                 { text: "Configuration Management", link: "config" },
+                                { text: "Configuration Semantics", link: "config-semantics" },
                                 { text: "Plan Table Specification", link: "planbook" },
                                 { text: "Script Adaptation", link: "script_task" },
                             ],
