@@ -45,6 +45,8 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
                             { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
+                            { text: "中国移动新消息（5G 消息）", link: "/docs/advanced-features/cmcc-newmsg" },
+                            { text: "让电脑定时上班", link: "/docs/advanced-features/skip-password" },
                         ],
                     },
                     { text: "常见问题", link: "/docs/FAQ" },
