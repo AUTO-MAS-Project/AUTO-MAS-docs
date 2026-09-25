@@ -232,9 +232,9 @@ netplwiz
 
 - 若有侵权请联系该页作者删除
 
-[【赤石科技】如何让电脑每天四点钟自启动做米游日常（附教程）](<https://www.bilibili.com/video/BV1pKwxzwEaP?vd_source=43fdeaf65ea5c12a419d74d955a2ebfd>)
+[肘击王结城友奈](<https://www.bilibili.com/video/BV1pKwxzwEaP?vd_source=43fdeaf65ea5c12a419d74d955a2ebfd>)
 
-[教程｜开机直接进桌面！Win11 电脑免密码免 PIN 自动登录（三种方法&设置简单）](<https://www.bilibili.com/video/BV1QY411q7cT?vd_source=43fdeaf65ea5c12a419d74d955a2ebfd>)
+[IT豪哥](<https://www.bilibili.com/video/BV1QY411q7cT?vd_source=43fdeaf65ea5c12a419d74d955a2ebfd>)
 
 [通义千问](<https://qianwen.my.cn/share/chat/e6e9752e2ba74705b6d85e3d7d46f629>)
 
