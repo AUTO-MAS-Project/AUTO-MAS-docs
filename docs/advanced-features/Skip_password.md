@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD033 MD007 MD029 MD024 -->
+<!-- markdownlint-disable MD033 MD007 MD029 MD024 MD060 -->
 # 跳过开机输入密码与锁屏界面
 
 > 本篇目前只覆盖 Windows，MacOS / Linux 的方案待补充。
@@ -164,6 +164,12 @@ netplwiz
    - 将 Resume by RTC Alarm 设置为 Enable。
 
 4. 将 Date (of Month) Alarm 设置为 0。
+
+   | 值 | 含义 |
+   |---|---|
+   | 1-31 | 每月的1号到31号触发 |
+   | 0 或 \* | 每天触发（忽略日期） |
+   | 特定值如 15 | 每月15号触发 |
 
    - "Date of Month Alarm"（日期闹钟）是 RTC 闹钟的一个设置选项，表示每月的哪一天触发闹钟，多数固件下设置为 0 就是每天触发（也有固件用 0 表示关闭，请以你主板上的说明为准）。
    - 下方的 time(hh)(mm) 与 (ss) 就表示电脑自动开机的时间。
