@@ -55,13 +55,24 @@ Honkai: Star Rail - March7thAssistant (M7A) + StarRailAssistant (SRA)
 
 ---
 
+### [BetterGI](/en/docs/script-guide/bettergi)
+
+Genshin Impact - BetterGI
+
+- Native GUI configuration; accounts are managed natively by BetterGI, complex settings are done in BetterGI's interface
+- Manages the One Dragon built-in config groups (8 toggles) and custom config groups independently per account
+- Supports reward party, combat party, and auto-battle strategy fields, auto-reading combat scripts under `User/AutoFight`
+- Account switching, notifications, and extra scripts can each be configured independently
+
+---
+
 ### [General Scheduling](/en/docs/script-guide/general)
 
 For scripts that can run tasks on startup and print logs
 
 - Supports most mainstream scripts, including March7thAssistant, SRC, zzzOD, and M9A
 - Ready-made config templates you can use straight away
-- Supports flexible custom script management plans
+- Supports flexible custom managed plans
 
 ---
 
@@ -71,3 +82,15 @@ Honkai: Star Rail - March7thAssistant
 
 - Under development
 - Can be used together with automatic login scripts
+
+---
+
+## Reading Recommendations
+
+- **New users**: start with the [MAA guide](/en/docs/script-guide/maa) if you play Arknights
+- **Wuthering Waves players**: read the [OK-WW guide](/en/docs/script-guide/okww)
+- **Reverse: 1999 players**: read the [M9A guide](/en/docs/script-guide/m9a)
+- **Honkai: Star Rail players**: read the [HSR guide](/en/docs/script-guide/hsr)
+- **Genshin Impact players**: read the [BetterGI guide](/en/docs/script-guide/bettergi)
+- **Other games**: read [General Scheduling](/en/docs/script-guide/general) and use an existing template
+- **Advanced users**: learn the configuration management model in [General Scheduling](/en/docs/script-guide/general) and customize your scheduling plan

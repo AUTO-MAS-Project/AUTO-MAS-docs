@@ -26,8 +26,9 @@ To provide better service, AUTO-MAS automatically collects the following informa
 
 - Software version
 - Runtime error information
+- Performance tracing information
 
-AUTO-MAS respects and protects user privacy. All reported information is anonymized and does not contain any personally identifiable information. Collected data is stored on official AUTO-MAS servers and is not transmitted to any third-party organization or facility.
+AUTO-MAS respects and protects user privacy. This information is redacted on the client before being sent to Sentry SaaS (US region) for error and performance analysis. User identity, cookies, request headers, request bodies, URL query parameters, local variables, and absolute local paths are not sent. Anonymous telemetry is enabled by default and can be disabled under 「Settings -> Function Settings」; once disabled, neither the frontend nor backend sends telemetry data.
 
 ## Pillar of Shame
 
