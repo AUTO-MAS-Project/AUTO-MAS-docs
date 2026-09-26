@@ -31,7 +31,7 @@ Each user can choose a source for their One Dragon configuration:
 | Configuration mode | Best for | What it means |
 | --- | --- | --- |
 | **Account-specific config** | Most users | Saves an independent One Dragon configuration per user, loaded before a run and read back after. Different users under the same script can differ. |
-| **Native configuration** | Letting BetterGI manage the config | Uses the script's current configuration directly, neither loading nor reading back the account's independent configuration; shared by direct-control users. |
+| **Native configuration** | Letting BetterGI manage the config | Uses the script's current configuration directly, neither loading nor reading back the account's independent configuration; shared by native-configuration users. |
 
 > When **Native configuration** is chosen, the **Task Configuration** and **Custom Config Groups** sections below are greyed out and not editable; BetterGI's native configuration decides.
 
@@ -133,7 +133,7 @@ Yes. The buttons are toggles: turning off only disables a group without deleting
 
 ### Why can't I edit task configuration in "Native configuration" mode?
 
-In direct-control mode, the One Dragon configuration is fully decided by BetterGI's native configuration; AUTO-MAS neither loads nor writes back the account's independent configuration, so the related fields are greyed out. Switch back to "Account-specific config" to have AUTO-MAS manage it.
+In native-configuration mode, the One Dragon configuration is fully decided by BetterGI's native configuration; AUTO-MAS neither loads nor writes back the account's independent configuration, so the related fields are greyed out. Switch back to "Account-specific config" to have AUTO-MAS manage it.
 
 ### Will my groups created in BetterGI be lost if I turn off the custom groups toggle?
 
