@@ -91,6 +91,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                                 { text: "API 开发", link: "API" },
                                 { text: "配置管理", link: "config" },
                                 { text: "配置语义", link: "config-semantics" },
+                                { text: "通知系统", link: "notification" },
                                 { text: "计划表规范", link: "planbook" },
                                 { text: "专项适配", link: "script_task" },
                             ],
