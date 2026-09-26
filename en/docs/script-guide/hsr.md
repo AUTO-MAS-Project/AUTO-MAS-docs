@@ -140,14 +140,14 @@ Two steps: pick the run mode, then switch on the scripts you want to run.
 ::: warning Native configuration ignores the rest of this page
 Task switches, account and password, stages, and the options under "Tasks managed by MAS" have **no effect** in native configuration. They belong to managed mode, and so does the "Progress and reset" area further down.
 
-Native configuration also has no automatic retry (whatever the script does is the result), a fixed two-hour cap per run, and works only through the automatic proxy — you cannot run a single direct-control user on its own from the scheduler.
+Native configuration also has no automatic retry (whatever the script does is the result), a fixed two-hour cap per run, and works only through the automatic proxy — you cannot run a single native-configuration account on its own from the scheduler.
 :::
 
 #### When you actually need "pin as a snapshot"
 
 Exactly one situation: **several game accounts under the same HSR script, and you want each to run a different plan**.
 
-Native configuration runs whichever configuration the script currently has in effect, so multiple direct-control users share it. In that case, open one user and click **Pin the current configuration as a snapshot (optional)**. AUTO-MAS copies the script's configuration as it is right now and stores it under that user, who then runs that copy independently of the others.
+Native configuration runs whichever configuration the script currently has in effect, so multiple native-configuration accounts share it. In that case, open one account and click **Pin the current configuration as a snapshot (optional)**. AUTO-MAS copies the script's configuration as it is right now and stores it under that account, which then runs that copy independently of the others.
 
 ::: warning A snapshot is frozen
 Once pinned, a snapshot **does not follow later changes in the script**. Change a setting in SRA and the pinned user still runs the old copy. Click **Re-pin to the current configuration** to refresh it, or **Switch back to the script's current configuration** to drop it.
