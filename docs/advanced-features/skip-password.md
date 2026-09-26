@@ -236,6 +236,6 @@ netplwiz
 
 [IT豪哥](<https://www.bilibili.com/video/BV1QY411q7cT?vd_source=43fdeaf65ea5c12a419d74d955a2ebfd>)
 
-[通义千问](<https://qianwen.my.cn/share/chat/e6e9752e2ba74705b6d85e3d7d46f629>)
+写的过程中问了通义千问和大肥鲸一些关于部分风险和文档格式的问题
 
 </details>
