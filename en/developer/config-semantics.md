@@ -1,107 +1,101 @@
 # Configuration Semantics
 
-The AUTO-MAS configuration system consists of two layers: **base** and **overlay**. The effective configuration of a running task is the result of stacking these two layers. This document defines the standard terminology for both layers and the exact meaning of each configuration source.
+AUTO-MAS configuration has two layers: the **base** and the **overlay**. During a task, the overlay overrides base fields to produce the effective configuration:
 
-The four historical terms "script level / user level / direct control / quick configuration" are being unified according to this document. New code, copy, and documentation must use the terminology defined here.
 
-## Runtime Configuration Model
+task_config = base ⊕ overlay
 
-```
-Effective configuration during a task = base ⊕ overlay
-                                          (overlay takes precedence)
+The `overlay` has higher precedence than `base`. Without an overlay, the task uses the base directly. The overlay exists only for the task run and does not change the base source. This page is the semantic contract for developers and documentation maintainers.
 
-┌─ overlay layer ── exists during the task · highest precedence · restored after ─┐
-└─────────────────────────────────────────────────────────────────────────────────┘
-┌─ base layer ───── persisted on disk · one of three sources ─────────────────────┐
-│          Shared        │     Independent     │         Native                   │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
+## Core Entities
 
-## base: The Base Configuration
+### Managed
 
-**base** is the main configuration of a running task. It is persisted on disk and lives across tasks. Its source is one of the following three states.
+A **Managed** is the MAS-side entity used to control an external automation script. It owns the script path, launch arguments, and Managed-level configuration, and can contain multiple accounts.
 
-| Term | Former name | Definition | Disk owner |
+### Account
+
+An **Account** is a game-account entry under a Managed. It owns account-level configuration, credentials, and task settings. One Managed can contain multiple accounts.
+
+Managed and Account describe MAS boundaries; they do not redefine the external script's object model. An adapter should preserve upstream concepts instead of renaming them merely to match MAS entities.
+
+## Base Layer
+
+The base is the main task configuration. It persists on disk across tasks and has exactly one of these three sources:
+
+| Source | MAS level | Meaning | Base owner |
 | --- | --- | --- | --- |
-| **Shared** | Script level | base is stored on the entry side; all accounts under that entry share one base | Entry |
-| **Independent** | User level | base is stored in the account directory; owned by a single account | Account |
-| **Native** | Direct control | base is the external script's own configuration; MAS neither maintains nor mirrors it | External script |
+| **Managed level (shared configuration)** | Managed | Multiple accounts under one Managed share one base configuration | Managed |
+| **Account level (independent configuration)** | Account | Each account has its own independent base configuration | Account |
+| **Native** | No MAS level | The base comes directly from the external script; MAS does not maintain a parallel copy | External script |
 
-### Common Boundary of the Three States
+Managed level and Account level are storage levels for base. Native is a third source alongside them, not another MAS level.
 
-The three states only determine the **disk owner** of base. They do not guarantee that the effective runtime configuration is identical: every account may enable its own overlay, so the configuration actually in effect during a task differs per account.
+### Boundaries of the Three Sources
 
-"Shared" therefore only describes the multi-account sharing of the base file. It **does not** mean "change once, effective for everyone" — if other accounts have enabled their own overlays, their runtime configuration will not be fully overwritten by that change.
+The source determines the base owner, not every field that will be effective during a run:
 
-## overlay: The Overlay Layer
+- Managed level means that the base can be shared by multiple accounts. It does not guarantee identical final runtime configurations.
+- Account level isolates the base per account. It does not prevent that account from using an overlay.
+- Native means that MAS uses the external script's existing configuration as base and does not mirror or maintain a parallel model.
 
-**overlay** is a thin configuration layer stacked on top of base during task execution.
+Shared configuration therefore does not mean that changing one file always produces the same runtime result for every account. An account with an enabled overlay still uses its own override fields for that run.
 
-- **Precedence**: higher than base; it overrides the corresponding base fields.
-- **Does not rewrite the source**: although it is bound to the account settings page, it does not modify the configuration source (the three base states).
-- **Restored afterwards**: it overwrites base before the task and correctly restores the original base afterwards; the snapshot mechanism covers success, failure, cancellation, timeout, exception, and crash paths.
-- **Composable**: it can be combined with any base source, forming a 3×2 matrix.
+## Overlay Layer
 
-| base source | Without overlay | With overlay |
+The overlay is the task-time configuration enabled in the user-facing UI as **Override Standard Configuration**. It contains the standard task fields exposed by MAS and temporarily overrides matching base fields when the task starts.
+
+The overlay must follow these rules:
+
+- **Higher precedence**: when a field exists in both layers, the overlay value wins.
+- **No source conversion**: enabling or disabling Override Standard Configuration does not convert Managed level, Account level, or Native into another source.
+- **Per-account scope**: an overlay belongs to the account's task settings and does not spread to other accounts under the same Managed.
+- **Restoration**: save the base before applying the temporary override and restore it afterwards. Success, failure, cancellation, timeout, exceptions, and process crashes must all be covered.
+- **Limited fields**: the overlay only covers standard task fields explicitly exposed by MAS; it does not replace the external script's full configuration.
+
+The layers compose as follows:
+
+| Base source | Override Standard Configuration off | Override Standard Configuration on |
 | --- | --- | --- |
-| Shared | Use the shared base directly | Shared base ＋ account overlay |
-| Independent | Use the independent base directly | Independent base ＋ account overlay |
-| Native | Use the script's native configuration | Native configuration ＋ MAS-managed field overrides |
+| Managed level (shared configuration) | Use the shared base | Shared base + the current account's overlay |
+| Account level (independent configuration) | Use the independent base | Independent base + the current account's overlay |
+| Native | Use the external script's native configuration | Native configuration + MAS standard-field overrides |
 
-::: warning Terminology pending
+“Override” is temporary for the task run and must not be implemented as a permanent write to base. Only a deliberate save in the external script's own configuration UI belongs to the native base.
 
-The following terms are not finalized. Code, copy, and documentation keep their current names for now; **do not add new semantics based on the current names**. They will be replaced once finalized.
+## Resolution Flow
 
-1. **Script entry name** (the entry created by "New Script" in MAS): candidates "Managed" and "Instance".
-2. **Account entry name** (the game account under an entry, formerly "User"): candidate "Account".
-3. **Quick configuration panel name**: candidates "Advanced" and "Priority".
-4. **overlay translation**: candidates "Overlay" and "Priority layer"; whether it should unify with item 3 under "Priority" is undecided.
+Resolve an account's configuration in this order:
 
-:::
+1. Select the base source: Managed level, Account level, or Native.
+2. If Override Standard Configuration is enabled, read the account's overlay fields.
+3. Merge overlay fields into base by field, with overlay taking precedence.
+4. Start the task with the merged configuration.
+5. Restore any temporarily modified base files and clear the run's overlay state when the task ends.
 
-## Terminology Replacement Table
+Every new adapter must identify whether each field belongs to base or overlay and must identify its disk owner. Runtime-only fields must not be persisted into base, and an account overlay must never contaminate another account under the same Managed.
 
-| Current term | Target term | Language usage (current → target) |
-| --- | --- | --- |
-| Script level | Shared | "Use the script-level shared configuration, shared by all users" → "Use the shared base configuration, shared by all accounts under the entry" |
-| User level | Independent | "Configure user-level MaaEnd" → "Configure the independent base configuration" |
-| Direct control | Native | "Script direct control uses the configuration currently saved by SRA" → "Native configuration uses the configuration currently saved by SRA" |
-| Script direct control | (removed entirely) | Once direct control is renamed to native, this phrase is dropped and uniformly expressed as "native configuration" |
-| Quick configuration | Pending (Advanced / Priority) | "Use the high-frequency task fields in the quick configuration panel below to override the current script configuration" → "Use the high-frequency task fields in the 〔pending〕 panel below to override the current script configuration" |
-| Script (MAS entry) | Pending (Managed / Instance) | "New general script" → "New general 〔pending〕" |
-| User (MAS entry) | Pending (Account) | "New user" → "New 〔pending〕" |
-| overlay / base (developer terms) | Pending / Base layer | "The overlay layer directly overrides the base layer configuration" → "The 〔pending〕 layer directly overrides the base layer configuration items" |
+## The zzz-od Model
 
-### Rejected Candidates
-
-| Candidate | Conflict |
-| --- | --- |
-| Instance | The zzz-od upstream concept "instance" means account (an upstream private concept that cannot be changed) |
-| Scheme | MAA's internal configuration scheme |
-| Project | MaaFW's `interface.json` project |
-| Config group | BetterGI's configuration group |
-
-## The Special Case of zzz-od
-
-zzz-od cannot be singularized under the general model: it has a **single entry (single program) with multiple accounts** structure, and the "account entry" and the "upstream instance (= account)" are two distinct concepts — each entry allows only one native-source account, and multiple accounts are configured in that account's instance management.
+zzz-od has a single-Managed, multiple-account structure. Its MAS account entry and upstream “instance” are not the same layer; the upstream instance corresponds to an account and is managed inside the native configuration.
 
 Therefore:
 
-- If "Instance" is used as the script entry name, it conflicts with the zzz-od upstream "instance" (= account).
-- The physical location of the three base states in zzz-od differs from standard adapters (the instance views all live in one script-level configuration).
-- zzz-od terminology must be discussed separately and **does not follow the general conclusions of this document**.
+- zzz-od account views may all be stored in the same Managed-level base configuration.
+- The physical locations of Managed level, Account level, and Native cannot be assumed to match the ordinary adapter layout.
+- An adapter for zzz-od must follow the upstream configuration model while preserving the MAS boundaries between Managed, Account, and overlay.
 
-## Scope of Change
+## Terminology
 
-Once the terminology is finalized, the following must be updated:
+Use these terms consistently:
 
-- Frontend UI copy and i18n (`frontend/src/locales/zh-CN.ts`)
-- Backend schema descriptions and configuration comments (`app/models/schema.py`, `app/models/config.py`)
-- Frontend OpenAPI generated type comments (**never edit by hand**; regenerate instead)
-- The `Info.Mode` stored values (`"脚本"` / `"用户"` / `"直控"`): renaming them requires a compatibility migration (there is precedent in the "简洁/详细/自定义" → "脚本/用户/直控" migration)
-- Hard-coded comparisons in adapters (such as `== "直控"`)
-- This document and the repository glossary
+- `base`: Base layer; describe it to users as base configuration.
+- `overlay`: Overlay layer; expose it to users as “Override Standard Configuration”.
+- `Managed` and `Account`.
+- Base sources: Managed level (shared configuration), Account level (independent configuration), and Native.
+
+The words “script” and “user” remain valid in ordinary contexts, such as “external script configuration” or “credentials entered by the user”. They must not be used as names for the MAS entities or base sources above.
 
 ## Related Discussion
 
-- [AUTO-MAS#879](https://github.com/AUTO-MAS-Project/AUTO-MAS/issues/879): terminology unification proposal and vote
+- [AUTO-MAS#879](https://github.com/AUTO-MAS-Project/AUTO-MAS/issues/879): configuration semantics and terminology

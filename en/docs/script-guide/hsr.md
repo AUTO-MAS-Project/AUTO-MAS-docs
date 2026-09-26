@@ -36,7 +36,7 @@ That is the point of the HSR script type: **you do not have to choose one**. Run
 Get these out of the way first. It removes about half the problems people run into later.
 
 1. **Install the scripts you want to use.** At least one of M7A and SRA. Install both if you want to mix them.
-2. **Open each script manually once.** A script only writes its own configuration file on first launch (`config.yaml` for March7th, a profile under `%APPDATA%\SRA\configs` for SRA). AUTO-MAS reads it to fill in the options on the right side of "Tasks managed by MAS", and script-direct control cannot even pass the pre-run check without it. If SRA has not written one after you open it, just save any setting inside SRA.
+2. **Open each script manually once.** A script only writes its own configuration file on first launch (`config.yaml` for March7th, a profile under `%APPDATA%\SRA\configs` for SRA). AUTO-MAS reads it to fill in the options on the right side of "Tasks managed by MAS", and Native configuration cannot even pass the pre-run check without it. If SRA has not written one after you open it, just save any setting inside SRA.
 3. **Install the Honkai: Star Rail PC client**, the CN official client.
 4. **Add everything to your antivirus allowlist**: AUTO-MAS, M7A, SRA, and the game directory. Otherwise the scripts get blocked and tasks fail for no visible reason.
 5. **Keep paths free of non-English characters and spaces**, for example `D:\M7A` and `D:\SRA`. Such paths have a long history of breaking image recognition and path parsing.
@@ -65,7 +65,7 @@ Go to **Script Management** → **New Script** → pick **HSR Script** → confi
 | **March7th path** | The **folder** M7A lives in |
 | **SRA path** | The **folder** SRA lives in |
 | **SRA config profile** | SRA can keep several configuration profiles; this picks which one to use. Defaults to "auto", see below |
-| **MAS manages the game** | Lets AUTO-MAS launch the game, restart it when switching scripts, and watch the game process. Defaults to "Yes"; a game that is already running is detected and the launch is skipped, so you do not need to turn this off for that. **Only pick "No" for script-direct control with the cloud client**; turning it off disables all three behaviours at once |
+| **MAS manages the game** | Lets AUTO-MAS launch the game, restart it when switching scripts, and watch the game process. Defaults to "Yes"; a game that is already running is detected and the launch is skipped, so you do not need to turn this off for that. **Only pick "No" for Native configuration with the cloud client**; turning it off disables all three behaviours at once |
 | **Game path** | The **folder** Honkai: Star Rail lives in. Required when "MAS manages the game" is "Yes" |
 | **Maximum game launch wait** | Seconds to wait after launching before the client is considered ready. Default 60, raise it on slower machines |
 | **Run in 1920×1080 windowed mode** | Temporarily rewrites the registry before a task so the game runs at 1920×1080 windowed, and restores it afterwards. The scripts' image recognition is tuned for this resolution, so turn it on if your aspect ratio differs |
@@ -76,7 +76,7 @@ Fill in only M7A or only SRA and leave the other empty. The empty one will not a
 :::
 
 ::: tip About SRA configuration profiles
-SRA stores its settings as one or more profiles under `%APPDATA%\SRA\configs`. Which one you pick decides three things: what the options under "Tasks managed by MAS" show, which profile script-direct control runs, and which one gets copied when you pin a snapshot.
+SRA stores its settings as one or more profiles under `%APPDATA%\SRA\configs`. Which one you pick decides three things: what the options under "Tasks managed by MAS" show, which profile Native configuration runs, and which one gets copied when you pin a snapshot.
 
 Leaving it on "auto" prefers `Default` and otherwise takes the first profile in filename order — which is exactly what AUTO-MAS always did before. If the profile you picked is later deleted or renamed, AUTO-MAS falls back to auto and says so on both the script page and the user page, rather than switching silently.
 :::
@@ -122,32 +122,32 @@ They are stored locally and encrypted automatically. Nothing is uploaded.
 Also, do not share your `data/` directory or script configuration JSON with anyone. They contain your encrypted credentials.
 :::
 
-## Run Mode: MAS Managed or Script-Direct Control
+## Run Mode: MAS Managed or Native Configuration
 
 Every user picks a **run mode**, which decides who is in charge:
 
 | Mode | Who decides what runs | Who it suits |
 |---|---|---|
 | **MAS managed** (default) | AUTO-MAS. Task switches, engines, stages and every option are set on this page | People who want to manage every account from one place |
-| **Script-direct control** | M7A / SRA themselves. AUTO-MAS only launches them on schedule | People already comfortable in the scripts who just want a scheduler |
+| **Native configuration** | M7A / SRA themselves. AUTO-MAS only launches them on schedule | People already comfortable in the scripts who just want a scheduler |
 
-### Script-direct control
+### Native configuration
 
-Direct control needs **no configuration in AUTO-MAS at all**. Whatever you set up in M7A / SRA is exactly what runs, and changes take effect immediately — there is nothing to sync back here.
+Native configuration needs **no configuration in AUTO-MAS at all**. Whatever you set up in M7A / SRA is exactly what runs, and changes take effect immediately — there is nothing to sync back here.
 
 Two steps: pick the run mode, then switch on the scripts you want to run.
 
-::: warning Direct control ignores the rest of this page
-Task switches, account and password, stages, and the options under "Tasks managed by MAS" have **no effect** in direct control. They belong to managed mode, and so does the "Progress and reset" area further down.
+::: warning Native configuration ignores the rest of this page
+Task switches, account and password, stages, and the options under "Tasks managed by MAS" have **no effect** in native configuration. They belong to managed mode, and so does the "Progress and reset" area further down.
 
-Direct control also has no automatic retry (whatever the script does is the result), a fixed two-hour cap per run, and works only through the automatic proxy — you cannot run a single direct-control user on its own from the scheduler.
+Native configuration also has no automatic retry (whatever the script does is the result), a fixed two-hour cap per run, and works only through the automatic proxy — you cannot run a single direct-control user on its own from the scheduler.
 :::
 
 #### When you actually need "pin as a snapshot"
 
 Exactly one situation: **several game accounts under the same HSR script, and you want each to run a different plan**.
 
-Direct control runs whichever configuration the script currently has in effect, so multiple direct-control users share it. In that case, open one user and click **Pin the current configuration as a snapshot (optional)**. AUTO-MAS copies the script's configuration as it is right now and stores it under that user, who then runs that copy independently of the others.
+Native configuration runs whichever configuration the script currently has in effect, so multiple direct-control users share it. In that case, open one user and click **Pin the current configuration as a snapshot (optional)**. AUTO-MAS copies the script's configuration as it is right now and stores it under that user, who then runs that copy independently of the others.
 
 ::: warning A snapshot is frozen
 Once pinned, a snapshot **does not follow later changes in the script**. Change a setting in SRA and the pinned user still runs the old copy. Click **Re-pin to the current configuration** to refresh it, or **Switch back to the script's current configuration** to drop it.
@@ -209,7 +209,7 @@ In managed mode, AUTO-MAS forces the script's own **notifications** and **after-
 
 The reason is that those actions close the game, or the whole computer. March7th closes the game on the way out whenever `after_finish` is anything but "None", which forces the rest of that phase to stop and go to a retry; set to "Shutdown" it really does shut the machine down 60 seconds later. Notifications are sent by AUTO-MAS itself instead.
 
-This only affects the run AUTO-MAS performs in managed mode — your own settings are restored afterwards. **Direct control leaves both of these alone**: whatever you set is what runs. The one exception is SRA's Windows toast notifications, which are turned off for the whole run whenever an SRA path is configured, and restored when it ends.
+This only affects the run AUTO-MAS performs in managed mode — your own settings are restored afterwards. **Native configuration leaves both of these alone**: whatever you set is what runs. The one exception is SRA's Windows toast notifications, which are turned off for the whole run whenever an SRA path is configured, and restored when it ends.
 :::
 
 ### Reset to the source configuration
