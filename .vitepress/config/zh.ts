@@ -47,6 +47,8 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
                             { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
+                            { text: "中国移动新消息（5G 消息）", link: "/docs/advanced-features/cmcc-newmsg" },
+                            { text: "让电脑定时上班", link: "/docs/advanced-features/skip-password" },
                         ],
                     },
                     { text: "常见问题", link: "/docs/FAQ" },
@@ -90,6 +92,8 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             items: [
                                 { text: "API 开发", link: "API" },
                                 { text: "配置管理", link: "config" },
+                                { text: "配置语义", link: "config-semantics" },
+                                { text: "通知系统", link: "notification" },
                                 { text: "计划表规范", link: "planbook" },
                                 { text: "专项适配", link: "script_task" },
                                 { text: "风味专项开发", link: "maafw-flavor" },
