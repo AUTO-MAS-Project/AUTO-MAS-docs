@@ -8,6 +8,7 @@ export const enThemeConfig: DefaultTheme.Config = {
             text: "Development",
             items: [
                 { text: "Core App", link: "/en/developer/getting-start" },
+                { text: "Flavor Development", link: "/en/developer/maafw-flavor" },
                 { text: "Plugin Development", link: "/en/plugin/start/start" },
             ],
             activeMatch: "^/en/(developer|plugin)/",
@@ -91,6 +92,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                                 { text: "Configuration Management", link: "config" },
                                 { text: "Plan Table Specification", link: "planbook" },
                                 { text: "Script Adaptation", link: "script_task" },
+                                { text: "Flavor Development", link: "maafw-flavor" },
                             ],
                         },
                     ],

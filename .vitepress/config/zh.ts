@@ -8,6 +8,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
             text: "开发",
             items: [
                 { text: "本体开发", link: "/developer/getting-start" },
+                { text: "风味专项开发", link: "/developer/maafw-flavor" },
                 { text: "插件开发", link: "/plugin/start/start" },
             ],
             activeMatch: "^/developer/",
@@ -91,6 +92,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                                 { text: "配置管理", link: "config" },
                                 { text: "计划表规范", link: "planbook" },
                                 { text: "专项适配", link: "script_task" },
+                                { text: "风味专项开发", link: "maafw-flavor" },
                             ],
                         },
                     ],
