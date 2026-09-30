@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUTO-MAS 接入三月七小助手（M7A）图文教程</title>
+<style>
+:root{
+  --accent:#2f6fed; --accent-weak:#eaf1fe; --ink:#1c2333; --muted:#5b6472;
+  --line:#e3e7ee; --bg:#f6f8fb; --card:#ffffff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei UI","Microsoft YaHei","PingFang SC","Noto Sans SC","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.85}
+.page{max-width:1020px;margin:0 auto;padding:28px 34px 80px}
+header.hero{background:linear-gradient(135deg,#1f3f8f 0%,#2f6fed 60%,#4f8bff 100%);color:#fff;
+  border-radius:18px;padding:34px 38px;margin-bottom:30px;box-shadow:0 10px 30px rgba(31,63,143,.25)}
+header.hero h1{margin:0 0 10px;font-size:30px;line-height:1.35}
+.backline{margin:0 0 26px;font-size:14px}
+.backline a{color:var(--accent);text-decoration:none}
+h2{font-size:24px;margin:46px 0 16px;padding:10px 16px;border-left:6px solid var(--accent);
+  background:linear-gradient(90deg,var(--accent-weak),transparent 70%);border-radius:0 10px 10px 0}
+h3{font-size:19px;margin:32px 0 12px;color:#173a75}
+h4{font-size:16.5px;margin:24px 0 10px}
+p{margin:10px 0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+strong{color:#0f2c66}
+table{border-collapse:collapse;width:100%;margin:14px 0 20px;background:var(--card);
+  border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(28,35,51,.06);font-size:14.8px}
+th{background:#22355e;color:#fff;text-align:left;padding:9px 14px;font-weight:600;white-space:nowrap}
+td{padding:9px 14px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#f8fafd}
+img{max-width:100%;height:auto;display:block;margin:14px auto 6px;border:1px solid var(--line);
+  border-radius:12px;box-shadow:0 6px 22px rgba(28,35,51,.12)}
+blockquote{margin:16px 0;padding:12px 18px;background:#fffdf3;border:1px solid #f1e4b8;
+  border-left:5px solid #eab308;border-radius:0 10px 10px 0;color:#57430a;font-size:15px}
+blockquote p{margin:4px 0}
+pre{background:#0f1729;color:#dbe7ff;padding:16px 18px;border-radius:12px;overflow:auto;
+  font-size:13.5px;line-height:1.7}
+code{background:#eef2f9;color:#c7392b;padding:1px 6px;border-radius:6px;font-size:.92em;
+  font-family:Consolas,"Courier New",monospace}
+pre code{background:none;color:inherit;padding:0}
+hr{border:none;border-top:1px dashed var(--line);margin:36px 0}
+footer{margin-top:50px;color:var(--muted);font-size:13.5px;text-align:center}
+@media print{
+  body{background:#fff;font-size:12.5px}
+  .page{max-width:none;padding:0}
+  header.hero{border-radius:0;box-shadow:none}
+  img{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  p:has(> img){page-break-inside:avoid;break-inside:avoid}
+  table{font-size:13.2px}
+  tr,td,th{page-break-inside:avoid;break-inside:avoid}
+  pre,blockquote{page-break-inside:avoid}
+  h2,h3,h4{page-break-after:avoid}
+  .keep-last{page-break-inside:avoid;break-inside:avoid}
+  .keep-last table{page-break-inside:avoid;break-inside:avoid}
+  footer{page-break-inside:avoid;margin-top:18px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="hero"><h1>AUTO-MAS 接入三月七小助手（M7A）图文教程</h1></header>
+<div class="backline"><a href="/docs/video-tutorial/">← 返回 视频图文教程</a></div>
+<h1 id="auto-mas-march7thassistant">AUTO-MAS 接入「三月七小助手（March7thAssistant）」超详细图文教程</h1>
+<blockquote>
+<p>本教程整理自一段约 20 分钟的实操演示录屏（<code>2026-09-05 15-47-00.mp4</code>，1920×1080），<strong>所有截图均截取自该视频</strong>，界面文字与提示均按视频原样记录。</p>
+<ul>
+<li><strong>演示软件版本</strong>：AUTO-MAS <code>v5.4.0</code>，March7th Assistant <code>v2026.8.28</code></li>
+<li><strong>演示游戏</strong>：崩坏：星穹铁道（官服），游戏目录 <code>D:\Star Rail Game</code>（含 <code>StarRail.exe</code>）</li>
+<li><strong>演示脚本</strong>：March7thAssistant（三月七小助手，下文简称 <strong>M7A</strong>），安装目录 <code>C:\Users\Administrator\Desktop\March7thAssistant_full</code></li>
+<li><strong>演示流程</strong>：新建 HSR 脚本 → 配置 M7A / 游戏路径 → 以「脚本直控」模式添加用户并一键导入 M7A 配置 → 调度中心自动代理执行 → 多用户 / 重命名 → 历史记录与日志排查</li>
+</ul>
+<p>ℹ️ <strong>版本提示</strong>：AUTO-MAS <code>v5.5.0</code> 起界面有较大调整（环境配置向导改为 4 步、MAA 任务配置内联到脚本配置、MaaEnd 改由 MFW 项目引导接入等），与本文不符之处请以最新版界面为准。</p>
+</blockquote>
+<hr />
+<h2 id="_1">目录</h2>
+<ul>
+<li><a href="#0-名词速查">0. 名词速查</a></li>
+<li><a href="#1-前置准备">1. 前置准备</a></li>
+<li><a href="#2-第一步新建-hsr-脚本">2. 第一步：新建 HSR 脚本</a></li>
+<li><a href="#3-第二步hsr-脚本配置页详解">3. 第二步：HSR 脚本配置页详解</a></li>
+<li><a href="#4-第三步添加用户脚本直控并导入-m7a-配置">4. 第三步：添加用户（脚本直控）并导入 M7A 配置</a></li>
+<li><a href="#5-第四步可选核对-m7a-原生设置">5. 第四步（可选）：核对 M7A 原生设置</a></li>
+<li><a href="#6-第五步调度中心执行自动代理">6. 第五步：调度中心执行自动代理</a></li>
+<li><a href="#7-第六步多用户重命名与重新导入配置">7. 第六步：多用户、重命名与重新导入配置</a></li>
+<li><a href="#8-第七步历史记录与日志排查">8. 第七步：历史记录与日志排查</a></li>
+<li><a href="#9-要点回顾与常见问题-faq">9. 要点回顾与常见问题 FAQ</a></li>
+<li><a href="#10-视频时间轴对照表">10. 视频时间轴对照表</a></li>
+</ul>
+<hr />
+<h2 id="0">0. 名词速查</h2>
+<table>
+<thead>
+<tr>
+<th>名词</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AUTO-MAS（MAS）</strong></td>
+<td>脚本管理 / 调度平台，本教程的操作主体，负责管理脚本、用户（游戏账号）、调度执行、日志与历史记录</td>
+</tr>
+<tr>
+<td><strong>M7A / 三月七小助手</strong></td>
+<td>March7thAssistant，星穹铁道自动化脚本本体；真正「打游戏」的程序</td>
+</tr>
+<tr>
+<td><strong>SRA</strong></td>
+<td>另一款星铁道自动化工具（<code>SRA-cli.exe</code>），HSR 脚本类型同样支持；视频中没有使用，路径留空</td>
+</tr>
+<tr>
+<td><strong>HSR 脚本</strong></td>
+<td>AUTO-MAS 中「三月七 / SRA 双脚本适配」的专项脚本类型</td>
+</tr>
+<tr>
+<td><strong>用户</strong></td>
+<td>挂在脚本下的一个游戏账号（可多个），每个用户有自己的运行模式与配置</td>
+</tr>
+<tr>
+<td><strong>MAS 管控</strong></td>
+<td>运行模式之一：账号、体力副本、任务开关等全部交给 AUTO-MAS 管理</td>
+</tr>
+<tr>
+<td><strong>脚本直控</strong></td>
+<td>运行模式之一：脚本行为由 M7A 自己的 <code>config.yaml</code> 决定，AUTO-MAS 只负责启动游戏、跟踪/停止脚本进程和最终清理</td>
+</tr>
+<tr>
+<td><strong>自动代理</strong></td>
+<td>调度中心的执行模式，自动依次执行所选脚本下的所有启用用户</td>
+</tr>
+<tr>
+<td><strong>用户快照</strong></td>
+<td>从 M7A 的 <code>config.yaml</code> 一键导入的用户配置副本（含导入时间戳）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1">1. 前置准备</h2>
+<p>开始之前，请确认以下两点（视频中演示者机器上的对应目录结构如下）：</p>
+<ol>
+<li><strong>三月七小助手（M7A）已解压/安装完整</strong>，目录中至少包含：</li>
+</ol>
+<p><img alt="M7A 安装目录内容" src="/docs/img/video-tutorial/10-M7A安装目录内容.jpg" /></p>
+<p>关键文件：<code>March7th Assistant.exe</code>（主程序）、<code>March7th Launcher.exe</code>（启动器）、<code>March7th Updater.exe</code>（更新器）、<code>config.yaml</code>（配置文件）、<code>warp.json</code>、<code>README.md</code>，以及 <code>3rdparty / assets / config / libraries / logs / settings / temp</code> 等子目录。
+   本视频使用的目录：<code>C:\Users\Administrator\Desktop\March7thAssistant_full</code>。</p>
+<ol start="2">
+<li><strong>游戏本体已安装</strong>，并且知道安装目录位置（需要目录中含 <code>StarRail.exe</code>）。
+   本视频使用的目录：<code>D:\Star Rail Game</code>。</li>
+</ol>
+<blockquote>
+<p>💡 建议先单独运行一次 M7A，确认它能正常完成日常后，再接入 AUTO-MAS——这与视频中的提示一致：<em>“请先在 SRA / 三月七助手中完成原生配置，再一键导入”</em>。</p>
+</blockquote>
+<hr />
+<h2 id="2-hsr">2. 第一步：新建 HSR 脚本</h2>
+<h3 id="21">2.1 打开「脚本管理」</h3>
+<p>启动 AUTO-MAS，点击左侧导航栏的 <strong>脚本管理</strong>。页面中每个卡片是一个脚本（含类型徽标 MAA / M9A / General / HSR 等），卡片右上角提供 <strong>编辑脚本</strong>、<strong>添加用户</strong>、<strong>更多</strong> 等按钮；页面右上角有 <strong>一键收起 / 一键展开 / ＋新建脚本</strong>。</p>
+<p><img alt="脚本管理页" src="/docs/img/video-tutorial/01-脚本管理页.jpg" /></p>
+<h3 id="22">2.2 选择脚本类型</h3>
+<p>点击右上角 <strong>＋ 新建脚本</strong>，弹出「新建脚本」对话框，分为两级：</p>
+<ul>
+<li><strong>通用脚本</strong>：适用于具备日志文件的自动化脚本（通过 <code>interface.json</code> 对接，视频里既有的 <code>March7thAssistant (General)</code> 就是这种接法）；</li>
+<li><strong>专项适配</strong>：MAA 脚本（明日方舟）、SRC 脚本（星穹铁道多账号代理）、MaaEnd 脚本（MaaFramework）、M9A 脚本（重返未来：1999）、ok-ww 脚本、ok-nte 脚本（异环）、<strong>HSR 脚本（三月七 / SRA 双脚本适配）</strong>。</li>
+</ul>
+<p>本教程演示的是 <strong>HSR 脚本</strong>：点选 <strong>HSR 脚本（三月七 / SRA 双脚本适配）</strong> 卡片（选中后卡片高亮、单选点亮），然后点击右下角 <strong>创建并配置</strong>。</p>
+<p><img alt="新建脚本-选择脚本类型" src="/docs/img/video-tutorial/02-新建脚本-选择脚本类型.jpg" /></p>
+<blockquote>
+<p>视频中演示者先点了 MAA 脚本，随后改选 HSR 脚本再点击「创建并配置」——以实际需要的类型为准即可。</p>
+</blockquote>
+<h3 id="23">2.3 进入配置页</h3>
+<p>创建后自动跳转到 <strong>编辑 HSR 脚本</strong> 页面（面包屑：<code>脚本管理 / 编辑 HSR 脚本</code>，右上角有 <strong>← 返回</strong>）。页面标题为 <strong>HSR 脚本配置</strong>，右侧带紫色徽标 <code>HSR (三月七 / SRA)</code>；顶部有一条黄色警告：</p>
+<blockquote>
+<p>⚠ <strong>请至少配置一个已加载的 HSR 引擎路径</strong></p>
+</blockquote>
+<p>意思就是：下面的「三月七路径 / SRA 路径 / 游戏路径」至少要填一个（通常三月七 + 游戏）。</p>
+<p><img alt="HSR 脚本配置页-顶部" src="/docs/img/video-tutorial/03-HSR脚本配置页-顶部.jpg" /></p>
+<hr />
+<h2 id="3-hsr">3. 第二步：HSR 脚本配置页详解</h2>
+<h3 id="31">3.1 基本信息</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>视频取值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>脚本名称</td>
+<td><code>新 HSR 脚本</code>（默认名，稍后重命名）</td>
+<td>显示在脚本管理列表与调度中心选择器中，可随时修改</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32">3.2 运行模式提示（重要）</h3>
+<p>页面中有一条蓝色提示，决定了「脚本页」和「用户页」的分工：</p>
+<blockquote>
+<p>ℹ <strong>运行模式与任务配置已移至用户配置</strong>
+请在用户页选择"MAS 管控"或"脚本直控"。是否由 MAS 启动、关闭、重启和监测游戏由下方开关决定；脚本页继续维护安装路径与公共执行参数。</p>
+</blockquote>
+<p>也就是说：<strong>脚本页 = 装在哪儿、怎么启动游戏</strong>；<strong>用户页 = 账号怎么跑、跑什么任务</strong>。</p>
+<h3 id="33">3.3 脚本与游戏配置</h3>
+<p>小节说明原文：<em>填写对应脚本路径即启用该引擎；清空路径后，该引擎不再校验或参与调度。</em></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>视频取值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAS 管理游戏</td>
+<td><code>是</code></td>
+<td>下拉框（是 / 否）。选「是」= 由 MAS 启动、关闭、重启和监测游戏；选「否」= 不由 MAS 管理游戏进程。视频开头先试了「否」，最终配置回「是」（见 <a href="#10-视频时间轴对照表">10. 时间轴</a>）</td>
+</tr>
+<tr>
+<td><strong>三月七路径</strong></td>
+<td><code>C:\Users\Administrator\Desktop\March7thAssistant_full</code></td>
+<td>点右侧 <strong>选择文件夹</strong>，选择 <strong>含 <code>March7th Assistant.exe</code></strong> 的 M7A 安装目录</td>
+</tr>
+<tr>
+<td>SRA 路径</td>
+<td>（留空）</td>
+<td>若使用 SRA 则选择含 <code>SRA-cli.exe</code> 的目录；不用 SRA 可不填</td>
+</tr>
+<tr>
+<td><strong>游戏路径</strong></td>
+<td><code>D:\Star Rail Game</code></td>
+<td>选择 <strong>含 <code>StarRail.exe</code></strong> 的星穹铁道安装目录</td>
+</tr>
+<tr>
+<td>游戏最大启动等待时间</td>
+<td><code>60</code> 秒</td>
+<td>MAS 启动游戏后最多等待该时间，每 5 秒检查一次进程（见运行日志）</td>
+</tr>
+<tr>
+<td>游戏启动参数</td>
+<td>（留空）</td>
+<td>传给游戏本体的启动参数</td>
+</tr>
+<tr>
+<td>运行时设为 1920×1080 窗口模式</td>
+<td>开（蓝色）</td>
+<td>附注：<em>结束后恢复原注册表值</em>。MAS 会在启动游戏前把分辨率/窗口模式写为 1920×1080，任务结束后还原</td>
+</tr>
+<tr>
+<td>兑换码仅在变化时执行</td>
+<td>开（蓝色）</td>
+<td>附注：<em>新用户先执行一次</em>。兑换码内容没变化时不重复执行</td>
+</tr>
+</tbody>
+</table>
+<p><strong>操作演示 —— 选择三月七路径：</strong></p>
+<p>点击「三月七路径」右侧的 <strong>选择文件夹</strong>，在系统文件夹选择对话框中定位到 M7A 安装目录（视频里先在 D 盘浏览了一圈，最后从 <code>C:\Users\Administrator → 桌面</code> 进入 <code>March7thAssistant_full</code>），点击 <strong>选择文件夹</strong> 确认：</p>
+<p><img alt="选择三月七路径-文件对话框" src="/docs/img/video-tutorial/04-选择三月七路径-文件对话框.jpg" /></p>
+<p>确认后输入框回填完整路径，页面顶部弹出绿色提示 <strong>✅ 路径已选择</strong>：</p>
+<p><img alt="三月七路径已选择" src="/docs/img/video-tutorial/05-三月七路径已选择.jpg" /></p>
+<p><strong>操作演示 —— 选择游戏路径：</strong></p>
+<p>同样点击「游戏路径」右侧 <strong>选择文件夹</strong>，定位到游戏安装目录 <code>D:\Star Rail Game</code>（对话框地址栏：<code>此电脑 &gt; 本地磁盘 (D:) &gt; Star Rail Game</code>），点击 <strong>选择文件夹</strong>：</p>
+<p><img alt="选择游戏路径-文件对话框" src="/docs/img/video-tutorial/06-选择游戏路径-文件对话框.jpg" /></p>
+<h3 id="34">3.4 执行限制</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>视频取值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>失败任务最大尝试次数</td>
+<td><code>3</code></td>
+<td>任务失败后的重试上限</td>
+</tr>
+<tr>
+<td>日常任务超时限制（分钟）</td>
+<td><code>20</code></td>
+<td>单个用户日常任务的最长执行时间</td>
+</tr>
+<tr>
+<td>周常任务超时限制（分钟）</td>
+<td><code>60</code></td>
+<td>单个用户周常任务的最长执行时间</td>
+</tr>
+<tr>
+<td>启用低性能兼容模式</td>
+<td>关</td>
+<td>附注原文：<em>仅对三月七差分宇宙生效，映射到 <code>weekly_divergent_stable_mode</code></em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="35">3.5 配置完成的样子</h3>
+<p>全部填好后页面如下（此时 MAS 管理游戏已改回 <strong>是</strong>，两个路径均已填，1920×1080 窗口模式已开启）：</p>
+<p><img alt="HSR 脚本配置完成" src="/docs/img/video-tutorial/07-HSR脚本配置完成.jpg" /></p>
+<p>确认无误后，点击右上角 <strong>← 返回</strong> 回到脚本管理（配置自动保存）。</p>
+<blockquote>
+<p>📌 顺带一提：视频里还短暂打开过既有的 <code>March7thAssistant (General)</code> 通用脚本配置页做对比——那是 M7A 的另一种接法（通用脚本 + <code>interface.json</code>）。本教程采用 <strong>HSR 专项适配</strong>，无需手工填 <code>interface.json</code> 等字段。</p>
+</blockquote>
+<hr />
+<h2 id="4-m7a">4. 第三步：添加用户（脚本直控）并导入 M7A 配置</h2>
+<p>回到 <strong>脚本管理</strong>，在 <strong>新 HSR 脚本</strong> 卡片上点击 <strong>添加用户</strong>，进入 <strong>编辑 HSR 用户</strong> 页（面包屑：<code>脚本管理 / 新 HSR 脚本 / 编辑 HSR 用户</code>）。</p>
+<h3 id="41">4.1 基本信息</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>视频取值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户名</td>
+<td><code>新用户</code>（默认，后改名）</td>
+<td>一个用户 ≈ 一个游戏账号</td>
+</tr>
+<tr>
+<td>启用</td>
+<td>开</td>
+<td>关闭后该用户不参与调度</td>
+</tr>
+<tr>
+<td>服务器</td>
+<td><code>官服</code></td>
+<td>下拉选择</td>
+</tr>
+<tr>
+<td>剩余天数</td>
+<td><code>-1</code></td>
+<td>卡片上显示「剩余天数：无期限」的来源；<code>-1</code> 表示不限</td>
+</tr>
+<tr>
+<td>备注</td>
+<td><code>无</code></td>
+<td>自由填写</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42">4.2 运行模式：脚本直控（本视频选择）</h3>
+<p><strong>运行模式</strong> 下拉框有两个选项，本视频选择 <strong>脚本直控</strong>。选择后页面出现三条提示：</p>
+<blockquote>
+<p>⚠ 脚本直控不会读取该用户的账号、体力副本和 MAS 任务开关。</p>
+<p>ℹ 请先在 SRA / 三月七助手中完成原生配置，再一键导入；MAS 只负责启动游戏、跟踪/停止脚本进程和最终清理。</p>
+<p>🔒 <strong>MAS 管控配置已停用</strong> —— 任务开关、账号、体力副本和动态选项在脚本直控模式下都不会生效。</p>
+</blockquote>
+<p><img alt="添加用户-脚本直控" src="/docs/img/video-tutorial/08-添加用户-脚本直控.jpg" /></p>
+<h3 id="43-m7a">4.3 一键导入 M7A 配置（用户快照）</h3>
+<p>「脚本直控」小节中的 <strong>三月七助手 CLI</strong> 卡片：</p>
+<ul>
+<li>右上角开关：<strong>执行 / 跳过</strong> —— 控制运行时是否执行这份导入的 <code>config.yaml</code> 快照；</li>
+<li>点击 <strong>一键从源配置导入</strong> 按钮，AUTO-MAS 会读取三月七路径下的 <code>config.yaml</code>，生成用户快照。</li>
+</ul>
+<p>导入成功后显示：</p>
+<blockquote>
+<p>✅ <strong>已导入用户快照</strong>
+<code>C:\Users\Administrator\Desktop\March7thAssistant_full\config.yaml · 2026-09-05T07:46:59.8614...</code></p>
+</blockquote>
+<p><img alt="用户快照导入成功" src="/docs/img/video-tutorial/09-用户快照导入成功.jpg" /></p>
+<p>保存后回到脚本管理，卡片下方便挂上了这个用户（含服务器、日常代理次数、剩余天数、历战余响 / 周常完成状态等标签）。</p>
+<hr />
+<h2 id="5-m7a">5. 第四步（可选）：核对 M7A 原生设置</h2>
+<p>因为「脚本直控」模式下真正干活的是 M7A 自己，所以值得打开 M7A 检查一遍原生配置。视频里从资源管理器双击 <strong>March7th Assistant.exe</strong>（也可以用 <code>March7th Launcher.exe</code> 启动器）打开主程序。</p>
+<h3 id="51-m7a">5.1 M7A 主界面与工具箱</h3>
+<p>主窗口左侧导航：<strong>主页 / 帮助 / 抽卡记录 / 工具箱 / 清理编排 / 启动游戏 / 日志 / 赞赏 / 设置</strong>。
+「工具箱」页提供：自动对话、游戏截图（捕获）、解锁帧率、兑换码（批量使用）、触屏模式、界面可切换性测试 等小工具：</p>
+<p><img alt="M7A 主界面-工具箱" src="/docs/img/video-tutorial/11-M7A主界面-工具箱.jpg" /></p>
+<h3 id="52">5.2 设置页一览</h3>
+<p>「设置」页的标签页分两组：</p>
+<ul>
+<li><strong>功能组</strong>：<code>体力</code> <code>日常</code> <code>货币战争</code> <code>差分宇宙</code> <code>锄大地</code> <code>逐光捡金</code></li>
+<li><strong>程序组</strong>：<code>程序</code> <code>云游戏</code> <code>推送</code> <code>杂项</code> <code>账号</code> <code>关于</code></li>
+</ul>
+<p><strong>「体力」页</strong>示例（清体力相关开关，视频截取）：</p>
+<p><img alt="M7A 设置-体力页" src="/docs/img/video-tutorial/12-M7A设置-体力页.jpg" /></p>
+<p>可见项：花藏繁生（副本类型下拉 <code>拟造花萼（金）</code>）、异器盈窥（开）、位面分裂（开）、活动热点通知（关）、启用奖励领取（开）、启用资产管理（关）等。</p>
+<p><strong>「程序」页</strong>（与 MAS 对接最相关的一页）：</p>
+<p><img alt="M7A 设置-程序页" src="/docs/img/video-tutorial/13-M7A设置-程序页.jpg" /></p>
+<ul>
+<li>游戏路径：<code>D:\Star Rail Game\StarRail.exe</code>（与 MAS 脚本页填的游戏目录一致）</li>
+<li>通过启动器更新游戏：关</li>
+<li>启动游戏超时时间（分）：<code>10</code></li>
+<li>成功后暂停程序：关；失败后直接退出：关</li>
+<li><strong>任务完成后：<code>退出</code></strong>（下拉，含“退出游戏”等选项——脚本跑完自动退出游戏）</li>
+</ul>
+<p><strong>「货币战争」页</strong>（视频演示了积分奖励与策略配置）：</p>
+<p><img alt="M7A 设置-货币战争页" src="/docs/img/video-tutorial/14-M7A设置-货币战争页.jpg" /></p>
+<ul>
+<li>启用「货币战争」积分奖励：开（附上次领取时间与「重置时间」按钮）</li>
+<li>快捷配置：提升首升等级 / 提升职级等级</li>
+<li>类别：<code>超频搏弈</code>；自动执行位面饰品快速提取：开；职级难度：<code>最低职级</code></li>
+<li>货币战争策略：<code>阿格莱雅</code>（下拉）</li>
+<li>「开拓者·记忆」名称：可修改</li>
+</ul>
+<h3 id="53">5.3 改完设置后要做什么？</h3>
+<p><strong>回到 AUTO-MAS 的用户编辑页，再点一次「一键从源配置导入」</strong>，把新的 <code>config.yaml</code> 同步成用户快照（详见 <a href="#74-修改-m7a-原生配置后重新一键导入">7.4</a>）。视频在修改货币战争配置后正是这么做的。</p>
+<hr />
+<h2 id="6">6. 第五步：调度中心执行自动代理</h2>
+<h3 id="61">6.1 调度中心布局</h3>
+<p>点击左侧导航 <strong>调度中心</strong>。页面自上而下：</p>
+<ul>
+<li><strong>主调度台</strong>（带状态标签：绿=空闲 / 运行中 / 结束），右上角 <strong>任务完成后电源操作</strong>（视频选 <code>无动作</code>，另有＋号新建调度台）；</li>
+<li>执行栏：<strong>脚本选择器</strong>（格式 <code>脚本 - 类型 - 名称</code>）＋ <strong>模式</strong>（<code>自动代理</code>）＋ 右侧蓝色 <strong>▶ 开始执行</strong>；</li>
+<li>下方两栏：左 <strong>任务总览</strong>（脚本 → 用户的树，带每级 运行/完成 状态），右 <strong>日志</strong>（右上角 自由浏览 / 保持最新 切换）。</li>
+</ul>
+<p>在脚本选择器中选择 <code>脚本 - HSR - 新 HSR 脚本</code>（下拉里会列出全部脚本及用户数）：</p>
+<p><img alt="调度中心-选择脚本" src="/docs/img/video-tutorial/15-调度中心-选择脚本.jpg" /></p>
+<h3 id="62">6.2 开始执行</h3>
+<p>点击 <strong>▶ 开始执行</strong>，弹出绿色提示 <strong>✅ 任务启动成功</strong>，主调度台进入「运行」状态，执行栏变为：</p>
+<blockquote>
+<p>任务：<code>脚本 - HSR - 新 HSR 脚本</code> ｜ 模式：<code>自动代理</code> ｜ 右侧出现红色 <strong>⊘ 停止任务</strong></p>
+</blockquote>
+<p><img alt="调度中心-任务启动成功" src="/docs/img/video-tutorial/16-调度中心-任务启动成功.jpg" /></p>
+<h3 id="63">6.3 启动阶段日志逐行解读</h3>
+<p>日志区会实时滚动，启动阶段的关键行（时间已打码格式 <code>[HH:MM:SS]</code>）：</p>
+<pre><code class="language-text">[15:51:32] 开始 HSR 配置检查
+[15:51:32] HSR 外部脚本日志运行行捕获
+[15:51:32] HSR 外部脚本目录已备份
+[15:51:32] HSR 配置已加载，可执行用户数: 1
+[15:51:32] 检测到游戏已在运行，本轮不会中途修改分辨率；请关闭游戏后重新执行以应用 1920×1080
+[15:51:32] 检测到游戏进程已在运行（StarRail.exe），跳过重复启动
+[15:51:32] 检测到游戏进程（StarRail.exe），等待 5s 后前置游戏窗口
+</code></pre>
+<blockquote>
+<p>⚠ <strong>视频中的真实小插曲</strong>：第一次点开始执行时游戏本来就开着，MAS 提示“本轮不会中途修改分辨率”。演示者随即点击 <strong>停止任务</strong>，然后重新 <strong>开始执行</strong>，这次 MAS 亲自拉起游戏：</p>
+</blockquote>
+<pre><code class="language-text">[15:51:49] 开始 HSR 配置检查
+[15:51:49] HSR 外部脚本目录已备份
+[15:51:49] HSR 配置已加载，可执行用户数: 1
+[15:51:49] 已临时调整注册表设为 1920×1080 窗口模式；游戏关闭后将恢复原值
+[15:51:49] 正在由 MAS 启动游戏: D:\Star Rail Game\StarRail.exe
+[15:51:49] 正在等待游戏完成启动，最大启动等待时间 60s，每 5s 检查一次进程
+</code></pre>
+<p><img alt="调度中心-停止并重新执行" src="/docs/img/video-tutorial/17-调度中心-停止并重新执行.jpg" /></p>
+<blockquote>
+<p>💡 右下角还会收到系统级通知（Python 托管通知）：<code>09-05 | 新 HSR 脚本的自动代理任务已完成! 已完成用户数: 0; 未完成用户数: 1</code> ——这是上一次被中断任务的收尾通知，无需理会。</p>
+</blockquote>
+<h3 id="64-m7a">6.4 游戏窗口嵌入与 M7A 接管</h3>
+<p>游戏启动后，<strong>崩坏：星穹铁道 窗口会直接嵌在调度中心里实时显示</strong>（画面 + 下方滚动日志），不需要切出去看：</p>
+<p><img alt="调度中心-游戏窗口嵌入" src="/docs/img/video-tutorial/18-调度中心-游戏窗口嵌入.jpg" /></p>
+<p>随后 M7A 接管操作，日志中以 <code>M7A stderr:</code> 开头的行为脚本自身输出，例如界面识别与切换：</p>
+<pre><code class="language-text">[15:52:48] M7A stderr: ... 界面识别: 星际和平指南-每日实训
+[15:52:49] M7A stderr: ... 切换到: 手机菜单
+[15:52:51] M7A stderr: ... 界面识别: 活动
+[15:53:38] M7A stderr: ... 当前界面: 委托
+</code></pre>
+<p><strong>运行效果节选</strong>（均截自视频，游戏画面都在调度中心/脚本卡片内）：</p>
+<p>活动试用（锋芒崭露 · 知更鸟·晴歌）：</p>
+<p><img alt="运行演示-活动试用界面" src="/docs/img/video-tutorial/19-运行演示-活动试用界面.jpg" /></p>
+<p>手机菜单（黑天鹅主界面，识别为 <code>手机菜单</code>）：</p>
+<p><img alt="运行演示-手机菜单" src="/docs/img/video-tutorial/20-运行演示-手机菜单.jpg" /></p>
+<p>星际和平指南 · 每日实训（活跃度进度 500，任务逐个领取，刷新时间 11 小时 59 分钟）：</p>
+<p><img alt="运行演示-每日实训活跃度" src="/docs/img/video-tutorial/29-运行演示-每日实训活跃度.jpg" /></p>
+<p>差分宇宙 · 位面饰品提取（虫虫来袭｜难度Ⅴ，快捷补充开拓力）：</p>
+<p><img alt="运行演示-位面饰品提取" src="/docs/img/video-tutorial/30-运行演示-位面饰品提取.jpg" /></p>
+<p>货币战争 · 备战阶段 1-1（自动编队与出战）：</p>
+<p><img alt="运行演示-货币战争卡牌对局" src="/docs/img/video-tutorial/31-运行演示-货币战争卡牌对局.jpg" /></p>
+<h3 id="65">6.5 任务完成</h3>
+<p>全部用户跑完后：</p>
+<ul>
+<li>主调度台标签变 <strong>结束</strong>，任务总览中脚本与用户均显示绿色 <strong>完成</strong>；</li>
+<li>日志收尾：<code>已完成用户数: 1；未完成用户数: 0</code> ＋ <code>新用户: 15:51 - HSR 脚本直控完成</code>；</li>
+<li>右下角通知：<code>新 HSR 脚本的自动代理任务已完成! 已完成用户数: 1; 未完成用户数: 0</code>；</li>
+<li>因为 M7A「任务完成后：退出」，游戏会自动退出并恢复注册表分辨率设置。</li>
+</ul>
+<p><img alt="调度中心-任务完成" src="/docs/img/video-tutorial/21-调度中心-任务完成.jpg" /></p>
+<hr />
+<h2 id="7">7. 第六步：多用户、重命名与重新导入配置</h2>
+<h3 id="71">7.1 添加第二个用户</h3>
+<p>再次在脚本卡片点 <strong>添加用户</strong>，同样的流程再走一遍（用户名、服务器、运行模式等）。视频里第二个用户在「用户名」框中输入了 <code>鸭吉吉……</code>（输入法候选可见）：</p>
+<p><img alt="添加第二个用户" src="/docs/img/video-tutorial/22-添加第二个用户.jpg" /></p>
+<blockquote>
+<p>💡 多账号就在同一个脚本下挂多个用户；调度时「自动代理」会依次执行所有 <strong>启用</strong> 的用户。此时列表里可以看到两个 HSR 脚本卡片（一个是本教程新建的，另一个是录制前已存在的演示卡）：</p>
+</blockquote>
+<p><img alt="脚本列表-两个HSR脚本" src="/docs/img/video-tutorial/23-脚本列表-两个HSR脚本.jpg" /></p>
+<h3 id="72">7.2 用户重命名</h3>
+<p>在 <strong>编辑 HSR 用户</strong> 页把「用户名」改为喜欢的名字，视频最终定名 <strong>鸭吉吉什么都不知道哦</strong>。</p>
+<h3 id="73">7.3 脚本重命名</h3>
+<p>在 <strong>编辑 HSR 脚本</strong> 页把「脚本名称」由默认的 <code>新 HSR 脚本</code> 改为 <strong>鸭吉吉哪里会配错吗</strong>（视频输入过程截图）：</p>
+<p><img alt="脚本重命名" src="/docs/img/video-tutorial/24-脚本重命名.jpg" /></p>
+<p>改名后，用户编辑页的面包屑也随之变成 <code>脚本管理 / 鸭吉吉哪里会配错吗 / 编辑 HSR 用户</code>：</p>
+<p><img alt="重命名后-用户编辑页" src="/docs/img/video-tutorial/25-重命名后-用户编辑页.jpg" /></p>
+<h3 id="74-m7a">7.4 修改 M7A 原生配置后，重新一键导入</h3>
+<p>第 5 章里演示者在 M7A 设置中调整了货币战争等选项。<strong>M7A 的改动不会自动同步进 MAS</strong>，需要回到 <strong>编辑 HSR 用户</strong> 页再点一次 <strong>一键从源配置导入</strong>。成功后：</p>
+<blockquote>
+<p>✅ <strong>M7A 原生配置已导入当前用户</strong></p>
+</blockquote>
+<p>同时「已导入用户快照」的时间戳更新（<code>config.yaml · 2026-09-05T08:03:04.3706...</code>）：</p>
+<p><img alt="重新导入M7A原生配置" src="/docs/img/video-tutorial/26-重新导入M7A原生配置.jpg" /></p>
+<hr />
+<h2 id="8">8. 第七步：历史记录与日志排查</h2>
+<h3 id="81">8.1 历史记录页</h3>
+<p>点击左侧导航 <strong>历史记录</strong>：</p>
+<ul>
+<li><strong>快捷选择</strong>：今天 / 昨天 / <strong>最近一周</strong>（视频选择）/ 最近一个月 / 最近两个月 / 最近三个月 / 最近半年；</li>
+<li><strong>合并模式</strong>：<code>按日合并</code>（下拉），配合 开始日期 / 结束日期（视频为 2026-08-29 ~ 2026-09-05），右侧 <strong>🔍 搜索</strong> 与 <strong>重置</strong>；</li>
+<li>左侧 <strong>日期列表</strong>：按日期分组，日期下是该脚本的用户（视频中 <code>2026年09月05日</code> 下有 <code>新用户</code>、<code>星铁</code>、<code>鸭吉吉什么都不知道哦</code>）；</li>
+<li>右侧 <strong>记录条目</strong>：每条记录带状态标签与对应 JSON 路径，如：</li>
+</ul>
+<pre><code class="language-text">2026年09月05日 10:10:24  ⚠ 失败: 未开始监督日志      D:\AUTO-MAS\history\2026-09-05\新用户\06_10-24.json
+2026年09月05日 12:40:28  ⚠ 失败: 未开始监督日志      ...\新 MAA 脚本\08-40-28.json
+2026年09月05日 15:51:32  ⚠ 失败: HSR 脚本直控运行中  ...\新 HSR 脚本\11-51-32.json
+2026年09月05日 15:51:46  ⚠ 失败: HSR 脚本直控运行中  ...\新 HSR 脚本\11-51-46.json
+2026年09月05日 15:51:49  ✅ 完成                    ...\新 HSR 脚本\11-51-49.json
+</code></pre>
+<p><img alt="历史记录页" src="/docs/img/video-tutorial/27-历史记录页.jpg" /></p>
+<h3 id="82">8.2 详细日志查看器</h3>
+<p>点击任一条记录打开 <strong>详细日志</strong> 弹窗（近全屏）。工具栏：标题右侧状态徽标（如 <code>完成</code>）、<strong>去除空行</strong> 复选框、行内复制/下载图标、字号调节（视频为 <code>13px</code>）与搜索。</p>
+<p>正文按行号排列，主要由两类内容组成：</p>
+<ul>
+<li><code>M7A stderr:</code> 开头的脚本输出——界面识别（<code>界面识别: 星际和平指南-每日实训</code>）、界面切换（<code>切换到: 手机菜单 / 委托 / 活动 / 地图</code>）、奖励结算（<code>检测到委托奖励</code>、<code>每日实训奖励完成</code>）、阶段分隔线与 <code>完成</code>、<code>停止运行</code> 标记；</li>
+<li>用户横幅：<code>用户「鸭吉吉什么都不知道哦」</code> ＋ 欢迎信息与项目地址 <code>https://github.com/moesnow/March7thAssistant</code>。</li>
+</ul>
+<p><img alt="详细日志查看器" src="/docs/img/video-tutorial/28-详细日志查看器.jpg" /></p>
+<h3 id="83">8.3 历史记录状态含义</h3>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ 完成</td>
+<td>该次调度正常结束</td>
+</tr>
+<tr>
+<td>⚠ 失败: HSR 脚本直控运行中</td>
+<td>启动时已有一次直控任务在跑（视频里 15:51:32/15:51:46 两次快速重启导致），属正常现象，以最后一条「完成」为准</td>
+</tr>
+<tr>
+<td>⚠ 失败: 未开始监督日志</td>
+<td>任务未能开始记录日志（如更早的其他脚本遗留记录）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-faq">9. 要点回顾与常见问题 FAQ</h2>
+<p><strong>Q1：脚本页的「MAS 管理游戏」和用户页的「运行模式」是什么关系？</strong>
+A：脚本页的 <code>MAS 管理游戏 = 是</code> 决定<strong>游戏进程</strong>由 MAS 启动/关闭/重启/监测（脚本直控时 MAS 只负责启动游戏、跟踪/停止脚本进程和最终清理）；用户页的 <code>运行模式</code> 决定<strong>脚本任务</strong>（账号、体力副本、任务开关）由谁管——本视频用「脚本直控」，任务行为完全跟随 M7A 的 <code>config.yaml</code> 快照。</p>
+<p><strong>Q2：SRA 路径必须填吗？</strong>
+A：不必。HSR 脚本支持「三月七 / SRA 双脚本适配」，只填三月七路径即可启用三月七引擎（黄色警告只要求"至少一个"引擎路径）。</p>
+<p><strong>Q3：游戏已经开着，能直接开始执行吗？</strong>
+A：能，但日志会提示 <code>检测到游戏已在运行，本轮不会中途修改分辨率</code> 并 <code>跳过重复启动</code>。若希望 MAS 亲自启动游戏并套用 1920×1080 窗口模式，先手动停止任务、关掉游戏（或停止后直接重跑），如视频 6.3 节演示。</p>
+<p><strong>Q4：为什么历史记录里有两条「失败: HSR 脚本直控运行中」？</strong>
+A：因为短时间内停止又启动了任务，前两次尝试被判定为“已有直控任务在运行”。最终以状态为「完成」的那条为准即可。</p>
+<p><strong>Q5：我在 M7A 里改了设置（比如货币战争策略），为什么 MAS 跑起来没变化？</strong>
+A：脚本直控模式执行的是<strong>导入时的 config.yaml 快照</strong>。改完 M7A 后，回到编辑 HSR 用户页再点一次 <strong>一键从源配置导入</strong>，看到「M7A 原生配置已导入当前用户」即可。</p>
+<p><strong>Q6：「运行时设为 1920×1080 窗口模式」会不会永久改我的显示设置？</strong>
+A：不会。该选项会在启动游戏前临时修改注册表，<code>游戏关闭后将恢复原值</code>。</p>
+<p><strong>Q7：想让 MAS 帮我管账号密码、体力副本计划、任务开关怎么办？</strong>
+A：把用户的「运行模式」从脚本直控改为 <strong>MAS 管控</strong>。注意两者互斥：脚本直控模式下这些 MAS 配置均不生效（页面会显示“MAS 管控配置已停用”）。</p>
+<p><strong>Q8：「启用低性能兼容模式」是干嘛的？</strong>
+A：仅对三月七的<strong>差分宇宙</strong>玩法生效，映射到 M7A 配置项 <code>weekly_divergent_stable_mode</code>，低配机器可尝试开启。</p>
+<p><strong>Q9：多账号怎么加？</strong>
+A：在同一个脚本卡片上多次点「添加用户」即可；自动代理会依次执行所有启用用户，日志会汇总 <code>已完成用户数 / 未完成用户数</code>。</p>
+<hr />
+<div class="keep-last"><h2 id="10">10. 视频时间轴对照表</h2>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>内容</th>
+<th>对应章节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00:00–00:06</td>
+<td>打开 AUTO-MAS 脚本管理页浏览既有脚本</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>00:06–00:11</td>
+<td>＋新建脚本 → 对话框（先选 MAA 后改选 HSR）→ 创建并配置</td>
+<td>2.2</td>
+</tr>
+<tr>
+<td>00:11–00:26</td>
+<td>HSR 脚本配置页：脚本名称、MAS 管理游戏（是→否）、打开游戏路径对话框后取消</td>
+<td>3.2–3.3</td>
+</tr>
+<tr>
+<td>00:27–00:37</td>
+<td>回脚本管理；查看既有 <code>March7thAssistant (General)</code> 通用脚本配置页做对比</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td>00:41–01:45</td>
+<td>重新编辑新 HSR 脚本：三月七路径（<code>March7thAssistant_full</code>）、游戏路径（<code>D:\Star Rail Game</code>）、MAS 管理游戏改回「是」、开启 1920×1080 窗口模式</td>
+<td>3.3–3.5</td>
+</tr>
+<tr>
+<td>01:50–02:15</td>
+<td>添加用户：默认「新用户」，运行模式=脚本直控，一键从源配置导入（用户快照）</td>
+<td>4</td>
+</tr>
+<tr>
+<td>02:15–02:30</td>
+<td>资源管理器查看 M7A 安装目录；双击 <code>March7th Assistant.exe</code></td>
+<td>1 / 5</td>
+</tr>
+<tr>
+<td>02:30–03:50</td>
+<td>M7A 设置页浏览：工具箱、体力、程序（游戏路径/超时/任务完成后退出）等</td>
+<td>5</td>
+</tr>
+<tr>
+<td>03:50–04:50</td>
+<td>调度中心：选择脚本 → 开始执行（首次：游戏已在运行提示）→ 停止任务 → 重新执行 → MAS 启动游戏 → 窗口嵌入</td>
+<td>6.1–6.3</td>
+</tr>
+<tr>
+<td>04:50–07:10</td>
+<td>M7A 自动代理运行实录：每日实训、活动、清体力、委托等，任务完成（已完成 1 / 未完成 0）</td>
+<td>6.4–6.5</td>
+</tr>
+<tr>
+<td>07:20–09:00</td>
+<td>添加第二个用户并改名为「鸭吉吉什么都不知道哦」</td>
+<td>7.1–7.2</td>
+</tr>
+<tr>
+<td>07:50–12:30</td>
+<td>游戏窗口浮于脚本管理页（手动启动演示）；继续浏览 M7A 设置（含「货币战争」页调整策略）</td>
+<td>5.2 / 6</td>
+</tr>
+<tr>
+<td>12:30–13:10</td>
+<td>脚本重命名为「鸭吉吉哪里会配错吗」</td>
+<td>7.3</td>
+</tr>
+<tr>
+<td>13:10–19:53</td>
+<td>调度中心第二次执行（日志起始 16:00:12，第二用户）；游戏内每日实训、差分宇宙·位面饰品提取、货币战争卡牌对局等实录</td>
+<td>6</td>
+</tr>
+<tr>
+<td>15:30–15:55</td>
+<td>历史记录页（快捷选择、按日合并、记录条目状态）与详细日志查看器</td>
+<td>8.1–8.2</td>
+</tr>
+<tr>
+<td>16:05</td>
+<td>用户页再次「一键从源配置导入」→「M7A 原生配置已导入当前用户」</td>
+<td>7.4</td>
+</tr>
+<tr>
+<td>19:53</td>
+<td>视频在第二用户任务运行中结束</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>本文档由演示录屏逐帧整理生成（2026-09）。如 AUTO-MAS 后续版本界面有更新，请以实际界面为准。</em></p></div>
+<footer>整理自 AUTO-MAS 官方部署演示录屏 · 红圈/红框为该步骤鼠标点击位置</footer>
+</div>
+</body>
+</html>
