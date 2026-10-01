@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD033 MD007 MD029 MD060 -->
+<!-- markdownlint-disable MD033 MD007 MD029 MD060 MD046 -->
 
 # 定时启动 AUTO-MAS
 
