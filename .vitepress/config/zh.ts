@@ -50,6 +50,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "中国移动新消息（5G 消息）", link: "/docs/advanced-features/cmcc-newmsg" },
                             { text: "让电脑定时开机", link: "/docs/advanced-features/Timed-Startup" },
                             { text: "免密开机直达桌面", link: "/docs/advanced-features/skip-password" },
+                            { text: "定时/延迟自启软件", link: "/docs/advanced-features/Timed-app-start" }
                         ],
                     },
                     { text: "常见问题", link: "/docs/FAQ" },

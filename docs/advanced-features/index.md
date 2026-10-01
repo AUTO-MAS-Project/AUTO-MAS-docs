@@ -9,6 +9,7 @@
 - [MCP 服务](./mcp) —— 让 AI 替你操作 AUTO-MAS。
 - [让电脑定时开机](./Timed-Startup) —— 让电脑定时自动开机
 - [免密开机直达桌面](./skip-password) —— 让电脑开机时跳过开机密码输入与锁屏界面
+- [定时/延迟自启软件](./Timed-app-start) —— 让 AUTO-MAS 定时/延迟自启
 
 ## 参考信息
 
