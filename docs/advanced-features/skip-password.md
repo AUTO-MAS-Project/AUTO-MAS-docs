@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD033 MD007 MD029 MD060 -->
-# 开机后跳过锁屏和输入密码界面界面直达桌面
+# 开机后跳过锁屏和输入密码直达桌面
 
 > 本篇目前只覆盖 Windows，MacOS / Linux 的方案待补充。
 
