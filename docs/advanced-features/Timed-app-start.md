@@ -26,6 +26,7 @@ AUTO-MAS 开启开机自启后，会在系统里注册一个计划任务 `AUTO-M
 
 1. `Win + R` 输入 `taskschd.msc` 回车(或者按win之后搜索“任务计划程序”)，打开任务计划程序。
 2. 在任务列表里找到 **`AUTO-MAS_AutoStart`**，双击打开属性。
+   - 若AUTO_MAS不存在，请打开AUTO-MAS的开机自启
    ![任务计划程序界面](../img/Timed-app-start/任务计划程序界面.png)
 3. 切到 **触发器** 选项卡 → 选中"登录时" → 点 **编辑**。
    ![任务计划程序界面](../img/Timed-app-start/点击编辑.png)
