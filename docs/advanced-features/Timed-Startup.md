@@ -74,7 +74,12 @@
    | 通电时间到 | 恢复通电 | 主板检测到来电跳变 → 自动开机 |
 
    - 想几点开机，就把通电时间设成几点。间隔别太短，太短主板可能没检测到断电、以为电一直通着，导致通电自启失败
-   - 注意：断电的时间点要确保电脑已经正常关机，别在系统还运行着的时候断电——强制掉电会丢失未保存的数据，甚至损坏文件系统
+   - 🌰:
+
+     <div style="display: flex; gap: 8px; align-items: flex-start;">
+       <img src="../img/Timed-Startup/通电自启-米家.png" alt="米家插座的通电定时设置" style="flex: 1 1 0; min-width: 0; height: auto;">
+       <img src="../img/Timed-Startup/通电自启-米家-云定时设置栗子.png" alt="米家云定时设置示例" style="flex: 1 1 0; min-width: 0; height: auto;">
+     </div>
 
 4. 测试：先在系统里正常关机，等电脑彻底关掉后（一般等个一分钟），用米家远程把插座关掉，过一分钟再打开——电脑能自己亮起来就说明设置成功了
 
