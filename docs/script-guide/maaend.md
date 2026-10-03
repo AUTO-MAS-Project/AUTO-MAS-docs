@@ -17,12 +17,12 @@ MaaEnd 是一个「明日方舟：终末地」第三方自动化工具，基于�
 **详情信息请查阅**：
 
 <Box :items="[
-{ name: 'MaaEnd 官网', link: 'https://maaend.com/', image: 'https://maaend.com/favicon.ico', },
+{ name: 'MaaEnd 官网', link: 'https://maaend.com/', image: '/icons/maaend.ico', },
 { name: 'MaaEnd GitHub', link: 'https://github.com/MaaEnd/MaaEnd', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },]"/>
 
 ## 安装 MaaEnd
 
-1. 前往 <Pill name="MaaEnd 官网" image="https://maaend.com/favicon.ico" link="https://maaend.com/"/> 或 <Pill name="MaaEnd 仓库" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaEnd/MaaEnd/releases/latest"/> 下载软件压缩包。
+1. 前往 <Pill name="MaaEnd 官网" image="/icons/maaend.ico" link="https://maaend.com/"/> 或 <Pill name="MaaEnd 仓库" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaEnd/MaaEnd/releases/latest"/> 下载软件压缩包。
 2. 将 MaaEnd 压缩包解压至任意文件夹。
 
 ::: warning 有两个位置不可以：
@@ -43,6 +43,20 @@ MaaEnd 是一个「明日方舟：终末地」第三方自动化工具，基于�
 2. 在 **打开的脚本配置** 中的 **MaaEnd 路径** 单击 **选择文件夹**，打开 MaaEnd 软件所在目录。
 ![脚本配置](/docs/img/script-guide/maaend/脚本配置.png)
 
+新建托管时会先进入 **MFW 项目引导**，四步完成接入：
+
+**① 基本信息**：选择 MaaEnd 所在目录并单击 **读取 interface**，AUTO-MAS 自动识别任务 / 预设 / 控制器数量，并安装 MaaFW Runner 依赖。
+![读取 interface](/docs/img/video-tutorial/v55-20-mfw-step1.jpg)
+
+**② 控制配置**：控制方式选 **电脑端·前台 · Win32**，游戏资源选 **通用资源**；PC 游戏启动方式选 **让 MAS 启动游戏**，**游戏可执行文件** 选 `Endfield.exe`（不是鹰角启动器），等待时间默认 60 秒，结束后自动关闭启动进程。
+![控制配置](/docs/img/video-tutorial/v55-21b-mfw-step2.jpg)
+
+**③ 项目更新**：自动更新时机（运行前 / 运行后）、更新源（GitHub 或 Mirror 酱 + CDK）、更新通道（稳定版）；也可单击 **检查更新** 手动更新。
+![项目更新](/docs/img/video-tutorial/v55-21-mfw-step3.jpg)
+
+**④ 运行配置**：确认后结束向导，进入上面的脚本配置页。
+
+
 根据需要调整以下配置：
 
    | 配置项 | 内容 |
@@ -60,6 +74,12 @@ MaaEnd 是一个「明日方舟：终末地」第三方自动化工具，基于�
    | **任务切换方式** | MaaEnd任务分为送货-日常-采集三个阶段，可选择仅重启MaaEnd或重启游戏 |
 
 1. 点击 **保存配置**。
+
+::: warning 首次运行 MaaEnd.exe 的 SmartScreen
+首次运行 MaaEnd 时 Windows 可能弹出「Windows 已保护你的电脑」，单击 **更多信息 → 仍要运行** 放行即可。
+![SmartScreen 放行](/docs/img/video-tutorial/step30-smartscreen.jpg)
+:::
+
 
 ::: warning 要用模拟器？先确认版本
 控制器类型选模拟器（ADB）时有两个前提：
@@ -124,9 +144,14 @@ AUTO-MAS 会按你的设定去开关 MaaEnd 里的任务。**你的 MaaEnd 里�
 顾名思义，添加后每天只会执行一次。
 ### 任务前后额外脚本
 与通用脚本一致的功能，支持在任务完成前/后额外执行您指定的程序或脚本。
+## 终末地首次登录
+
+首次部署需要手动启动一次终末地：在 **扫码登录** 界面用手机端鹰角网络 App 扫码，等待资源更新并完成新手引导，能自由行动即可。这一步只需做一次，之后交给托管自动执行。
+![终末地扫码登录](/docs/img/video-tutorial/step-login-qr.jpg)
+
 ## 森空岛自动签到
 
-已经搬到 [游戏签到工具](/docs/advanced-features/game-sign)
+已经搬到 [游戏社区](/docs/advanced-features/community)
 
 ## 额外的结果推送
 
@@ -134,6 +159,13 @@ AUTO-MAS 会按你的设定去开关 MaaEnd 里的任务。**你的 MaaEnd 里�
 
 - 开了**基质刷取的任务后机制筛选** → 多推一份基质刷取结果。
 - 加了**抽数计算** → 多推一份抽数计算结果。
+
+## 完整部署实录下载
+
+本文的完整图文实录（从获取安装包到运行验证）也提供离线版本：
+
+- v5.5 实录（MFW 项目引导）：[PDF](/video-tutorial/maaend-v55.pdf) ｜ [HTML](/video-tutorial/maaend-v55.html)
+- v5.4 实录（专项脚本类型）：[PDF](/video-tutorial/maaend.pdf) ｜ [HTML](/video-tutorial/maaend.html)
 
 ## 常见问题
 
@@ -151,3 +183,23 @@ MaaEnd 强制要求 **16:9** 比例。注意全屏模式下的实际分辨率由
 ### 游戏路径选哪个 exe
 
 选 `Endfield.exe`，**不要选鹰角启动器**。这是最常见的填错。
+
+## 放进调度队列
+
+托管和账号都配好之后，把账号拖进 [调度队列](/docs/task-scheduler) 就能定时自动跑。多个账号按顺序排队，一个跑完自动切下一个。
+
+需要开机就跑、或者跳过锁屏密码的话，看 [让电脑定时上班](/docs/advanced-features/skip-password)。
+
+## 常见问题补充
+
+### 提示任务被跳过
+
+MAS 的增强功能是对你 MaaEnd 配置里已有的任务做开关，**不会凭空添加**。比如启用了自动采集，但你的 MaaEnd 配置里没有对应任务，MAS 就跳过这个阶段并给出提示。先在 MaaEnd 里把任务配上再回来开开关。
+
+### 剩余天数减到 0 了
+
+账号被跳过是正常行为。把 **剩余天数** 改成 `-1`（不限制）或重新填一个正数就能继续跑。
+
+### 想和其他脚本一起排班
+
+调度队列是按账号排队、跨脚本混排的。把 MaaEnd 的账号和 MAA、通用脚本的账号放进同一个队列即可，不需要分开建队列。
