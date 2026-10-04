@@ -1,5 +1,7 @@
 # MAA 配置方法
 
+> 📌 本篇以 **AUTO-MAS-Lite v5.5.0-beta.6 + MAA v6.18.0-beta.2** 为例，全文截图均出自该版本的部署录屏，红圈 / 红框为该步骤鼠标点击位置。
+
 ## 什么是 MAA？
 
 MAA 是一个明日方舟第三方软件，能够轻松完成明日方舟日常代理、肉鸽存钱等重复性无趣工作。
@@ -42,15 +44,11 @@ v5.4.x 的向导是六步（Python / Pip / Git / 源码拉取 / 依赖安装 / �
 ## 配置脚本
 
 1. 进入 **脚本管理**，单击 **新建脚本** 并选择 **MAA脚本** 以添加脚本实例管理页面。
-![AUTO_MAS配置3](/docs/img/script-guide/maa/AUTO-MAA-1.png)
-
 v5.5.0 的「新建脚本」窗口如下图，除 MAA 外还新增了 **MFW 脚本** 类型（用于接入任意带 interface.json 的 MaaFramework 项目，见 [MaaEnd 教程](/docs/script-guide/maaend)）：
 ![v5.5 新建脚本](/docs/img/video-tutorial/v55-06-newscript.jpg)
 
 
 2. 在 **打开的脚本配置** 中的 **MAA路径** 单击 **选择文件夹**，打开 MAA 软件所在目录。
-![AUTO_MAS配置4](/docs/img/script-guide/maa/AUTO-MAA-2.png)
-
 v5.5.0 的脚本配置页如下图（多了 **游戏更新** 等分组，字段基本一致）：
 ![v5.5 MAA脚本配置](/docs/img/video-tutorial/v55-07-maa-config.jpg)
 
@@ -63,13 +61,11 @@ v5.5.0 的模拟器管理新增了 **设备列表**（设备序号、在线状�
 
 
 4. 点击 **配置 MAA** 在 MAA 中配置。
-![AUTO_MAS配置5](/docs/img/script-guide/maa/AUTO-MAA-5.png)
-
-v5.5.0 下打开的 MAA 窗口如下图（图为 v6.18.0-beta.2，连接设置确认 `127.0.0.1:16384`）：
+v5.5.0 下打开的 MAA 窗口如下图（图为 v6.18.0-beta.2）：
 ![v5.5 MAA 窗口](/docs/img/video-tutorial/v55-10-maa-window.jpg)
 
 
-5. 手动取消勾选 **开机自启动MAA**，并完成 ADB 连接相关配置，其余配置可以根据您的喜好设置。
+5. 连接与启动设置：先启动 **明日方舟所在的模拟器**，在 MAA「设置 → 连接设置」单击 **自动检测** 识别模拟器端口，再进行一次 **截图检测**，能截到明日方舟画面即连接成功；然后取消勾选 **开机自启动MAA**，其余配置按喜好设置。
 
 6. 完成配置后，关闭 **MAA**，并在 AUTO-MAS 中点击 **保存配置**。
 ![AUTO_MAS配置6](/docs/img/script-guide/maa/AUTO-MAA-6.png)
@@ -77,9 +73,7 @@ v5.5.0 下打开的 MAA 窗口如下图（图为 v6.18.0-beta.2，连接设置�
 ## 配置用户
 
 1. 在 **脚本管理** 的脚本表格内，单击 **添加用户** 以添加一个用户。
-![AUTO_MAS配置7](/docs/img/script-guide/maa/AUTO-MAA-7.png)
 2. 按照设置卡相关提示填写用户信息。
-![AUTO_MAS配置8](/docs/img/script-guide/maa/AUTO-MAA-8.png)
 
 v5.5.0 把 **任务配置** 直接内联到了用户页里，不用再打开 MAA 逐项勾选：
 ![v5.5 内联任务配置](/docs/img/video-tutorial/v55-08-user-tasks.jpg)
@@ -204,13 +198,6 @@ v5.5.0 的调度队列新增了 **队列类型**（定时队列）与 **延时�
 
 
 需要开机就跑、或者跳过锁屏密码的话，看 [让电脑定时上班](/docs/advanced-features/skip-password)。
-
-## 完整部署实录下载
-
-本文对应的完整图文实录（从获取安装包到运行验证）也提供离线版本：
-
-- v5.5 实录：[PDF](/video-tutorial/maa-v55.pdf) ｜ [HTML](/video-tutorial/maa-v55.html)
-- v5.4 实录：[PDF](/video-tutorial/maa.pdf) ｜ [HTML](/video-tutorial/maa.html)
 
 ## 常见问题
 

@@ -6,6 +6,8 @@ date: 2026-09-17
 
 # MaaEnd 配置方法
 
+> 📌 本篇以 **AUTO-MAS-Lite v5.5.0-beta.6 + MaaEnd v2.29.0** 为例，配图为对应版本的界面截图。
+
 ## TL;DR(太长不看)
 
 下载 MaaEnd，AUTO-MAS 里二选一：**MaaEnd 专项托管**（推荐，配置简单）或 **MFW 通用项目托管**（任务队列直接编辑），配好账号加入队列，开始托管！
@@ -80,7 +82,6 @@ MaaEnd 在 AUTO-MAS 里有两种接入方式，**二选一**即可：
 
 ::: warning 首次运行 MaaEnd.exe 的 SmartScreen
 首次运行 MaaEnd 时 Windows 可能弹出「Windows 已保护你的电脑」，单击 **更多信息 → 仍要运行** 放行即可。
-![SmartScreen 放行](/docs/img/video-tutorial/step30-smartscreen.jpg)
 :::
 
 
@@ -154,14 +155,8 @@ AUTO-MAS 会按你的设定去开关 MaaEnd 里的任务。**你的 MaaEnd 里�
 新建 MFW 托管后会进入 **MFW 项目引导**，四步完成接入：
 
 **① 基本信息**：选择 MaaEnd 所在目录并单击 **读取 interface**，AUTO-MAS 自动识别任务 / 预设 / 控制器数量，并安装 MaaFW Runner 依赖。
-![读取 interface](/docs/img/video-tutorial/v55-20-mfw-step1.jpg)
-
 **② 控制配置**：控制方式选 **电脑端·前台 · Win32**，游戏资源选 **通用资源**；PC 游戏启动方式选 **让 MAS 启动游戏**，**游戏可执行文件** 选 `Endfield.exe`（不是鹰角启动器），等待时间默认 60 秒，结束后自动关闭启动进程。
-![控制配置](/docs/img/video-tutorial/v55-21b-mfw-step2.jpg)
-
 **③ 项目更新**：自动更新时机（运行前 / 运行后）、更新源（GitHub 或 Mirror 酱 + CDK）、更新通道（稳定版）；也可单击 **检查更新** 手动更新。
-![项目更新](/docs/img/video-tutorial/v55-21-mfw-step3.jpg)
-
 **④ 运行配置**：确认后结束向导，进入脚本配置页。
 
 ### MFW 用户配置
@@ -186,7 +181,6 @@ MFW 方式把任务队列 / 自动采集 / 优先售卖等全部内联到 AUTO-M
 ## 终末地首次登录
 
 首次部署需要手动启动一次终末地：在 **扫码登录** 界面用手机端鹰角网络 App 扫码，等待资源更新并完成新手引导，能自由行动即可。这一步只需做一次，之后交给托管自动执行。
-![终末地扫码登录](/docs/img/video-tutorial/step-login-qr.jpg)
 
 ## 森空岛自动签到
 
@@ -198,13 +192,6 @@ MFW 方式把任务队列 / 自动采集 / 优先售卖等全部内联到 AUTO-M
 
 - 开了**基质刷取的任务后机制筛选** → 多推一份基质刷取结果。
 - 加了**抽数计算** → 多推一份抽数计算结果。
-
-## 完整部署实录下载
-
-本文的完整图文实录（从获取安装包到运行验证）也提供离线版本：
-
-- 方式二（MFW 通用项目托管）实录：[PDF](/video-tutorial/maaend-v55.pdf) ｜ [HTML](/video-tutorial/maaend-v55.html)
-- 方式一（专项托管）在 v5.4 下的实录：[PDF](/video-tutorial/maaend.pdf) ｜ [HTML](/video-tutorial/maaend.html)
 
 ## 常见问题
 

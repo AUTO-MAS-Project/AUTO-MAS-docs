@@ -34,21 +34,10 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "通用脚本", link: "/docs/script-guide/general" },
                             { text: "SRA", link: "/docs/script-guide/sra" },
                             { text: "三月七", link: "/docs/script-guide/march7th" },
+                            { text: "三月七（HSR 脚本部署实录）", link: "/docs/script-guide/march7th-hsr" },
                         ],
                     },
-                                        { text: "任务调度", link: "/docs/task-scheduler" },
-                    {
-                        text: "视频图文教程",
-                        link: "/docs/video-tutorial/",
-                        items: [
-                            { text: "教程总览", link: "/docs/video-tutorial/" },
-                            { text: "M7A 接入（三月七小助手）", link: "/docs/video-tutorial/m7a" },
-                            { text: "MAA 部署（v5.4）", link: "/docs/video-tutorial/maa" },
-                            { text: "MaaEnd 部署（v5.4）", link: "/docs/video-tutorial/maaend" },
-                            { text: "MAA 部署（v5.5）", link: "/docs/video-tutorial/maa-v55" },
-                            { text: "MaaEnd 接入（v5.5 · MFW）", link: "/docs/video-tutorial/maaend-v55" },
-                        ],
-                    },
+                    { text: "任务调度", link: "/docs/task-scheduler" },
                     {
                         text: "进阶功能",
                         link: "/docs/advanced-features/",
