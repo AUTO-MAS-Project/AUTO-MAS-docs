@@ -47,6 +47,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
                             { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
+                            { text: "自定义外观包", link: "/docs/advanced-features/appearance" },
                             { text: "中国移动新消息（5G 消息）", link: "/docs/advanced-features/cmcc-newmsg" },
                             { text: "让电脑定时开机", link: "/docs/advanced-features/Timed-Startup" },
                             { text: "免密开机直达桌面", link: "/docs/advanced-features/skip-password" },
