@@ -36,6 +36,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                             { text: "通用脚本", link: "/docs/script-guide/general" },
                             { text: "SRA", link: "/docs/script-guide/sra" },
                             { text: "三月七", link: "/docs/script-guide/march7th" },
+                            { text: "三月七（HSR 脚本部署实录）", link: "/docs/script-guide/march7th-hsr" },
                         ],
                     },
                     { text: "任务调度", link: "/docs/task-scheduler" },
