@@ -1,5 +1,16 @@
 # 使用Bot自助排障
 
+<Links
+  :items="[
+    {
+      name: '加入 AUTO-MAS QQ 官方群',
+      link: 'https://qm.qq.com/q/hdV065dcbu',
+      image: '/icons/tencentqq.svg',
+      desc: '群号：957750551'
+    }
+  ]"
+/>
+
 AUTO-MAS QQ群内部署了可以自动分析日志的机器人，具体使用方法如下：
 
 1. 发送`debug [你的具体问题]`
