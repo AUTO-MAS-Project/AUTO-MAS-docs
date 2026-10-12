@@ -7,13 +7,19 @@ MAA is a third-party Arknights tool that can handle repetitive tasks such as dai
 **For more information, see:**
 
 <Box :items="[
-{ name: 'MAA Website', link: 'https://maa.plus/', image: 'https://maa.plus/favicon.ico', },
+{ name: 'MAA Website', link: 'https://maa.plus/', image: '/icons/maa.ico', },
 { name: 'MAA GitHub', link: 'https://github.com/MaaAssistantArknights/MaaAssistantArknights', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },]"/>
 
 ## Install MAA
 
-1. Download the archive from <Pill name="MAA Website" image="https://maa.plus/favicon.ico" link="https://maa.plus"/>, <Pill name="MAA Repository" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaAssistantArknights/MaaAssistantArknights/releases/latest"/>, or <Pill name="MirrorChyan" image="https://mirrorchyan.com/favicon.ico" link="https://mirrorchyan.com/zh/projects?rid=MAA&scouce=AUTO-MAS-Web"/>.
+1. Download the archive from <Pill name="MAA Website" image="/icons/maa.ico" link="https://maa.plus"/>, <Pill name="MAA Repository" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaAssistantArknights/MaaAssistantArknights/releases/latest"/>, or <Pill name="MirrorChyan" image="/icons/mirrorchyan.ico" link="https://mirrorchyan.com/zh/projects?rid=MAA&scouce=AUTO-MAS-Web"/>.
 2. Extract the MAA archive to any folder.
+
+::: warning Two Places You Should Not Use:
+
+- **Don't put it under a non-English path** — that causes failures that are hard to diagnose. Use a plain English path like `D:\MAA`.
+- **Don't put it inside the AUTO-MAS root directory**. As with the other scripts, there is a risk of it being deleted by mistake.
+:::
 
 ## Configure the Script
 
@@ -137,3 +143,27 @@ Automatic check-in has risks. AUTO-MAS is not responsible for any results caused
 ::: tip Reminder
 Do not enter the quotation marks around `content`, and do not enter the entire returned page content into the option tab.
 :::
+
+Skland check-in is only one part of the AUTO-MAS community feature. Credentials for miyoushe, Kuro Community and Tajiduo are configured in the same place — see [Game Community](/en/docs/advanced-features/community).
+
+## Put It in a Scheduling Queue
+
+With the script and users configured, drag the users into a [Scheduling Queue](/en/docs/task-scheduler) and they run on a timer. Several accounts queue up in order, and AUTO-MAS moves to the next one when a run finishes.
+
+## Common Questions
+
+### The emulator won't connect
+
+Configure the emulator in **Emulator Management** first, then come back to the script configuration and pick the emulator instance. See [Emulator Management](/en/docs/advanced-features/emulator).
+
+### The account isn't switching
+
+Check the [Account ID tips](#account-id-tips) above and make sure the fragment you entered is unique to that account. For the official server the last four digits of the phone number are usually enough; for the Bilibili server, don't enter the full nickname, it is easily misread.
+
+### My MAA settings aren't taking effect
+
+Check whether AUTO-MAS has taken that setting over: options that appear in the user configuration page always follow that page, and AUTO-MAS also controls annihilation, daily task order, and scheduled execution. See [Which MAA Settings AUTO-MAS Takes Over](#which-maa-settings-auto-mas-takes-over).
+
+### It says the path can't be found / MAA won't launch
+
+Make sure **MAA path** points at the folder you extracted MAA into, that there are no non-English characters in it, and that MAA hasn't been moved. Re-select the directory and let the configuration refresh.

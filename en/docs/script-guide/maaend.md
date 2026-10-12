@@ -13,12 +13,12 @@ MaaEnd is a third-party automation tool for Arknights: Endfield. Based on visual
 **For more information, see:**
 
 <Box :items="[
-{ name: 'MaaEnd Website', link: 'https://maaend.com/', image: 'https://maaend.com/favicon.ico', },
+{ name: 'MaaEnd Website', link: 'https://maaend.com/', image: '/icons/maaend.ico', },
 { name: 'MaaEnd GitHub', link: 'https://github.com/MaaEnd/MaaEnd', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },]"/>
 
 ## Install MaaEnd
 
-1. Download the archive from <Pill name="MaaEnd Website" image="https://maaend.com/favicon.ico" link="https://maaend.com/"/> or <Pill name="MaaEnd Repository" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaEnd/MaaEnd/releases/latest"/>.
+1. Download the archive from <Pill name="MaaEnd Website" image="/icons/maaend.ico" link="https://maaend.com/"/> or <Pill name="MaaEnd Repository" :image="{ light: '/icons/github.svg', dark: '/icons/github-dark.svg', }" link="https://github.com/MaaEnd/MaaEnd/releases/latest"/>.
 2. Extract the MaaEnd archive to any folder.
 
 ::: warning Two Places Not to Extract It
@@ -94,7 +94,7 @@ Of the two methods, **MAS built-in account switching** is generally more stable,
 
 ## Skland Automatic Check-In
 
-This moved to the [Game Check-in tool](/en/docs/advanced-features/game-sign). Configure it there.
+This moved to the [Game Community tool](/en/docs/advanced-features/community). Configure it there.
 
 ## Extra Result Notifications
 
@@ -120,3 +120,21 @@ MaaEnd requires a **16:9** ratio. Note that in fullscreen the actual resolution 
 ### Which exe is the game path?
 
 `Endfield.exe`, **not the Hypergryph launcher**. This is the most common mistake.
+
+## Put It in a Scheduling Queue
+
+With the managed instance and accounts configured, drag the accounts into a [Scheduling Queue](/en/docs/task-scheduler) and they run on a timer. Several accounts queue up in order, and AUTO-MAS moves to the next one when a run finishes.
+
+## More Common Questions
+
+### It says a task was skipped
+
+The MAS enhancements toggle tasks that already exist in your MaaEnd configuration; they don't create tasks out of nothing. If you enable automatic collection but your MaaEnd configuration has no matching task, MAS skips that stage and tells you. Add the task in MaaEnd first, then come back and turn the switch on.
+
+### Remaining days hit 0
+
+Being skipped is expected. Set **Remaining Days** back to `-1` (unlimited) or any positive number and it runs again.
+
+### I want to schedule it alongside other scripts
+
+Scheduling queues are ordered by account and mix scripts freely. Put MaaEnd accounts, MAA accounts and general script accounts into the same queue — you don't need separate queues.
