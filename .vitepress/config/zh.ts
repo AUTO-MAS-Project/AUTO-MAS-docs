@@ -42,7 +42,7 @@ export const zhThemeConfig: DefaultTheme.Config = {
                         text: "进阶功能",
                         link: "/docs/advanced-features/",
                         items: [
-                            { text: "游戏签到工具", link: "/docs/advanced-features/game-sign" },
+                            { text: "游戏社区", link: "/docs/advanced-features/community" },
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
                             { text: "MCP 服务", link: "/docs/advanced-features/mcp" },

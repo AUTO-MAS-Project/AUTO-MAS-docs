@@ -41,7 +41,7 @@ export const enThemeConfig: DefaultTheme.Config = {
                         text: "Advanced Features",
                         link: "/en/docs/advanced-features/",
                         items: [
-                            { text: "Game Check-in", link: "/en/docs/advanced-features/game-sign" },
+                            { text: "Game Community", link: "/en/docs/advanced-features/community" },
                             { text: "Emulator Management", link: "/en/docs/advanced-features/emulator" },
                             { text: "Notifications", link: "/en/docs/advanced-features/notification" },
                             { text: "MCP Service", link: "/en/docs/advanced-features/mcp" },
