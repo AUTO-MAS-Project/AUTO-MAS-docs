@@ -43,9 +43,11 @@ my-appearance/              ← 这一层只是你的工作目录，不进 ZIP
 | 角落装饰 | 宽 300–600 像素 | 透明 PNG / WebP | 显示宽度由 `mascot.width` 决定，图片宽度取它的 2 倍左右更清晰 |
 | 菜单图标 | 48×48 或 96×96 | 透明 PNG | 侧栏按 24px 显示，线条要粗、轮廓要简单 |
 | 光标 | 32×32 | 透明 PNG | **必须** 1–64 像素见方以内；要记下指针尖端的像素坐标 |
-| 预览图 | 960×540 | PNG / JPEG | 只在导入后的预览弹窗里显示，可以直接用应用后的截图 |
+| 预览图 | 建议 16:10，例如 1280×800 | PNG / JPEG / WebP | 用于导入预览，也可作为资源商店封面；比例和尺寸不是导入的硬性要求 |
 
 单张图片不能超过 8 MB，背景图优先用 JPEG 或 WebP 压缩。
+
+上传到资源商店时，可以使用包内的预览图作为封面，也可以另选一张图片；包内没有预览图时，需要在上传时选择封面。封面同样支持 PNG、JPEG、WebP，不超过 8 MB，建议使用 16:10。
 
 ### 3. 写 theme.json
 
@@ -181,7 +183,7 @@ my-appearance/              ← 这一层只是你的工作目录，不进 ZIP
 | 字段 | 默认值 | 说明 |
 | --- | --- | --- |
 | `path` | — | 必填，必须在 `assets/` 下 |
-| `width` | `144` | 显示宽度（像素），16 到 1024；实际最多占窗口宽度的 35%、高度的 30% |
+| `width` | `144` | 显示宽度（像素），16 到 1024；桌面悬浮桌宠的实际宽高还会受当前显示器工作区限制，宽不超过工作区的 35%，高不超过 30% |
 | `opacity` | `1` | 0 到 1 |
 | `position` | `bottom-right` | `top-left`、`top-right`、`bottom-left`、`bottom-right` |
 
@@ -202,6 +204,7 @@ my-appearance/              ← 这一层只是你的工作目录，不进 ZIP
 | `gameSign` | 游戏社区 |
 | `history` | 历史记录 |
 | `tools` | 工具 |
+| `themeStore` | 资源商店 |
 | `settings` | 设置 |
 
 开发版另有 `testRouter`、`ocrDev`、`overlayMaskDev`、`updateDownloadDev` 四个开发菜单键。
@@ -274,7 +277,7 @@ ZIP 里的每个文件都必须被 `theme.json` 引用，不能有多余文件�
 4. tokens 只能包含 colorPrimary（必填）、colorBgLayout、colorBgContainer、colorBgElevated、colorText、colorTextSecondary、colorBorder、colorBorderSecondary、borderRadius。颜色一律写 #rrggbb 六位十六进制；borderRadius 是 0 到 32 的数字。正文文字与背景色的对比度至少 4.5:1。
 5. background：path 必须以 assets/ 开头；opacity、surfaceOpacity 为 0 到 1（surfaceOpacity 是卡片表面不透明度，背景图越花越要调高，建议 0.6 到 0.85）；position 写 "left"、"center" 或 "right"，可再跟空格和 "top"、"center" 或 "bottom"；size 为 "cover"、"contain" 或 "auto"。
 6. mascot：path 以 assets/ 开头；width 为 16 到 1024；opacity 为 0 到 1；position 为 "top-left"、"top-right"、"bottom-left"、"bottom-right" 之一。
-7. menuIcons 的键只能是 home、scripts、plans、emulators、queue、scheduler、gameSign、history、tools、settings。
+7. 普通菜单的 menuIcons 键为 home、scripts、plans、emulators、queue、scheduler、gameSign、history、tools、themeStore（资源商店）、settings；只填写需要替换图标的键。
 8. cursors 的键只能是 default、pointer、text；path 必须是 assets/ 下的 .png；hotspotX、hotspotY 为 0 到 63 的整数，并且在图片尺寸以内。
 9. 只引用我列出的文件，我写了“无”的字段整段省略，不要编造任何路径或字段。
 ```
@@ -298,7 +301,7 @@ ZIP 里的每个文件都必须被 `theme.json` 引用，不能有多余文件�
 **菜单图标**
 
 ```text
-一套 10 个风格统一的软件侧栏图标，分别表示：主页、托管管理、计划管理、模拟器管理、调度队列、调度中心、游戏社区、历史记录、工具、设置。<风格>，<主色>配色，透明背景，每个图标单独居中、大小一致，轮廓简单、线条粗，缩小到 24 像素仍能辨认。不要文字。
+一套 11 个风格统一的软件侧栏图标，分别表示：主页、托管管理、计划管理、模拟器管理、调度队列、调度中心、游戏社区、历史记录、工具、资源商店、设置。<风格>，<主色>配色，透明背景，每个图标单独居中、大小一致，轮廓简单、线条粗，缩小到 24 像素仍能辨认。不要文字。
 ```
 
 生成的通常是一整张拼图，需要逐个裁成单独的 PNG，再在 `menuIcons` 里对应到各个键。
