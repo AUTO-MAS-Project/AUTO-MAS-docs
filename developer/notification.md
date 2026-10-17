@@ -255,7 +255,7 @@ def build_image_notification(image_bytes: bytes) -> NotifyPayload:
 
 ## 7. 扩展渠道
 
-1. 在 `app/notification_channels/<id>/` 新建 `manifest.json`，声明接口版本、渠道 ID、注册入口与必需依赖。清单格式见主仓同目录的 `README.md`；只加载随应用交付的可信内置渠道。
+1. 在 `app/notification_channels/<id>/` 新建 `manifest.json`，声明接口版本、渠道 ID、注册入口与必需依赖。清单格式见主仓 `app/notification_channels/README.md`；只加载随应用交付的可信内置渠道。
 2. 在 `__init__.py` 提供 `register() -> NotifyChannel`，声明设置元数据、作用域、启用字段，并绑定 `target_builder`、`send_adapter` 和 `sender_factory`。描述不携带密钥值；发现、注册或构造发送器时不得发送、联网或启动任务。
 3. 目标构造器只读取宿主提供的 `ChannelConfig`，按显式启用配置生成稳定 ID、收件配置与 `ChannelTarget.capabilities`。能力只保存在具体目标上，重试复用同一份目标快照。
 4. 在 `transport.py` 的发送器中实现协议编码、发送和业务结果判断，通过 `ChannelDependencies` 使用宿主注入的传输能力。发送适配器接收 `RenderedNotification`，只执行一次发送；新增发送方法时同步测试注入使用的 `Notifier` 协议。
