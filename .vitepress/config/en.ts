@@ -19,37 +19,58 @@ export const enThemeConfig: DefaultTheme.Config = {
     sidebar: {
         "/en/docs/": [
             {
-                text: "User Guide",
+                text: "Getting Started",
+                collapsed: false,
                 items: [
                     { text: "Getting Started", link: "/en/docs/user-guide" },
-                    {
-                        text: "Script Configuration",
-                        link: "/en/docs/script-guide/",
-                        items: [
-                            { text: "MAA", link: "/en/docs/script-guide/maa" },
-                            { text: "MAAEND", link: "/en/docs/script-guide/maaend" },
-                            { text: "M9A", link: "/en/docs/script-guide/m9a" },
-                            { text: "MFW Projects", link: "/en/docs/script-guide/maafw" },
-                            { text: "OK-WW", link: "/en/docs/script-guide/okww" },
-                            { text: "HSR", link: "/en/docs/script-guide/hsr" },
-                            { text: "BetterGI", link: "/en/docs/script-guide/bettergi" },
-                            { text: "General Scripts", link: "/en/docs/script-guide/general" },
-                            { text: "SRA", link: "/en/docs/script-guide/sra" },
-                            { text: "March 7th", link: "/en/docs/script-guide/march7th" },
-                        ],
-                    },
+                    { text: "Script Guide Overview", link: "/en/docs/script-guide/" },
+                    { text: "Advanced Features Overview", link: "/en/docs/advanced-features/" },
+                ],
+            },
+            {
+                text: "Script Guides",
+                collapsed: true,
+                items: [
+                    { text: "MAA", link: "/en/docs/script-guide/maa" },
+                    { text: "MaaEnd", link: "/en/docs/script-guide/maaend" },
+                    { text: "M9A", link: "/en/docs/script-guide/m9a" },
+                    { text: "OK-WW", link: "/en/docs/script-guide/okww" },
+                    { text: "BetterGI", link: "/en/docs/script-guide/bettergi" },
+                    { text: "HSR", link: "/en/docs/script-guide/hsr" },
+                    { text: "SRA", link: "/en/docs/script-guide/sra" },
+                    { text: "March7thAssistant", link: "/en/docs/script-guide/march7th" },
+                    { text: "MFW Projects", link: "/en/docs/script-guide/maafw" },
+                    { text: "General Scripts", link: "/en/docs/script-guide/general" },
+                ],
+            },
+            {
+                text: "Tasks & Daily Management",
+                collapsed: true,
+                items: [
                     { text: "Task Scheduler", link: "/en/docs/task-scheduler" },
-                    {
-                        text: "Advanced Features",
-                        link: "/en/docs/advanced-features/",
-                        items: [
-                            { text: "Game Check-in", link: "/en/docs/advanced-features/game-sign" },
-                            { text: "Emulator Management", link: "/en/docs/advanced-features/emulator" },
-                            { text: "Notifications", link: "/en/docs/advanced-features/notification" },
-                            { text: "Failure Replays", link: "/en/docs/advanced-features/failure-replay" },
-                            { text: "MCP Service", link: "/en/docs/advanced-features/mcp" },
-                        ],
-                    },
+                    { text: "Emulator Management", link: "/en/docs/advanced-features/emulator" },
+                    { text: "Game Check-in", link: "/en/docs/advanced-features/game-sign" },
+                ],
+            },
+            {
+                text: "Notifications & Run Records",
+                collapsed: true,
+                items: [
+                    { text: "Notifications", link: "/en/docs/advanced-features/notification" },
+                    { text: "Failure Replays", link: "/en/docs/advanced-features/failure-replay" },
+                ],
+            },
+            {
+                text: "Personalization & Extensions",
+                collapsed: true,
+                items: [
+                    { text: "MCP Service", link: "/en/docs/advanced-features/mcp" },
+                ],
+            },
+            {
+                text: "FAQ & Troubleshooting",
+                collapsed: true,
+                items: [
                     { text: "FAQ", link: "/en/docs/FAQ" },
                     { text: "How to Ask Questions", link: "/en/docs/howtoask" },
                 ],
