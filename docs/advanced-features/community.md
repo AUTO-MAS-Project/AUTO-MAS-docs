@@ -2,7 +2,7 @@
 
 各游戏社区的每日签到可以交给 AUTO-MAS：凭据填一次，之后随代理任务自动完成。
 
-目前支持 **森空岛、米游社、库街区、塔吉多** 四个社区；
+目前支持 **<img src="../img/video-tutorial/社区图标/skland.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">森空岛、<img src="../img/video-tutorial/社区图标/miyoushe.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">米游社、<img src="../img/video-tutorial/社区图标/kuro.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">库街区、<img src="../img/video-tutorial/社区图标/tajiduo.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">塔吉多** 四个社区；
 无需手动指定角色——AUTO-MAS 会自动读取账号绑定的**所有游戏角色**并逐个签到，结果中会列出每个角色的状态
 
 ::: warning 使用前须知
@@ -56,7 +56,7 @@ BMT 由个人维护，**独立于 AUTO-MAS 团队，不代表原团队发布**�
 
 未配置凭据的社区不会出现在通知中。
 
-## 森空岛
+## <img src="../img/video-tutorial/社区图标/skland.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">森空岛
 
 森空岛签到会自动查询鹰角网络账号下的 **明日方舟** 和 **终末地** 角色。每个角色的签到状态会分别记录。
 
@@ -87,7 +87,7 @@ BMT 由个人维护，**独立于 AUTO-MAS 团队，不代表原团队发布**�
 
 账密只存在于本次请求的内存中，窗口关闭、登录成功或失败后都会清理输入内容。该功能不提供短信验证码登录。
 
-## 米游社
+## <img src="../img/video-tutorial/社区图标/miyoushe.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">米游社
 
 米游社会自动读取账号绑定的 **原神、星穹铁道、绝区零、崩坏学园 2、崩坏 3、未定事件簿** 角色，并逐个查询签到状态。
 
@@ -103,7 +103,7 @@ BMT 由个人维护，**独立于 AUTO-MAS 团队，不代表原团队发布**�
 
 也可以在已登录米游社网页端的开发者工具中执行 `document.cookie`，将包含认证字段的 Cookie 字符串粘贴到输入框。不要粘贴网页 HTML、完整接口响应或无关 Cookie；缺少 `cookie_token`、`stoken` 等认证字段时，后续角色查询和签到可能失败。
 
-## 库街区
+## <img src="../img/video-tutorial/社区图标/kuro.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">库街区
 
 自动读取你绑定的 **战双帕弥什** 和 **鸣潮** 角色，逐个签到。
 
@@ -125,7 +125,7 @@ AUTO-MAS **无法直接获取库街区 Token**，库街区也没有网页端或�
 
 账号没绑定可签到的角色时，结果里不会出现库街区的条目。Token 失效会在结果里写明失败原因。
 
-## 塔吉多
+## <img src="../img/video-tutorial/社区图标/tajiduo.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">塔吉多
 
 自动查出你号上的游戏角色并签到。
 
