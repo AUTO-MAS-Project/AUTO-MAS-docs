@@ -65,7 +65,6 @@ my-appearance/              ← 这一层只是你的工作目录，不进 ZIP
   "mode": "light",
   "tokens": {
     "colorPrimary": "#1677ff",
-    "colorPageTitle": "#244a38",
     "colorBgLayout": "#f5f7fb",
     "colorBgContainer": "#ffffff",
     "colorBgElevated": "#ffffff",
