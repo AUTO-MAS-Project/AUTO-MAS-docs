@@ -18,7 +18,7 @@ date: 2025-11-08
 { name: '三月七小助手 官网', link: 'https://m7a.top/#/', image: '/icons/m7a.png', },
 { name: '三月七小助手 GitHub', link: 'https://github.com/moesnow/March7thAssistant', image: { light: '/icons/github.svg', dark: '/icons/github-dark.svg', }, },]"/>
 
-## 
+## 实操
 
 ### 安装 三月七
 
@@ -28,7 +28,6 @@ date: 2025-11-08
 ::: warning 别解压到中文路径
 三月七小助手（以及其他通用脚本）都不要放在带中文的文件夹里，比如 `D:\脚本\`。中文路径容易引发莫名其妙的报错，用 `D:\M7A` 这样的纯英文路径。
 :::
-
 
 ### 设置脚本实例
 
@@ -44,9 +43,9 @@ date: 2025-11-08
 4. 接着在新的窗口界面找到并选择**三月七小助手的通用模板参考**，并点击**使用此模板**。
 ![AUTO_MAS配置4](/docs/img/script-guide/March7thAssistan/AUTO-MAA-3.png)
 
-稍后会打开脚本的配置，如下图：
-![AUTO_MAS配置4](/docs/img/script-guide/March7thAssistan/AUTO-MAA-4-1.png)
-![AUTO_MAS配置4](/docs/img/script-guide/March7thAssistan/AUTO-MAA-4-2.png)
+    稍后会打开脚本的配置，如下图：
+    ![AUTO_MAS配置4](/docs/img/script-guide/March7thAssistan/AUTO-MAA-4-1.png)
+    ![AUTO_MAS配置4](/docs/img/script-guide/March7thAssistan/AUTO-MAA-4-2.png)
 
 5. 在 **打开的脚本配置** 中的 **脚本根目录** 单击 **选择文件夹**，打开 三月七小助手 软件所在目录。
 ![AUTO_MAS配置5](/docs/img/script-guide/March7thAssistan/AUTO-MAA-5.png)
@@ -125,4 +124,3 @@ date: 2025-11-08
 ### 日志里报路径找不到
 
 多半是脚本根目录选错，或者三月七被移动过位置。重新选一次根目录，让 **脚本配置** 一栏的路径自动刷新。
-

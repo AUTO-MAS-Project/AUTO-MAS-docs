@@ -2,7 +2,7 @@
 
 Opening each community app every day to tap the check-in button gets old. Fill in your credentials here once, and your automation runs will handle check-ins along the way.
 
-Four communities are supported: **Skland**, **miyoushe**, **Kuro Community**, and **Tajiduo**. You don't have to tell it which characters you have — it reads the game characters bound to your account, checks in for each one, and lists every character's status in the results.
+Four communities are supported: **<img src="/docs/img/video-tutorial/社区图标/skland.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">Skland**, **<img src="/docs/img/video-tutorial/社区图标/miyoushe.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">miyoushe**, **<img src="/docs/img/video-tutorial/社区图标/kuro.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">Kuro Community**, and **<img src="/docs/img/video-tutorial/社区图标/tajiduo.png" alt="" style="height:1em;vertical-align:-0.15em;margin-right:2px">Tajiduo**. You don't have to tell it which characters you have — it reads the game characters bound to your account, checks in for each one, and lists every character's status in the results.
 
 ::: warning Read This Before You Start
 
@@ -53,7 +53,7 @@ An automatic check-in is running right now. Wait for it to finish, then click ag
 
 Communities you haven't given credentials to won't appear in the notification, so you won't see a pile of empty entries.
 
-## Skland
+## <img src="/docs/img/video-tutorial/社区图标/skland.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">Skland
 
 Skland check-in automatically looks up the **Arknights** and **Arknights: Endfield** characters under your Hypergryph account. Each character's check-in status is recorded separately.
 
@@ -84,7 +84,7 @@ Don't copy the outer JSON, the quotation marks around `content`, or any other fi
 
 Your account and password only exist in memory for that one request. The input is cleared when the window closes and on both success and failure. This feature does not offer SMS-code login.
 
-## miyoushe
+## <img src="/docs/img/video-tutorial/社区图标/miyoushe.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">miyoushe
 
 miyoushe automatically reads the characters bound to your account across **Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, Houkai Gakuen 2, Honkai Impact 3rd, and Tears of Themis**, then checks the check-in status for each one.
 
@@ -100,7 +100,7 @@ QR codes expire. If you see "QR code expired" or "QR code status invalid", click
 
 You can also run `document.cookie` in the developer tools of a logged-in miyoushe web session and paste the cookie string containing the authentication fields into the input. Don't paste page HTML, a full API response, or unrelated cookies. Without authentication fields such as `cookie_token` and `stoken`, the character lookup and check-in that follow may fail.
 
-## Kuro Community
+## <img src="/docs/img/video-tutorial/社区图标/kuro.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">Kuro Community
 
 Reads the **Punishing: Gray Raven** and **Wuthering Waves** characters you have bound, and checks in for each one.
 
@@ -122,7 +122,7 @@ Read their code and satisfy yourself that the sources are trustworthy before usi
 
 If the account has no characters bound that can be checked in, no Kuro Community entry appears in the results. An expired token shows the reason for the failure in the results.
 
-## Tajiduo
+## <img src="/docs/img/video-tutorial/社区图标/tajiduo.png" alt="" style="height:1.1em;vertical-align:-0.2em;margin-right:6px">Tajiduo
 
 Looks up the game characters on your account and checks in.
 
