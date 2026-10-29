@@ -19,46 +19,72 @@ export const zhThemeConfig: DefaultTheme.Config = {
     sidebar: {
         "/docs/": [
             {
-                text: "使用文档",
+                text: "快速入门",
+                collapsed: false,
                 items: [
                     { text: "开始使用", link: "/docs/user-guide" },
-                    {
-                        text: "脚本配置",
-                        link: "/docs/script-guide/",
-                        items: [
-                            { text: "MAA", link: "/docs/script-guide/maa" },
-                            { text: "MAAEND", link: "/docs/script-guide/maaend" },
-                            { text: "M9A", link: "/docs/script-guide/m9a" },
-                            { text: "MFW 项目", link: "/docs/script-guide/maafw" },
-                            { text: "OK-WW", link: "/docs/script-guide/okww" },
-                            { text: "HSR", link: "/docs/script-guide/hsr" },
-                            { text: "BetterGI", link: "/docs/script-guide/bettergi" },
-                            { text: "通用脚本", link: "/docs/script-guide/general" },
-                            { text: "SRA", link: "/docs/script-guide/sra" },
-                            { text: "三月七", link: "/docs/script-guide/march7th" },
-                        ],
-                    },
+                    { text: "脚本选择与配置总览", link: "/docs/script-guide/" },
+                    { text: "进阶功能总览", link: "/docs/advanced-features/" },
+                ],
+            },
+            {
+                text: "脚本教程",
+                collapsed: true,
+                items: [
+                    { text: "MAA（明日方舟）", link: "/docs/script-guide/maa" },
+                    { text: "MaaEnd（终末地）", link: "/docs/script-guide/maaend" },
+                    { text: "M9A（重返未来：1999）", link: "/docs/script-guide/m9a" },
+                    { text: "OK-WW（鸣潮）", link: "/docs/script-guide/okww" },
+                    { text: "BetterGI（原神）", link: "/docs/script-guide/bettergi" },
+                    { text: "HSR（星穹铁道）", link: "/docs/script-guide/hsr" },
+                    { text: "SRA", link: "/docs/script-guide/sra" },
+                    { text: "三月七小助手", link: "/docs/script-guide/march7th" },
+                    { text: "MFW 项目", link: "/docs/script-guide/maafw" },
+                    { text: "通用脚本", link: "/docs/script-guide/general" },
+                ],
+            },
+            {
+                text: "任务与日常管理",
+                collapsed: true,
+                items: [
                     { text: "任务调度", link: "/docs/task-scheduler" },
-                    {
-                        text: "进阶功能",
-                        link: "/docs/advanced-features/",
-                        items: [
-                            { text: "游戏签到工具", link: "/docs/advanced-features/game-sign" },
-                            { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
-                            { text: "推送通知", link: "/docs/advanced-features/notification" },
-                            { text: "失败回放", link: "/docs/advanced-features/failure-replay" },
-                            { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
-                            { text: "自定义外观包", link: "/docs/advanced-features/appearance" },
-                            { text: "桌宠包制作与导入", link: "/docs/advanced-features/mascot" },
-                            { text: "中国移动新消息（5G 消息）", link: "/docs/advanced-features/cmcc-newmsg" },
-                            { text: "让电脑定时开机", link: "/docs/advanced-features/Timed-Startup" },
-                            { text: "免密开机直达桌面", link: "/docs/advanced-features/skip-password" },
-                            { text: "定时/延迟自启软件", link: "/docs/advanced-features/Timed-app-start" },
-                            { text: "使用bot分析日志", link: "/docs/advanced-features/cnb-bot" },
-
-                        ],
-                    },
+                    { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
+                    { text: "游戏签到工具", link: "/docs/advanced-features/game-sign" },
+                ],
+            },
+            {
+                text: "通知与运行记录",
+                collapsed: true,
+                items: [
+                    { text: "推送通知", link: "/docs/advanced-features/notification" },
+                    { text: "中国移动 5G 消息", link: "/docs/advanced-features/cmcc-newmsg" },
+                    { text: "失败回放", link: "/docs/advanced-features/failure-replay" },
+                ],
+            },
+            {
+                text: "个性化与扩展",
+                collapsed: true,
+                items: [
+                    { text: "自定义外观包", link: "/docs/advanced-features/appearance" },
+                    { text: "桌宠包制作与导入", link: "/docs/advanced-features/mascot" },
+                    { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
+                ],
+            },
+            {
+                text: "系统与开机自动化",
+                collapsed: true,
+                items: [
+                    { text: "让电脑定时开机", link: "/docs/advanced-features/Timed-Startup" },
+                    { text: "免密开机直达桌面", link: "/docs/advanced-features/skip-password" },
+                    { text: "定时 / 延迟自启软件", link: "/docs/advanced-features/Timed-app-start" },
+                ],
+            },
+            {
+                text: "常见问题与排障",
+                collapsed: true,
+                items: [
                     { text: "常见问题", link: "/docs/FAQ" },
+                    { text: "使用 Bot 分析日志", link: "/docs/advanced-features/cnb-bot" },
                     { text: "提问的智慧", link: "/docs/howtoask" },
                 ],
             },
