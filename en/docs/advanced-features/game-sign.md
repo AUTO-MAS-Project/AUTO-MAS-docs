@@ -9,7 +9,7 @@ Four communities are supported: **Skland**, **miyoushe**, **Kuro Community**, an
 - Check-in requests are made locally by AUTO-MAS. Tokens are only used to reach the official API of the matching community, and are not sent to third-party services unrelated to check-in.
 - A token is a login credential. Don't send it to anyone, and don't put it in public logs, screenshots, or config repositories.
 - **Get token with account and password** uses your account and password only inside that one login request. Neither is saved: the input is cleared when the request finishes or fails, and nothing is written to config, logs, or notifications.
-- AUTO-MAS does not offer SMS-code login. When you use a password or a QR code to obtain credentials, make sure your network and your account are in a safe state.
+- AUTO-MAS does not offer SMS-code login. When you use a password to obtain credentials, make sure your network and your account are in a safe state.
 - Automatic check-in carries risks: account risk control, API changes, and failed check-ins. Evaluate that yourself and accept the consequences of using it.
 
 :::
@@ -73,17 +73,9 @@ Your account and password only exist in memory for that one request. The input i
 
 miyoushe automatically reads the characters bound to your account across **Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, Houkai Gakuen 2, Honkai Impact 3rd, and Tears of Themis**, then checks the check-in status for each one.
 
-### Recommended: Get a Token by QR Code
-
-1. Click **Get token by QR code** in the **miyoushe** section of the user edit window.
-2. Scan the QR code with the miyoushe app and confirm the login.
-3. The credential saves to the current user automatically once you confirm.
-
-QR codes expire. If you see "QR code expired" or "QR code status invalid", click **Regenerate QR code** and scan again. Scanning obtains an authentication cookie; AUTO-MAS does not write that cookie to the frontend log.
-
 ### Filling In a Cookie by Hand
 
-You can also run `document.cookie` in the developer tools of a logged-in miyoushe web session and paste the cookie string containing the authentication fields into the input. Don't paste page HTML, a full API response, or unrelated cookies. Without authentication fields such as `cookie_token` and `stoken`, the character lookup and check-in that follow may fail.
+Run `document.cookie` in the developer tools of a logged-in miyoushe web session and paste the cookie string containing the authentication fields into the input. Don't paste page HTML, a full API response, or unrelated cookies. Without authentication fields such as `cookie_token` and `stoken`, the character lookup and check-in that follow may fail.
 
 ## Kuro Community
 
@@ -91,7 +83,7 @@ Reads the **Punishing: Gray Raven** and **Wuthering Waves** characters you have 
 
 ### Get a Token
 
-This is the awkward one: **there is no web page or QR code option**. The token has to be dug out of the client's local login data, and where it lives changes with the client version and your system, so there is no single set of steps to give you here.
+The token has to be dug out of the client's local login data, and where it lives changes with the client version and your system, so there is no single set of steps to give you here.
 
 1. Log in to the account you want to check in with, using the Kuro Community client.
 2. Find the token in the local login data.
@@ -117,7 +109,7 @@ One thing worth knowing: if you also want to see your remaining Cloud NTE time, 
 2. Enter your Tajiduo account or phone number and password in the separate popup window.
 3. On success, AUTO-MAS validates `accessToken`, `refreshToken`, and the user ID, then saves the credential automatically.
 
-If the login fails, the returned fields are incomplete, or risk control kicks in, you won't get a "token saved" confirmation and your existing credential won't be overwritten. Your account and password only exist inside that one login request and are cleared afterwards. This feature does not offer SMS-code login or unverified QR-code login.
+If the login fails, the returned fields are incomplete, or risk control kicks in, you won't get a "token saved" confirmation and your existing credential won't be overwritten. Your account and password only exist inside that one login request and are cleared afterwards. This feature does not offer SMS-code login.
 
 ### Filling In Credentials by Hand
 
@@ -145,7 +137,7 @@ Results are shown as community + game + character name. Communities without a to
 
 First confirm the account can still log in normally in the official client or on the web. If even the official login fails, the problem isn't AUTO-MAS. If it works, get a fresh token:
 
-- **miyoushe**: scan the QR code again, that's the easiest.
+- **miyoushe**: get a fresh cookie from the web and enter it by hand.
 - **Skland, Tajiduo**: reopen their respective password windows.
 - **Kuro Community**: dig it out of the client again.
 
