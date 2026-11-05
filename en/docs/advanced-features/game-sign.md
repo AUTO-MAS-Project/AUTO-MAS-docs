@@ -87,7 +87,7 @@ For QR login, use [BMT](https://github.com/Lance0174/Better-MAS-Tools).
    }
    ```
 
-4. Paste the token into the **Skland** field in the user edit window and save.
+4. Paste the token into the **Skland** field in the account edit window and save.
 
 Don't copy the outer JSON, the quotation marks around `content`, or any other field. To switch accounts, clear your browser cookies and log in again — logging out on the web page directly can invalidate the original credential.
 
@@ -113,7 +113,7 @@ The token has to be dug out of the client's local login data, and where it lives
 
 1. Log in to the account you want to check in with, using the Kuro Community client.
 2. Find the token in the local login data.
-3. Paste it into the **Kuro Community** field in the user edit window and save.
+3. Paste it into the **Kuro Community** field in the account edit window and save.
 
 For step 2, the open-source project [Kuro_login](https://github.com/mxyooR/Kuro_login) shows one approach.
 
