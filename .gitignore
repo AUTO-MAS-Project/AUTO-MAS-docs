@@ -14,3 +14,8 @@ yarn-error.log*
 .DS_Store
 .vitepress/cache
 .vitepress/dist
+
+# DocForge keeps all Rust caches and generated portable packages local.
+/tools/docforge/target/
+/tools/docforge/tmp/
+/tools/docforge/out/
