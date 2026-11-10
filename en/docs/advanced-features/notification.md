@@ -32,6 +32,73 @@ Open the account under Managed scripts (托管管理), then find **Notification 
 Global notifications still use the global settings. Per-account notifications send that account's results separately. An account recipient does not replace the global sender and authorization code; configure global email settings first.
 :::
 
+## QQ Official Bot: Remote Commands {#qq-bot-commands}
+
+After binding a QQ official bot, send commands in QQ to retry a managed script or start a queue in the running AUTO-MAS instance. These commands target the bot bound in your own MAS settings. The [community log-diagnosis bot](/docs/advanced-features/cnb-bot) uses a different command set.
+
+### Before You Start
+
+1. Open **Settings > Notifications > QQ Official Bot** (设置 > 通知设置 > QQ 官方机器人), complete **Scan to bind** (扫码绑定), and add the bot as a friend using the QQ account that scanned the code. If you used **Advanced: Configure bot manually** (高级：手动配置机器人), private commands are accepted from the configured recipient OpenID.
+2. Enable the QQ notification channel, keep the computer and MAS online, and wait for **Connected** (已连接). QQ commands cannot wake a powered-off or sleeping computer or launch MAS after it exits.
+3. Send private commands from the bound user's account. For group commands, set **Notification destination** (通知接收位置) to **Group** (群聊) or **All** (全部). Have the group owner add the bot and allow proactive messages. While MAS is online, add the bot to the group or actually **@mention the bot** in QQ, then check that the group is discovered in settings.
+4. Every group command requires an **@mention**. Replies go to the same group. Typing the bot's name as ordinary text is not a QQ mention.
+
+### Released Commands (v5.8.0)
+
+| Command | Behavior |
+| --- | --- |
+| `重试 full managed-script name` | Runs that managed script again using its current automatic-run configuration. It does not target only the last failed account or individual task. |
+| `启动队列 full queue name` | Starts the named queue. In v5.8.0, normal queues run once; queues with cycling enabled follow their cycle settings. |
+| `我的ID` | Group mentions only: returns your member OpenID for the group-command allowlist. |
+
+Put a space between the command and the name, for example `重试 Arknights Daily` or `启动队列 Evening Routine`. Copy the complete **managed-script name** or **queue name** shown in MAS, not an account name, game title, or script type. Preserve spaces within names and do not add placeholder brackets or quotation marks. Rename duplicate managed scripts or queues in MAS before trying again.
+
+All three commands accept a leading `/`, such as `/重试 Arknights Daily`. v5.8.0 does not support the help, list, English aliases, or `--` syntax described below.
+
+### Extended Commands (Not Yet Released)
+
+::: warning Version scope
+The following command extensions in [PR #1917](https://github.com/AUTO-MAS-Project/AUTO-MAS/pull/1917) are pending merge and release. They do not work in v5.8.0. In the new development version, starting a queue runs it **once using its current configuration**; do not assume the v5.8.0 cycling behavior applies.
+:::
+
+| Purpose | Chinese form | English form |
+| --- | --- | --- |
+| Show all commands | `帮助` | `help` |
+| Show retry help | `重试 帮助` | `retry help` |
+| List managed-script names | `重试 列表 [page]` | `retry list [page]` |
+| Retry a managed script | `重试 full managed-script name` | `retry full managed-script name` |
+| Show queue-start help | `启动队列 帮助` | `start help` |
+| List queue names | `启动队列 列表 [page]` | `start list [page]` |
+| Start a queue once | `启动队列 full queue name` | `start full queue name` |
+| Show your group-command ID (groups only) | `我的ID` | `myid` |
+
+- `重试` / `retry` and `启动队列` / `start` without an argument show their own help and do not start tasks.
+- Mix Chinese and English keywords if preferred: `重试 help`, `retry 列表`, or `启动队列 list`. English keywords are case-insensitive, so `/RETRY LIST` works. Names still require an exact, case-sensitive match.
+- Any leading command accepts `/`. In groups, first @mention the bot in QQ, then enter the command, for example `/start Evening Routine`.
+- `help` / `帮助` and `list` / `列表` only return information; they do not start tasks and follow the existing private-user and group-allowlist restrictions. Lists show configured names in configuration order. A listed target is not guaranteed to be runnable right now. Names returned in a group are visible to its members.
+- List pages start at `1`; omit the page number to get page 1. **Each request returns only one page.** If more content remains, follow the next-page command at the end of the reply, such as `retry list 2` or `start list 2`. The Chinese form also works: `重试 列表 2`. `[page]` denotes an optional argument; do not type the brackets. An invalid page number only returns an error and never starts a task.
+- When a name starts with `help`, `list`, `帮助`, or `列表` as its first word, put `--` before it: `retry -- help` for a managed script named `help`, `start -- list` for a queue named `list`, `retry -- list 2` for a managed script named `list 2`, or `retry -- help example` for one named `help example`. The same applies to `帮助` / `列表`. For a name that is itself `-- help`, use `retry -- -- help` (or `start -- -- help` for a queue). Enter ordinary names directly without adding `--`; for example, a managed script named `-- alpha` is selected with `retry -- alpha`.
+
+For example, send `retry list` to find a managed-script name, then `retry Arknights Daily`; send `start list` to find a queue name, then `start Evening Routine`. Replace these example names with your actual names.
+
+### Restrict Group Access
+
+::: warning An empty allowlist opens group control
+**Saving an empty group-command allowlist permits every member of every discovered group to retry managed scripts and start queues.** Fill the allowlist first if you need to restrict access. Disable the QQ notification channel to stop all QQ commands, or switch the notification destination to **Private** (私聊) to stop group commands.
+:::
+
+1. Ask each member you want to authorize to @mention the bot and send `我的ID` (or `myid` in versions supporting the extension). Members can query their own ID even before they are allowlisted.
+2. In the QQ channel settings, enter each returned member OpenID on its own line in **Group-command member allowlist** (群控制成员白名单), then click **Save allowlist** (保存白名单). Use the member OpenID, not a QQ number, group number, or private-recipient OpenID.
+3. The allowlist applies to **all discovered groups**, not separately to each group. Once populated, only listed members may use restricted commands. Private commands still accept only the bound user. Changing bots or unbinding clears the allowlist; review access again afterward.
+
+### No Reply or No Task Started
+
+- **No reply:** Check the QQ channel switch, MAS availability, and gateway connection. In groups, also check the actual @mention, destination mode, discovered group, and allowlist. Missing message-event permissions or a gateway fallback to minimal subscriptions can prevent command reception even if outgoing notifications still work.
+- **Name not found or duplicated:** Check the complete managed-script or queue name. In versions supporting the extension, use `retry list` or `start list` first. Duplicate names must be changed in MAS.
+- **Cannot start now:** Check task status in MAS and wait for the current task to finish if necessary. QQ commands do not bypass MAS startup restrictions.
+- **“Submitted” reply:** This confirms acceptance of the start request, not task completion or success. Check scheduling status and results in MAS. To receive task-result notifications, also configure the global **Task result timing** (推送任务结果时机).
+- **Delayed or duplicate message ignored:** The bot ignores expired messages and duplicate deliveries. A missing reply does not prove that nothing ran. Check task status in MAS before resending an operation to avoid starting it twice.
+
 ## Email Notifications
 
 To receive notifications by email you need three things: an **SMTP server address**, a **sending address**, and an **authorization code**. Here is how to get each one.
