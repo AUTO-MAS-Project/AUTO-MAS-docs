@@ -1,8 +1,8 @@
 # MCP Service
 
-MCP lets an AI read configuration, edit plans and queues, start or stop tasks, and check runtime status and history. Available actions depend on the tools actually listed by the client. Deletion, cleanup, publishing, login, and application updates are not automatically exposed.
-
 MCP (Model Context Protocol) is a common interface for AI to call external tools. You do not need to know how it works. Just put the address below into your AI client.
+
+MCP lets an AI read configuration, edit plans and queues, start or stop tasks, and check runtime status and history. Available actions depend on the tools actually listed by the client. Deletion, cleanup, publishing, login, and application updates are not automatically exposed.
 
 ## Configuration
 
