@@ -1,219 +1,282 @@
 # Configuration Schema
 
-This document explains the recommended way to define AUTO-MAS plugin configuration schemas, the backend support scope, and frontend rendering rules.
-
-## Recommended Pattern
-
-Plugin configuration should use Pydantic `BaseModel` with `PluginField`:
-
-```python
-from typing import Literal
-from pydantic import BaseModel, ConfigDict
-from mas.plugin_config import PluginField
-
-class Config(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
-    enabled: bool = PluginField(default=True, description="Enable")
-    host: str = PluginField(default="127.0.0.1", description="Server address")
-    port: int = PluginField(default=8080, description="Port", ge=1, le=65535)
-    token: str = PluginField(default="", description="Access token", format="password")
-    homepage: str = PluginField(default="", description="Homepage", format="url")
-    contact: str = PluginField(default="", description="Email", format="email")
-    template: str = PluginField(default="", description="Template", format="textarea", rows=8)
-    mode: Literal["always", "failed_only", "never"] = PluginField(
-        default="always",
-        description="Notification strategy",
-    )
-```
-
-::: tip Tip
-
-Do not write `Field(format="password")` directly in normal plugin configuration. Pydantic can accept these extra parameters at runtime, but IDEs check against the `Field()` type signature and report "unexpected argument". `PluginField()` is a typed wrapper provided by the plugin system. It converts these UI parameters into standard `json_schema_extra`. Import it from the lightweight module `mas.plugin_config` to avoid triggering heavy main-program initialization during schema loading.
-
+::: warning
+This page follows the `dev` branch implementation as of 2026-11-18. The plugin system is still changing; the interfaces are whatever your installed AUTO-MAS source says.
 :::
 
-## PluginField Parameters
+A plugin's configuration is declared with a Python class. The host uses it to validate, persist, and generate the settings page. You write no frontend code.
 
-`PluginField()` supports common Pydantic `Field()` parameters, such as:
+::: tip Differences from the old version
+`Config(BaseModel)`, `PluginField()`, `mas.plugin_config`, and `ctx.config.get()` from the old docs no longer exist, and the runtime schema dict and the type names `string`/`key_value`/`table` are no longer used. Config is now the host's unified configuration framework (`ConfigEntry` / `ConfigGroup`), the same one used for script, user, and plan configuration.
+:::
 
-- `default`
-- `default_factory`
-- `title`
-- `description`
-- `examples`
-- `gt`
-- `ge`
-- `lt`
-- `le`
-- `multiple_of`
-- `min_length`
-- `max_length`
-- `pattern`
+## Minimal Example
 
-It also supports additional plugin frontend UI parameters:
+```python
+from typing import Annotated, Literal
 
-| Parameter | Type | Purpose |
+from pydantic import Field
+
+from auto_mas_core import (
+    BasePlugin,
+    ConfigGroup,
+    PluginConfig,
+    Trigger,
+    UiVisibility,
+    encrypted,
+    trigger_field,
+    ui_visibility,
+)
+
+
+class DemoConfig(PluginConfig):
+    class General(ConfigGroup):
+        enabled: bool = Field(default=True, description="启用")
+        interval: int = Field(default=5, ge=1, le=60, description="检查间隔（分钟）")
+        mode: Literal["always", "failed_only", "never"] = Field(
+            default="always", description="通知策略"
+        )
+        token: Annotated[str, encrypted()] = Field(default="", description="访问令牌")
+
+    class Action(ConfigGroup):
+        send_test: Trigger = Field(default=False, description="发送测试通知")
+
+    general: General = Field(default_factory=General, description="常规")
+    action: Action = Field(default_factory=Action, description="操作")
+
+    @ui_visibility("action.send_test")
+    def _vis_send_test(self) -> UiVisibility:
+        # 没启用时按钮置灰
+        return UiVisibility.SHOW if self.general.enabled else UiVisibility.DISABLE
+
+    @trigger_field("action.send_test", cancellable=False)
+    async def on_send_test(self) -> None:
+        from auto_mas_core.notify import Notify, NotifyPayload
+
+        await Notify.send_global(
+            NotifyPayload(title="测试", text=f"策略：{self.general.mode}"),
+            include_system=True,
+        )
+
+
+class PLUGIN(BasePlugin):
+    config_class = DemoConfig
+
+    async def on_enable(self) -> None:
+        assert isinstance(self.config, DemoConfig)
+        interval = self.config.general.interval
+```
+
+Key points:
+
+- The config class extends `PluginConfig`, and you set it on the `BasePlugin` subclass with `config_class`.
+- **Groups:** each field in the config class annotated with a `ConfigGroup` subclass is a group; in the example, `general` and `action`. The settings page is divided into blocks by group.
+- **Fields:** inside a group are ordinary pydantic fields. Types, defaults, and constraints such as `ge`/`le` are all validated by pydantic.
+- The group name `ui` is taken by the host; do not use it.
+- Read with `self.config.general.interval`. To write, assign and then `await self.config.commit()`; see [Core Capabilities](./core).
+
+## Where Config Is Stored
+
+- File: `config/plugins/<plugin name>.yaml`, under AUTO-MAS's working directory.
+- It is built from the file and activated on enable; on disable it is committed and written to disk before release; on uninstall the file is deleted.
+- The `uid` of the config object and the `uid` of the plugin's registry entry are two different values.
+
+## UI Controls
+
+The controls on the settings page are inferred from the field type, and you can override them with annotations. The backend puts the inferred result in the config's `ui.hints`, and the frontend `DeclarativeControl.vue` renders it.
+
+| Field type | Control |
+| --- | --- |
+| `bool` | Switch |
+| `int` | Number input; `ge`/`gt`/`le`/`lt` become the min and max (a constraint value of `0` is not passed to the control) |
+| `str` | Single-line input |
+| `Annotated[str, encrypted()]` | Password input, stored encrypted |
+| `Literal[...]`, `Enum` | Dropdown |
+| `list[Literal[...]]`, `list[Enum]` | Multi-select dropdown |
+| `datetime.date` | Date picker |
+| `FilePath`, `FolderPath`, `ExecutablePath` | Path input with a "Select" button |
+| `Annotated[str, select(endpoint=...)]` | Dropdown whose options come from a host endpoint; see below |
+| `Trigger` | Button; see [Triggers](#triggers) |
+
+A type with no matching control falls back to a single-line text input. Known cases:
+
+- `float`, `time`, and `datetime` render as a single-line input, and the entered value is validated by the backend.
+- `list[str]`, `dict`, and similar have no editor. Do not use them as UI fields; if you need them, change to a `Literal` list or put the data in a hidden group.
+- The buttons for choosing files and directories rely on the desktop app's system dialogs; they are unavailable when the frontend is opened on its own in a browser.
+
+The control width is determined by type and fixed by the frontend: buttons and switches take 6 columns, dropdowns and numbers take 8, and the rest take 12 (out of 24 columns).
+
+### Overriding the Inference: `ui()`
+
+```python
+from auto_mas_core import ui
+
+# 放在 Annotated 里
+note: Annotated[str, ui(widget="input")] = Field(default="")
+```
+
+| Parameter | Purpose |
+| --- | --- |
+| `widget` | Specifies the control name, overriding the inference. The frontend knows `input`, `path`, `number`, `select`, `date`, `button`, `dropdown-button`, and `switch` (`bool`, `boolean`, `checkbox`, and `toggle-button` are the same as `switch`, and `ref-select` is the same as `select`); other names are treated as a single-line input |
+| `visibility` | Show/hide; see below |
+| `secret` | Marks it as a password input |
+| `format`, `deps` | Written into the hint; `deps` is used for option linkage; `format` is currently unused by the frontend and produces no URL or email validation |
+
+### Dropdown Options from a Host Endpoint: `select()`
+
+```python
+from auto_mas_core import select
+
+game: Annotated[str, select(endpoint="/api/plugin/options/games")] = Field(default="-")
+```
+
+The frontend only recognizes the `endpoint` values below. Any other value shows "option endpoint not wired up yet" on the page, with that address:
+
+| endpoint | Options | Linkage |
 | --- | --- | --- |
-| `format` | `"password" | "url" | "email" | "textarea"` | Specifies a special string input control or validation mode |
-| `rows` | `int` | Default row count for `textarea` |
-| `placeholder` | `str` | Input placeholder |
-| `help` | `str` | Help text shown below the field |
-| `ui_type` | `str` | Overrides the frontend control type, such as `key_value` or `table` |
-| `item_type` | `str` | Type hint for list or table elements |
-| `json_schema_extra` | `dict[str, Any]` | Advanced extension entry point, not recommended for ordinary cases |
+| `/api/plugin/options/games` | Games registered with the host | None |
+| `/api/plugin/options/devices` | Devices of a game | `ui(deps=["<group>.<game field>"])` |
+| `/api/plugin/options/plans` | Plans | None |
+| `/api/info/combox/emulator` | Emulators | None |
+| `/api/info/combox/emulator/devices` | Device instances of an emulator | `ui(deps=["<group>.<emulator field>"])` |
+| `/api/info/combox/plan` | General plans | None |
 
-## Backend Schema Output
+A dropdown with an `endpoint` gets an extra "Not linked" (「不关联」) option, whose value is `"-"`; make the field's default `"-"`. When the dependency field's value is `"-"` or empty, the device dropdown does not request the endpoint and has only the "Not linked" option.
 
-The backend normalizes the `Config` model into a runtime schema dictionary. Common fields are:
+## Visibility and Read-only
 
-| Field | Type | Meaning |
-| --- | --- | --- |
-| `type` | `str` | Field type |
-| `required` | `bool` | Whether the field is required |
-| `default` | `Any` | Default value |
-| `nullable` | `bool` | Whether `None` is allowed |
-| `description` | `str` | Field description |
-| `title` | `str` | Field title |
-| `examples` | `list` | Example values |
-| `constraints` | `dict` | Pydantic constraints, such as `ge`, `le`, and `pattern` |
-| `enum` | `list` | Enum values |
-| `format` | `str` | Frontend format hint |
-| `item_type` | `str` | List element type hint |
+`UiVisibility` has four values:
 
-## Supported Types
+| Value | Effect |
+| --- | --- |
+| `SHOW` | Shown and editable |
+| `HIDE` | Not shown, and the field is not in the API output either |
+| `DISABLE` | Shown but read-only |
+| `MASKED` | The value is replaced by a placeholder; submitting the placeholder unchanged means no modification. Only usable on specific fields |
 
-The backend supports the following basic types:
-
-| Schema type | Python type | Frontend rendering |
-| --- | --- | --- |
-| `string` / `str` | `str` | Single-line input |
-| `integer` / `int` | `int` | Number input |
-| `number` / `float` | `float` | Number input |
-| `boolean` / `bool` | `bool` | Toggle |
-| `list` / `list[...]` | `list` | List editor |
-| `dict` | `dict[str, Any]` | Default JSON editor |
-| `key_value` | `dict[str, Any]` | Key-value table |
-| `table` | `list[dict[str, Any]]` | Table editor |
-
-The backend also supports common type expressions such as `Literal[...]`, `Optional[...]`, `T | None`, `dict[str, T]`, and `list[T]`.
-
-## Enums
-
-Using `Literal` is recommended:
+There are two ways to declare it. A field may use only one; declaring both raises `TypeError` when the class is created:
 
 ```python
-mode: Literal["always", "failed_only", "never"] = PluginField(
-    default="always",
-    description="Notification strategy",
+# 常量：放在 Annotated 里，字段或整个分组都可以
+debug: Annotated[bool, ui(visibility=UiVisibility.HIDE)] = Field(default=False)
+cache: Annotated[CacheFields, ui(visibility=UiVisibility.HIDE)] = Field(default_factory=CacheFields)
+
+# 动态：配置类上的同步方法，按其他字段的值决定
+@ui_visibility("general.token")
+def _vis_token(self) -> UiVisibility:
+    return UiVisibility.SHOW if self.general.mode != "never" else UiVisibility.HIDE
+```
+
+- A dynamic method must be a synchronous function that returns `UiVisibility`; written as `async def`, it raises `TypeError` when evaluated.
+- When a group is `HIDE`, all fields in it are hidden; when a group is `DISABLE`, all fields in it are read-only.
+- When the config is locked (for example, a task is using it), all fields are read-only.
+- Visibility is evaluated in the backend. The frontend re-reads the config after a save or a button click; it does not recompute in real time while editing.
+- Changes submitted by the frontend for `HIDE` and `DISABLE` fields are ignored. Program-internal code can bypass this restriction with `await config.update(patch, check_visibility=False)`.
+
+## Triggers
+
+A trigger is a "click to run" field. Its value is not persisted, and reading it always returns the idle value (a `Trigger` is `False`; the `Literal` trigger below is `None`).
+
+1. Declare a `Trigger` field in a group.
+2. Bind a handler method on the config class with `@trigger_field("<group>.<field>")`.
+3. If needed, control the button's visibility with `@ui_visibility`.
+
+```python
+from auto_mas_core import trigger_field
+
+@trigger_field("action.send_test", cancellable=False)
+async def on_send_test(self) -> None:
+    ...
+```
+
+- The handler can be sync or async and takes no parameters.
+- `cancellable` defaults to `True` and declares whether this operation may be cancelled.
+- The binding must be one-to-one: assigning to a `Trigger` field without `@trigger_field` raises `AttributeError`; binding the same field twice raises `TypeError`.
+- The handler runs as a plugin operation in the background task group and does not block the caller. While the same trigger is running, triggering it again with the same value merges into the same operation, and triggering with a different value is rejected.
+- For a `HIDE` or `DISABLE` trigger, assigning `True` is silently ignored; starting it through `Operations.start` is rejected.
+
+After a frontend button click, the frontend calls the host's command endpoint and refreshes the page when the operation ends; the whole form is disabled while it runs.
+
+There are two ways to trigger it from code:
+
+```python
+# 1) 赋值。不返回操作 ID
+self.config.action.send_test = True
+
+# 2) 通过 Operations 启动，拿到操作 ID 用于查询和取消
+from auto_mas_core.services import Operations
+
+operation_id = await Operations.start(
+    config_uid=self.config.uid, group="action", field="send_test", value=True
 )
 ```
 
-The backend outputs it as a runtime `enum` array, and the frontend renders it as a dropdown.
+`Operations.start` is rejected when the config is locked, and also when the value equals the idle value (for example `False`). The HTTP entry is `/api/operations/start`.
 
-Multi-select enum example:
+### Multi-button Triggers
 
-```python
-channels: list[Literal["system", "mail", "webhook"]] = PluginField(
-    default_factory=lambda: ["system"],
-    description="Enabled channels",
-)
-```
-
-The frontend renders it as a multi-select dropdown.
-
-The plugin runtime schema does not enter the OpenAPI strongly typed generation chain, so enum values in Chinese are safe here. Do not convert plugin configuration fields into OpenAPI strongly typed models, or Chinese enum values may trigger member-name conflicts in the code generator.
-
-## String Formats
-
-Password input:
+Write a field as a `Literal` and the UI shows a dropdown button; the selected value is passed to the handler.
 
 ```python
-token: str = PluginField(default="", description="Access token", format="password")
+from typing import Annotated, Literal
+
+from app.config import TriggerDecl
+
+class Action(ConfigGroup):
+    export: Annotated[Literal["json", "yaml"] | None, TriggerDecl()] = None
 ```
 
-Multiline text:
+The handler takes one parameter:
 
 ```python
-template: str = PluginField(
-    default="",
-    description="Message template",
-    format="textarea",
-    rows=8,
-)
+@trigger_field("action.export")
+async def on_export(self, value: str) -> None:
+    ...
 ```
 
-URL:
+::: warning
+`TriggerDecl` is currently not exported from `auto_mas_core`; it can only be imported from `app.config`. A single field cannot mix `bool` and `Literal`.
+:::
 
-```python
-homepage: str = PluginField(default="", description="Homepage", format="url")
+## UI Text
+
+Labels in the UI do not come from pydantic's `description`; they come from the plugin package's language files. If not found, the field name or group name is shown directly.
+
+Language files go in the package's `i18n/` directory: `zh_CN.json`, `en.json`, and `ja.json` (`zh-CN.json`, `en-US.json`, and `ja-JP.json` are also accepted). A file is a flat JSON object. Every key must start with `plugins.<plugin name>.`, and every value must be a string.
+
+| Key | Purpose |
+| --- | --- |
+| `plugins.<plugin name>.config.<group>.label` | Group title |
+| `plugins.<plugin name>.config.<group>.<field>.label` | Field label; button text uses it too |
+| `plugins.<plugin name>.config.<group>.<field>.tip` | The question-mark tooltip beside the field |
+| `plugins.<plugin name>.config.<group>.<field>.options.<value>` | Display text of a dropdown option |
+
+```json
+{
+  "plugins.demo.config.general.label": "常规",
+  "plugins.demo.config.general.interval.label": "检查间隔（分钟）",
+  "plugins.demo.config.general.mode.label": "通知策略",
+  "plugins.demo.config.general.mode.tip": "决定什么时候发通知",
+  "plugins.demo.config.general.mode.options.always": "总是",
+  "plugins.demo.config.general.mode.options.failed_only": "仅失败时",
+  "plugins.demo.config.general.mode.options.never": "从不",
+  "plugins.demo.config.action.label": "操作",
+  "plugins.demo.config.action.send_test.label": "发送测试通知"
+}
 ```
 
-Email:
+An empty object, duplicate keys, or keys without the prefix make the language resources fail to load.
 
-```python
-contact: str = PluginField(default="", description="Email", format="email")
-```
+## Saving and Validation
 
-The frontend provides instant hints for `url`, `email`, `pattern`, length, and number range validation. The backend is still responsible for final trusted validation.
+- "Save" on the settings page submits the values of all current groups to `/api/plugin_config/update`, and the backend re-validates them with your `config_class`. On a validation failure it returns an error and writes nothing.
+- The frontend only applies control-level range limits; the backend validation is what counts.
+- When the plugin is not enabled or has not declared `config_class`, the settings page shows an empty state, and the save endpoint returns "plugin not enabled or has no config of its own" (「插件未启用或无自有配置」).
 
-## Key-Value Pairs and Tables
+## Development Tips
 
-Key-value pairs:
-
-```python
-headers: dict[str, str] = PluginField(
-    default_factory=lambda: {"Content-Type": "application/json"},
-    description="Request headers",
-    ui_type="key_value",
-)
-```
-
-Table:
-
-```python
-class WebhookItem(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
-    name: str = PluginField(default="Default channel", description="Name")
-    enabled: bool = PluginField(default=True, description="Enable")
-    url: str = PluginField(default="", description="URL", format="url")
-
-
-class Config(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
-    webhooks: list[WebhookItem] = PluginField(
-        default_factory=list,
-        description="Webhook list",
-        ui_type="table",
-        item_type="object",
-    )
-```
-
-## Current Frontend Support
-
-The current plugin configuration page supports:
-
-- Boolean toggles.
-- Number inputs and basic range constraints.
-- Single-line strings.
-- Password inputs.
-- Multiline textareas.
-- URL and email format hints.
-- `Literal` dropdowns.
-- `list[Literal[...]]` multi-select dropdowns.
-- Basic list editor.
-- Key-value table.
-- Object table.
-- JSON editor entry point for unrecognized complex types.
-
-## Development Recommendations
-
-1. Prefer `PluginField()` for ordinary plugin configuration fields.
-2. Prefer `Literal[...]` for enums.
-3. Use `format="password"` for keys, tokens, and passwords.
-4. Use `format="url"` and `format="email"` for URLs and emails.
-5. Use `format="textarea"` and `rows` for large text.
-6. For complex objects without a clear UI, allow the JSON editor first.
-7. Frontend validation improves UX but cannot replace backend validation.
+1. Use `Literal[...]` for enumerations; the UI automatically becomes a dropdown.
+2. Use `Annotated[str, encrypted()]` for secrets and tokens.
+3. Put state that is only for internal use in a `HIDE` group so it does not appear in the UI.
+4. Write the conditions for dynamic visibility in `@ui_visibility` methods, keeping them synchronous and free of IO.
+5. Always put UI text in the language files; treat `description` as a code comment only.

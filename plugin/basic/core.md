@@ -1,647 +1,347 @@
 # 核心功能
 
-当在开发插件时，不可避免地需要使用大量核心能力，比如日志系统、配置管理、事件收发、缓存和运行时执行。
-
-本文将介绍如何使用上下文（context，下称 ctx）让插件获得这些能力，并给出每个能力的简介与最小可用用法。
-
-## 上下文
-
-### ctx 是什么
-
-ctx 是插件运行时的统一能力入口。插件实例化后，宿主会把 ctx 传给插件，你可以通过它访问：
-
-- `ctx.plugin_name` / `ctx.instance_id`：插件与实例标识。
-- `ctx.logger`：日志能力。
-- `ctx.config`：配置读写能力。
-- `ctx.event`：事件监听与发送能力。
-- `ctx.cache`：实例级缓存管理能力。
-- `ctx.runtime`：运行时探测与代码执行能力。
-
-::: tip 还有更多
-
-此处列举了基础ctx，更多请继续查阅[事件系统](../basic/event) **等**文档
-
+::: warning
+本文以 `dev` 分支 2026-11-18 的实现为准。插件系统仍在变化，接口以你安装的 AUTO-MAS 源码为准。
 :::
 
-### ctx 如何注入到插件
+插件开发需要的核心能力分三处：
 
-典型流程：
+- **插件实例**：`BasePlugin` 子类的属性和生命周期钩子，如 `self.config`、`self.services`、`self.background_tasks`。
+- **SDK**：`auto_mas_core` 顶层和 `utils`、`services`、`notify` 子模块导出的类与函数。
+- **宿主**：这些导出背后的真实实现。SDK 不提供独立运行的宿主，插件只能在 AUTO-MAS 里运行。
 
-1. 插件加载器构建 `PluginContext`。
-2. 加载器调用 `Plugin(ctx)` 创建插件实例。
-3. 插件在 `__init__` 中保存 `self.ctx`，后续生命周期和事件处理阶段可直接使用。
-
-最小示例：
-
-```python
-class Plugin:
-	def __init__(self, ctx):
-		self.ctx = ctx
-		self.ctx.logger.info(f"插件已初始化: {ctx.plugin_name}")
-```
-
-## 基础属性
-
-### ctx.plugin_name
-
-当前插件名（逻辑名）。
-
-用法：
-
-```python
-name = ctx.plugin_name
-ctx.logger.info(f"plugin_name={name}")
-```
-
-### ctx.instance_id
-
-当前插件实例 ID。多实例场景下通常用于隔离缓存、事件、状态。
-
-用法：
-
-```python
-instance_id = ctx.instance_id
-ctx.logger.info(f"instance_id={instance_id}")
-```
-
-## 日志能力
-
-### ctx.logger
-
-插件日志入口，通常由宿主统一接管输出、格式和持久化。
-
-常用方法：
-
-- `ctx.logger.debug(msg)`：调试信息。
-- `ctx.logger.info(msg)`：常规信息。
-- `ctx.logger.warning(msg)`：告警信息。
-- `ctx.logger.error(msg)`：错误信息。
-
-最小用法：
-
-```python
-ctx.logger.debug("调试日志")
-ctx.logger.info("插件开始执行")
-ctx.logger.warning("这是一个告警")
-ctx.logger.error("发生错误")
-```
-
-实践建议：
-
-- 日志中带上 `plugin_name` 或业务主键，便于跨插件排查。
-- 错误路径尽量记录异常类型和关键上下文。
-
-## 配置能力
-
-### ctx.config
-
-配置代理对象，兼容字典访问，并扩展了 `set/update/reset` 等语义化方法。
-
-### ctx.config.get
-
-读取配置项，未命中时返回默认值。
-
-用法：
-
-```python
-hello = ctx.config.get("hello", "world")
-```
-
-### ctx.config.set
-
-写入单个配置项。
-
-::: warning 你会用到这个方法吗？
-
-我们不推荐使用set的方式在插件运行时动态的修改配置项，因为这可能导致前端显示的配置不一致。
-
-不过那也就是个显示的问题而已，如果你想存储时间戳，类似三月七的“上一次执行周本时间”这样的，那不妨一用。
-
+::: tip
+旧文档里的 `ctx`（`ctx.logger`、`ctx.event`、`ctx.cache`、`ctx.runtime`）已经不存在。插件不再接收 `PluginContext`，对应能力的去向见本文各节和[事件系统](./event)。
 :::
 
-用法：
+## 最小插件
+
+插件是普通 Python 包，包的 `__init__.py` 导出名为 `PLUGIN` 的 `BasePlugin` 子类。
 
 ```python
-ctx.config.set("retry", 3)
-ctx.config.set("feature_enabled", True)
+from auto_mas_core import BasePlugin
+from auto_mas_core.utils import get_logger
+
+logger = get_logger("demo")
+
+
+class PLUGIN(BasePlugin):
+    async def on_enable(self) -> None:
+        logger.info(f"{self.plugin_name} 已启用")
+
+    async def on_disable(self) -> None:
+        logger.info(f"{self.plugin_name} 已停用")
 ```
 
-注意事项：
+加载器检查 `PLUGIN` 必须是 `BasePlugin` 子类，并读取类上的 `requires`、`wants`。包里如果声明了 `PLUGIN_API_VERSION`，主版本必须和宿主一致。
 
-- key 必须是非空字符串，否则会抛出异常。
+## 实例上的能力
 
-### ctx.config.update
-
-批量更新配置项，可传字典，也可用关键字参数。
-
-用法：
+宿主在启用时构造实例，构造参数是 `config` 和 `record`。你不需要自己写 `__init__`；确实要写时保持签名并调用父类。
 
 ```python
-ctx.config.update({"timeout": 10, "mode": "fast"})
-ctx.config.update(timeout=15, mode="safe")
+class PLUGIN(BasePlugin):
+    def __init__(self, config=None, record=None) -> None:
+        super().__init__(config, record)
 ```
 
-### ctx.config.reset
+| 成员 | 类型 | 说明 |
+| --- | --- | --- |
+| `self.config` | `config_class` 的实例，没有声明时为 `None` | 插件自己的配置，见[配置声明](./schema) |
+| `self.services` | `ServiceResolver` | 读取其他插件提供的服务，见[服务系统](./service) |
+| `self.background_tasks` | `BackgroundTaskGroup` | 本实例的后台任务组 |
+| `self.record` | `PluginRecord` | 注册表项，含版本、状态等元数据 |
+| `self.plugin_name` | `str` | 注册名 |
+| `self.lifecycle_context` | `LifecycleContext` | 当前生命周期语境 |
 
-重置配置源并重建当前配置。
+类属性：
 
-用法：
+| 属性 | 作用 |
+| --- | --- |
+| `config_class` | 配置类，见[配置声明](./schema) |
+| `provides_services` | 提供的服务，`{服务名: 方法名}` |
+| `requires` / `wants` | 依赖的服务名，元组 |
+| `api_router` | 一个 FastAPI `APIRouter`，启用时挂载 |
+
+### self.config
+
+`self.config` 的类型是 `PluginConfig | None`。声明了 `config_class` 才有值，用之前先收窄类型。
 
 ```python
-snapshot = ctx.config.reset({"hello": "new-world"})
-ctx.logger.info(f"重置后配置: {snapshot}")
+from auto_mas_core import BasePlugin, PluginConfig
+
+
+class MyConfig(PluginConfig):
+    ...
+
+
+class PLUGIN(BasePlugin):
+    config_class = MyConfig
+
+    async def on_enable(self) -> None:
+        assert isinstance(self.config, MyConfig)
 ```
 
-注意事项：
-
-- `reset(None)` 会重置为空配置，不是“不做变更”。
-
-### ctx.config.to_dict
-
-返回当前配置深拷贝，适合只读快照。
-
-用法：
+读配置直接取属性。写配置先赋值，再 `await commit()`：
 
 ```python
-current_config = ctx.config.to_dict()
+# General 是 MyConfig 里声明的分组，字段怎么写见「配置声明」
+self.config.general.interval = 10
+await self.config.commit()
 ```
 
-### ctx.config.source_dict
+- 赋值只是暂存，`commit()` 才落地并触发信号。提交失败会抛 `ConfigAggregateError`。
+- 配置被锁定时不能写入。
+- 配置文件是 `config/plugins/<插件名>.yaml`。停用时保存并释放，再次启用时从文件重建。卸载插件时删除。
 
-返回源配置深拷贝，用于对比当前配置与源配置差异。
+### self.background_tasks
 
-用法：
+插件的后台工作放进这个任务组，不要自己 `asyncio.create_task`。停用、卸载、重载时宿主会取消并等待组内任务结束。
 
 ```python
-source_config = ctx.config.source_dict()
+async def refresh(self) -> None:
+    ...
+
+
+async def on_enable(self) -> None:
+    handle = self.background_tasks.spawn(lambda: self.refresh())
+    if handle is None:
+        # 任务组已关闭，或并发数/保留数已满
+        return
 ```
 
-## 事件能力
+`spawn(factory)` 接收一个返回协程的函数，返回 `BackgroundTaskHandle`；被拒绝时返回 `None`，不会抛异常，也不会创建协程。
 
-### ctx.event
+| 方法 | 作用 |
+| --- | --- |
+| `handle.cancel()` | 取消任务 |
+| `handle.done()` | 是否已结束 |
+| `await handle.wait_done(timeout)` | 等待结束，不取结果；超时返回 `False` |
+| `await handle.wait_take(timeout)` | 等待并取走结果，得到 `TaskOutcome`；超时抛 `TimeoutError`，`retain_result=False` 的任务抛 `KeyError` |
+| `outcome.unwrap()` | 成功返回值，否则重新抛出原异常 |
 
-插件事件门面，统一提供监听、取消监听、发送事件能力。
+- 任务组的并发数和保留数都等于设置里的插件操作上限（`Config.setting.plugin.max_operations`）。
+- 结果默认保留 300 秒。不需要结果时传 `spawn(factory, retain_result=False)`。
+- 没有执行超时。需要超时自己用 `asyncio.timeout`。
+- 任务组在 `pre_enable()` 之前绑定，之前访问 `self.background_tasks` 会抛 `RuntimeError`。
 
-### ctx.event.on
-
-注册事件监听器，返回 listener_id。
-
-用法：
+### self.record 与 self.plugin_name
 
 ```python
-async def on_ping(payload):
-	ctx.logger.info(f"收到 ping: {payload}")
-
-listener_id = ctx.event.on(
-	"demo.ping",
-	on_ping,
-	scope="global",
-	priority=10,
-	once=False,
-)
+info = self.record.info
+logger.info(f"{self.plugin_name} {info.version} 来源={info.source}")
 ```
 
-关键参数：
+`info` 里常用的字段：`plugin_name`、`package_name`、`version`、`source`（`installed` 或 `local`）、`state`、`last_error`、`is_core`、`is_local`。`self.record` 只持有弱引用，注册项被回收后访问会抛 `RuntimeError`，不要在后台长期缓存。
 
-- `event`：事件名。
-- `handler`：处理函数。
-- `scope`：`global` 或 `instance`。
-- `priority`：越大越先执行。
-- `once`：是否触发一次后自动解绑。
-- `error_policy`：`continue` 或 `raise`，`None` 表示继承事件级策略。
+## 生命周期钩子
 
-### @on_event（推荐）
+所有钩子都是 `async def`，默认什么都不做。需要的才覆盖。
 
-你也可以导入并使用@on_event装饰器来快速启用一个事件监听器，这很酷不是吗？
+| 钩子 | 时机 |
+| --- | --- |
+| `pre_enable` | 启用前的预检。此时服务、后台任务已绑定，配置尚未激活，上游依赖尚未启用 |
+| `on_enable` | 上游依赖已启用、配置已激活。启动你的业务资源 |
+| `pre_disable` | 停用前的预检 |
+| `on_disable` | 停用时。后台任务组此时已被取消并等待完毕 |
+| `pre_reload` / `on_reload` | 重载前预检 / 重载时，作用于旧实例 |
+| `pre_unload` / `on_unload` | 卸载前预检 / 卸载时 |
+| `on_teardown` | 程序退出。不替代 `on_disable`，不落盘、不改启用状态 |
+| `on_fail_cleanup` | 生命周期操作失败后的清理，收到出错阶段、语境和异常 |
 
-```python
-from mas.plugins import on_event
+启用顺序：构造实例 → 绑定后台任务组和服务 → `pre_enable` → 启用 `requires` 里的上游 → 激活配置 → `on_enable` → 登记 `provides_services` → 挂载 HTTP。
 
-@on_event("script.exit", scope="global", priority=0, once=False)
-async def on_script_exit(payload, ctx):
-	ctx.logger.info(f"script.exit: {payload}")
-```
+停用顺序：`pre_disable` → 先停用依赖本插件服务的下游 → 取消后台任务 → `on_disable` → 保存并释放配置 → 注销服务和 HTTP。
 
-## 
+重载：`pre_reload` → 拆下依赖本插件的下游 → `on_reload` → 停用旧实例 → 重新导入插件代码 → 启用新实例 → 按原样恢复下游。
 
-### ctx.event.off
-
-取消监听器，可用 handler 或 listener_id 解绑。
-
-用法：
-
-```python
-ctx.event.off("demo.ping", listener_id=listener_id)
-```
-
-### ctx.event.off_all
-
-取消当前实例注册的全部监听器。
-
-用法：
-
-```python
-ctx.event.off_all()
-```
-
-### ctx.event.emit_async
-
-异步发送事件，推荐在 async 流程中优先使用。
-
-用法：
-
-```python
-await ctx.event.emit_async(
-	"cache.test",
-	{"key": "k1", "value": {"x": 1}},
-	scope="instance",
-	error_policy="continue",
-)
-```
-
-### ctx.event.emit
-
-同步桥接发送事件。若当前有事件循环，会创建任务异步发送；若无事件循环，会自动创建并执行。
-
-用法：
-
-```python
-ctx.event.emit("demo.ping", {"message": "hello"}, scope="global")
-```
-
-实践建议：
-
-- 在 async 代码中优先使用 `emit_async` 并 `await`。
-- 需要严格时序时，不建议依赖同步 `emit` 的后台任务行为。
-
-## 缓存能力
-
-虽然它名字是叫缓存，而且叫“cache”，但是实际上他是可以持久化的，拥有完整的CRUD功能。
-
-*哪天支持数据库了我真得考虑要不要给他改个名字了*
-
-### ctx.cache
-
-实例级缓存管理器，用于注册和管理多个缓存空间。
-
-### ctx.cache.register
-
-注册缓存并返回缓存实例（当前后端仅支持 `json`）。
-
-用法：
-
-```python
-cache = ctx.cache.register(
-	cache_name="test_cache",
-	backend="json",
-	limit=10,
-	limit_mode="count",
-)
-```
-
-关键参数：
-
-- `cache_name`：缓存名，建议英文规范名。
-- `backend`：后端类型，当前仅支持 `json`。
-- `limit`：阈值。
-- `limit_mode`：`count`（按条目数）或 `bytes`（按字节数）。
-- `limit_unit`：`b/kb/mb/gb`，仅 `bytes` 模式生效。
-
-常见示例：
-
-```python
-# 按条目数限制
-cache_a = ctx.cache.register(
-	cache_name="recent_users",
-	backend="json",
-	limit=100,
-	limit_mode="count",
-)
-
-# 按体积限制
-cache_b = ctx.cache.register(
-	cache_name="large_payload",
-	backend="json",
-	limit="10mb",
-	limit_mode="bytes",
-	limit_unit="mb",
-)
-```
-
-同名缓存重复注册时，参数必须一致，否则会抛异常。
-
-### ctx.cache.get_registered
-
-获取已注册缓存实例，不存在返回 `None`。
-
-用法：
-
-```python
-cache = ctx.cache.get_registered("test_cache")
-if cache is None:
-	cache = ctx.cache.register(
-		cache_name="test_cache",
-		backend="json",
-		limit=10,
-		limit_mode="count",
-	)
-```
-
-### ctx.cache.list_registered
-
-列出当前实例全部已注册缓存及统计信息。
-
-用法：
-
-```python
-stats_map = ctx.cache.list_registered()
-ctx.logger.info(f"已注册缓存: {stats_map}")
-```
-
-### ctx.cache.instance_cache_dir
-
-当前实例缓存目录路径。
-
-用法：
-
-```python
-cache_dir = ctx.cache.instance_cache_dir
-ctx.logger.info(f"缓存目录: {cache_dir}")
-```
-
-### 缓存实例方法（register 返回对象）
-
-#### cache.set
-
-写入单个键值。
-
-```python
-cache.set("user:1", {"name": "Alice"})
-```
-
-#### cache.get
-
-读取键值，未命中返回默认值。
-
-```python
-user = cache.get("user:1", default={})
-```
-
-#### cache.delete
-
-删除键，返回是否删除成功。
-
-```python
-deleted = cache.delete("user:1")
-```
-
-#### cache.exists
-
-判断键是否存在。
-
-```python
-exists = cache.exists("user:1")
-```
-
-#### cache.update
-
-批量写入键值。
-
-```python
-cache.update({"k1": 1, "k2": 2})
-```
-
-#### cache.all
-
-获取缓存全部键值（不含内部元数据）。
-
-```python
-all_items = cache.all()
-```
-
-#### cache.clear
-
-清空缓存。
-
-```python
-cache.clear()
-```
-
-#### cache.stats
-
-返回缓存统计信息（计数、大小、阈值、路径等）。
-
-```python
-stats = cache.stats()
-ctx.logger.info(f"cache stats: {stats}")
-```
-
-## 运行时能力
+- `pre_enable` 抛异常时启用被中止，宿主释放已绑定的任务组和配置。`pre_enable` 之后的阶段（启用上游、激活配置、`on_enable`、登记服务和 HTTP）抛异常时，插件进入 `fault_runtime`，并调用 `on_fail_cleanup`。
+- `pre_*` 钩子是业务预检，预检不通过时抛 `PluginPrecheckError`（SDK 已导出）。
+- 核心插件 `auto_mas_core` 不可停用、重载和卸载。
 
 ::: warning
-
-该能力所列出来的方法已经完成，但后续还有更多拓展功能在计划中，随时可能出现破坏性的修改和更新。
-
-*目前看上去实现的并不够优雅，可能后续用更优雅的实现方式*
-
-2026/4/19
-
+停用和卸载时，宿主关闭新调用准入并等待在途调用结束。外部进程、订阅、临时文件等私有资源由你在 `on_disable` 里释放。
 :::
 
-MAS允许你设定插件的代码解释器，以在特定的虚拟环境下执行特定的代码。
-
-::: tip 合理使用
-
-插件开发者理应对可能导致主程序无法使用的库使用单独的运行时。
-
-比如想使用MAS拥有，但版本不同的库，想使用不一样的python版本，或是引入其他大型框架。
-
-都可以尝试额外的运行时。
-
-:::
-
-### ctx.runtime
-
-运行时门面，提供环境探测、参数设置、代码执行等能力。
-
-### ctx.runtime.info
-
-获取运行时信息（如宿主解释器、当前选定解释器、解释器检查结果）。
-
-用法：
+## 日志
 
 ```python
-info = ctx.runtime.info()
-ctx.logger.info(f"selected_python={info.get('selected_python')}")
+from auto_mas_core.utils import get_logger
+
+logger = get_logger("我的插件")
+logger.debug("调试信息")
+logger.info("常规信息")
+logger.warning("警告")
+logger.error("错误")
 ```
 
-### ctx.runtime.set
+`get_logger` 返回宿主的 loguru 日志器，模块名用于标记来源。写日志前可以用 `sanitize_log_message(text)` 去掉文本里的令牌等敏感参数。
 
-更新运行时选项，如解释器路径和超时设置。
+## SDK 导出
 
-用法：
+### auto_mas_core 顶层
+
+| 类别 | 名称 |
+| --- | --- |
+| 基类 | `BasePlugin`、`ExtensionPlugin`、`GameAdapterPlugin`、`ScriptAdapterPlugin`、`CorePlugin` |
+| 插件配置 | `PluginConfig`、`PluginCommandEntry`、`trigger_field`、`ConfigEntry`、`ConfigGroup`、`ConfigCollection`、`collection`、`ConfigTableColumn` |
+| 字段与界面 | `Trigger`、`Virtual`、`virtual_field`、`ui`、`ui_visibility`、`UiVisibility`、`select`、`encrypted`、`FilePath`、`FolderPath`、`ExecutablePath`、`JsonDictString`、`JsonListString` |
+| 配置信号与锁 | `FieldChangeEvent`、`LockTicket` |
+| 服务与 HTTP | `ServiceResolver`、`plugin_route` |
+| 后台任务 | `BackgroundTaskGroup`、`BackgroundTaskHandle` |
+| 下载 | `DownloadRequest`、`DownloadSnapshot` |
+| 错误与状态 | `PluginError`、`PluginPrecheckError`、`PluginState`、`PLUGIN_API_VERSION` |
+| 专项适配 | `ScriptTypeDecl`、`GameTypeDecl`、`UserExpander`、`ModeWorker`、`AutoProxyWorker`、`ScriptConfigWorker`、`ScriptViewWorker`、`MODE_WORKERS`、`AdapterRuntime`、`GameRuntime`、`GameControl`、`EmulatorControl`、`EmulatorExpect`、`DeviceHandle`、`DeviceStatus`、`DeviceSubscription`、`DeviceSubscribeError`、`TRIGGER_TICKET` |
+| 宿主数据模型 | `ScriptEntry`、`UserEntry`、`PlanEntry`、`GameEntry`、`GameDeviceEntry`、`EmulatorEntry`、`EmulatorDeviceEntry`、`TagItem`、`TaskMode`、`TaskScriptItem`、`TaskUserItem`、`LogRecord` |
+
+专项适配相关的类见[独立专项适配](../adapter/standalone)。
+
+以下名称按需加载，第一次访问时才取得宿主单例：
+
+| 名称 | 说明 |
+| --- | --- |
+| `Config` | 宿主全局配置 |
+| `Plugin` | 插件管理器 |
+| `Publisher` | WebSocket 发布器，见[事件系统](./event) |
+| `protocol` | WebSocket 消息类型常量 |
+| `History` | 历史记录 |
+| `WSTaskNoticeData` | 任务通知数据模型 |
 
 ```python
-runtime_config = ctx.runtime.set(
-	python_executable="/usr/bin/python3",
-	timeout_seconds=20,
-)
-ctx.logger.info(f"runtime config: {runtime_config}")
+from auto_mas_core import Config
+
+version = Config.VERSION
 ```
 
-说明：
+未列入导出表的名称会抛 `AttributeError`。
 
-- `timeout_seconds` 会映射到 runtime 配置中的 `python_timeout_seconds`。
+### auto_mas_core.utils
 
-### ctx.runtime.run
+| 名称 | 作用 |
+| --- | --- |
+| `get_logger` | 取得日志器 |
+| `get_setting(group, name, default)` | 读取宿主设置 `Config.setting.<group>.<name>`，读不到返回默认值 |
+| `ProcessRunner` | 运行子进程并取得输出 |
+| `ProcessManager`、`ProcessInfo`、`ProcessResult` | 进程管理与结果 |
+| `is_process_running` | 判断进程是否在运行 |
+| `WebSocketClient` | WebSocket 客户端 |
+| `read_file` / `write_file` | 读写配置文件 |
+| `decode_bytes` | 按多种编码尝试解码字节 |
+| `dpapi_encrypt` / `dpapi_decrypt` | Windows DPAPI 加解密 |
+| `sanitize_log_message` | 日志脱敏 |
+| `busy_wait` | 高精度忙等待，占用 CPU |
+| `to_pep440` | 应用版本标签转 PEP 440 |
 
-异步执行一段 Python 代码并返回执行结果。
-
-用法：
+运行子进程：
 
 ```python
-result = await ctx.runtime.run(
-	code="a=1; b=2; print(a+b)",
-	timeout_seconds=5,
-)
+from auto_mas_core.utils import ProcessRunner
 
-if result.get("ok"):
-	ctx.logger.info(result.get("stdout", "").strip())
+result = await ProcessRunner.run_process("python", "--version", timeout=10)
+if result.returncode == 0:
+    print(result.stdout)
 else:
-	ctx.logger.error(result.get("stderr", "").strip())
+    print(result.failure_detail())
 ```
 
-返回结构常见字段：
+`run_process` 的 `timeout` 默认 60 秒。
 
-- `ok`：是否执行成功。
-- `returncode`：进程返回码。
-- `stdout`：标准输出。
-- `stderr`：标准错误。
-- `python`：实际执行所用解释器路径。
+### auto_mas_core.services
 
-### ctx.runtime.check_interpreter
+导出四个宿主单例。
 
-检查解释器是否可用。
+| 名称 | 作用 |
+| --- | --- |
+| `Downloads` | 统一下载中心 |
+| `Operations` | 插件配置触发器的操作调度 |
+| `Notify` | 通知分发 |
+| `BackgroundTaskManager` | 应用级后台任务管理器。插件用 `self.background_tasks`，一般不直接用它 |
 
-用法：
+下载：
 
 ```python
-check = ctx.runtime.check_interpreter("/usr/bin/python3")
-ctx.logger.info(f"interpreter ok={check.get('ok')}")
+from auto_mas_core import DownloadRequest
+from auto_mas_core.services import Downloads
+
+request = DownloadRequest(url="https://example.com/data.zip", key="my_plugin:data")
+if Downloads.request(request, owner="my_plugin"):
+    snapshot = await Downloads.wait(request)
+    if snapshot.state == "succeeded":
+        print(snapshot.path)
+    await Downloads.release(request.cache_key, owner="my_plugin")
 ```
 
-### ctx.runtime.list_scripts
+- `request()` 被拒绝（容量忙）时返回 `False`；下载中心已关闭时抛 `RuntimeError`。
+- `key` 可以替代 URL 作为资源键，URL 变化时不会误当成新资源。文件身份按 `rid`、`content_hash`、空身份的顺序确定。
+- 用完调用 `release()`。最后一个使用者释放时，未完成的下载被取消。
+- `query(request)` 立即取快照，`list(owner=...)` 列出某个使用者的下载。
 
-读取宿主暴露的 `list_scripts` 列表（若宿主未注册能力，返回空列表）。此处沿用历史能力名称，列表项的含义以宿主注册的能力为准。
+Operations 的用法见[配置声明](./schema#触发器)。
 
-用法：
+### 通知（auto_mas_core.notify）
 
 ```python
-scripts = ctx.runtime.list_scripts()
+from auto_mas_core.notify import Notify, NotifyPayload
+
+result = await Notify.send_global(
+    NotifyPayload(title="通知标题", text="通知正文"),
+    include_system=True,
+)
+if result.attempted == 0:
+    ...  # 没有可用渠道，并不代表已投递
 ```
 
-### ctx.runtime.get_script_log
+| 方法 | 作用 |
+| --- | --- |
+| `send_global(payload, include_system=False, ...)` | 发到全局通知渠道 |
+| `send_user(payload, user_config, ...)` | 发到某个用户配置的渠道 |
+| `send_statistics(payload, user_config, ...)` | 按用户和全局的统计通知策略发送 |
+| `push_proxy_result(title=..., report=..., ...)` | 推送代理结果报告 |
 
-按历史 `script_id` 标识读取执行日志（若宿主未注册能力，返回空字符串）。
+同一模块还导出 `DispatchResult`、`NotificationImage`、`TaskResultReport`、`image_reference`。没有插件专用的通知协议，插件复用宿主的渠道和模板。
 
-用法：
+## HTTP 接口
+
+插件可以挂自己的 HTTP 接口，路径前缀是 `/api/plugin/<插件名>`。
 
 ```python
-log_text = ctx.runtime.get_script_log("script-001", limit=200)
+from starlette.requests import Request
+
+from auto_mas_core import BasePlugin, plugin_route
+
+
+class PLUGIN(BasePlugin):
+    @plugin_route("/ping", methods=["GET"])
+    async def ping(self) -> dict:
+        return {"ok": True}
+
+    @plugin_route("/echo", methods=["POST"])
+    async def echo(self, request: Request) -> dict:
+        return await request.json()
 ```
 
-## 同步与异步边界
+- 接口地址是 `/api/plugin/<插件名>/ping`。`methods` 省略时是 `GET`。
+- 处理函数要么没有参数（`self` 不算），要么只有一个参数，收到的是请求对象 `Request`。
+- 返回 `dict`、`list` 或 `None` 时按 JSON 响应；返回 `Response` 原样发出；其他值转成文本。抛异常时返回 500，详情只在本地日志。
+- 启用时挂载，停用时卸下。宿主暂停调用期间（停用、重载、卸载进行中）和程序退出时返回 503；已停用的插件没有挂载，返回 404。
+- 需要类型化的路由和 OpenAPI 时，在类上设置 `api_router = APIRouter()`，写法见[前端与后端的对接](../adapter/frontend)。
 
-### 常见边界
+## 同步与异步
 
-- `ctx.runtime.run` 是异步方法，必须在 async 上下文中 `await`。
-- `ctx.event.emit_async` 是异步方法，建议优先使用。
-- `ctx.event.emit` 是同步桥接，不保证严格阻塞发送完成。
-
-### 同步监听器注意事项
-
-如果监听器是同步函数，且你要创建异步任务，请将监听器改为 `async def`，避免出现 no running event loop 一类问题。
-
-## 最小可用实现模板
-
-```python
-from typing import Any
-from mas.plugins import on_event
-
-
-class Plugin:
-	def __init__(self, ctx):
-		self.ctx = ctx
-		self.cache = self.ctx.cache.register(
-			cache_name="test_cache",
-			backend="json",
-			limit=10,
-			limit_mode="count",
-		)
-
-	async def on_start(self) -> None:
-		await self.ctx.event.emit_async(
-			"demo.ping",
-			{"message": "Hello from plugin"},
-			scope="global",
-		)
-
-	@on_event("demo.ping", scope="global", priority=10)
-	async def on_ping(self, payload: dict, ctx) -> None:
-		ctx.logger.info(f"收到 demo.ping: {payload}")
-
-	@on_event("cache.test", scope="instance")
-	def on_cache_test(self, payload: dict, ctx) -> None:
-		value = payload.get("value", {"k": "v"})
-		self.cache.set("test_cache", value)
-		ctx.logger.info(f"缓存写入成功: {self.cache.get('test_cache')}")
-
-	@on_event("runtime.test", scope="instance")
-	async def on_runtime_test(self, payload: Any, ctx) -> None:
-		_ = payload
-		result = await ctx.runtime.run(code="print(1+2)", timeout_seconds=5)
-		if result.get("ok"):
-			ctx.logger.info(f"运行结果: {result.get('stdout', '').strip()}")
-		else:
-			ctx.logger.error(f"运行失败: {result.get('stderr', '').strip()}")
-```
+- 生命周期钩子、`Downloads.wait`、`Notify.*`、`ProcessRunner.run_process` 都是协程，必须 `await`。
+- 后台任务的 `factory` 要返回协程，如 `lambda: self.refresh()`。
+- `plugin_route` 的处理函数可以是同步或异步。同步函数直接在事件循环里执行，耗时操作请用异步或放进后台任务。
 
 ## 常见问题
 
-### cache.register 报参数不一致
+### 访问 self.background_tasks 报「插件未绑定背景任务组」
 
-可能原因：
+在构造函数里访问了。任务组在 `pre_enable()` 之前才绑定，请在钩子里使用。
 
-- 同一实例中重复使用同名 `cache_name`，但 `limit/limit_mode` 与第一次注册不一致。
+### spawn 返回 None
 
-建议：
+任务组已关闭（正在停用），或同时运行/保留的任务数已达上限。检查返回值，不要假定一定成功。
 
-- 参数保持一致，或换一个新的 `cache_name`。
+### 访问 auto_mas_core 的某个名称报 AttributeError
 
-### 事件监听器没有触发
-
-可能原因：
-
-- event 名拼写错误。
-- scope 不匹配（事件按 global 发出，但监听器用 instance）。
-- 监听器签名不合法，导致注册失败。
-
-### runtime.run 调用时报错
-
-可能原因：
-
-- 在非 async 上下文直接调用，未 `await`。
-- 解释器路径无效。
-- 超时设置过短。
-
-### config.reset 之后配置消失
-
-可能原因：
-
-- 传入了 `None` 或空字典，行为是“重置为空配置”。
-
-## 结语
-
-ctx 的目标是把插件开发中最常用的核心能力统一收敛到一个对象上：日志、配置、事件、缓存、运行时。
-
-建议优先采用本文的“最小可用模板”起步，再按业务逐步扩展事件与缓存策略。
+名称不在 SDK 导出表里。不要直接导入宿主 `app.*` 的内部模块，它们不属于 SDK 契约，随时可能变化。
