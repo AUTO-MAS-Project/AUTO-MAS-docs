@@ -1,177 +1,179 @@
 # Service System
 
-The service system provides low-coupling capability sharing between plugins. Plugins cooperate through service names instead of hard-coding references to specific plugin classes.
-
-This document explains the current AUTO-MAS service mechanism, lifecycle behavior, and minimal usable patterns.
-
-## Service Model
-
-### Core Concepts
-
-- Service name: a string key, such as `clock`, `store`, or `auth`.
-- Service declaration: declares "I provide this service name", but the service may not be ready immediately.
-- Service assignment: writes the service instance into the registry, making the service readable.
-- Hard dependency (`needs`): if missing, the instance will not start.
-- Soft dependency (`wants`): if missing, startup is still allowed.
-
-### Declaration and Assignment Are Separate
-
-Service registration uses two steps:
-
-1. Declaration: `provide(name)` only registers the service slot and provider.
-2. Assignment: `set(name, value)` writes the instance value and triggers dependency recalculation.
-
-This avoids timing issues where a service is used before it is ready.
-
-## Plugin Entry Points
-
-Plugins can use service features directly through `ctx`, or through the equivalent `ctx.service` interface.
-
-### Quick Methods
-
-- `ctx.provide(name)`: declare a service.
-- `ctx.set(name, value)`: set a service value.
-- `ctx.get(name, default=None)`: read a service value.
-- `ctx.inject(needs=None, wants=None, ready=None)`: dynamically inject dependencies and trigger a callback when they are satisfied.
-
-### Service Methods
-
-- `ctx.service.provide(name)`
-- `ctx.service.set(name, value)`
-- `ctx.service.get(name, default=None)`
-- `ctx.service.inject(needs=None, wants=None, ready=None)`
-- `ctx.service.miss()`: returns the current instance's missing hard dependencies.
-
-## Static Dependency Declarations
-
-Plugin classes support static declaration fields:
-
-- `provides`: services provided by the current instance.
-- `needs`: services required for startup.
-- `wants`: optional services.
-
-Declaration values support two forms, which are normalized internally:
-
-- String: `provides = "clock"`
-- List: `provides = ["clock", "ticker"]`
-
-Example:
-
-```python
-class Plugin:
-    provides = "clock"
-    needs = ["store"]
-    wants = "notify"
-
-    def __init__(self, ctx):
-        self.ctx = ctx
-```
-
-Notes:
-
-- The current development version does not provide compatibility for the old static `inject` layer.
-- Static declarations only recognize `provides`, `needs`, and `wants`.
-
-## Startup Order and Dependency Policy
-
-### Load Order
-
-The loader first scans enabled instances and parses `provides/needs/wants`, then builds a dependency graph and performs topological sorting.
-
-::: warning What happens if service names duplicate?
-
-Only one provider is allowed for the same service name.
-
-- If another instance tries to declare an existing service name, that instance startup is rejected and an error is logged.
-- This error does not interrupt the entire plugin system startup process, but the instance enters a failed state.
-
+::: warning
+This page follows the `dev` branch implementation as of 2026-11-18. The plugin system is still changing; the interfaces are whatever your installed AUTO-MAS source says.
 :::
 
-Sorting goals:
+Services let plugins call each other's methods by name, without importing each other's code.
 
-- Providers start before consumers.
-- If a dependency cycle is detected, a warning is logged, and the remaining instances continue loading in their original order.
+::: tip Differences from the old version
+The old `ctx.provide` / `ctx.set` / `ctx.get` / `ctx.inject`, `ctx.service.miss()`, and the class attributes `provides`, `needs`, and `wants` have all been removed. Now:
 
-### Missing Hard Dependencies
+- A provider uses the class attribute `provides_services = {service name: method name}`. A service is just a method on the plugin; there is no more "declare, then assign".
+- Dependencies use `requires` (hard dependency, formerly `needs`) and `wants` (optional dependency).
+- A consumer uses `self.services.get(...)` and `self.services.require(...)`.
+:::
 
-When an instance has missing `needs`:
+## Concepts
 
-- The instance is skipped and marked as failed.
-- Other instances continue starting. The entire plugin system is not interrupted.
+| Concept | Description |
+| --- | --- |
+| Service name | A string; a namespace is recommended, such as `arknights.stage_info` |
+| Service | A method on the provider plugin. The consumer gets a callable for that method |
+| `requires` | Hard dependency. If the service is missing, this plugin cannot be enabled; when the provider is disabled, this plugin is disabled along with it |
+| `wants` | Optional dependency. If the service is missing, this plugin is enabled as usual and you degrade on your own |
 
-This follows the policy that one failed instance should not bring down the whole system.
+A service name can have only one provider.
 
-## Service Changes and Automatic Recalculation
-
-The registry triggers two-phase notifications on `set` / `drop`:
-
-- `before`: tells dependents to prepare for deactivation.
-- `after`: tells dependents to try reloading.
-
-The loader listens to both phases and performs recalculation:
-
-1. Collect affected instances that are currently active.
-2. Unload those instances first.
-3. Try to reload them according to recorded configuration and dependency declarations.
-
-## Undeclared Access Warnings
-
-When `ctx.get(name)` reads a service, it checks whether the current instance has declared that service through `provides/needs/wants` or dynamic `inject`.
-
-- Declared: read normally.
-- Undeclared: log a warning, but do not throw immediately.
-
-This is a progressive constraint strategy that helps old plugins migrate smoothly.
-
-## Minimal Examples
-
-### 1) Plugin Providing a Service
+## Providing a Service
 
 ```python
-class Plugin:
-    provides = {"clock"}
+from auto_mas_core import BasePlugin
 
-    def __init__(self, ctx):
-        self.ctx = ctx
 
-    async def on_start(self):
-        self.ctx.set("clock", {"now": "2026-04-25T12:00:00+08:00"})
+class PLUGIN(BasePlugin):
+    provides_services = {
+        "clock.now": "now",
+        "clock.minutes_to_seconds": "minutes_to_seconds",
+    }
 
-    async def on_stop(self, reason: str):
-        _ = reason
+    async def now(self) -> str:
+        from datetime import datetime, timezone
+
+        return datetime.now(timezone.utc).isoformat()
+
+    def minutes_to_seconds(self, minutes: int) -> int:
+        return minutes * 60
 ```
 
-### 2) Plugin Depending on a Service
+- The key is the service name, and the value is the **method name on this class** (a string).
+- A method can be sync or async, with any parameters and return value.
+- Services are registered **after** `on_enable()` returns, and unregistered on disable (after `on_disable()`). Inside `on_enable`, this plugin's services cannot yet be obtained by others.
+- If the attribute the method name points to does not exist or is not callable, that service is **not registered**, and no error is raised. Get the name right.
+- If the service name is already registered by another plugin, registration raises `PluginError` and this plugin fails to enable.
+
+## Using a Service
+
+### Hard dependency: requires
 
 ```python
-class Plugin:
-    needs = {"clock"}
+from auto_mas_core import BasePlugin
+from auto_mas_core.utils import get_logger
 
-    def __init__(self, ctx):
-        self.ctx = ctx
+logger = get_logger("clock_user")
 
-    async def on_start(self):
-        clock = self.ctx.get("clock", {})
-        self.ctx.logger.info(f"clock={clock}")
 
-    async def on_stop(self, reason: str):
-        _ = reason
+class PLUGIN(BasePlugin):
+    requires = ("clock.now",)
+
+    async def on_enable(self) -> None:
+        now = self.services.require("clock.now")
+        logger.info(f"现在是 {await now()}")
 ```
 
-### 3) Dynamic Injection Callback
+- Write `requires` as a tuple or list. **Do not write it as a string:** `requires = "clock.now"` is split into single characters.
+- When this plugin is enabled, the host first enables the plugins that provide these services, so `on_enable` can always get them.
+- `require(name)` raises `PluginError` when the service does not exist, and `payload["service"]` is the service name.
+
+### Optional dependency: wants
 
 ```python
-class Plugin:
-    def __init__(self, ctx):
-        self.ctx = ctx
+from auto_mas_core import BasePlugin, PluginError
+from auto_mas_core.utils import get_logger
 
-    async def on_start(self):
-        def ready(ctx):
-            data = ctx.get("clock", {})
-            ctx.logger.info(f"inject ready: {data}")
+logger = get_logger("report")
 
-        self.ctx.inject(needs={"clock"}, wants={"notify"}, ready=ready)
 
-    async def on_stop(self, reason: str):
-        _ = reason
+class PLUGIN(BasePlugin):
+    wants = ("clock.now",)
+
+    async def build_report(self) -> str:
+        now = self.services.get("clock.now")
+        if now is None:
+            return "报告（无时间）"
+        try:
+            return f"报告 {await now()}"
+        except PluginError:
+            # 提供方正在停用或重载，调用被拒绝
+            return "报告（无时间）"
 ```
+
+- `get(name, default=None)` returns the default when it cannot get the service, and does not raise.
+- Get the service at the time you use it; **do not fetch it in `on_enable` and store it**. An optional service may be enabled after you, and may disappear midway. After the provider reloads or is disabled, calling the old callable raises `PluginError`.
+- When calling a service, also handle `PluginError`; it is the base class of the error types below.
+
+### Return values of calls
+
+The callable returned by `get` / `require` keeps the sync or async form of the original method: an async method must be `await`ed, and a sync method returns the result directly.
+
+## What Happens on Enable, Disable, and Reload
+
+Only `requires` takes part in the cascade; `wants` does not.
+
+| Operation | Effect on dependents (requires) |
+| --- | --- |
+| Enable a dependent | The providers of the services it needs are enabled first; if a provider fails to enable, the dependent fails to enable too |
+| Disable a provider | All enabled dependents are disabled first, then the provider |
+| Reload a provider | Dependents are detached first; after the provider finishes reloading, the dependents are re-enabled along the dependency tree as it was when they were detached |
+| Uninstall a provider | Dependents are uninstalled first |
+| Program exit | Dependents run `on_teardown` first, providers after |
+
+Details:
+
+- If no plugin that provides a given service can be found (not installed, or not declared on the class): enabling raises `PluginPrecheckError`, with the service name in the message.
+- Dependency cycle: when a loop is detected on the cycle, `PluginPrecheckError` is raised (the message contains the cycle made of registry entry uids). The outer enable wraps it in `PluginOperationError`, and the plugins on the cycle that had already begun enabling go to `fault_runtime`.
+- After reloading a provider, if a dependent fails to re-enable: that dependent goes to `fault_runtime`, stays disabled, and `last_error` records the reason; the other dependents continue to be restored.
+- Disabling a provider may also disable adapters (script types, game types) along with it. The host provides `disable_impact`, which summarizes the configuration domains that would be deleted on disable, for the frontend to confirm.
+
+### Optional dependencies lack these guarantees
+
+For services in `wants`:
+
+- They do not affect startup order. The provider may be enabled only after you, and `get` then returns the default.
+- When the provider is enabled, disabled, or reloaded, you are **not** notified and not reloaded.
+- The host only records which optional services were missing at the time; there is no public query interface.
+
+So the pattern for optional dependencies is fixed: `get` each time you use it, check for empty, and degrade.
+
+## When a Call Is Rejected
+
+A service call goes through the provider's call admission:
+
+- The provider is being disabled, uninstalled, or reloaded: new calls are rejected with a subclass of `PluginError`, with the message "plugin is being released and no longer accepts calls" (「插件正在释放，不再受理调用」). Calls already in progress are waited for until they end.
+- The program is exiting: `get` returns the default, and `require` raises.
+
+So when calling another plugin's service for a long time from a background task, handle call failures and `get` again on the next loop.
+
+## A Real Example
+
+The MAA adapter plugin provides three stage-data services:
+
+```python
+class Plugin(ScriptAdapterPlugin):
+    provides_services = {
+        "arknights.stage_info": "stage_info",
+        "arknights.stage_data": "stage_data",
+        "arknights.stage_overview": "stage_overview",
+    }
+
+    async def stage_info(self, kind, *, server="Official"):
+        ...
+```
+
+A consumer just uses `self.services.get("arknights.stage_info")`, without needing to know the MAA adapter's package name.
+
+## Do Not Register Services Yourself
+
+`auto_mas_core.plugin.services` exposes the host's service registry itself, with `register` / `unregister`. Plugins should not use it to register services: the registered object has no call admission protection, and is not guaranteed to be unregistered on disable, which can leave stale references. Always use `provides_services`.
+
+## Migration Reference
+
+| Old style | Now |
+| --- | --- |
+| `provides = "clock"` + `ctx.set("clock", value)` | `provides_services = {"clock.now": "now"}`; a service is a method |
+| `needs = ["store"]` | `requires = ("store.get",)` |
+| `wants = "notify"` | `wants = ("notify.send",)`, must be a tuple or list |
+| `ctx.get("clock", {})` | `self.services.get("clock.now")` |
+| `ctx.inject(needs=..., ready=...)` | No equivalent; declare `requires` statically and use it in `on_enable` |
+| `ctx.service.miss()` | No equivalent |
+| Reading an undeclared service only warns | There is no declaration check; if `get` cannot get it, you get the default |

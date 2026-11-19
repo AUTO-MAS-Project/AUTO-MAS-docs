@@ -75,6 +75,13 @@ export const enThemeConfig: DefaultTheme.Config = {
                     { text: "Service System", link: "/en/plugin/basic/service" },
                 ],
             },
+            {
+                text: "Adapter Integration",
+                items: [
+                    { text: "Standalone Adapters", link: "/en/plugin/adapter/standalone" },
+                    { text: "Frontend and Backend Integration", link: "/en/plugin/adapter/frontend" },
+                ],
+            },
         ],
         "/en/developer/": {
             base: "/en/developer/",

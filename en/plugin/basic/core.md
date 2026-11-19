@@ -1,641 +1,347 @@
 # Core Capabilities
 
-When developing plugins, you inevitably need many core capabilities, such as logging, configuration management, event sending and receiving, cache management, and runtime execution.
-
-This document explains how plugins obtain these capabilities through the context object, referred to as `ctx`, and gives a short introduction and minimal usage example for each capability.
-
-## Context
-
-### What is ctx?
-
-`ctx` is the unified capability entry point at plugin runtime. After a plugin is instantiated, the host passes `ctx` to it. You can use it to access:
-
-- `ctx.plugin_name` / `ctx.instance_id`: plugin and instance identifiers.
-- `ctx.logger`: logging.
-- `ctx.config`: configuration reading and writing.
-- `ctx.event`: event listening and sending.
-- `ctx.cache`: instance-level cache management.
-- `ctx.runtime`: runtime detection and code execution.
-
-::: tip More capabilities
-
-This page covers the basic `ctx` capabilities. Continue reading the [event system](/en/plugin/basic/event) and other documents for more.
-
+::: warning
+This page follows the `dev` branch implementation as of 2026-11-18. The plugin system is still changing; the interfaces are whatever your installed AUTO-MAS source says.
 :::
 
-### How ctx Is Injected
+The core capabilities you need for plugin development live in three places:
 
-Typical flow:
+- **Plugin instance:** the attributes and lifecycle hooks of a `BasePlugin` subclass, such as `self.config`, `self.services`, and `self.background_tasks`.
+- **SDK:** the classes and functions exported by the top level of `auto_mas_core` and its `utils`, `services`, and `notify` submodules.
+- **Host:** the real implementation behind those exports. The SDK does not provide a standalone host; plugins can only run inside AUTO-MAS.
 
-1. The plugin loader builds `PluginContext`.
-2. The loader calls `Plugin(ctx)` to create the plugin instance.
-3. The plugin stores `self.ctx` in `__init__`, then uses it during lifecycle and event handling.
+::: tip
+The `ctx` of the old docs (`ctx.logger`, `ctx.event`, `ctx.cache`, `ctx.runtime`) no longer exists. Plugins no longer receive a `PluginContext`. Where each capability went is covered in the sections below and in [Event System](./event).
+:::
 
-Minimal example:
+## Minimal Plugin
 
-```python
-class Plugin:
-    def __init__(self, ctx):
-        self.ctx = ctx
-        self.ctx.logger.info(f"plugin initialized: {ctx.plugin_name}")
-```
-
-## Basic Properties
-
-### ctx.plugin_name
-
-The current plugin name, also known as the logical name.
-
-Usage:
+A plugin is an ordinary Python package whose `__init__.py` exports a `BasePlugin` subclass named `PLUGIN`.
 
 ```python
-name = ctx.plugin_name
-ctx.logger.info(f"plugin_name={name}")
+from auto_mas_core import BasePlugin
+from auto_mas_core.utils import get_logger
+
+logger = get_logger("demo")
+
+
+class PLUGIN(BasePlugin):
+    async def on_enable(self) -> None:
+        logger.info(f"{self.plugin_name} 已启用")
+
+    async def on_disable(self) -> None:
+        logger.info(f"{self.plugin_name} 已停用")
 ```
 
-### ctx.instance_id
+The loader checks that `PLUGIN` is a `BasePlugin` subclass and reads `requires` and `wants` from the class. If the package declares `PLUGIN_API_VERSION`, its major version must match the host's.
 
-The current plugin instance ID. In multi-instance scenarios, it is usually used to isolate cache, events, and state.
+## Capabilities on the Instance
 
-Usage:
+The host constructs the instance on enable, with `config` and `record` as constructor arguments. You do not need to write `__init__` yourself; if you must, keep the signature and call the parent class.
 
 ```python
-instance_id = ctx.instance_id
-ctx.logger.info(f"instance_id={instance_id}")
+class PLUGIN(BasePlugin):
+    def __init__(self, config=None, record=None) -> None:
+        super().__init__(config, record)
 ```
+
+| Member | Type | Description |
+| --- | --- | --- |
+| `self.config` | An instance of `config_class`, or `None` if none is declared | The plugin's own config; see [Configuration Schema](./schema) |
+| `self.services` | `ServiceResolver` | Reads services provided by other plugins; see [Service System](./service) |
+| `self.background_tasks` | `BackgroundTaskGroup` | This instance's background task group |
+| `self.record` | `PluginRecord` | The registry entry, with metadata such as version and state |
+| `self.plugin_name` | `str` | The registered name |
+| `self.lifecycle_context` | `LifecycleContext` | The current lifecycle context |
+
+Class attributes:
+
+| Attribute | Purpose |
+| --- | --- |
+| `config_class` | The config class; see [Configuration Schema](./schema) |
+| `provides_services` | The services provided, `{service name: method name}` |
+| `requires` / `wants` | Names of the services depended on, as a tuple |
+| `api_router` | A FastAPI `APIRouter`, mounted on enable |
+
+### self.config
+
+The type of `self.config` is `PluginConfig | None`. It only has a value if `config_class` is declared, so narrow the type before using it.
+
+```python
+from auto_mas_core import BasePlugin, PluginConfig
+
+
+class MyConfig(PluginConfig):
+    ...
+
+
+class PLUGIN(BasePlugin):
+    config_class = MyConfig
+
+    async def on_enable(self) -> None:
+        assert isinstance(self.config, MyConfig)
+```
+
+To read config, just read attributes. To write, assign and then `await commit()`:
+
+```python
+# General 是 MyConfig 里声明的分组，字段怎么写见「配置声明」
+self.config.general.interval = 10
+await self.config.commit()
+```
+
+- Assignment only stages the change; `commit()` persists it and fires the signals. A failed commit raises `ConfigAggregateError`.
+- A locked config cannot be written.
+- The config file is `config/plugins/<plugin name>.yaml`. It is saved and released on disable, and rebuilt from the file on the next enable. It is deleted when the plugin is uninstalled.
+
+### self.background_tasks
+
+Put a plugin's background work in this task group; do not call `asyncio.create_task` yourself. On disable, uninstall, and reload, the host cancels the tasks in the group and waits for them to finish.
+
+```python
+async def refresh(self) -> None:
+    ...
+
+
+async def on_enable(self) -> None:
+    handle = self.background_tasks.spawn(lambda: self.refresh())
+    if handle is None:
+        # 任务组已关闭，或并发数/保留数已满
+        return
+```
+
+`spawn(factory)` takes a function that returns a coroutine and returns a `BackgroundTaskHandle`. When rejected it returns `None`; it does not raise and does not create the coroutine.
+
+| Method | Purpose |
+| --- | --- |
+| `handle.cancel()` | Cancels the task |
+| `handle.done()` | Whether it has finished |
+| `await handle.wait_done(timeout)` | Waits for it to finish without taking the result; returns `False` on timeout |
+| `await handle.wait_take(timeout)` | Waits for and takes the result as a `TaskOutcome`; raises `TimeoutError` on timeout, and `KeyError` for a task with `retain_result=False` |
+| `outcome.unwrap()` | The return value on success; otherwise re-raises the original exception |
+
+- The group's concurrency limit and retention limit both equal the plugin operation limit in settings (`Config.setting.plugin.max_operations`).
+- Results are kept for 300 seconds by default. When you do not need the result, pass `spawn(factory, retain_result=False)`.
+- There is no execution timeout. Use `asyncio.timeout` yourself if you need one.
+- The task group is bound before `pre_enable()`. Accessing `self.background_tasks` earlier raises `RuntimeError`.
+
+### self.record and self.plugin_name
+
+```python
+info = self.record.info
+logger.info(f"{self.plugin_name} {info.version} 来源={info.source}")
+```
+
+Commonly used fields of `info`: `plugin_name`, `package_name`, `version`, `source` (`installed` or `local`), `state`, `last_error`, `is_core`, and `is_local`. `self.record` holds only a weak reference. Accessing it after the registry entry has been reclaimed raises `RuntimeError`, so do not cache it long-term in the background.
+
+## Lifecycle Hooks
+
+All hooks are `async def` and do nothing by default. Override only what you need.
+
+| Hook | When |
+| --- | --- |
+| `pre_enable` | Precheck before enable. Services and the task group are already bound, the config is not yet active, and upstream dependencies are not yet enabled |
+| `on_enable` | Upstream dependencies are enabled and the config is active. Start your business resources here |
+| `pre_disable` | Precheck before disable |
+| `on_disable` | On disable. The background task group has already been cancelled and waited for |
+| `pre_reload` / `on_reload` | Precheck before reload / during reload, acting on the old instance |
+| `pre_unload` / `on_unload` | Precheck before uninstall / during uninstall |
+| `on_teardown` | Program exit. It does not replace `on_disable`, does not persist anything, and does not change the enable state |
+| `on_fail_cleanup` | Cleanup after a lifecycle operation fails; receives the failing stage, the context, and the exception |
+
+Enable order: construct the instance → bind the task group and services → `pre_enable` → enable the upstream plugins in `requires` → activate the config → `on_enable` → register `provides_services` → mount HTTP.
+
+Disable order: `pre_disable` → first disable downstream plugins that depend on this plugin's services → cancel background tasks → `on_disable` → save and release the config → unregister services and HTTP.
+
+Reload: `pre_reload` → detach the downstream plugins that depend on this plugin → `on_reload` → disable the old instance → re-import the plugin code → enable the new instance → restore the downstream plugins as they were.
+
+- When `pre_enable` raises, enable is aborted and the host releases the bound task group and config. When a stage after `pre_enable` (enabling upstreams, activating config, `on_enable`, registering services and HTTP) raises, the plugin goes to `fault_runtime` and `on_fail_cleanup` is called.
+- `pre_*` hooks are business prechecks. When a precheck fails, raise `PluginPrecheckError` (exported by the SDK).
+- The core plugin `auto_mas_core` cannot be disabled, reloaded, or uninstalled.
+
+::: warning
+On disable and uninstall, the host stops admitting new calls and waits for in-flight calls to finish. Release private resources such as external processes, subscriptions, and temporary files yourself in `on_disable`.
+:::
 
 ## Logging
 
-### ctx.logger
-
-Plugin logging entry point. The host usually manages output, formatting, and persistence.
-
-Common methods:
-
-- `ctx.logger.debug(msg)`: debug information.
-- `ctx.logger.info(msg)`: normal information.
-- `ctx.logger.warning(msg)`: warning information.
-- `ctx.logger.error(msg)`: error information.
-
-Minimal usage:
-
 ```python
-ctx.logger.debug("debug log")
-ctx.logger.info("plugin started")
-ctx.logger.warning("this is a warning")
-ctx.logger.error("an error occurred")
+from auto_mas_core.utils import get_logger
+
+logger = get_logger("我的插件")
+logger.debug("调试信息")
+logger.info("常规信息")
+logger.warning("警告")
+logger.error("错误")
 ```
 
-Recommendations:
+`get_logger` returns the host's loguru logger; the module name marks the source. Before writing a log line you can use `sanitize_log_message(text)` to strip sensitive parameters such as tokens from the text.
 
-- Include `plugin_name` or a business key in logs to make cross-plugin troubleshooting easier.
-- On error paths, record the exception type and key context whenever possible.
+## SDK Exports
 
-## Configuration
+### auto_mas_core top level
 
-### ctx.config
+| Category | Names |
+| --- | --- |
+| Base classes | `BasePlugin`, `ExtensionPlugin`, `GameAdapterPlugin`, `ScriptAdapterPlugin`, `CorePlugin` |
+| Plugin config | `PluginConfig`, `PluginCommandEntry`, `trigger_field`, `ConfigEntry`, `ConfigGroup`, `ConfigCollection`, `collection`, `ConfigTableColumn` |
+| Fields and UI | `Trigger`, `Virtual`, `virtual_field`, `ui`, `ui_visibility`, `UiVisibility`, `select`, `encrypted`, `FilePath`, `FolderPath`, `ExecutablePath`, `JsonDictString`, `JsonListString` |
+| Config signals and locks | `FieldChangeEvent`, `LockTicket` |
+| Services and HTTP | `ServiceResolver`, `plugin_route` |
+| Background tasks | `BackgroundTaskGroup`, `BackgroundTaskHandle` |
+| Downloads | `DownloadRequest`, `DownloadSnapshot` |
+| Errors and state | `PluginError`, `PluginPrecheckError`, `PluginState`, `PLUGIN_API_VERSION` |
+| Adapters | `ScriptTypeDecl`, `GameTypeDecl`, `UserExpander`, `ModeWorker`, `AutoProxyWorker`, `ScriptConfigWorker`, `ScriptViewWorker`, `MODE_WORKERS`, `AdapterRuntime`, `GameRuntime`, `GameControl`, `EmulatorControl`, `EmulatorExpect`, `DeviceHandle`, `DeviceStatus`, `DeviceSubscription`, `DeviceSubscribeError`, `TRIGGER_TICKET` |
+| Host data models | `ScriptEntry`, `UserEntry`, `PlanEntry`, `GameEntry`, `GameDeviceEntry`, `EmulatorEntry`, `EmulatorDeviceEntry`, `TagItem`, `TaskMode`, `TaskScriptItem`, `TaskUserItem`, `LogRecord` |
 
-Configuration proxy object. It is compatible with dictionary-style access and extends semantic methods such as `set`, `update`, and `reset`.
+For the adapter-related classes, see [Standalone Adapters](/en/plugin/adapter/standalone).
 
-### ctx.config.get
+The following names are loaded lazily: the host singleton is only obtained on first access.
 
-Reads a configuration item and returns a default value when missing.
-
-Usage:
+| Name | Description |
+| --- | --- |
+| `Config` | The host's global configuration |
+| `Plugin` | The plugin manager |
+| `Publisher` | The WebSocket publisher; see [Event System](./event) |
+| `protocol` | WebSocket message type constants |
+| `History` | History records |
+| `WSTaskNoticeData` | The task notice data model |
 
 ```python
-hello = ctx.config.get("hello", "world")
+from auto_mas_core import Config
+
+version = Config.VERSION
 ```
 
-### ctx.config.set
+Names not in the export table raise `AttributeError`.
 
-Writes a single configuration item.
+### auto_mas_core.utils
 
-::: warning Should you use this method?
+| Name | Purpose |
+| --- | --- |
+| `get_logger` | Gets a logger |
+| `get_setting(group, name, default)` | Reads the host setting `Config.setting.<group>.<name>`; returns the default if it cannot be read |
+| `ProcessRunner` | Runs a subprocess and collects its output |
+| `ProcessManager`, `ProcessInfo`, `ProcessResult` | Process management and results |
+| `is_process_running` | Checks whether a process is running |
+| `WebSocketClient` | WebSocket client |
+| `read_file` / `write_file` | Reads and writes config files |
+| `decode_bytes` | Tries several encodings to decode bytes |
+| `dpapi_encrypt` / `dpapi_decrypt` | Windows DPAPI encryption and decryption |
+| `sanitize_log_message` | Log redaction |
+| `busy_wait` | High-precision busy wait; occupies the CPU |
+| `to_pep440` | Converts an app version tag to PEP 440 |
 
-We do not recommend using `set` to dynamically modify configuration during plugin runtime, because this may make frontend display inconsistent with actual configuration.
-
-That said, it is only a display consistency issue. If you want to store a timestamp, such as "last weekly task execution time", using it is reasonable.
-
-:::
-
-Usage:
-
-```python
-ctx.config.set("retry", 3)
-ctx.config.set("feature_enabled", True)
-```
-
-Notes:
-
-- `key` must be a non-empty string, or an exception is raised.
-
-### ctx.config.update
-
-Batch updates configuration items. It accepts a dictionary or keyword arguments.
-
-Usage:
+Running a subprocess:
 
 ```python
-ctx.config.update({"timeout": 10, "mode": "fast"})
-ctx.config.update(timeout=15, mode="safe")
-```
-
-### ctx.config.reset
-
-Resets the configuration source and rebuilds the current configuration.
-
-Usage:
-
-```python
-snapshot = ctx.config.reset({"hello": "new-world"})
-ctx.logger.info(f"config after reset: {snapshot}")
-```
-
-Notes:
-
-- `reset(None)` resets to empty configuration. It does not mean "no change".
-
-### ctx.config.to_dict
-
-Returns a deep copy of the current configuration, suitable for read-only snapshots.
-
-Usage:
-
-```python
-current_config = ctx.config.to_dict()
-```
-
-### ctx.config.source_dict
-
-Returns a deep copy of the source configuration, useful for comparing current configuration with source configuration.
-
-Usage:
-
-```python
-source_config = ctx.config.source_dict()
-```
-
-## Events
-
-### ctx.event
-
-Plugin event facade. It provides a unified interface for listening to, unregistering, and sending events.
-
-### ctx.event.on
-
-Registers an event listener and returns `listener_id`.
-
-Usage:
-
-```python
-async def on_ping(payload):
-    ctx.logger.info(f"received ping: {payload}")
-
-listener_id = ctx.event.on(
-    "demo.ping",
-    on_ping,
-    scope="global",
-    priority=10,
-    once=False,
-)
-```
-
-Key parameters:
-
-- `event`: event name.
-- `handler`: handler function.
-- `scope`: `global` or `instance`.
-- `priority`: larger numbers run earlier.
-- `once`: whether to automatically unbind after one trigger.
-- `error_policy`: `continue` or `raise`; `None` means inheriting the event-level policy.
-
-### @on_event (Recommended)
-
-You can also import and use the `@on_event` decorator to quickly register an event listener.
-
-```python
-from mas.plugins import on_event
-
-@on_event("script.exit", scope="global", priority=0, once=False)
-async def on_script_exit(payload, ctx):
-    ctx.logger.info(f"script.exit: {payload}")
-```
-
-### ctx.event.off
-
-Unregisters a listener by `handler` or `listener_id`.
-
-Usage:
-
-```python
-ctx.event.off("demo.ping", listener_id=listener_id)
-```
-
-### ctx.event.off_all
-
-Unregisters all listeners registered by the current instance.
-
-Usage:
-
-```python
-ctx.event.off_all()
-```
-
-### ctx.event.emit_async
-
-Sends an event asynchronously. Prefer this in async flows.
-
-Usage:
-
-```python
-await ctx.event.emit_async(
-    "cache.test",
-    {"key": "k1", "value": {"x": 1}},
-    scope="instance",
-    error_policy="continue",
-)
-```
-
-### ctx.event.emit
-
-Synchronous bridge for sending events. If an event loop exists, it creates a task and sends asynchronously. If no event loop exists, it creates one and runs it automatically.
-
-Usage:
-
-```python
-ctx.event.emit("demo.ping", {"message": "hello"}, scope="global")
-```
-
-Recommendations:
-
-- In async code, prefer `emit_async` and `await`.
-- When strict ordering is required, do not rely on the background-task behavior of synchronous `emit`.
-
-## Cache
-
-Although it is called "cache", it can be persistent and provides full CRUD functionality.
-
-### ctx.cache
-
-Instance-level cache manager used to register and manage multiple cache spaces.
-
-### ctx.cache.register
-
-Registers a cache and returns the cache instance. The current backend supports only `json`.
-
-Usage:
-
-```python
-cache = ctx.cache.register(
-    cache_name="test_cache",
-    backend="json",
-    limit=10,
-    limit_mode="count",
-)
-```
-
-Key parameters:
-
-- `cache_name`: cache name. Use a normalized English name.
-- `backend`: backend type. Currently only `json` is supported.
-- `limit`: threshold.
-- `limit_mode`: `count` for item count or `bytes` for size.
-- `limit_unit`: `b/kb/mb/gb`, only effective in `bytes` mode.
-
-Common examples:
-
-```python
-# Limit by item count
-cache_a = ctx.cache.register(
-    cache_name="recent_users",
-    backend="json",
-    limit=100,
-    limit_mode="count",
-)
-
-# Limit by size
-cache_b = ctx.cache.register(
-    cache_name="large_payload",
-    backend="json",
-    limit="10mb",
-    limit_mode="bytes",
-    limit_unit="mb",
-)
-```
-
-When registering a cache with an existing name, parameters must match the first registration, or an exception is raised.
-
-### ctx.cache.get_registered
-
-Gets a registered cache instance. Returns `None` if it does not exist.
-
-Usage:
-
-```python
-cache = ctx.cache.get_registered("test_cache")
-if cache is None:
-    cache = ctx.cache.register(
-        cache_name="test_cache",
-        backend="json",
-        limit=10,
-        limit_mode="count",
-    )
-```
-
-### ctx.cache.list_registered
-
-Lists all registered caches and their statistics for the current instance.
-
-Usage:
-
-```python
-stats_map = ctx.cache.list_registered()
-ctx.logger.info(f"registered caches: {stats_map}")
-```
-
-### ctx.cache.instance_cache_dir
-
-Path to the current instance cache directory.
-
-Usage:
-
-```python
-cache_dir = ctx.cache.instance_cache_dir
-ctx.logger.info(f"cache directory: {cache_dir}")
-```
-
-### Cache Instance Methods
-
-These methods are available on the object returned by `register`.
-
-#### cache.set
-
-Writes one key-value pair.
-
-```python
-cache.set("user:1", {"name": "Alice"})
-```
-
-#### cache.get
-
-Reads a key-value pair. Returns the default value when missing.
-
-```python
-user = cache.get("user:1", default={})
-```
-
-#### cache.delete
-
-Deletes a key and returns whether deletion succeeded.
-
-```python
-deleted = cache.delete("user:1")
-```
-
-#### cache.exists
-
-Checks whether a key exists.
-
-```python
-exists = cache.exists("user:1")
-```
-
-#### cache.update
-
-Writes multiple key-value pairs.
-
-```python
-cache.update({"k1": 1, "k2": 2})
-```
-
-#### cache.all
-
-Gets all cache key-value pairs, excluding internal metadata.
-
-```python
-all_items = cache.all()
-```
-
-#### cache.clear
-
-Clears the cache.
-
-```python
-cache.clear()
-```
-
-#### cache.stats
-
-Returns cache statistics, including count, size, threshold, and path.
-
-```python
-stats = cache.stats()
-ctx.logger.info(f"cache stats: {stats}")
-```
-
-## Runtime
-
-::: warning
-
-The methods listed here have been implemented, but more extensions are planned and may introduce breaking changes.
-
-2026/4/19
-
-:::
-
-MAS allows plugins to configure a code interpreter so specific code can run in a specific virtual environment.
-
-::: tip Use It Reasonably
-
-Plugin developers should use a separate runtime for libraries that may break the main program.
-
-For example, if you need a library that MAS already has but in a different version, a different Python version, or another large framework, consider an extra runtime.
-
-:::
-
-### ctx.runtime
-
-Runtime facade providing environment detection, parameter settings, code execution, and related capabilities.
-
-### ctx.runtime.info
-
-Gets runtime information, such as the host interpreter, currently selected interpreter, and interpreter check results.
-
-Usage:
-
-```python
-info = ctx.runtime.info()
-ctx.logger.info(f"selected_python={info.get('selected_python')}")
-```
-
-### ctx.runtime.set
-
-Updates runtime options, such as interpreter path and timeout settings.
-
-Usage:
-
-```python
-runtime_config = ctx.runtime.set(
-    python_executable="/usr/bin/python3",
-    timeout_seconds=20,
-)
-ctx.logger.info(f"runtime config: {runtime_config}")
-```
-
-Notes:
-
-- `timeout_seconds` maps to `python_timeout_seconds` in runtime configuration.
-
-### ctx.runtime.run
-
-Asynchronously executes a piece of Python code and returns the result.
-
-Usage:
-
-```python
-result = await ctx.runtime.run(
-    code="a=1; b=2; print(a+b)",
-    timeout_seconds=5,
-)
-
-if result.get("ok"):
-    ctx.logger.info(result.get("stdout", "").strip())
+from auto_mas_core.utils import ProcessRunner
+
+result = await ProcessRunner.run_process("python", "--version", timeout=10)
+if result.returncode == 0:
+    print(result.stdout)
 else:
-    ctx.logger.error(result.get("stderr", "").strip())
+    print(result.failure_detail())
 ```
 
-Common return fields:
+The `timeout` of `run_process` defaults to 60 seconds.
 
-- `ok`: whether execution succeeded.
-- `returncode`: process return code.
-- `stdout`: standard output.
-- `stderr`: standard error.
-- `python`: interpreter path actually used.
+### auto_mas_core.services
 
-### ctx.runtime.check_interpreter
+Exports four host singletons.
 
-Checks whether an interpreter is usable.
+| Name | Purpose |
+| --- | --- |
+| `Downloads` | The unified download center |
+| `Operations` | Operation scheduling for plugin config triggers |
+| `Notify` | Notification dispatch |
+| `BackgroundTaskManager` | The app-level background task manager. Plugins use `self.background_tasks` and generally do not use this directly |
 
-Usage:
+Downloads:
 
 ```python
-check = ctx.runtime.check_interpreter("/usr/bin/python3")
-ctx.logger.info(f"interpreter ok={check.get('ok')}")
+from auto_mas_core import DownloadRequest
+from auto_mas_core.services import Downloads
+
+request = DownloadRequest(url="https://example.com/data.zip", key="my_plugin:data")
+if Downloads.request(request, owner="my_plugin"):
+    snapshot = await Downloads.wait(request)
+    if snapshot.state == "succeeded":
+        print(snapshot.path)
+    await Downloads.release(request.cache_key, owner="my_plugin")
 ```
 
-### ctx.runtime.list_scripts
+- `request()` returns `False` when rejected (capacity busy), and raises `RuntimeError` if the download center is closed.
+- `key` can replace the URL as the resource key, so a changed URL is not mistaken for a new resource. File identity is determined in the order `rid`, `content_hash`, empty identity.
+- Call `release()` when done. When the last user releases, an unfinished download is cancelled.
+- `query(request)` takes a snapshot immediately, and `list(owner=...)` lists one user's downloads.
 
-Reads the `list_scripts` list exposed by the host. Returns an empty list if the host has not registered this capability. The method retains its historical name; the host's registered capability defines what each list item represents.
+For Operations, see [Configuration Schema](./schema#triggers).
 
-Usage:
+### Notifications (auto_mas_core.notify)
 
 ```python
-scripts = ctx.runtime.list_scripts()
+from auto_mas_core.notify import Notify, NotifyPayload
+
+result = await Notify.send_global(
+    NotifyPayload(title="通知标题", text="通知正文"),
+    include_system=True,
+)
+if result.attempted == 0:
+    ...  # 没有可用渠道，并不代表已投递
 ```
 
-### ctx.runtime.get_script_log
+| Method | Purpose |
+| --- | --- |
+| `send_global(payload, include_system=False, ...)` | Sends to the global notification channels |
+| `send_user(payload, user_config, ...)` | Sends to the channels configured for a user |
+| `send_statistics(payload, user_config, ...)` | Sends according to the user's and the global statistics notification policy |
+| `push_proxy_result(title=..., report=..., ...)` | Pushes a proxy result report |
 
-Reads an execution log by its historical `script_id` identifier. Returns an empty string if the host has not registered this capability.
+The same module also exports `DispatchResult`, `NotificationImage`, `TaskResultReport`, and `image_reference`. There is no plugin-specific notification protocol; plugins reuse the host's channels and templates.
 
-Usage:
+## HTTP API
+
+A plugin can mount its own HTTP endpoints under the path prefix `/api/plugin/<plugin name>`.
 
 ```python
-log_text = ctx.runtime.get_script_log("script-001", limit=200)
+from starlette.requests import Request
+
+from auto_mas_core import BasePlugin, plugin_route
+
+
+class PLUGIN(BasePlugin):
+    @plugin_route("/ping", methods=["GET"])
+    async def ping(self) -> dict:
+        return {"ok": True}
+
+    @plugin_route("/echo", methods=["POST"])
+    async def echo(self, request: Request) -> dict:
+        return await request.json()
 ```
 
-## Sync and Async Boundaries
+- The endpoint address is `/api/plugin/<plugin name>/ping`. When `methods` is omitted it is `GET`.
+- A handler either has no parameters (not counting `self`) or exactly one, which receives the request object `Request`.
+- Returning `dict`, `list`, or `None` produces a JSON response; returning a `Response` sends it as is; other values are converted to text. When it raises, a 500 is returned and the details appear only in the local log.
+- Mounted on enable and removed on disable. While the host has calls paused (during disable, reload, or uninstall) and at program exit it returns 503; a disabled plugin is not mounted and returns 404.
+- When you need typed routes and OpenAPI, set `api_router = APIRouter()` on the class; see [Frontend and Backend Integration](/en/plugin/adapter/frontend) for how.
 
-### Common Boundaries
+## Sync and Async
 
-- `ctx.runtime.run` is asynchronous and must be awaited in an async context.
-- `ctx.event.emit_async` is asynchronous and should be preferred.
-- `ctx.event.emit` is a synchronous bridge and does not guarantee strict blocking until sending completes.
-
-### Notes for Synchronous Listeners
-
-If a listener is a synchronous function and you need to create asynchronous tasks, change the listener to `async def` to avoid errors such as `no running event loop`.
-
-## Minimal Implementation Template
-
-```python
-from typing import Any
-from mas.plugins import on_event
-
-
-class Plugin:
-    def __init__(self, ctx):
-        self.ctx = ctx
-        self.cache = self.ctx.cache.register(
-            cache_name="test_cache",
-            backend="json",
-            limit=10,
-            limit_mode="count",
-        )
-
-    async def on_start(self) -> None:
-        await self.ctx.event.emit_async(
-            "demo.ping",
-            {"message": "Hello from plugin"},
-            scope="global",
-        )
-
-    @on_event("demo.ping", scope="global", priority=10)
-    async def on_ping(self, payload: dict, ctx) -> None:
-        ctx.logger.info(f"received demo.ping: {payload}")
-
-    @on_event("cache.test", scope="instance")
-    def on_cache_test(self, payload: dict, ctx) -> None:
-        value = payload.get("value", {"k": "v"})
-        self.cache.set("test_cache", value)
-        ctx.logger.info(f"cache write succeeded: {self.cache.get('test_cache')}")
-
-    @on_event("runtime.test", scope="instance")
-    async def on_runtime_test(self, payload: Any, ctx) -> None:
-        _ = payload
-        result = await ctx.runtime.run(code="print(1+2)", timeout_seconds=5)
-        if result.get("ok"):
-            ctx.logger.info(f"run result: {result.get('stdout', '').strip()}")
-        else:
-            ctx.logger.error(f"run failed: {result.get('stderr', '').strip()}")
-```
+- Lifecycle hooks, `Downloads.wait`, `Notify.*`, and `ProcessRunner.run_process` are coroutines and must be `await`ed.
+- A background task's `factory` must return a coroutine, such as `lambda: self.refresh()`.
+- A `plugin_route` handler can be sync or async. A sync function runs directly in the event loop, so use async or a background task for slow operations.
 
 ## FAQ
 
-### cache.register reports inconsistent parameters
+### Accessing self.background_tasks reports "plugin has no background task group bound"
 
-Possible cause:
+You accessed it in the constructor. The task group is only bound before `pre_enable()`, so use it inside the hooks.
 
-- The same `cache_name` is reused in the same instance, but `limit` or `limit_mode` differs from the first registration.
+### spawn returns None
 
-Recommendation:
+The task group is closed (the plugin is being disabled), or the number of concurrently running or retained tasks has reached the limit. Check the return value; do not assume it always succeeds.
 
-- Keep parameters consistent, or use a new `cache_name`.
+### Accessing a name on auto_mas_core raises AttributeError
 
-### Event listener does not trigger
-
-Possible causes:
-
-- The event name is misspelled.
-- Scope mismatch. For example, the event is sent as `global`, but the listener uses `instance`.
-- The listener signature is invalid, causing registration to fail.
-
-### runtime.run reports an error
-
-Possible causes:
-
-- It is called directly in a non-async context without `await`.
-- The interpreter path is invalid.
-- The timeout is too short.
-
-### Configuration disappears after config.reset
-
-Possible cause:
-
-- `None` or an empty dictionary was passed in. This means "reset to empty configuration".
-
-## Conclusion
-
-The goal of `ctx` is to gather the most common plugin development capabilities into one object: logging, configuration, events, cache, and runtime.
-
-Start with the minimal template in this document, then extend event and cache strategies according to your business needs.
+The name is not in the SDK export table. Do not import the host's internal `app.*` modules directly; they are not part of the SDK contract and may change at any time.

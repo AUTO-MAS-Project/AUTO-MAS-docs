@@ -82,6 +82,13 @@ export const zhThemeConfig: DefaultTheme.Config = {
                     { text: "服务系统", link: "/plugin/basic/service" },
                 ],
             },
+            {
+                text: "专项接入",
+                items: [
+                    { text: "独立专项适配", link: "/plugin/adapter/standalone" },
+                    { text: "前端与后端的对接", link: "/plugin/adapter/frontend" },
+                ],
+            },
         ],
         "/developer/": {
             base: "/developer/",

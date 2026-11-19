@@ -1,411 +1,154 @@
 # 事件系统
 
-事件系统是MAS插件系统的重要组成部分，可以说没有事件系统就没有插件系统。
-
-本文将带你了解MAS事件系统的构造和使用，帮助你快速编写一个使用事件系统的插件。
-
-本文保留历史事件协议中的 `task.*`、`script.*` 和 `script_id` 等名称。这里的 `script.*` 描述账号执行过程；当前界面的管理对象称为“托管”和“账号”，不要按界面用词改写事件名或载荷字段。
-
-## 事件模型
-
-### 事件对象结构
-
-标准事件对象包含以下结构，我们将其称为**载荷（payload）**：
-
-*此处以task.start举例，data字段不完整*
-
-```json
-{
-  "event": "task.start",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:45+08:00",
-  "data": {
-    "task_id": "task-001"
-  }
-}
-```
-
-字段分层说明：
-
-- 元信息层（顶层）：event、event_version、source、timestamp。
-- 业务数据层（data）：业务侧字段，按事件类型变化。
-
-### task.* 与 script.* 的关键差异
-
-task.* 事件通常把任务字段放在 data 内；script.* 事件会把账号执行上下文字段提升到顶层。
-
-task.start 示例（任务字段主要在 data 内）：
-
-```json
-{
-  "event": "task.start",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:45+08:00",
-  "data": {
-    "task_id": "task-001",
-    "mode": "AutoProxy",
-    "queue_id": "queue-001"
-  }
-}
-```
-
-script.exit 示例（账号执行字段提升到顶层）：
-
-```json
-{
-  "event": "script.exit",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:59+08:00",
-  "task_id": "task-001",
-  "script_id": "script-001",
-  "script_name": "日常任务",
-  "mode": "AutoProxy",
-  "status": "完成",
-  "error": null,
-  "result": "script.success",
-  "data": {
-    "queue_id": "queue-001",
-    "queue_name": "每日轮询"
-  }
-}
-```
-
-对照结论：
-
-- task.*：重点字段一般在 data 内读取，例如 data.task_id、data.mode。
-- script.*：重点字段一般在顶层读取，例如 task_id、script_id、script_name、result。
-
-开发建议：
-
-- 处理 task.* 时，优先从 payload["data"] 读取 task_id 等字段。
-- 处理 script.* 时，优先从 payload 顶层读取 task_id、script_id、script_name、result。
-
-## 系统提供的标准事件
-
-### Task事件
-
-- task.start：任务启动。
-- task.progress：任务进度快照。
-- task.log：当前账号执行时的脚本日志快照。
-- task.exit：任务结束。
-
-### Script事件
-
-- script.start：账号执行开始。
-- script.success：账号执行成功完成。
-- script.error：账号执行失败。
-- script.cancelled：账号执行被人工取消。
-- script.exit：账号执行生命周期结束（推荐优先监听）。
-
-::: tip 有什么区别？
-
-`task` 和 `script` 是历史事件协议中的执行层级：一个任务可以包含多次账号执行，每次账号执行使用 `script.*` 事件。
-
-例如，一个 MAA 托管有两个账号；任务依次运行这两个账号时，各自会产生一组 `script.*` 事件。
-
+::: warning
+本文以 `dev` 分支 2026-11-18 的实现为准。插件系统仍在变化，接口以你安装的 AUTO-MAS 源码为准。
 :::
 
-## 事件监听
+## 旧事件总线已移除
 
-### 装饰器参数
+旧版文档里的这些东西，在当前实现里都找不到：
 
-示例：
+- `ctx.event.on` / `off` / `emit` / `emit_async`
+- `@on_event` 装饰器和 `mas.plugins` 模块
+- 载荷里的 `task.start`、`task.progress`、`task.log`、`task.exit`、`script.start`、`script.exit` 等事件，以及 `event_version`、`source` 这些信封字段
+
+插件不再有「按事件名订阅、广播」的总线，所以也没有 `scope`、`priority`、`error_policy`。照旧文档写的 `@on_event("script.exit")` 不会收到任何东西。
+
+::: tip
+需要「某件事发生时做点什么」，按下面的顺序选：生命周期钩子、配置信号、服务调用、配置触发器。每种的边界都不同，下文逐个说明。
+:::
+
+## 现在用什么代替
+
+| 想做的事 | 用什么 |
+| --- | --- |
+| 在插件启停、重载时执行代码 | [生命周期钩子](#生命周期钩子) |
+| 配置某个字段变化时执行代码 | [配置信号](#配置信号) |
+| 让别的插件调用你的能力，或调用别的插件 | [服务系统](./service) |
+| 用户在界面点按钮时执行代码 | [触发器](./schema#触发器) |
+| 向前端推一条消息 | [WebSocket 推送](#websocket-推送) |
+| 给用户发通知 | [通知](./core) |
+| 在任务、账号运行结束时做点什么 | [没有公开入口](#任务与账号运行事件) |
+
+## 生命周期钩子
+
+`BasePlugin` 提供一组 `async` 钩子：`pre_enable`、`on_enable`、`pre_disable`、`on_disable`、`pre_reload`、`on_reload`、`pre_unload`、`on_unload`、`on_teardown`、`on_fail_cleanup`。顺序和注意事项见[核心功能](./core#生命周期钩子)。
 
 ```python
-from mas.plugins import on_event
+from auto_mas_core import BasePlugin
+from auto_mas_core.utils import get_logger
 
-@on_event("script.exit", scope="global", priority=0, once=False)
-async def on_script_exit(payload, ctx):
+logger = get_logger("demo")
+
+
+class PLUGIN(BasePlugin):
+    async def on_enable(self) -> None:
+        logger.info("启用")
+
+    async def on_disable(self) -> None:
+        logger.info("停用")
+```
+
+## 配置信号
+
+配置节点自带变更信号，基于 blinker。SDK 导出 `FieldChangeEvent`，宿主自己也用同一机制订阅任务和配置的变化。
+
+订阅写法：
+
+```python
+from auto_mas_core import BasePlugin, FieldChangeEvent, PluginConfig
+
+
+class MyConfig(PluginConfig):
     ...
+
+
+async def on_interval_changed(sender, event: FieldChangeEvent) -> None:
+    print(event.group, event.field, event.old_value, "->", event.value)
+
+
+class PLUGIN(BasePlugin):
+    config_class = MyConfig
+
+    async def on_enable(self) -> None:
+        MyConfig.connect(
+            on_interval_changed, kind="set", group="general", field="interval"
+        )
+
+    async def on_disable(self) -> None:
+        MyConfig.disconnect(
+            on_interval_changed, kind="set", group="general", field="interval"
+        )
 ```
 
-参数说明：
+- 回调的参数是 `(sender, event)`，可以是同步或异步函数。异步回调会被依次等待。
+- 回调要用模块级函数。实例方法不能挂属性，默认的弱引用订阅会抛 `TypeError`。
+- `kind="set"` 表示运行期变更，`"init_set"` 是配置激活时的初始化赋值。`phase` 默认 `"runtime"`，只收运行期事件。
+- `group`、`field` 用来过滤，省略则收该类全部字段的变化。
+- 用 `MyConfig.connect` 订阅整个类；用 `self.config.connect` 只订阅这一个实例。
+- 同一组 `(phase, kind, group, field, sender)` 重复订阅会抛 `ValueError`，先 `disconnect`。
+- 在回调里改配置要自己 `commit()`；回调返回前必须提交当次暂存，否则抛 `RuntimeError`。
 
-- event：事件名，不能为空。
-- scope：作用域，global（全局） 或 instance（插件内）。
-- priority：优先级，数值越大，越先执行。
-- once：是否触发一次后自动解绑。
-- error_policy：continue 或 raise，None 表示继承事件级策略。
+::: warning
+信号只在字段值真的改变时触发。写入同一个值不触发。
+:::
 
-### 处理函数允许的签名
+## 服务调用
 
-加载器会自动注入上下文，建议使用以下任一形式：
+要让另一个插件在合适的时候被调用，不要自己造订阅机制，用服务：被调用方 `provides_services`，调用方 `self.services.get(...)`。见[服务系统](./service)。
 
-- handler(payload)
-- handler(payload, ctx)
-- handler(payload, *, ctx=...)
+服务是「主动调用」，不是「被动通知」。提供方无法向消费方广播。需要广播的场景，让消费方轮询，或者让消费方把回调函数当参数传给提供方的服务方法，再由提供方保存。保存回调时，提供方要在 `on_disable` 里清掉，否则消费方卸载后回调还在。
 
-如果签名不匹配，会在注册阶段报错。
+## 触发器
 
-### 同步监听器注意事项
+用户在插件设置页点按钮，宿主调用配置类里 `@trigger_field` 标记的方法，作为后台操作运行，结束后通过 WebSocket 发布操作终态（`id="Operations"`、`type="operation.updated"`）。见[配置声明](./schema#触发器)。
 
-事件总线对同步函数会放到线程执行。若你在同步监听器内直接调用 asyncio.create_task，常见报错为 no running event loop。
+## WebSocket 推送
 
-因此，需要创建异步任务时，需要将监听器定义为 async def。
-
-## 作用域、优先级、错误策略
-
-### 作用域路由
-
-- 事件以 global 广播时，只会命中 scope=global 的监听器。
-- 事件以 instance 广播时，只会命中同一实例的 scope=instance 监听器。
-
-核心事件（如 task.*、script.*）默认按 global 发送，因此插件监听核心事件时通常应使用 scope="global"。
-
-### 执行顺序
-
-- 先按 priority 从高到低分组。
-- 同优先级内并发执行。
-- 当前优先级组完成后，再执行下一组。
-
-### 错误策略
-
-- continue：记录异常后继续分发。
-- raise：该监听器异常会向上抛出并参与分发异常聚合。
-
-实践建议：
-
-- 插件内优先自行捕获异常，避免因策略或版本差异影响事件流稳定性。
-
-## payload 读取范式
-
-### task.* 读取范式
+`auto_mas_core.Publisher` 是宿主向前端发消息的出口，`auto_mas_core.protocol` 是消息类型常量。两者按需加载。
 
 ```python
-def read_task_payload(payload: dict) -> tuple[str, str]:
-    # 可选类型检测
-    data = payload.get("data") if isinstance(payload, dict) else None
-    if not isinstance(data, dict):
-        return "", ""
-    
-    task_id = str(data.get("task_id") or "").strip()
-    mode = str(data.get("mode") or "").strip()
-    return task_id, mode
+from auto_mas_core import Publisher
+
+sent = await Publisher.send(
+    id="my_plugin",
+    type="my_plugin.changed",
+    data={"count": 3},
+)
 ```
 
-### script.* 读取范式
+- `send(id, type, data)` 向前端的主连接发一条 `{id, type, data}` 信封消息，返回是否发出。主连接未建立时消息被丢弃，返回 `False`，不缓存、不重发。
+- `data` 可以是 pydantic 模型或字典。
+- 这是**单向**通道：只发往前端，不会送到其他插件。
+- `protocol` 里的类型都是宿主与前端约定好的（任务、更新、模拟器、插件能力变化等）。前端只处理它认识的类型。当前 SDK 没有让插件加载自己的前端代码的入口，所以自定义类型的消息，前端不会有页面去消费。
 
-```python
-def read_script_payload(payload: dict) -> tuple[str, str, str]:
-    if not isinstance(payload, dict):
-        return "", "", ""
-    script_name = str(payload.get("script_name") or "").strip()
-    script_id = str(payload.get("script_id") or "").strip()
-    result = str(payload.get("result") or "").strip()
-    return script_name, script_id, result
-```
+::: warning
+`type` 不要借用宿主已有的类型常量冒充，前端会按那个类型的载荷格式解析。
+:::
 
-## 最小可用实现模板
+## 任务与账号运行事件
 
-```python
-from typing import Any
-from mas.plugins import on_event
+宿主在任务开始、结束、脚本执行边界时会向前端推送 `task.created`、`task.completed`、`task.script.started`、`task.script.finished` 等消息，它们定义在 `protocol` 里，**只发往前端，没有提供给普通插件的订阅入口**。
 
+宿主内部还有 `TaskManager.task_ended` 这类信号，但 SDK 没有导出，也不属于插件契约，不要依赖。
 
-class Plugin:
-    def __init__(self, ctx):
-        self.ctx = ctx
-        self._seen: set[tuple[str, str, str]] = set()
+如果你的需求是「在某个脚本运行时插入自己的逻辑」，这属于专项适配：用 `ScriptTypeDecl` 注册脚本类型，并实现 `UserExpander` 和对应的 `ModeWorker`，由宿主在任务里调度它们。见[独立专项适配](../adapter/standalone)。
 
-    @on_event("script.exit", scope="global")
-    async def on_script_exit(self, payload: Any, ctx) -> None:
-        _ = ctx
-        try:
-            if not isinstance(payload, dict):
-                return
+## 插件系统自己的信号
 
-            script_name = str(payload.get("script_name") or "").strip()
-            task_id = str(payload.get("task_id") or "").strip()
-            script_id = str(payload.get("script_id") or "").strip()
-            result = str(payload.get("result") or "").strip()
+`app/plugin/signals.py` 里有一组插件系统内部用的 blinker 信号：`service_changed`、`sources_changed`、`capabilities_changed`、`install_progress`、`upgrade_progress`、`precheck_failed`。
 
-            if not script_name:
-                return
+- 它们不在 SDK 导出表里，属于宿主内部实现。
+- 目前只有 `service_changed`（服务登记或注销时）、`sources_changed`（源码目录变化时）、`capabilities_changed`（插件启用或停用时）有地方发送；其余三个只有声明，没有发送者。
+- 不要在插件里订阅它们。需要知道服务是否可用时，直接 `self.services.get(...)` 看返回值。
 
-            key = (task_id, script_id, script_name)
-            if key in self._seen:
-                return
-            self._seen.add(key)
+## 迁移对照
 
-            if result == "script.success":
-                self.ctx.logger.info(f"脚本成功: {script_name}")
-            elif result == "script.error":
-                self.ctx.logger.warning(f"脚本失败: {script_name}")
-            elif result == "script.cancelled":
-                self.ctx.logger.info(f"脚本取消: {script_name}")
-
-        except Exception as e:
-            self.ctx.logger.warning(f"处理 script.exit 失败: {type(e).__name__}: {e}")
-```
-
-## 常见问题
-
-### 监听器没有触发
-
-可能原因：
-
-- event 名拼写错误。
-- 监听器用的是 scope="instance"，但核心事件按 global 发出。
-- 函数签名不合法导致注册失败。
-
-### payload 字段为空
-
-可能原因：
-
-- 把 task.* 当成 script.* 读取，或反过来。
-
-## 事件样例
-
-### task.start
-
-```json
-{
-  "event": "task.start",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:45+08:00",
-  "data": {
-    "task_id": "task-001",
-    "mode": "AutoProxy",
-    "queue_id": "queue-001",
-    "queue_name": "每日轮询",
-    "script_total": 3,
-    "scripts": [
-      {
-        "script_id": "script-001",
-        "script_name": "日常任务",
-        "status": "等待"
-      }
-    ],
-    "primary_script_id": null,
-    "primary_script_name": null,
-    "actions": {
-      "stop_task": {
-        "api": "/api/dispatch/stop",
-        "method": "POST",
-        "body": {
-          "taskId": "task-001"
-        }
-      },
-      "stop_all_tasks": {
-        "api": "/api/dispatch/stop",
-        "method": "POST",
-        "body": {
-          "taskId": "ALL"
-        }
-      }
-    }
-  }
-}
-```
-
-### task.progress
-
-```json
-{
-  "event": "task.progress",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:50+08:00",
-  "data": {
-    "task_id": "task-001",
-    "mode": "AutoProxy",
-    "queue_id": "queue-001",
-    "queue_name": "每日轮询",
-    "current_script_index": 0,
-    "current_script_id": "script-001",
-    "current_script_name": "日常任务",
-    "script_total": 3,
-    "script_completed": 1,
-    "user_total": 12,
-    "user_completed": 4,
-    "current_script": {
-      "script_id": "script-001",
-      "script_name": "日常任务",
-      "status": "运行",
-      "current_user_index": 1,
-      "user_count": 4
-    }
-  }
-}
-```
-
-### task.log
-
-```json
-{
-  "event": "task.log",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:51+08:00",
-  "data": {
-    "task_id": "task-001",
-    "mode": "AutoProxy",
-    "queue_id": "queue-001",
-    "queue_name": "每日轮询",
-    "script_id": "script-001",
-    "script_name": "日常任务",
-    "script_status": "运行",
-    "current_script_index": 0,
-    "log": "...完整日志...",
-    "log_tail": "...末尾日志...",
-    "log_length": 12345,
-    "truncated_for_tail": true
-  }
-}
-```
-
-### task.exit
-
-```json
-{
-  "event": "task.exit",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:24:20+08:00",
-  "data": {
-    "task_id": "task-001",
-    "mode": "AutoProxy",
-    "queue_id": "queue-001",
-    "queue_name": "每日轮询",
-    "scripts": [
-      {
-        "script_id": "script-001",
-        "script_name": "日常任务",
-        "status": "完成"
-      }
-    ],
-    "final_script_id": "script-001",
-    "final_script_name": "日常任务",
-    "final_script_status": "完成",
-    "result": "success",
-    "error": null,
-    "summary": "任务摘要..."
-  }
-}
-```
-
-### script.exit
-
-```json
-{
-  "event": "script.exit",
-  "event_version": "1",
-  "source": "core.task_manager",
-  "timestamp": "2026-03-22T01:23:59+08:00",
-  "task_id": "task-001",
-  "script_id": "script-001",
-  "script_name": "日常任务",
-  "mode": "AutoProxy",
-  "status": "完成",
-  "error": null,
-  "result": "script.success",
-  "data": {
-    "queue_id": "queue-001",
-    "queue_name": "每日轮询"
-  }
-}
-```
+| 旧写法 | 现在 |
+| --- | --- |
+| `ctx.event.on("script.exit", ...)` | 没有对应入口，见[任务与账号运行事件](#任务与账号运行事件) |
+| `ctx.event.emit_async("x", ...)` | 对方是你自己的插件：提供服务；对方是前端：`Publisher.send` |
+| `@on_event(...)` | 配置信号或生命周期钩子 |
+| `scope="instance"` / `"global"` | 不再有作用域概念 |
+| `async def on_start(self)` | `async def on_enable(self)` |
+| `async def on_stop(self, reason)` | `async def on_disable(self)`，没有 `reason` 参数 |
