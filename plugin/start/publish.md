@@ -19,9 +19,9 @@
 Changelog = "https://github.com/OWNER/REPO/blob/main/CHANGELOG.md"
 ```
 
-发布新版本后，在 PyPI 项目页打开 **Changelog**，核对文件与版本标题。数据站的插件索引会读取该文件，并在目标版本及之前最近五个已发布版本中收录有正文的章节。`Unreleased` 和尚未上传到 PyPI 的版本不会进入市场。
+发布新版本后，在 PyPI 项目页打开 **Changelog**，核对文件与版本标题。插件索引工作流读取该文件，从目标版本及之前最近五个已发布版本中收录有正文的章节，再将目录发布到数据站。`Unreleased` 和尚未上传到 PyPI 的版本不会进入市场。
 
-刷新插件市场后，用户可以在「更新」展开本次升级涉及的说明，也可以在「已安装」详情回看本机版本。主程序从 PyPI 或镜像直接检索插件时，日志为空。
+等待工作流完成，下载[公开插件目录](https://data.auto-mas.top/api/v1/files/auto-mas/Client/plugins/download)，按 `package_name` 找到自己的包，核对 `version` 和 `changelog`。刷新插件市场后，用户可以在「更新」展开本次升级涉及的说明，也可以在「已安装」详情回看本机版本。主程序从 PyPI 或镜像直接检索插件时，日志为空。
 
 ## 构建源代码
 

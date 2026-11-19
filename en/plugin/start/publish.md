@@ -19,9 +19,9 @@ Add the public HTTPS link to the file under `[project.urls]` in `pyproject.toml`
 Changelog = "https://github.com/OWNER/REPO/blob/main/CHANGELOG.md"
 ```
 
-After publishing a new release, open **Changelog** on its PyPI project page and check the file and version heading. The data site reads the file and includes sections with notes for the five most recent published versions up to and including the market version. It skips `Unreleased` and versions you have yet to publish to PyPI.
+After publishing a new release, open **Changelog** on its PyPI project page and check the file and version heading. The plugin index workflow reads the file, collects notes from the five most recent published versions up to and including the market version, and publishes the catalog to the data site. It skips `Unreleased` and versions you have yet to publish to PyPI.
 
-After refreshing the market, users can expand **Release notes** in **Updates** to see changes since their installed version. The installed plugin's details show the notes for that version. When the app retrieves plugins directly from PyPI or a mirror, it displays no release notes.
+Once the workflow finishes, download the [public plugin catalog](https://data.auto-mas.top/api/v1/files/auto-mas/Client/plugins/download). Find your package by `package_name` and check its `version` and `changelog`. After refreshing the market, users can expand **Release notes** in **Updates** to see changes since their installed version. The installed plugin's details show the notes for that version. When the app retrieves plugins directly from PyPI or a mirror, it displays no release notes.
 
 ## Build the Source Code
 
