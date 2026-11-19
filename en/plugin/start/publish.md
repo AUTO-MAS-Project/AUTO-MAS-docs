@@ -73,6 +73,27 @@ When the declaration is missing, not at the start, invalid JSON, or any of the t
 If a new version of an already-indexed package loses its keywords or has an invalid declaration, that whole data site refresh round aborts and the old catalog is kept. The new version does not appear, and updates for other plugins are held up too, until someone fixes it. Check before you publish.
 :::
 
+## Show Release Notes in the Plugin Market
+
+Keep `CHANGELOG.md` at the root of your plugin repository. Give each release a level-two heading with its PyPI version in brackets.
+
+```markdown
+## [1.2.0] - 2026-11-19
+
+- Allow each account to use a different device.
+```
+
+Add the public HTTPS link to the file under `[project.urls]` in `pyproject.toml`. Replace the repository and branch in this example with your own.
+
+```toml
+[project.urls]
+Changelog = "https://github.com/OWNER/REPO/blob/main/CHANGELOG.md"
+```
+
+After publishing a new release, open **Changelog** on its PyPI project page and check the file and version heading. The plugin index workflow reads the file, collects notes from the five most recent published versions up to and including the market version, and publishes the catalog to the data site. It skips `Unreleased` and versions you have yet to publish to PyPI.
+
+Once the workflow finishes, download the [public plugin catalog](https://data.auto-mas.top/api/v1/files/auto-mas/Client/plugins/download). Find your package by `package_name` and check its `version` and `changelog`. After refreshing the market, users can expand **Release notes** in **Updates** to see changes since their installed version. The installed plugin's details show the notes for that version. When the app retrieves plugins directly from PyPI or a mirror, it displays no release notes.
+
 ## Building the Source
 
 First install the build tool and twine. You can install them in a virtual environment or system-wide; a virtual environment is recommended.

@@ -73,6 +73,27 @@
 一个已被收录的包，发布的新版本如果缺了关键词或声明失效，数据站那一轮刷新会整体中止并保留旧目录。新版本不会出现，其他插件的更新也会被一起拖住，直到有人修好。发布前务必自检。
 :::
 
+## 在插件市场显示更新日志
+
+在插件仓库根目录维护 `CHANGELOG.md`。每个发行版本使用二级标题，括号中的版本号与 PyPI 发行版本一致。
+
+```markdown
+## [1.2.0] - 2026-11-19
+
+- 支持为每个账号单独选择设备。
+```
+
+在 `pyproject.toml` 的 `[project.urls]` 下添加文件的公开 HTTPS 链接。将示例中的仓库和分支替换为自己的地址。
+
+```toml
+[project.urls]
+Changelog = "https://github.com/OWNER/REPO/blob/main/CHANGELOG.md"
+```
+
+发布新版本后，在 PyPI 项目页打开 **Changelog**，核对文件与版本标题。插件索引工作流读取该文件，从目标版本及之前最近五个已发布版本中收录有正文的章节，再将目录发布到数据站。`Unreleased` 和尚未上传到 PyPI 的版本不会进入市场。
+
+等待工作流完成，下载[公开插件目录](https://data.auto-mas.top/api/v1/files/auto-mas/Client/plugins/download)，按 `package_name` 找到自己的包，核对 `version` 和 `changelog`。刷新插件市场后，用户可以在「更新」展开本次升级涉及的说明，也可以在「已安装」详情回看本机版本。主程序从 PyPI 或镜像直接检索插件时，日志为空。
+
 ## 构建源代码
 
 你需要先安装构建工具和 twine。可以装在虚拟环境里，也可以装在系统环境里，我们推荐虚拟环境。
