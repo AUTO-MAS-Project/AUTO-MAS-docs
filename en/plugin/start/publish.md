@@ -2,6 +2,27 @@
 
 This document explains how to upload your plugin to PyPI so users can download and install it.
 
+## Show release notes in the plugin market
+
+Keep `CHANGELOG.md` at the root of your plugin repository. Give each release a level-two heading with its PyPI version in brackets.
+
+```markdown
+## [1.2.0] - 2026-11-19
+
+- Allow each account to use a different device.
+```
+
+Add the public HTTPS link to the file under `[project.urls]` in `pyproject.toml`. Replace the repository and branch in this example with your own.
+
+```toml
+[project.urls]
+Changelog = "https://github.com/OWNER/REPO/blob/main/CHANGELOG.md"
+```
+
+After publishing a new release, open **Changelog** on its PyPI project page and check the file and version heading. The data site reads the file and includes sections with notes for the five most recent published versions up to and including the market version. It skips `Unreleased` and versions you have yet to publish to PyPI.
+
+After refreshing the market, users can expand **Release notes** in **Updates** to see changes since their installed version. The installed plugin's details show the notes for that version. When the app retrieves plugins directly from PyPI or a mirror, it displays no release notes.
+
 ## Build the Source Code
 
 If you want to publish to the plugin marketplace, build your source code first. Install `twine` before doing so.
