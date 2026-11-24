@@ -296,4 +296,4 @@ A:那可能是在从原目录导入副本。未启用跟随来源时，完成并
 
 ## 给开发者
 
-如果项目需要自己的脚本类型、提示或运行前任务编排，请看 [风味专项开发](/developer/maafw-flavor)。
+如果项目需要自己的脚本类型、提示或运行前任务编排，请看 [风味专项开发](/developer/plugins/script-adapters/mfw/develop)。

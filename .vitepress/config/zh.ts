@@ -1,18 +1,10 @@
 import type { DefaultTheme } from "vitepress";
 
-export const zhThemeConfig: DefaultTheme.Config = {
+export const zhThemeConfig = {
     nav: [
         { text: "首页", link: "/" },
         { text: "文档", link: "/docs/user-guide" },
-        {
-            text: "开发",
-            items: [
-                { text: "本体开发", link: "/developer/getting-start" },
-                { text: "风味专项开发", link: "/developer/maafw-flavor" },
-                { text: "插件开发", link: "/plugin/start/start" },
-            ],
-            activeMatch: "^/(developer|plugin)/",
-        },
+        { text: "开发", link: "/developer/", activeMatch: "^/developer/" },
         { text: "下载", link: "/download/auto-mas" },
         { text: "公示", link: "/disclosure/" },
     ],
@@ -63,77 +55,6 @@ export const zhThemeConfig: DefaultTheme.Config = {
                 ],
             },
         ],
-        "/plugin/": [
-            {
-                text: "插件开发者指南",
-                items: [
-                    { text: "开发起步", link: "/plugin/start/start" },
-                    { text: "配置文件", link: "/plugin/start/config" },
-                    { text: "插件开发", link: "/plugin/start/develop" },
-                    { text: "发布插件", link: "/plugin/start/publish" },
-                ],
-            },
-            {
-                text: "开发基础",
-                items: [
-                    { text: "核心能力", link: "/plugin/basic/core" },
-                    { text: "事件系统", link: "/plugin/basic/event" },
-                    { text: "配置声明", link: "/plugin/basic/schema" },
-                    { text: "服务系统", link: "/plugin/basic/service" },
-                ],
-            },
-            {
-                text: "专项接入",
-                items: [
-                    { text: "独立专项适配", link: "/plugin/adapter/standalone" },
-                    { text: "前端与后端的对接", link: "/plugin/adapter/frontend" },
-                ],
-            },
-        ],
-        "/developer/": {
-            base: "/developer/",
-            items: [
-                {
-                    text: "MAS主程序开发者指南",
-                    link: "",
-                    items: [
-                        { text: "开发起步", link: "getting-start" },
-                        { text: "开发规范", link: "development-specifications" },
-                        { text: "测试与验证", link: "testing" },
-                        { text: "仓库与 Agent 规范", link: "agent-and-repository-rules" },
-                        { text: "构筑与发布", link: "build-and-publish" },
-                        {
-                            text: "开发文档",
-                            items: [
-                                { text: "API 开发", link: "API" },
-                                { text: "配置管理", link: "config" },
-                                { text: "配置语义", link: "config-semantics" },
-                                { text: "通知系统", link: "notification" },
-                                { text: "计划表规范", link: "planbook" },
-                                { text: "专项适配", link: "script_task" },
-                                { text: "风味专项开发", link: "maafw-flavor" },
-                                {
-                                    text: "MFW 设计",
-                                    collapsed: true,
-                                    items: [
-                                        { text: "总览", link: "maafw/" },
-                                        { text: "总体架构", link: "maafw/architecture" },
-                                        { text: "导入与载荷视图", link: "maafw/import-and-payload" },
-                                        { text: "运行", link: "maafw/run" },
-                                        { text: "运行环境", link: "maafw/runtime-env" },
-                                        { text: "项目更新", link: "maafw/update" },
-                                        { text: "风味", link: "maafw/flavor" },
-                                        { text: "前端与交互", link: "maafw/frontend" },
-                                        { text: "外壳配置导入与问题包", link: "maafw/shell-import-and-issue-report" },
-                                        { text: "设计取舍", link: "maafw/tradeoffs" },
-                                    ],
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        },
         "/download/": [
             {
                 text: "软件下载",
@@ -178,4 +99,4 @@ export const zhThemeConfig: DefaultTheme.Config = {
         level: [2, 4],
         label: "目录",
     },
-};
+} satisfies DefaultTheme.Config;

@@ -1,12 +1,13 @@
-# Development Guide
+---
+outline: false
+---
 
-Welcome to AUTO-MAS development. Before contributing, you must understand the following.
+# Developer Guide
 
-## Development and Collaboration Rules
+> [!IMPORTANT] Read before contributing code
+> Before submitting code to any AUTO-MAS-Project repository, read the full **AUTO-MAS Developer Community Authorization Agreement** on this page.
 
-- [Development Standards](/en/developer/development-specifications): branches, commit messages, test submission and maintenance, version records, backend comments, and function-call style.
-- [Testing and Verification](/en/developer/testing): how pytest regression, browser E2E, and author-local real runs divide the work, plus commands, debug switches, and PR evidence.
-- [Repository Division and Agent Rules](/en/developer/agent-and-repository-rules): responsibilities of the main repository, documentation site, and skills repository, plus rules for AI assistants writing Issue and PR bodies.
+If this is your first contribution, follow [Environment Setup](./getting-start/environment.md) to run AUTO-MAS locally and consult the [Development Standards](./getting-start/development-specifications.md) before submitting changes. Core and plugin developers use the same environment. Once it is running, use the sidebar to find the module you want to work on under Core Application Development or Plugin Development.
 
 ## AUTO-MAS Developer Community Authorization Agreement
 

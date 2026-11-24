@@ -65,4 +65,4 @@ Edit an account created by configuration import, or add one from the managed-scr
 
 ## For developers
 
-To give a project its own script identity or pre-run rules, see [Flavor Development](/en/developer/maafw-flavor).
+To give a project its own script identity or pre-run rules, see [Flavor Development](/en/developer/plugins/script-adapters/mfw/develop).
