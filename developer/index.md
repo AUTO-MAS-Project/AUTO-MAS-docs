@@ -1,12 +1,13 @@
-# 开发指引
+---
+outline: false
+---
 
-欢迎参与 AUTO-MAS 项目开发！参与开发前，您必须了解以下内容。
+# 导读
 
-## 开发与协作规范
+> [!IMPORTANT] 重要提醒
+> 向 AUTO-MAS-Project 的任何仓库提交代码前，请完整阅读本页的 **AUTO-MAS 开发者社区授权协议**。
 
-- [开发规范](/developer/development-specifications)：分支、提交信息、测试提交与维护、版本记录、后端注释与函数调用风格。
-- [测试与验证](/developer/testing)：pytest 回归、浏览器 E2E 与本机真实运行的分工、命令、调试开关和 PR 证据要求。
-- [仓库分工与 Agent 规范](/developer/agent-and-repository-rules)：主仓、文档站、skills 仓库的职责边界，以及 AI 助手撰写 Issue / PR 正文的规则。
+首次开发，请先[配置环境](./getting-start/environment.md)，冰阅读[开发规范](./getting-start/development-specifications.md)。环境就绪后，阅读**主程序开发**或**插件开发**对应文档，了解相关信息。
 
 ## AUTO-MAS 开发者社区授权协议
 
@@ -14,21 +15,20 @@
 
 - 您授权 **AUTO-MAS-Project** 的开发团队 **AUTO-MAS Team** 使用您所提交代码的部分权利：
 
-    1. **版权许可**  
-    您授予 **AUTO-MAS Team** 一项永久的、全球性的、不可撤销的、免版税的、非独占的版权许可，允许其使用、复制、修改、分发、公开演示和展示您的贡献，并基于您的贡献创作衍生作品。
+  1. **版权许可**  
+     您授予 **AUTO-MAS Team** 一项永久的、全球性的、不可撤销的、免版税的、非独占的版权许可，允许其使用、复制、修改、分发、公开演示和展示您的贡献，并基于您的贡献创作衍生作品。
 
-    2. **专利许可**  
-    您同时授予 **AUTO-MAS Team** 一项永久的、全球性的、不可撤销的、免版税的专利许可，覆盖您贡献中所必需的专利权利。
+  2. **专利许可**  
+     您同时授予 **AUTO-MAS Team** 一项永久的、全球性的、不可撤销的、免版税的专利许可，覆盖您贡献中所必需的专利权利。
 
-    3. **保留权利**  
-    您仍保有您原创贡献的版权和署名权。您的姓名将作为作者保留在 Git 提交历史及项目致谢中。
+  3. **保留权利**  
+     您仍保有您原创贡献的版权和署名权。您的姓名将作为作者保留在 Git 提交历史及项目致谢中。
 
 - **AUTO-MAS Team** 的所有权利均授权给 [DLmaster (@DLmaster361)](https://github.com/DLmaster361)，仅该被授权人能代表 **AUTO-MAS Team** 行使全部权利。补充细则如下：
 
-    1. 无法联系到 [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 时，**AUTO-MAS Team** 相关事务由 [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 依据社区共识处理。
-    
-    2. [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 退出项目时，必须将 **AUTO-MAS Team** 的所有授权移交给另一项目开发者。
+  1. 无法联系到 [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 时，**AUTO-MAS Team** 相关事务由 [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 依据社区共识处理。
+  2. [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 退出项目时，必须将 **AUTO-MAS Team** 的所有授权移交给另一项目开发者。
 
-    3. [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 绝对多数通过时，允许取消对 [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 的授权，由 [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 重新授权给其他项目开发者。
+  3. [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 绝对多数通过时，允许取消对 [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 的授权，由 [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 重新授权给其他项目开发者。
 
 以上条款用于保证 **AUTO-MAS-Project** 项目拥有清晰的责任主体，能够对侵权者采取法律手段进行法律维权，并确保 **AUTO-MAS Team** 的权利不会被滥用。

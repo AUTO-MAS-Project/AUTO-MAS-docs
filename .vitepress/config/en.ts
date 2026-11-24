@@ -1,18 +1,10 @@
 import type { DefaultTheme } from "vitepress";
 
-export const enThemeConfig: DefaultTheme.Config = {
+export const enThemeConfig = {
     nav: [
         { text: "Home", link: "/en/" },
         { text: "Docs", link: "/en/docs/user-guide" },
-        {
-            text: "Development",
-            items: [
-                { text: "Core App", link: "/en/developer/getting-start" },
-                { text: "Flavor Development", link: "/en/developer/maafw-flavor" },
-                { text: "Plugin Development", link: "/en/plugin/start/start" },
-            ],
-            activeMatch: "^/en/(developer|plugin)/",
-        },
+        { text: "Development", link: "/en/developer/", activeMatch: "^/en/developer/" },
         { text: "Download", link: "/en/download/auto-mas" },
         { text: "Disclosure", link: "/en/disclosure/" },
     ],
@@ -56,60 +48,6 @@ export const enThemeConfig: DefaultTheme.Config = {
                 ],
             },
         ],
-        "/en/plugin/": [
-            {
-                text: "Plugin Developer Guide",
-                items: [
-                    { text: "Getting Started", link: "/en/plugin/start/start" },
-                    { text: "Configuration File", link: "/en/plugin/start/config" },
-                    { text: "Plugin Development", link: "/en/plugin/start/develop" },
-                    { text: "Publishing Plugins", link: "/en/plugin/start/publish" },
-                ],
-            },
-            {
-                text: "Development Basics",
-                items: [
-                    { text: "Core Capabilities", link: "/en/plugin/basic/core" },
-                    { text: "Event System", link: "/en/plugin/basic/event" },
-                    { text: "Configuration Schema", link: "/en/plugin/basic/schema" },
-                    { text: "Service System", link: "/en/plugin/basic/service" },
-                ],
-            },
-            {
-                text: "Adapter Integration",
-                items: [
-                    { text: "Standalone Adapters", link: "/en/plugin/adapter/standalone" },
-                    { text: "Frontend and Backend Integration", link: "/en/plugin/adapter/frontend" },
-                ],
-            },
-        ],
-        "/en/developer/": {
-            base: "/en/developer/",
-            items: [
-                {
-                    text: "MAS Core App Developer Guide",
-                    link: "",
-                    items: [
-                        { text: "Getting Started", link: "getting-start" },
-                        { text: "Development Standards", link: "development-specifications" },
-                        { text: "Testing and Verification", link: "testing" },
-                        { text: "Repository and Agent Rules", link: "agent-and-repository-rules" },
-                        { text: "Build and Release", link: "build-and-publish" },
-                        {
-                            text: "Development Docs",
-                            items: [
-                                { text: "API Development", link: "API" },
-                                { text: "Configuration Management", link: "config" },
-                                { text: "Configuration Semantics", link: "config-semantics" },
-                                { text: "Plan Table Specification", link: "planbook" },
-                                { text: "Script Adaptation", link: "script_task" },
-                                { text: "Flavor Development", link: "maafw-flavor" },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        },
         "/en/download/": [
             {
                 text: "Downloads",
@@ -154,4 +92,4 @@ export const enThemeConfig: DefaultTheme.Config = {
         level: [2, 4],
         label: "On this page",
     },
-};
+} satisfies DefaultTheme.Config;
