@@ -1,16 +1,16 @@
 ---
-title: SRA用户指南
-description: 在AUTO中调度SRA
+title: SRA 用户指南
+description: 在 AUTO-MAS 中调度 SRA
 date: 2025-11-08
 ---
 
-# StarRailAssistant用户指南
+# StarRailAssistant 用户指南
 
-## 在AUTO中调度SRA
+## 在 AUTO-MAS 中调度 SRA {#在auto中调度sra}
 
 ### 什么是 SRA？
 
-StarRailAssistant是一个崩坏星穹铁道的第三方软件，能够轻松完成崩坏星穹铁道日常代理、差分宇宙等重复性无趣工作。
+StarRailAssistant 是一款《崩坏：星穹铁道》第三方软件，能够轻松完成日常代理、差分宇宙等重复性工作。
 
 **详情信息请查阅**：
 
@@ -47,9 +47,9 @@ SRA 自己能管多账号，AUTO-MAS 也能管多账号，所以这里有两条�
 
 1. 打开 **AUTO-MAS**，进入 **托管管理**，单击 **新建托管** 并选择 **通用脚本** 以添加托管配置页。
    ![SRA配置1](/docs/img/script-guide/March7thAssistan/AUTO-MAA-1.png)
-2. 在弹出的窗口里选择选择**从模板创建**，然后单击 **确定**
+2. 在弹出的窗口里选择 **从模板创建**，然后单击 **确定**。
    ![SRA配置2](/docs/img/script-guide/March7thAssistan/AUTO-MAA-2.png)
-3. 接着在新的窗口界面找到并选择 适用于SRAv2.14及以上版本的 **StarRailAssistant** 模板，并点击**使用此模板**。
+3. 接着在新的窗口界面找到并选择适用于 SRA v2.14 及以上版本的 **StarRailAssistant** 模板，并点击 **使用此模板**。
 4. 稍后会打开托管配置页，如下图：
    ![SRA配置3](/docs/img/script-guide/sra/mas1.png)
 5. 在 **打开的托管配置页** 中的 **脚本根目录** 单击 **选择文件夹**，打开 SRA 软件所在目录。
@@ -57,23 +57,23 @@ SRA 自己能管多账号，AUTO-MAS 也能管多账号，所以这里有两条�
    ::: warning 下面那些路径别手动改
    选好脚本根目录之后，**脚本配置** 一栏的各个路径会自动填好。模板已经帮你配对了，不清楚每项是什么意思就别动它，改错了代理会各种出问题。
    :::
-6. 选择完 SRA 的目录以后会自动修正**脚本配置**一栏的路径，无需手动选择。
+6. 选择完 SRA 的目录后，会自动修正 **脚本配置** 一栏的路径，无需手动选择。
    ![SRA配置5](/docs/img/script-guide/sra/mas3.png)
-7. SRA 约定选择 `C:\Users\用户名\AppData\Roaming\SRA` 作为默认配置目录，因此无需修改 **配置文件路径** 一栏。
+7. SRA 默认使用 `C:\Users\用户名\AppData\Roaming\SRA` 作为配置目录，因此无需修改 **配置文件路径** 一栏。
    ![SRA配置6](/docs/img/script-guide/sra/mas4.png)
 8. 脚本配置将自动保存，接下来退出托管配置页面。
-9. 点击**添加账号**，需要自己给添加的账号进行命名（在账号名称一栏输入你想要的账号名称（这仅仅只是个命名而已）），然后点击右上方的**通用配置**按钮
+9. 点击 **添加账号**，在账号名称一栏输入自定义名称（仅用于标识），然后点击右上方的 **通用配置** 按钮。
    ![SRA配置7](/docs/img/script-guide/sra/mas5.png)
 10. 这会启动 SRA 窗口，在里面配置 SRA 本身。
    ::: warning 配置文件名保持 Default
    用 AUTO-MAS 管多账号时，不要改配置文件名，保持默认的 `Default`。
    :::
    ![SRA配置8](/docs/img/script-guide/sra/sra1.png)
-11. 配置完成后，点击SRA窗口主页启动按钮右侧的箭头，展开启动选项，选择**仅保存配置**
+11. 配置完成后，点击 SRA 窗口主页启动按钮右侧的箭头，展开启动选项，选择 **仅保存配置**。
    ![SRA配置9](/docs/img/script-guide/sra/sra2.png)
-12. 点击**仅保存配置**后，关闭 SRA 窗口并点击 AUTO-MAS 中的保存配置按钮，就完成了一个账号的配置。
+12. 点击 **仅保存配置** 后，关闭 SRA 窗口并点击 AUTO-MAS 中的保存配置按钮，就完成了一个账号的配置。
    ![SRA配置10](/docs/img/script-guide/sra/sra3.png)
-13. 要加更多账号就重复步骤 9-12。第 10 步启动 SRA 时，它会自动载入上一次的配置，这是正常的，你只要改成新账号的设置就行。
+13. 要加更多账号就重复步骤 9–12。第 10 步启动 SRA 时，它会自动载入上一次的配置，这是正常的，你只要改成新账号的设置就行。
    ::: warning 每个账号都一样
    配置文件名统一保持默认的 `Default`，不要改。
    :::
@@ -85,14 +85,14 @@ SRA 自己能管多账号，AUTO-MAS 也能管多账号，所以这里有两条�
 8. 把 **启动参数** 改成 `-e task run`。这样 SRA 启动后会把它自己保存的所有配置跑一遍，而不是只跑某一个。
    ![修改启动参数](/docs/img/script-guide/sra/mas6.png)
 9. 配置将自动保存，接下来退出托管配置页面。
-10. 点击**添加账号**，需要自己给添加的账号进行命名（在账号名称一栏输入你想要的账号名称（这仅仅只是个命名而已）)，然后点击右上方的**通用配置**按钮
+10. 点击 **添加账号**，在账号名称一栏输入自定义名称（仅用于标识），然后点击右上方的 **通用配置** 按钮。
    ![SRA配置7](/docs/img/script-guide/sra/mas5.png)
 11. 这将启动 SRA 窗口，你可以在此界面中进行 SRA 的相关配置。
-   你可以直接使用Default配置文件，如果你有多个账号，请**在SRA中**创建新的配置，并切换到对应的配置进行修改
+   你可以直接使用 `Default` 配置文件；如果有多个账号，请 **在 SRA 中** 创建新的配置，并切换到对应的配置进行修改。
    ![SRA配置8](/docs/img/script-guide/sra/sra4.png)
    ![SRA配置8](/docs/img/script-guide/sra/sra5.png)
    ![SRA配置8](/docs/img/script-guide/sra/sra6.png)
-12. 每个配置完成后，都需要点击SRA窗口控制面板启动按钮右侧的箭头，展开启动选项，选择**仅保存配置**
+12. 每个配置完成后，都需要点击 SRA 窗口控制面板启动按钮右侧的箭头，展开启动选项，选择 **仅保存配置**。
    ![SRA配置9](/docs/img/script-guide/sra/sra2.png)
 13. 保存好每个配置后，关闭 SRA 窗口并点击 AUTO-MAS 中的保存配置按钮，就完成了所有账号的配置。
 

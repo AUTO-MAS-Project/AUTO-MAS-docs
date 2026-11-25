@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
       <img src="https://pan.quark.cn/favicon.ico" alt="Quark Cloud Drive icon" style="width:48px;height:48px;">
     </picture>
     <div class="download-card-title">Quark Cloud Drive</div>
-    <div class="download-card-desc">Download the latest version from Quark Cloud Drive for free<br>Your save action can provide a small benefit to the project team</div>
+    <div class="download-card-desc">Download the latest version from Quark Cloud Drive for free<br>Saving the file to your drive gives the project team a small reward</div>
     <a href="https://pan.quark.cn/s/5003e30dc69b" target="_blank">Open Drive</a>
   </div>
 
@@ -126,7 +126,7 @@ onBeforeUnmount(() => {
       <img src="https://mall.bilibili.com/favicon.ico" alt="Bilibili Shop icon" style="width:48px;height:48px;">
     </picture>
     <div class="download-card-title">Bilibili Shop</div>
-    <div class="download-card-desc">Purchase and download the stable version from Bilibili Shop<br>For users who want to additionally support the developers</div>
+    <div class="download-card-desc">Purchase and download the stable version from Bilibili Shop<br>For users who want to give extra support to the developers</div>
     <a href="https://mall.bilibili.com/neul-next/detailuniversal/detail.html?itemsId=40352459" target="_blank">Open Product Page</a>
   </div>
 

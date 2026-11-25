@@ -44,12 +44,12 @@
 
 | 邮箱                | SMTP 服务器地址       |
 | ------------------- | --------------------- |
-| **QQ邮箱**          | smtp.qq.com           |
-| **163邮箱**         | smtp.163.com          |
+| **QQ 邮箱**         | smtp.qq.com           |
+| **163 邮箱**        | smtp.163.com          |
 | **Gmail**           | smtp.gmail.com        |
 | **Yahoo Mail**      | smtp.mail.yahoo.com   |
 
-表里没有你的邮箱？去它的帮助中心搜"SMTP 服务器地址"。
+表里没有你的邮箱？去它的帮助中心搜“SMTP 服务器地址”。
 
 ::: warning 使用 Outlook.com / Hotmail 发信
 微软要求 Outlook.com SMTP 使用 587 端口、STARTTLS 和 OAuth2。本节版本的内置邮件渠道使用 465 端口的 SSL 连接及密码认证，填写 Outlook 服务器地址和应用密码无法补齐这些要求。请使用兼容的发信邮箱或其他通知渠道，参见 [微软的 SMTP 要求](https://support.microsoft.com/en-us/outlook/pop-imap-and-smtp-settings-for-outlook-com)。
@@ -66,14 +66,14 @@
 <Pill name="QQ邮箱官方教程" image="https://res.wx.qq.com/t/webmail/webmail/res/static/images/projects/login/loginpage/qqmail_logo_default_35h.e071fb4.png" link="https://service.mail.qq.com/detail/0/75"/>
 
 - 登录到您的 [QQ 邮箱账号与安全中心](https://wx.mail.qq.com/account)。
-- 在 **账号与安全 > 安全设置 > SMTP/IMAP服务** 中开启服务并获取授权码。
+- 在 **账号与安全 > 安全设置 > SMTP/IMAP 服务** 中开启服务并获取授权码。
 
 2. **163 邮箱**
 
 <Pill name="163邮箱官方教程" image="https://help.mail.163.com/style/img/logo-163.png" link="https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac2a5feb28b66796d3b"/>
 
 - 登录到您的 [163 邮箱](https://email.163.com)。
-- 进入 **设置 > POP3/SMTP/IMAP**，找到 **IMAP/SMTP服务** 并点击开启。
+- 进入 **设置 > POP3/SMTP/IMAP**，找到 **IMAP/SMTP 服务** 并点击开启。
 - 在弹窗中点击 **继续开启**，根据指示在手机中发送短信。
 - 弹窗生成 **授权密码**，该密码便为您的授权码。
 
@@ -96,10 +96,10 @@
 
 ::: warning 关于授权码
 
-- 别告给别人，定期换一次。
+- 别告诉别人，定期换一次。
 - 有些邮箱的授权码**只显示一次**，拿到就存好；有些有有效期，到期了通知就发不出去，记得换。
 - 授权码在本地是加密存的（和你的 Windows 账号绑定），所以**换电脑或重装系统后，需要重新填一次**。
-  :::
+:::
 
 <span id="serverchan-通知推送渠道"></span>
 
@@ -155,7 +155,7 @@ SendKey 就是 Server 酱认你这个人的凭据，填了它消息才知道往�
 
 1. 当前手机卡为中国移动号码；
 2. 手机系统支持 5G 消息；
-3. 已开通 5G 消息服务；
+3. 已开通 5G 消息服务。
 
 ### 第一步：获取 Channel API Key
 
@@ -188,7 +188,6 @@ Channel API Key 是连接中国移动新消息服务的凭证，可以选择以�
 
 4. 按照页面提示完成授权，并获取 Channel API Key。
 
-
 ### 第二步：配置中国移动新消息
 
 获取 Channel API Key 后，在 AUTO-MAS 的通知设置中填写中国移动新消息配置。
@@ -201,7 +200,6 @@ Channel API Key 是连接中国移动新消息服务的凭证，可以选择以�
 
 4. 将上一步复制的 Channel API Key 粘贴到对应输入框中。
 
-
 ::: tip 关于配置范围
 
 中国移动新消息当前仅支持全局通知，没有账号级配置入口。任务结果是否发送仍受全局「推送任务结果时机」控制。
@@ -211,4 +209,4 @@ Channel API Key 是连接中国移动新消息服务的凭证，可以选择以�
 ### 安全注意事项
 
 - Channel API Key 属于敏感凭证，请勿发布到截图、日志、代码仓库或公开聊天中；
-- 复制 Key 时不要在前后附加空格或其他字符；
+- 复制 Key 时不要在前后附加空格或其他字符。

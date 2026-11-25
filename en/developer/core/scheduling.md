@@ -103,7 +103,7 @@ The full execution chain has four levels. L1 accepts the task and starts L2, whi
 `TaskManager.start()` and `_launch()` in `app/core/task_manager.py` validate the request, build the runtime tree, and start execution. L1 returns once it launches L2. The run continues in the background.
 
 1. **Validate the request.** In a short configuration transaction, check the selected targets, their ownership, and their order. Resolve queue items to managed scripts and expand the account selection.
-2. **Build the runtime tree.** Create managed-script and account nodes for the selected scope, copying node parameters and queue-level actions. Later queue edits affect subsequent runs.
+2. **Build the runtime tree.** Create managed-script and account nodes for the selected scope, copying node parameters and queue-level actions. Later queue edits do not affect this run; they only apply to subsequent runs.
 3. **Record the trigger time.** Write the corresponding timestamp in the same transaction for an automatic trigger. Skip this step for a manual start.
 4. **Start execution.** After the transaction succeeds, register the runtime tree, publish the task creation event, start L2, and return the task UUID.
 
@@ -180,10 +180,10 @@ Import `TaskManager` with `from app.core import TaskManager`. The HTTP routes ar
 
   - `<task UUID string>` is the run UUID as a string.
   - `<task status>` is a `TaskStatusOut` containing status, mode, trigger reason, and a result summary. The method returns `None` if the task cannot be found.
-  - `running` means accepted or running.
-  - `success` means the task completed successfully.
-  - `error` means the task failed.
-  - `cancelled` means the task was cancelled.
+    - `running` means accepted or running.
+    - `success` means the task completed successfully.
+    - `error` means the task failed.
+    - `cancelled` means the task was cancelled.
   - Use `GET /api/dispatch/task/{task_id}` to poll status or read a recent terminal state. The summary omits logs. An unknown task produces application `code` `404`.
 
 ### Receive Runtime Updates
@@ -217,9 +217,9 @@ Import `History` with `from app.core import History` to read persistent history.
 
   - `start_date=` and `end_date=` take `date` objects. The range includes both dates.
   - `mode=` selects how to group results.
-  - `"DAILY"` groups by day.
-  - `"WEEKLY"` groups by week, using the Monday date as the key.
-  - `"MONTHLY"` groups by month, using the first day of the month as the key.
+    - `"DAILY"` groups by day.
+    - `"WEEKLY"` groups by week, using the Monday date as the key.
+    - `"MONTHLY"` groups by month, using the first day of the month as the key.
   - `<grouped results>` are organized by group date and account name. Each `index` lists records, and `data` supplies aggregate statistics. Use the index entry's `id` to read the details.
   - Use `POST /api/history/search` over HTTP with `start_date`, `end_date`, and `mode` in the body. Pass dates as `YYYY-MM-DD` strings.
 

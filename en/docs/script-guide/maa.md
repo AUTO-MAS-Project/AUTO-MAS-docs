@@ -76,8 +76,8 @@ Because MAA's **Bilibili server account switching** uses OCR with limited accura
   - Rare characters, such as `黍`, which may be recognized as something else
   - Underscores `_`, which are often misrecognized or missed
 - Example:
-  - Account 1: `DLmaster_361` -> enter `master` or `361`
-  - Account 2: `黍的XX_1234` -> enter `1234`, `的`, or `XX`; do **not** enter `黍` or `_`
+  - Account 1: `DLmaster_361` → enter `master` or `361`
+  - Account 2: `黍的XX_1234` → enter `1234`, `的`, or `XX`; do **not** enter `黍` or `_`
 
 With these changes, account switching should become more stable.
 :::
@@ -125,7 +125,7 @@ Select **Weekly mode** (周计划模式). Set the values in the Monday-to-Sunday
 
 ### 3. Select the plan in an account
 
-Open the MAA account under Managed scripts (托管管理), enable **Override standard configuration** (覆写常规配置), and expand **Sanity tasks** (理智任务). Select your plan in **Stage configuration mode** (关卡配置模式).
+Open the MAA account under **Managed scripts** (托管管理), enable **Override standard configuration** (覆写常规配置), and expand **Sanity tasks** (理智任务). Select your plan in **Stage configuration mode** (关卡配置模式).
 
 [![Select the plan in the MAA account's sanity task](/docs/img/tutorial-20261104/plan-bind.png)](/docs/img/tutorial-20261104/plan-bind.png)
 

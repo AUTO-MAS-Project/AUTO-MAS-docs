@@ -2,7 +2,7 @@
 
 找到你玩的那个游戏，点进去照着配就行。
 
-玩的游戏不在下面这个列表里？看 [通用调度](/docs/script-guide/general)——只要那个脚本能"启动后自动开跑"并且会写日志，AUTO-MAS 就能管它。
+玩的游戏不在下面这个列表里？看 [通用调度](/docs/script-guide/general)——只要那个脚本能“启动后自动开跑”并且会写日志，AUTO-MAS 就能管它。
 
 ## 指南目录
 
@@ -11,8 +11,10 @@
 明日方舟 - MaaAssistantArknights
 
 - 支持所有剿灭与日常代理
-- 官服与 B服 支持管理多账号
+- 官服与 B 服支持管理多账号
 - 支持使用计划表定制关卡配置
+
+---
 
 ### [MaaEnd](/docs/script-guide/maaend)
 
@@ -29,7 +31,7 @@
 1999（亿韭韭韭） - M9A
 
 - 支持日常代理、活动刷取、自动深眠等
-- 支持 MuMu 与 雷电模拟器
+- 支持 MuMu 与雷电模拟器
 - 作为 MFW 脚本接入：选中目录自动识别，自动补启动 / 关闭游戏与官服切号
 
 ---
@@ -104,4 +106,4 @@
 - **星穹铁道玩家**：查看 [HSR 配置方法](/docs/script-guide/hsr) 快速上手
 - **原神玩家**：查看 [BetterGI 配置方法](/docs/script-guide/bettergi) 快速上手
 - **其他游戏**：查看 [通用调度](/docs/script-guide/general) 并使用现成模板
-- **高级用户**：深入了解[通用调度](/docs/script-guide/general)的配置管理逻辑，自定义您的调度方案
+- **高级用户**：深入了解 [通用调度](/docs/script-guide/general) 的配置管理逻辑，自定义你的调度方案

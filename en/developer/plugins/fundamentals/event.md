@@ -15,7 +15,7 @@ None of the following from the old docs can be found in the current implementati
 Plugins no longer have a bus for "subscribe and broadcast by event name", so there is also no `scope`, `priority`, or `error_policy`. An `@on_event("script.exit")` written from the old docs receives nothing.
 
 ::: tip
-When you need "do something when X happens", pick in this order: lifecycle hooks, config signals, service calls, config triggers. Each has different boundaries, covered one by one below.
+When you need to react to an event, choose in this order: lifecycle hooks, config signals, service calls, or config triggers. Each has different boundaries, covered below.
 :::
 
 ## What to Use Instead
@@ -43,15 +43,15 @@ logger = get_logger("demo")
 
 class PLUGIN(BasePlugin):
     async def on_enable(self) -> None:
-        logger.info("启用")
+        logger.info("Enabled")
 
     async def on_disable(self) -> None:
-        logger.info("停用")
+        logger.info("Disabled")
 ```
 
 ## Config Signals
 
-Config nodes come with change signals, built on blinker. The SDK exports `FieldChangeEvent`, and the host itself subscribes to task and config changes with the same mechanism.
+Config nodes come with change signals, built on Blinker. The SDK exports `FieldChangeEvent`, and the host itself subscribes to task and config changes with the same mechanism.
 
 How to subscribe:
 
@@ -120,7 +120,7 @@ sent = await Publisher.send(
 ```
 
 - `send(id, type, data)` sends one `{id, type, data}` envelope message to the frontend's main connection and returns whether it was sent. When the main connection is not established, the message is dropped and `False` is returned; it is neither cached nor resent.
-- `data` can be a pydantic model or a dict.
+- `data` can be a Pydantic model or a dict.
 - This is a **one-way** channel: it only goes to the frontend and never reaches other plugins.
 - The types in `protocol` are all agreed between the host and the frontend (tasks, updates, emulators, plugin capability changes, and so on). The frontend only handles types it recognizes. The current SDK has no entry point for a plugin to load its own frontend code, so for messages of a custom type there is no page in the frontend to consume them.
 
@@ -138,7 +138,7 @@ If what you need is "insert my own logic while a script runs", that is an adapte
 
 ## The Plugin System's Own Signals
 
-`app/plugin/signals.py` has a set of blinker signals used internally by the plugin system: `service_changed`, `sources_changed`, `capabilities_changed`, `install_progress`, `upgrade_progress`, and `precheck_failed`.
+`app/plugin/signals.py` has a set of Blinker signals used internally by the plugin system: `service_changed`, `sources_changed`, `capabilities_changed`, `install_progress`, `upgrade_progress`, and `precheck_failed`.
 
 - They are not in the SDK export table and are internal host implementation.
 - Currently only `service_changed` (when a service is registered or unregistered), `sources_changed` (when the source directory changes), and `capabilities_changed` (when a plugin is enabled or disabled) are sent from anywhere; the other three are declared but have no sender.

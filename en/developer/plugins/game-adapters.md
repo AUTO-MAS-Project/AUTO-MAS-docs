@@ -31,7 +31,9 @@ Place config and field hints in `config.py`, instance operations in `control.py`
 
 ## Discover and import installations
 
-Make `search()` return an async result containing only candidate entries of its own type. Return an empty sequence if it finds none. Probe the installation without persisting entries or starting a device. Move synchronous blocking probes off the event loop. The host calls each enabled adapter, filters mismatched and already registered installations, then caches candidates for the user to add. Repeat discovery if a candidate expires. An optional `resolve_installation(path)` resolves an old path to a recognized installation, primarily for configuration upgrade. Return `None` for paths it cannot resolve.
+Make `search()` return an async result containing only candidate entries of its own type, or an empty sequence if none are found. Probe the installation without persisting entries or starting a device, and move synchronous blocking probes off the event loop.
+
+The host calls each enabled adapter, filters out mismatched and already-registered installations, and caches candidates for the user to add. Repeat discovery if a candidate expires. An optional `resolve_installation(path)` resolves an old path to a recognized installation—primarily for configuration upgrades—and returns `None` for unrecognized paths.
 
 If MuMu is installed but discovery is empty, check whether the adapter is installed, enabled, and registered. Check for an existing entry or a path the current discovery code cannot detect. The host logs discovery failures separately from empty results. If a path cannot be found automatically, add it manually according to the adapter’s configuration requirements.
 
@@ -41,7 +43,9 @@ If MuMu is installed but discovery is empty, check whether the adapter is instal
 - Give each device action its own [trigger](./fundamentals/schema.md#triggers), and expose availability through backend hints. A trigger deduplicates the same field; the controller still checks admission for different actions on one physical device. Call the controller’s `runtime_changed()` when device usage or availability changes.
 - The host renders tabs and device lists by type. Expose initialization, settings, maintenance, or window controls as applicable. The frontend renders the supported controls from their individual field hints. See [Configuration UI Synchronization](./fundamentals/frontend.md#configuration-ui-synchronization).
 
-`GameDeviceEntry` already provides `action.open`, `close`, `show`, `hide`, `minimize`, and `maximize`. Their handlers call the controller with the entry UUID and `TRIGGER_TICKET`. A plugin can inherit this wiring and implement the controller methods. For example, the Windows Process adapter inherits those actions and uses `initialize_devices()` to supply a stable device entry for the configured executable. It only accepts manual registration because there is no reliable list of arbitrary installed games to discover. A manual action uses the special ticket and does not require a managed task subscription. The controller still enforces its own action limits; a task holding a subscription is not by itself a reason for the base UI to disable all buttons.
+`GameDeviceEntry` already provides `action.open`, `close`, `show`, `hide`, `minimize`, and `maximize`. Their handlers call the controller with the entry UUID and `TRIGGER_TICKET`. A plugin can inherit this wiring and implement the controller methods. For example, the Windows Process adapter inherits those actions and uses `initialize_devices()` to supply a stable device entry for the configured executable; it only accepts manual registration because there is no reliable list of arbitrary installed games to discover.
+
+A manual action uses the special ticket and does not require a managed task subscription. The controller still enforces its own action limits; a task holding a subscription is not by itself a reason for the base UI to disable all buttons.
 
 ### Host integration and debugging
 
@@ -59,7 +63,9 @@ The host flow runs from `app/api/games.py` through `app/core/game_manager.py` in
 
 ## Bind, reserve, and restore devices
 
-A managed task may bind a default game and device. Each account may override it. The managed task owns the game ticket, and its accounts borrow it. The host and controller check device admission before use; the task log reports a wait for availability. When work ends, try restoring temporary settings before releasing the ticket and configuration locks. Log recovery failures and keep the required material for a later retry. The managed task may report failure while completed accounts keep their own successful results and counts. Use the shared subscription boundary for device exclusivity and cleanup on plugin unload or reload.
+A managed task may bind a default game and device, which each account can override. The managed task owns the game ticket and its accounts borrow it. The host and controller check device admission before use, and the task log reports waits for availability.
+
+When work ends, try restoring temporary settings before releasing the ticket and configuration locks. Log recovery failures and keep the required material for a later retry. The managed task may report failure while completed accounts keep their own successful results and counts. Use the shared subscription boundary for device exclusivity and cleanup on plugin unload or reload.
 
 ## Default installation, upgrade, and verification
 

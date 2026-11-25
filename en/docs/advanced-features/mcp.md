@@ -12,7 +12,7 @@ MCP (Model Context Protocol) is a common interface for AI to call external tools
 
 Installed builds default to `http://127.0.0.1:36163/mcp`; source development defaults to port `36164`. The port may vary by instance, so use the address displayed in Tools.
 
-For clients that accept the `mcpServers` / `url` format, the configuration looks like this. Check your client's instructions for its configuration entry and support for local HTTP servers:
+For clients that accept the `mcpServers` / `url` format, the configuration looks like this. Check your client's documentation for where to place this configuration and whether it supports local HTTP servers:
 
 ```json
 {
@@ -32,9 +32,9 @@ The Chinese-interface screenshot uses **dev after v5.8.0-beta.3 (3c9448bdf)** an
 
 The numbers mark **viewing items**, not a sequence of clicks:
 
-- **①Service status**: it should show ready.
-- **②Service address**: use the address shown by your instance; its port can differ from the example.
-- **③Available tool count**: the service offers tools. This does not prove an AI client has connected or executed a task.
+- **① Service status**: it should show ready.
+- **② Service address**: use the address shown by your instance; its port can differ from the example.
+- **③ Available tool count**: the service offers tools. This does not prove an AI client has connected or executed a task.
 
 ## Usage
 

@@ -173,7 +173,7 @@ We recommend GitHub Actions with PyPI Trusted Publishing: CI proves its identity
 A minimal `.github/workflows/publish.yml`:
 
 ```yaml
-name: 构建并发布 PyPI 包
+name: Build and publish PyPI package
 
 on:
   push:
@@ -190,7 +190,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: 检查标签与包版本一致
+      - name: Verify tag matches package version
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
@@ -201,7 +201,7 @@ jobs:
 
           version = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
           if os.environ["RELEASE_TAG"] != f"v{version}":
-              raise SystemExit("发布标签必须与 pyproject.toml 的版本一致")
+              raise SystemExit("Release tag must match the version in pyproject.toml")
           PY
       - run: python -m pip install build twine
       - run: python -m build
@@ -286,9 +286,9 @@ If the version is the one you just published, the data site has updated. If noth
 ### 3. Display and install work in the client
 
 1. Use a clean test environment, and do not leave the same plugin's source under `plugins/`. Local source overrides an installed distribution, so it cannot prove the PyPI install works.
-2. Open the Plugin Marketplace (「插件市场」). The client refreshes the catalog automatically when you enter the page, or you can click "Refresh" (「刷新」).
+2. Open the Plugin Marketplace. The client refreshes the catalog automatically when you enter the page, or you can click "Refresh".
 3. Find your plugin, check the name, description, tags, and version, and click install. The install may ask you to restart the backend.
-4. Go back to the Plugin Center (「插件中心」), check the package name, version, source ("Plugin Marketplace", 「插件市场」), and state, then enable it and confirm it works.
+4. Go back to the Plugin Center, check the package name, version, source ("Plugin Marketplace"), and state, then enable it and confirm it works.
 
 ::: tip
 If it cannot be installed right after publishing, the mirror used for dependency resolution may not have synced the new version yet. Try again a little later; do not mistake it for a failed release.
@@ -331,7 +331,7 @@ If you uploaded a plugin to PyPI and later find it may cause errors or a serious
 4. Go to **"Releases"**
 5. Find the version you want to withdraw
 6. Click **"Options"** next to that version
-7. Choose Yank
+7. Choose **"Yank"**
 
 ![pypi_yank](/plugin/img/pypi_yank.png)
 

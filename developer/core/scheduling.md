@@ -18,9 +18,9 @@ from app.models.task import TaskMode, TaskTriggerReason
 ```
 
 - `mode=`：运行模式
-  - `TaskMode.AUTO_PROXY`：运行代理任务
-  - `TaskMode.SCRIPT_CONFIG`：打开软件配置会话
-  - `TaskMode.SCRIPT_VIEW` 打开软件查看会话。
+  - `TaskMode.AUTO_PROXY`：运行代理任务。
+  - `TaskMode.SCRIPT_CONFIG`：打开软件配置会话。
+  - `TaskMode.SCRIPT_VIEW`：打开软件查看会话。
 - `tasks=`：选择树，用于指定本次执行的目标和顺序。各模式的填法见[选择运行范围](#选择运行范围)。
 - `trigger=`：触发原因
   - `TaskTriggerReason.MANUAL`：手动触发，默认值。
@@ -180,10 +180,10 @@ L4 的生命周期由 `app/task/mode_worker.py` 中的 `ModeWorker` 提供，专
 
   - `<任务 UUID 字符串>`：本次运行的 UUID 字符串。
   - `<任务状态>`：`TaskStatusOut`，包含运行状态、模式、触发原因和结果摘要。未找到指定任务时返回 `None`。
-  - `running`：任务已受理或正在运行。
-  - `success`：任务成功结束。
-  - `error`：任务以异常结束。
-  - `cancelled`：任务已取消。
+    - `running`：任务已受理或正在运行。
+    - `success`：任务成功结束。
+    - `error`：任务以异常结束。
+    - `cancelled`：任务已取消。
   - HTTP 使用 `GET /api/dispatch/task/{task_id}`，适合轮询状态或读取近期终态。状态摘要省去日志内容，找不到任务时响应的业务 `code` 为 `404`。
 
 ### 接收运行更新
@@ -217,9 +217,9 @@ L4 的生命周期由 `app/task/mode_worker.py` 中的 `ModeWorker` 提供，专
 
   - `start_date=`、`end_date=`：传入 `date` 对象，起止日期均包含在查询范围内。
   - `mode=`：指定结果的分组方式。
-  - `"DAILY"`：按日分组。
-  - `"WEEKLY"`：按周分组，以该周周一的日期作为键。
-  - `"MONTHLY"`：按月分组，以该月第一天的日期作为键。
+    - `"DAILY"`：按日分组。
+    - `"WEEKLY"`：按周分组，以该周周一的日期作为键。
+    - `"MONTHLY"`：按月分组，以该月第一天的日期作为键。
   - `<分组结果>`：按分组日期和账号名称组织，每组的 `index` 列出记录，`data` 提供汇总统计。后续读取详情时使用索引项的 `id`。
   - HTTP 使用 `POST /api/history/search`，在请求体中提供 `start_date`、`end_date` 和 `mode`，日期使用 `YYYY-MM-DD` 字符串。
 

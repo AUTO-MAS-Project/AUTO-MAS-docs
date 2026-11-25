@@ -6,7 +6,7 @@ MFW 风味在主程序中登记一种托管类型，并通过钩子和前端描�
 
 1. **确认项目接口**：MFW 直接读取项目 `interface.json` 声明的任务、资源、控制器和选项。只需导入和运行项目时，按[MFW 项目指南](/docs/script-guide/maafw)配置。
 2. **判断扩展归属**：项目特有的身份、提示、运行前编排和少量表单通过风味实现。通用能力放进 MFW 引擎，项目任务执行和结果判断沿用上游入口。需要独立运行契约时参考[独立专项适配](../standalone.md)。
-3. **阅读契约与样例**：先查看主程序中的 `app/task/MaaFW/AGENTS.md`、`MaaFWFlavor` 契约及现有 M9A、MSS 实现。风味代码通过 `FLAVOR` 接入，不为每个项目在引擎内增加类型分支。参见 [MFW 维护说明](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/app/task/MaaFW/AGENTS.md)和[风味契约](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/app/task/MaaFW/tools/embedded/flavor.py)。
+3. **阅读契约与样例**：先查看主程序中的 `app/task/MaaFW/AGENTS.md`、`MaaFWFlavor` 契约及现有 M9A、MSS 实现。风味代码通过 `FLAVOR` 接入，不为每个项目在引擎内增加类型分支。参见 [MFW 维护说明](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/app/task/MaaFW/AGENTS.md) 和[风味契约](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/app/task/MaaFW/tools/embedded/flavor.py)。
 
 ## 声明并登记配置
 
@@ -122,7 +122,7 @@ FLAVOR = XFlavor()
 - `decorate_selection` 在运行计划生成前接收**已经选中的任务实例 ID**和选项，返回新的 `(task_ids, task_options)`。可以插入、删去、排序项目独有任务，或按账号配置调整选项；不要在这里重做更新、重试、超时、游戏启停等通用流程。
 
   - 每个账号建运行计划时调用一次，重试时不再调。传入的候选任务已按本次运行的选择规则筛过。风味可从选择上下文读取被排除的实例。
-  - `<任务选择上下文>`：`flavor_support.py` 提供的只读 `MaaFWSelectionContext`。
+  - **任务选择上下文**：`flavor_support.py` 提供的只读 `MaaFWSelectionContext`。
 
     - `script_config`：本次运行的托管配置。
     - `user_config`：本次运行的账号配置。
@@ -195,7 +195,7 @@ FLAVOR = XFlavor()
 | `no_default_fallback_inputs = frozenset({(选项名, 字段名), ...})` | 字符串输入没填时，引擎默认回落 interface 里的 `default`；列在这里的字段不回落，没填就下发空串。用于 `default` 是项目留下的字面量占位、真下发会出错的字段（M9A 自定义兑换码的“占位”）。`/maafw/preview` 会把这些字段的 `default` 置空，账号页不会把它显示成没填时的值。能跑的 `default` 别列                                                   |
 | `retype_notice_lines(*, entering, has_users) -> list[str]`        | 项目导入后脚本换成 / 换出本风味时，接在系统通知“已按项目识别为 …”下面的说明行。换入以 `entering=True`、换出以 `entering=False` 各调一次；`has_users` 是脚本此刻有没有账号，只对已有账号说的话没有账号时不要返回                                                                                                                               |
 
-签名、调用时机与优先级见 [`flavor.py` 的模块说明](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/app/task/MaaFW/tools/embedded/flavor.py)，设计说明见 [风味](./flavor.md)。
+签名、调用时机与优先级见 [`flavor.py` 的模块说明](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/app/task/MaaFW/tools/embedded/flavor.py)，设计说明见[风味机制](./flavor.md)。
 
 ### 运行前登录：`ensure_logged_in`
 
@@ -231,7 +231,7 @@ class XFlavor:
 
 - 参数：`user_config.Info.Account` 是账号字段；`package_name` 是这次随模拟器拉起的包名（空串表示没拉起，钩子可自行按包名拉起）；`host_adb` 非空时，截图和命令必须走这条私有通道，否则按 `adb_path` 连接；`progress` 是写用户运行日志的异步回调。Win32 控制器会以空的 `adb_address` 调用，钩子据此拒绝不支持的登录模式。
 - 返回值：字符串会写进运行日志，空串不写。登录**成功**后才记完成；失败时下一次尝试会重新调用，重试关闭游戏 / 模拟器后也会重新验证。
-- 失败：抛 `MaaFWLoginRequired`，文案直接给用户看。本账号本次尝试判失败，按普通失败走重试；抛其它异常同样按失败处理，引擎把它包成 `MaaFWLoginRequired`，文案是“运行前登录出错：<异常原文>”。
+- 失败：抛 `MaaFWLoginRequired`，文案直接给用户看。本账号本次尝试判失败，按普通失败走重试；抛其他异常同样按失败处理，引擎把它包成 `MaaFWLoginRequired`，文案是“运行前登录出错：<异常原文>”。
 - 取消：用户停止时的 `CancelledError` 必须照常向上抛，不能吞掉。
 - 选号后还要由项目启动游戏时，返回 `StartupTask(deadline, entry)`，而不是字符串：`deadline` 是 `time.monotonic()` 的绝对时刻（剩余登录时限的终点），`entry` 是首项公开启动任务的 entry（M9A 返回 `StartupTask(deadline, "StartUp")`）。要求：
   - 运行计划的第一个任务的 entry 必须等于它，否则本次判失败（所以 `decorate_selection` 要把这个任务放在队首）；
@@ -291,7 +291,7 @@ export const X_FLAVOR = defineMaaFWFlavor({
 
 | 字段                   | 作用                                                                                           | MFW 默认                            |
 | ---------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `titleKey`             | 脚本编辑页标题；可为 `null`，`null` 时是“<项目名> 项目配置”。引导形态一律是“<项目名> 项目引导” | `null`                              |
+| `titleKey`             | 脚本编辑页标题；可为 `null`，`null` 时为“`<项目名>` 项目配置”。引导形态一律为“`<项目名>` 项目引导” | `null`                              |
 | `sourceDirectoryKey`   | 项目目录字段的标签                                                                             | `core.edit.localProjectDirectory`   |
 | `sourceHintKey`        | 项目目录标签上的问号提示（导入后字段锁死，提示换成统一的“已导入”那句）                         | `core.edit.pickMfwProjectDirectory` |
 | `sourcePlaceholderKey` | 项目目录输入框占位                                                                             | `core.edit.pickActualMfwProject`    |

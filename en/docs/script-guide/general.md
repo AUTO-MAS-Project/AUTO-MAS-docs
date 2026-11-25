@@ -9,7 +9,7 @@ date: 2025-07-16
 ::: tip Start here: most people never configure this by hand
 AUTO-MAS ships with a set of ready-made templates. Go to **New managed script > General > Create from template**, pick a template, fill in one script path, and you are done.
 
-March7thAssistant, SRC, zzzOD, M9A and other common scripts all have mature templates. Check the list before you build anything yourself.
+March7thAssistant, SRC, zzzOD, M9A, and other common scripts all have mature templates. Check the list before you build anything yourself. If you run into trouble, feel free to join the user community group to discuss with developers and template contributors.
 :::
 
 ::: warning Configuring from scratch means knowing your script
@@ -36,13 +36,13 @@ Which rules apply depends on whether you filled in **task success logs**:
 
 | You filled in a success keyword | You left the success keyword blank |
 | --- | --- |
-| The success keyword appears in the log -> **success** | The script exits on its own and no error keyword ever appeared -> **success** |
-| The script exits but the success keyword never appeared -> **failure** | An error keyword appeared before the script exited -> **failure** |
+| The success keyword appears in the log → **success** | The script exits on its own and no error keyword ever appeared → **success** |
+| The script exits but the success keyword never appeared → **failure** | An error keyword appeared before the script exited → **failure** |
 
 Two more rules always apply:
 
-- An error keyword appears before the success keyword -> **failure**
-- The log goes untouched for longer than the **auto-proxy timeout limit** -> treated as a hang, **timeout failure**
+- An error keyword appears before the success keyword → **failure**
+- The log goes untouched for longer than the **auto-proxy timeout limit** → treated as a hang, **timeout failure**
 
 Using MAA as an example:
 ![AUTO workflow](/docs/img/AUTO工作逻辑.png)
@@ -74,8 +74,8 @@ Some scripts have no "start running as soon as it opens" option in their UI and 
 
 You only need the separators if your script is one of these two special cases:
 
-- **Configuring and running a task take different arguments** -> separate the two sets with `|`. Task arguments first, config arguments second.
-- **Configuring and running a task use different executables** -> put that executable's path relative to the `script path` in front of the arguments, separated by `%`.
+- **Configuring and running a task take different arguments** → separate the two sets with `|`. Task arguments first, config arguments second.
+- **Configuring and running a task use different executables** → put that executable's path relative to the `script path` in front of the arguments, separated by `%`.
 
 The full format looks like this (leave out the parts you do not need):
 
@@ -89,8 +89,8 @@ The full format looks like this (leave out the parts you do not need):
 
 Some scripts work like this: a launcher starts the main program, then the launcher exits. Watching only the launcher process would make AUTO-MAS think the script already finished. Turn this on for those scripts so child processes are watched too.
 
-- **The script closed but AUTO-MAS still thinks it is running** -> turn this off.
-- **The script is still running but AUTO-MAS says it exited** -> turn this on.
+- **The script closed but AUTO-MAS still thinks it is running** → turn this off.
+- **The script is still running but AUTO-MAS says it exited** → turn this on.
 
 ### Script Config File Path
 
@@ -105,8 +105,8 @@ Pick the file the script writes its log to.
 **How to find it**: open the script directory and look for a folder like `debug` or `log`.
 
 - **That folder exists**: go in and pick a `.log` or `.txt` file.
-  - The filename has **no date** in it (`log.txt`, `gui.log`) -> select it and you are done.
-  - The filename **has a date** in it (`2025-06-29.log`) -> select it too, then also fill in **script log file name format** below.
+  - The filename has **no date** in it (`log.txt`, `gui.log`) → select it and you are done.
+  - The filename **has a date** in it (`2025-06-29.log`) → select it too, then also fill in **script log file name format** below.
 - **No such folder**: look for `.txt` or `.log` files in the script root, open them to confirm they hold log output, and select the right one.
 
 ### Script Log File Name Format
@@ -119,7 +119,7 @@ Some scripts create a new log file every day with the date in the filename. AUTO
 
 ### Script Log Timestamp Start/End Position
 
-This tells AUTO-MAS which character each log line's timestamp starts and ends at. It uses that to tell whether the script has stopped moving.
+This tells AUTO-MAS the start and end character positions of each log line's timestamp, which it uses to detect whether the script has stalled.
 
 **How to count**: take any log line with a timestamp and count characters from `1`. For example:
 
@@ -145,7 +145,7 @@ Pick something that only shows up on success. Do not pick a generic message the 
 
 ## Sharing and Importing Configs
 
-Once you have a general managed script configured, you can export it as a JSON file and share it. You can import someone else's JSON the same way. To get it in front of more people, submit it to the **AUTO-MAS config sharing centre**; once it passes review, every user can import your config with one click.
+Once you have a general managed script configured, you can export it as a JSON file and share it. You can import someone else's JSON the same way. To get it in front of more people, submit it to the **AUTO-MAS config sharing center**; once it passes review, every user can import your config with one click.
 
 ::: warning Check your paths yourself before sharing
 Exporting and uploading both scrub the config, but **only some of the paths**. You have to check the rest.
@@ -157,7 +157,7 @@ Handled automatically:
 
 You have to check these yourself:
 
-- The **game and emulator path is not scrubbed**. It is exported as-is.
+- The **game/emulator path is not scrubbed**. It is exported as-is.
 - Those four script paths are also exported as-is if they are under neither the script root directory nor `AppData`.
 
 So open the exported JSON and skim it before sharing. If you see a path with your real name in it, such as `C:/Users/YourName/...`, edit it out first.

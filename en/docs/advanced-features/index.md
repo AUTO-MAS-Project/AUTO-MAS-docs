@@ -2,11 +2,17 @@
 
 Once the basics are working, these features make life easier:
 
-- [Emulator Management](./emulator) - register your emulator once and AUTO-MAS fills in the emulator settings for every managed script. Set this up first if you use an emulator.
-- [Push Notifications](./notification) - sends a message to your email or phone when automation finishes.
-- [Failure Replays](./failure-replay) - set up the OBS Replay Buffer and view videos from failed automatic runs in History.
-- [Game Check-in](./game-sign) - takes care of the daily check-ins on each game's community site while it is at it.
-- [MCP Service](./mcp) - lets an AI operate AUTO-MAS for you.
+- [Emulator Management](./emulator) — register your emulator once and AUTO-MAS fills in the emulator settings for every managed script. Set this up first if you use an emulator.
+- [Push Notifications](./notification) — send a message to your email or phone when automation finishes.
+- [Failure Replays](./failure-replay) — set up the OBS Replay Buffer and view videos from failed automatic runs in History.
+- [Game Check-in](./game-sign) — automatically complete daily check-ins on supported game community platforms.
+- [MCP Service](./mcp) — let an AI operate AUTO-MAS for you.
+- [Custom Appearance Packages](./appearance) — import a ZIP package to customize colors, backgrounds, sidebar menu icons, and cursors.
+- [Desktop Mascot Packages](./mascot) — create standalone mascot packages with idle, working, mouse-tracking, task result, and drag animations.
+- [Scheduled Computer Startup](./Timed-Startup) — automatically power on your computer on a schedule.
+- [Automatic Windows Login](./skip-password) — skip the Windows lock screen and password prompt at startup.
+- [Scheduled and Delayed App Startup](./Timed-app-start) — launch AUTO-MAS on a schedule or after a startup delay.
+- [Troubleshooting with the Community Bot](./cnb-bot) — upload log bundles in the AUTO-MAS QQ group for automated bot analysis.
 
 ## Reference
 

@@ -52,7 +52,7 @@ Community accounts are managed separately from the game accounts in managed scri
 An automatic check-in is running right now. Wait for it to finish, then click again.
 :::
 
-Automatic check-in records each account’s daily attempt even if it fails. Restarting the app does not retry it; click **Check in all** to retry manually. The day is calculated in Beijing time (UTC+8).
+Automatic check-in records each account's daily attempt even if it fails. Restarting the app does not retry it; click **Check in all** to retry manually. The day is calculated in Beijing time (UTC+8).
 
 Communities without credentials do not appear in the notification.
 
@@ -155,9 +155,7 @@ Results are shown as community + game + character name. Communities without a to
 
 ### The token expired, or check-in keeps failing
 
-First confirm the account can still log in normally in the official client or on the web. If even the official login fails, the problem isn't AUTO-MAS. If it works, get a fresh token:
-
-Obtain fresh credentials for the community, then enter and save them in the account editor.
+First confirm the account can still log in normally in the official client or on the web. If even the official login fails, the problem isn't AUTO-MAS. If it works, obtain fresh credentials for that community, then enter and save them in the account editor.
 
 ### One of my games isn't in the results
 

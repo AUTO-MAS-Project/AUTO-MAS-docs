@@ -22,12 +22,12 @@
 
 准备运行环境时，由 `runner/environment.py` 确定 MaaFramework 版本。
 
-- **固定隔离环境的版本**：隔离 venv 的 maafw 固定为 runner 加载的原生库的**确切版本**，不照抄 requirements 里的范围（`runner/environment.py` 的 `resolve_project_maafw_requirement`）。 maafw 5.13.0 把 Agent 协议号从 7 升到 8；让 pip 自己挑会落到协议不同的版本。
-- **匹配宿主提供的原生库**：没自带原生库的项目同样钉确切版本（[#1294][1294]）。 同上；这类项目升级后会重建一次隔离 venv。
-- **记录依赖清单**：固定的版本进 venv 清单哈希，一变就自动重建。 已装错的 venv 不用让用户手动删。
-- **处理项目自带解释器**：`project_python` 里的 binding 也调整原生库版本，只对**内嵌视图与更新暂存目录**做；用户自己的目录只说明、不改（[#885][885]）。 项目的部署脚本可能把 maafw 升到 PyPI 最新。
-- **处理重复的安装记录**：site-packages 里残留多份 `maafw-*.dist-info` 时，调整前先把非最高版本的记录暂时挪开；只有 pip 成功且复读版本一致才删，否则原样挪回（`agent_env/env.py` 的 `_stale_maafw_dist_infos`，[#1024][1024]）。 pip 按目录顺序取第一份、我们取最高版本，不挪开两边认的不是同一个；失败时必须回到原样，离线也能照常准备。
-- **处理修正失败**：调整的任何一步失败只记日志，不拦准备。 离线时照样能跑。
+- **固定隔离环境的版本**：隔离 venv 的 `maafw` 固定为 runner 加载的原生库的**确切版本**，不照抄 `requirements` 里的范围（`runner/environment.py` 的 `resolve_project_maafw_requirement`），因为 `maafw` 5.13.0 把 Agent 协议号从 7 升到 8，让 pip 自行挑选可能会落到协议不同的版本。
+- **匹配宿主提供的原生库**：没自带原生库的项目同样固定为确切版本（[#1294][1294]），避免协议版本错配；这类项目升级后会重建一次隔离 venv。
+- **记录依赖清单**：固定的版本会写入 venv 清单哈希，一旦变化就自动重建，无需用户手动删除装错的 venv。
+- **处理项目自带解释器**：`project_python` 里的 binding 也会对齐原生库版本，且只对**内嵌视图与更新暂存目录**执行，用户自己的目录只说明、不修改（[#885][885]），防止项目的部署脚本把 `maafw` 升到 PyPI 最新版导致协议不匹配。
+- **处理重复的安装记录**：`site-packages` 里残留多份 `maafw-*.dist-info` 时，调整前先把非最高版本的记录暂时挪开；只有 pip 成功且复读版本一致才删除，否则原样挪回（`agent_env/env.py` 的 `_stale_maafw_dist_infos`，[#1024][1024]）。因为 pip 按目录顺序取第一份而我们取最高版本，不挪开会导致两边识别不一致；失败时必须还原，保证离线时也能照常准备。
+- **处理修正失败**：调整过程中的任何一步失败都只记日志、不拦截准备流程，确保离线时照样能运行。
 
 ## 原生库选择
 
@@ -39,7 +39,7 @@
 | runner 与 agent 用同一份：项目自带 Python 里没有 `maa/bin` 时，给 agent 注入 `MAAFW_BINARY_PATH` 指向 runner 用的那份；agent 的 PATH 里这份排最前（`agent_env/env.py` 的 `project_python_agent_binary_path`，[#1143][1143]） | 项目里同时有两份原生库时，MAS 与项目 agent 的取序可能相反，结果协议不一致      |
 | 原生 agent 固定从 `<项目>/maafw` 加载，指不过去：runner 选的不是它且版本不同时，启动 agent 之前就报混装                                                                                                                      | 不等满连接超时                                                                 |
 | agent 输出里出现 `Protocol version mismatch` 立即失败，报出两端的版本与协议号（[#1140][1140]）                                                                                                                               | 原来要等满 600 秒                                                              |
-| 项目自带 Python 的健康检查用与 agent 真跑时同一份原生库（[#1082][1082]）                                                                                                                                                     | 有的发行包不在 `maa/bin` 放库，由 agent 自己指路径；检查不照做就一律误报不可用 |
+| 项目自带 Python 的健康检查用与 agent 真跑时同一份原生库（[#1082][1082]）                                                                                                                                                     | 有的发行包不在 `maa/bin` 放库，由 agent 自己指路径；否则检查会一律误报不可用 |
 | 健康检查失败时界面只给 traceback 的最后一行，完整输出只进详情日志（[#1088][1088]）                                                                                                                                           | 任务结果与通知只取第一行                                                       |
 
 ## 运行池
@@ -76,7 +76,7 @@
 
 - 只支持 x64。
 - 项目 agent 首次运行时自己安装依赖，可能超过 runner 等待连接的时间窗口。
-- 导入时用户手动装进自带解释器的包，第一次全量更新就会被清掉，MAS 不负责重装（见 [项目更新](./update.md)）。
+- 导入时用户手动装进自带解释器的包，第一次全量更新就会被清掉，MAS 不负责重装（见[项目更新](./update.md)）。
 
 [531]: https://github.com/AUTO-MAS-Project/AUTO-MAS/pull/531
 [610]: https://github.com/AUTO-MAS-Project/AUTO-MAS/pull/610

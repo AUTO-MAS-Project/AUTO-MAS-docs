@@ -241,7 +241,7 @@ my-mascot/
 | `mascot.animation.resultPath` | 不使用专属结果图   | 两行结果动画 PNG 路径，先失败后成功                    |
 | `mascot.animation.dragPath`   | 使用通用拖动效果   | 单行拖拽 PNG 路径，列数与主动画一致，使用 `workingFps` |
 
-以上动画图片都必须放在 `assets/` 下，扩展名为 `.png`。`lookPath` 和 `resultPath` 都写在 `animation` 内，并配合主动画使用。
+以上动画图片都必须放在 `assets/` 下，扩展名为 `.png`。`lookPath`、`resultPath` 和 `dragPath` 都写在 `animation` 内，并配合主动画使用。
 
 ## 制作后方滚动代码
 
@@ -308,18 +308,18 @@ PNG、JPEG、WebP 是图片的真实编码格式，不是随便改一个文件�
 请为 AUTO-MAS 生成独立桌宠包的 mascot.json，只输出有效 JSON。
 
 名称：<桌宠名称>
-id：<小写字母、数字、下划线、短横线，以字母或数字开头，最多64字符>
+id：<小写字母、数字、下划线、短横线，以字母或数字开头，最多 64 个字符>
 已有文件：
 - 静态图：assets/mascot.png
-- 主动画：<assets/animation.png 或 无>，<每行帧数>列、2行，先待机后工作
-- 视线图：<assets/look.png 或 无>，固定3×3
+- 主动画：<assets/animation.png 或 无>，<每行帧数>列、2 行，先待机后工作
+- 视线图：<assets/look.png 或 无>，固定 3×3
 - 结果图：<assets/results.png 或 无>，列数与主动画一致，先失败后成功
 - 拖拽图：<assets/drag.png 或 无>，单行，列数与主动画一致
-显示宽度：<例如192>
+显示宽度：<例如 192>
 
-要求：formatVersion 为1；name 最多80字符；有 description 时最多300字符。
+要求：formatVersion 为 1；name 最多 80 个字符；有 description 时最多 300 个字符。
 mascot.path 必填；animation.path 和 columns 在配置动画时必填。
-columns 为2至120的整数；idleFps、workingFps 为1至120，建议先用6和10。
+columns 为 2 至 120 的整数；idleFps、workingFps 为 1 至 120，建议先用 6 和 10。
 所有角色与动画素材路径以 assets/ 开头，动画素材必须是 PNG。
 有主动画时，才在 animation 中填写实际存在的 lookPath、resultPath、dragPath。
 没有的素材整段省略；不生成主题配色或背景字段，不添加 stoppedPath。

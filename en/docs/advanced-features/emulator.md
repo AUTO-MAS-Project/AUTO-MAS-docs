@@ -1,6 +1,6 @@
 # Emulator Management
 
-Register an emulator, then select its configuration and device number in the managed-script settings. AUTO-MAS fills connection information for supported scripts and starts or closes instances as required by the task.
+Register an emulator, then select its configuration and device number in the managed-script settings. AUTO-MAS fills in connection details for supported scripts and starts or closes instances as required by the task.
 
 ::: info Version and demonstration scope
 This page follows **dev after v5.8.0-beta.3 (d49cff7c5)**. The automatic-path screenshot marks the search entry only; no installation search or import was performed. The manual path created an isolated configuration, selected MuMu, and checked the saved type after reload. No real executable was selected, and no emulator or game was started. The screenshots show the Chinese interface.
@@ -57,11 +57,11 @@ If you need a single device table for several installation paths, create a separ
 
 One auto-detect configuration can manage several installation paths. **MAS device numbers may differ from the emulator's own instance numbers.** Bind managed scripts using the MAS device number shown in the table.
 
-## Filling In the Settings
+## Filling in the settings
 
 | Setting | What to enter |
 | --- | --- |
-| **Emulator name** | Anything you like. It is only shown to you inside AUTO-MAS |
+| **Emulator name** | Any label you like; it is only displayed inside AUTO-MAS |
 | **Emulator type** | Match a single-emulator configuration to the installed emulator; use the optional auto-detect setup above when managing several installation paths together |
 | **Emulator path** | Select the **multi-instance manager executable** for a single-type configuration; use **Manage emulators** to add paths for auto-detect configurations |
 | **Maximum wait time** | How long to wait for the emulator to start. The script only launches once the emulator is up, so raise this on a slow machine |
@@ -74,5 +74,5 @@ One auto-detect configuration can manage several installation paths. **MAS devic
 :::
 
 ::: tip No emulator yet? Pick MuMu 12 or LDPlayer
-Both perform well and capture screenshots reliably, and their multi-instance manager support is the most complete, so AUTO-MAS works best with them. Other emulators may land you on problems nobody has hit before.
+Both perform well and capture screenshots reliably, and their multi-instance manager support is the most complete, so AUTO-MAS works best with them. Other emulators may run into untested edge cases.
 :::

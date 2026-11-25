@@ -65,7 +65,7 @@ Go to **Managed scripts** → **New managed script** → pick **HSR** → confir
 | **March7th path** | The **folder** M7A lives in |
 | **SRA path** | The **folder** SRA lives in |
 | **SRA config profile** | SRA can keep several configuration profiles; this picks which one to use. Defaults to "auto", see below |
-| **MAS manages the game** | Lets AUTO-MAS launch the game, restart it when switching scripts, and watch the game process. Defaults to "Yes"; a game that is already running is detected and the launch is skipped, so you do not need to turn this off for that. **Only pick "No" for Native configuration with the cloud client**; turning it off disables all three behaviours at once |
+| **MAS manages the game** | Lets AUTO-MAS launch the game, restart it when switching scripts, and watch the game process. Defaults to "Yes"; a game that is already running is detected and the launch is skipped, so you do not need to turn this off for that. **Only pick "No" for Native configuration with the cloud client**; turning it off disables all three behaviors at once |
 | **Game path** | The **folder** Honkai: Star Rail lives in. Required when "MAS manages the game" is "Yes" |
 | **Maximum game launch wait** | Seconds to wait after launching before the client is considered ready. Default 60, raise it on slower machines |
 | **Run in 1920×1080 windowed mode** | Temporarily rewrites the registry before a task so the game runs at 1920×1080 windowed, and restores it afterwards. The scripts' image recognition is tuned for this resolution, so turn it on if your aspect ratio differs |
@@ -76,7 +76,7 @@ Fill in only M7A or only SRA and leave the other empty. The empty one will not a
 :::
 
 ::: tip About SRA configuration profiles
-SRA stores its settings as one or more profiles under `%APPDATA%\SRA\configs`. Which one you pick decides two things: what the options under "Tasks managed by MAS" show, which profile Native configuration runs.
+SRA stores its settings as one or more profiles under `%APPDATA%\SRA\configs`. Which one you pick decides two things: what the options under "Tasks managed by MAS" show, and which profile Native configuration runs.
 
 Leaving it on "auto" prefers `Default` and otherwise takes the first profile in filename order — which is exactly what AUTO-MAS always did before. If the profile you picked is later deleted or renamed, AUTO-MAS falls back to auto and says so on both the managed-script page and the account page, rather than switching silently.
 :::
@@ -120,13 +120,13 @@ In the **Managed scripts** table, click **Add an account**, then fill in the bas
 | **Account** | Phone number or similar login. Only needed when SRA has to switch accounts for you |
 | **Password** | Login password, same condition |
 | **Server** | CN official only for now |
-| **Days remaining** | How many more days to run this account. `-1` means no limit. It **drops by at most one per day**, and only once at least one module has succeeded in that day's daily phase. The account is skipped at 0. Direct-control accounts never count down, but they are still skipped at 0 |
+| **Days remaining** | How many more days to run this account. `-1` means no limit. It **drops by at most one per day**, and only once at least one module has succeeded in that day's daily phase. The account is skipped at 0. Native-configuration accounts never count down, but they are still skipped at 0 |
 | **Note** | Anything you want |
 
 ::: warning About the account and password
 They are stored locally and encrypted automatically. Nothing is uploaded.
 
-**They only appear when the managed-script page has an SRA path and this account is in MAS-managed mode.** Whether they are actually used for login or account switching further depends on one of your enabled modules being assigned to SRA; otherwise they sit unused.
+**They only appear when the managed-script page has an SRA path and this account is in MAS-managed mode.** However, they are only used for login or account switching if at least one enabled module is assigned to SRA; otherwise, they remain unused.
 
 Also, do not share your `data/` directory or managed-script configuration JSON with anyone. They contain your encrypted credentials.
 :::
@@ -204,7 +204,7 @@ That has a few direct consequences:
 ::: warning Two kinds of settings are force-disabled by AUTO-MAS
 In managed mode, AUTO-MAS forces the script's own **notifications** and **after-task action** off in the temporary configuration (March7th's `after_finish`, SRA's `missionAccomplished`).
 
-The reason is that those actions close the game, or the whole computer. March7th closes the game on the way out whenever `after_finish` is anything but "None", which forces the rest of that phase to stop and go to a retry; set to "Shutdown" it really does shut the machine down 60 seconds later. Notifications are sent by AUTO-MAS itself instead.
+The reason is that those actions close the game, or the whole computer. March7th closes the game on the way out whenever `after_finish` is anything but "None", which forces the rest of that phase to stop and go to a retry; if set to "Shutdown", it really does shut the machine down 60 seconds later. Notifications are sent by AUTO-MAS itself instead.
 
 This only affects the run AUTO-MAS performs in managed mode — your own settings are restored afterwards. **Native configuration leaves both of these alone**: whatever you set is what runs. The one exception is SRA's Windows toast notifications, which are turned off for the whole run whenever an SRA path is configured, and restored when it ends.
 :::
