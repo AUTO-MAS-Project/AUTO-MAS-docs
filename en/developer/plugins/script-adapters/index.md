@@ -60,7 +60,7 @@ Specialized adaptation should follow the order "frontend surface first, then bac
    - `app/models/config.py`: add `XxxConfig` / `XxxUserConfig` and register them to the corresponding configuration collections.
    - `app/models/schema.py`: complete API schema.
    - `app/core/config.py`, `app/api/scripts.py`, `app/utils/constants.py`: complete configuration, API, display text, and type mapping.
-   - After backend schema changes, start the current local backend and run `yarn openapi` in `frontend`. Do not manually edit the generated `frontend/src/api` directory.
+   - After backend schema changes, start the current local backend and run `vp run openapi` in `frontend`. Do not manually edit the generated `frontend/src/api` directory.
 
 4. **Task module**
    - `app/task/Xxx/`: implement `Manager` and `AutoProxy` according to the architecture line, and add `config_schema.py` or `ScriptConfig.py` when needed.

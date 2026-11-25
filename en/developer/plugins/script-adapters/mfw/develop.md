@@ -420,7 +420,7 @@ Frontend:
    - `core.scripts.create.typeDesc.X`: the type description in the create dialog;
    - the string keys used in the descriptor object and slot components (such as `core.edit.xFlavorSourceHint`);
    - for those with a plan table, also `core.plan.type.x`.
-2. **Regenerate OpenAPI.** First start the dev backend of the target worktree (the `openapi` script in `frontend/package.json` fetches the schema from `http://127.0.0.1:36164/openapi.json`, so the backend must listen on this port), then run `corepack yarn openapi` from that worktree's `frontend` directory. After generation this script runs `scripts/postprocess-openapi.mjs`, which normalizes the generated files' CRLF line endings to LF; do not hand-edit `frontend/src/api/`.
+2. **Regenerate OpenAPI.** First start the dev backend of the target worktree (the `openapi` script in `frontend/package.json` fetches the schema from `http://127.0.0.1:36164/openapi.json`, so the backend must listen on this port), then run `vp run openapi` from that worktree's `frontend` directory. After generation this script runs `scripts/postprocess-openapi.mjs`, which normalizes the generated files' CRLF line endings to LF; do not hand-edit `frontend/src/api/`.
 
 ## Checklist
 
