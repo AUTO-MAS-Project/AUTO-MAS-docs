@@ -65,4 +65,4 @@ Pages send HTTP requests to the Python backend through generated clients wrapped
 | `res/`                                                                   | Resources and version information shipped with the app.                                      |
 | `tests/`, `frontend/e2e/`                                                | Python and Playwright tests. Frontend `*.test.ts` files live next to the modules they cover. |
 | `pyproject.toml`, `uv.lock`, `.python-version`                           | Python project and dependencies, lockfile, and interpreter version.                          |
-| `frontend/package.json`, `frontend/yarn.lock`, `frontend/vite.config.ts` | Frontend dependencies and commands, lockfile, and Vite configuration.                        |
+| `frontend/package.json`, `frontend/yarn.lock`, `frontend/vite.config.ts` | Frontend dependencies and scripts, lockfile, and Vite+ (`vp`) configuration.                 |

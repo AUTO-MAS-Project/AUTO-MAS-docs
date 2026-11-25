@@ -1,45 +1,57 @@
 # Development Standards
 
-For repository responsibilities and rules for agents, see [Repository and Agent Rules](./agent-and-repository-rules.md).
+This page covers the repository layout, Git workflow, testing policy, changelog conventions, and backend coding style for contributing to AUTO-MAS. For detailed repository division and AI assistant rules, see [Repository and Agent Rules](./agent-and-repository-rules.md).
+
+## Repositories
+
+| Project | Repository |
+| --- | --- |
+| Main Application | [AUTO-MAS](https://github.com/AUTO-MAS-Project/AUTO-MAS) |
+| Documentation Site | [AUTO-MAS-docs](https://github.com/AUTO-MAS-Project/AUTO-MAS-docs) |
+| Data Center Frontend | [AUTO-MAS-data-center-frontend](https://github.com/AUTO-MAS-Project/AUTO-MAS-data-center-frontend) (private) |
+| Data Center Backend | [AUTO-MAS-data-center-backend](https://github.com/AUTO-MAS-Project/AUTO-MAS-data-center-backend) (private) |
+| Data Sync & Plugins | `AUTO-MAS-Xxx` / `AUTO-MAS-<target>-Adapter` |
+
+## Using AI Assistants
+
+Before using an AI coding assistant, confirm that the main repository contains and loads `.agents/skills/mas-skills/SKILL.md` so the assistant follows project workflows and conventions.
 
 ## Git Branches
 
-### 1. Main Branch
+### 1. Main Branch (`main`)
 
-- **Branch name**: `main`
-- **Description**: stores stable code. All features should be stable and runnable.
-- **Rules**: `force push` and direct `push` are not allowed. It accepts only pull requests from `dev`, not pull requests from development branches.
+- **Purpose**: Stores stable release code. All features must be stable and runnable.
+- **Rules**: Direct `push` and `force push` are forbidden. `main` only accepts Pull Requests from `dev`.
 
-### 2. Main Development Branch
+### 2. Main Development Branch (`dev`)
 
-- **Branch name**: `dev`
-- **Description**: stores the latest feature code. It only guarantees that the project can run.
-- **Rules**: maintainers may maintain `dev` directly according to permission. External contributors should create development branches from upstream `dev` and merge through Pull Requests to `AUTO-MAS-Project/AUTO-MAS:dev`. Larger features should use development branches and be merged after testing.
+- **Purpose**: Stores the latest feature code and must remain buildable and runnable.
+- **Rules**:
+  - Maintainers may maintain `dev` directly, though larger features should still use dedicated development branches and be merged after testing.
+  - External contributors should branch off the latest upstream `dev` and submit Pull Requests to `AUTO-MAS-Project/AUTO-MAS:dev`.
+- **Tip**: Run `git fetch` before creating a development branch so you start from the **latest** upstream `dev` and minimize merge conflicts.
 
-### 3. Release Branch
+### 3. Release Branch (`release/<version>`)
 
-- **Branch name**: `release/{version}`
-- **Description**: stores the latest backend code for each release. It is created automatically by the release workflow. Each released app pulls the latest backend code from its corresponding release branch to support hot updates for some features and fixes.
-- **Rules**: after submitting feature updates or fixes to `dev`, synchronize changes to release branches through `cherry-pick`.
-- **Cherry-pick rules**: AUTO-MAS separates its frontend and backend, and released apps hot-update backend code from the `release/{version}` branch, while the frontend ships inside the installer and cannot be hot-updated through that branch. Only small `dev` fixes that are **pure backend (unrelated to any frontend code)** may be cherry-picked to an already released `release/{version}` branch. Cherry-picking a commit that carries frontend logic is a **violation**.
+- **Purpose**: Stores the latest backend code for each shipped release and is created automatically by the release workflow. Installed apps pull from their corresponding release branch to receive backend hot updates.
+- **Rules**: After landing a fix on `dev`, synchronize it to the target `release/<version>` branch via `cherry-pick`. **Only small, pure-backend fixes unrelated to frontend code may be cherry-picked**; cherry-picking any commit that includes frontend logic is a **violation**.
 
-  Handle a violation as follows, with no exemption for the change being otherwise correct:
+  _Any commit that touches both frontend paths (such as `frontend/`) and backend paths (such as `app/`) counts as carrying frontend logic—judge by the touched files, not by the commit message._
 
-  1. Close the related PR.
-  2. Revert the related commit.
-  3. If the violating commit has already shipped in a release, roll the released code back and explain the situation to users.
+  If a violation occurs:
 
-  Judge by the files the commit actually touches, not by the `type` or `scope` in its message: a commit that touches both frontend paths (such as `frontend/`) and backend paths (such as `app/`) carries frontend logic and must not be cherry-picked to a release branch.
+  1. Close the related Pull Request and revert the offending commit.
+  2. If the violating commit has already shipped to users, roll back the release branch and notify users.
 
-### 4. Development Branch
+### 4. Development Branches
 
-- **Branch name**: any name that does not conflict with other branches or tags
-- **Description**: used by core developers to store features in development. It may not run. After development is complete, it is merged into `dev`.
-- **Rules**: delete the branch after development and merge are complete.
+- **Naming**: Any descriptive name that does not conflict with existing branches or tags (for example `feat/xxx` or `fix/xxx`).
+- **Purpose**: Used for work-in-progress features or bug fixes; it does not have to be runnable at every intermediate commit, and is merged into `dev` when complete.
+- **Rules**: Delete the branch once merged.
 
 ## Git Commit Messages
 
-Git commits use the Conventional Commits standard:
+Commits follow the Conventional Commits format:
 
 ```text
 <type>(<scope>): <subject>
@@ -48,43 +60,28 @@ Git commits use the Conventional Commits standard:
 ### 1. type
 
 | Type | Description |
-| ---- | ----------- |
+| --- | --- |
 | **feat** | New feature |
 | **fix** | Bug fix |
-| **docs** | Documentation changes, such as README |
-| **style** | Code style changes that do not affect logic, such as spacing or indentation |
-| **refactor** | Refactoring that is neither a feature nor a fix |
+| **docs** | Documentation changes (such as README or guides) |
+| **style** | Formatting changes that do not affect logic (spacing, indentation, etc.) |
+| **refactor** | Refactoring that is neither a feature nor a bug fix |
 | **perf** | Performance optimization |
-| **test** | Add or modify tests |
-| **chore** | Build process or dependency management changes |
+| **test** | Adding or updating tests |
+| **chore** | Maintenance, dependency, or tooling adjustments |
 | **build** | Changes affecting the build system or external dependencies |
-| **ci** | CI/CD configuration changes |
+| **ci** | CI/CD workflow configuration changes |
 
 ### 2. scope
 
-1. **Only one file is modified**
-
-   Use the modified file name without extension, preserving case.
-
-   - Example: when modifying `logger.py`, use `logger`
-
-     ```text
-     fix(logger): adjust logger level
-     ```
-
-2. **Multiple files are modified**
-
-   Prefer the common **parent folder name** of the modified files. If multiple directories are involved, choose the business scope that best represents the intent of the change. Do not mechanically concatenate unrelated directories into the scope.
-
-   - Example: when modifying `app/api/a.py` and `app/api/b.py`, use `api`
-
-     ```text
-     fix(api): adjust api module
-     ```
+1. **Single file modified**: Use the file name without its extension, preserving original casing.
+   - Example: modifying `logger.py` -> `fix(logger): adjust logger level`
+2. **Multiple files modified**: Prefer the common **parent directory name**. If changes span multiple directories, choose the business module name that best represents the intent instead of concatenating unrelated paths.
+   - Example: modifying `app/api/a.py` and `app/api/b.py` -> `fix(api): adjust api module`
 
 ### 3. subject
 
-Use one sentence to summarize the change. Detailed changes may be written after a blank line.
+Summarize the change in one concise line. If more detail is helpful, add a blank line followed by bullet points:
 
 ```text
 feat(core): improve database connection module
@@ -94,69 +91,90 @@ feat(core): improve database connection module
 - Fix a possible connection leak
 ```
 
+## Issue and PR Bodies
+
+### Issue Body
+
+Describe the **user-observable problem or request**: actual behavior, expected behavior, reproduction steps, environment details, and relevant logs or screenshots. If the issue does not reproduce reliably, describe known trigger conditions. Leave implementation steps, internal interfaces, and code locations to investigation and design.
+
+### PR Body
+
+- Under `## Summary`, provide 1 to 4 concise bullets describing the problem and changes. Link related issues with `Closes #<number>`.
+- Record actual verification commands and results; clearly note any checks that were not run.
+- For user-visible changes, add a changelog fragment per [Version Records](#version-records). Do not edit version numbers or version files in ordinary PRs.
+
 ## Test Submission and Maintenance
 
-Automated tests are reviewable evidence for code changes. Deterministic, isolated tests that protect user-visible behavior or public contracts should live in the same repository and pull request as the change, and remain maintained with the product code.
+Tests provide repeatable proof that changes work and do not break existing behavior. Deterministic, isolated automated regression tests protecting user-visible behavior or public contracts should be submitted in the same PR as the code change and maintained alongside it.
 
 ### Test Categories
 
-- **Long-lived automated tests:** Put deterministic, isolated, repeatable unit, contract, and regression tests in the appropriate test directory or near the code under test, and submit them with the implementation they cover. Prefer assertions on user-visible behavior or public contracts over private call order and internal data layout.
-- **Author-local real flows:** Run flows that require real accounts, games, script installations, or emulators in the author's environment, following `docs/testing/e2e.md` in the main repository. Include the command and reviewed, sanitized evidence in the PR. Do not submit credentials, account data, game assets, or machine-specific configuration.
-- **Temporary diagnostics:** Keep one-off probes and scripts local or in an ignored `.dev/` directory. Add a diagnostic tool to `scripts/` only when it has clear repeated-use value.
+- **Long-lived automated tests**: Place deterministic, isolated, repeatable unit, contract, and regression tests in the appropriate test directory or alongside the code under test, and submit them with the implementation. Prefer asserting user-visible behavior or public contracts over private call order or internal data layouts.
+- **Author-local real flows**: Run flows requiring real accounts, games, script installations, or emulators locally following `docs/testing/e2e.md` in the main repository, and include the commands and sanitized evidence in the PR. Never commit credentials, account data, game assets, or machine-specific settings.
+- **Temporary diagnostics**: Keep one-off diagnostic scripts local or in the Git-ignored `.dev/` directory. Only promote tools with clear ongoing reuse value into `scripts/`.
 
 ### PR Verification Record
 
-- Record the test command, pass/fail result, tested commit SHA, environment, and uncovered areas. For real flows, also record required preconditions and selected evidence.
-- When a bug has a stable reproduction, its regression test should fail before the fix, pass after the fix, and remain in the PR. If it cannot be reproduced reliably or automated, explain why and provide alternative verification; a pass count from an unsubmitted test is not enough.
-- When no automated test is added or changed, explain why and provide alternative verification. Documentation, CI, and test-maintenance changes may mark testing as not applicable.
+- Record the commands run, pass/fail outcomes, tested commit SHA, environment, and uncovered areas. For real runs, include preconditions and selected evidence.
+- When a bug reproduces reliably, its regression test should fail before the fix, pass after the fix, and remain in the PR. If reliable reproduction or automation is not feasible, explain why and provide alternative verification—do not report pass counts from unsubmitted local tests alone.
+- If no automated test is added or updated, explain why and describe alternative verification. Pure documentation, CI, or test-maintenance PRs may mark this as not applicable.
+
+You can use the following template in PR descriptions:
+
+```markdown
+- Scenario: <user action or public contract>
+- Command: `<actual command run>`
+- Commit & environment: <full commit SHA, worktree state, OS/preconditions>
+- Result: <pass / fail / not run and observed outcome>
+- Evidence: <relevant log, screenshot, or summary path>
+- Uncovered scope: <untested branches or environment limitations>
+```
 
 ### Revising, Removing, and Quarantining Tests
 
-- Update relevant expectations when behavior or a public contract changes. When deleting a test, explain whether the behavior was removed, stronger coverage replaces it, the test was redundant, or its reliability cannot be maintained at reasonable cost; describe replacement coverage where applicable.
-- Track flaky tests with an issue, an owner, and a review date, then quarantine them temporarily. They must later be fixed, replaced, or removed. Do not use automatic retries to hide failures or leave quarantines and `xfail` markers without ownership and review dates.
-- Maintain tests using failure rate, diagnosis cost, and runtime. Test line count, file count, and the ratio of test code to product code are not quality gates; investigate slow tests and shared setup when runtime grows.
+- Update test expectations whenever behavior or a public contract changes. When deleting a test, explain why (behavior removed, replaced by stronger coverage, redundant, or unsustainable maintenance cost) and note replacement coverage.
+- Track flaky tests with an issue, an owner, and a review date, then quarantine them temporarily until fixed, replaced, or removed. Do not hide failures with automatic retries or leave skipped / `xfail` tests unowned.
+- Maintain tests based on failure rate, diagnosis cost, and runtime—not line counts or test-to-code ratios. When runtime grows, investigate slow tests and shared setup first.
 
 ### Local and CI Commands
 
-pytest is a main-repository development dependency. Run tests in the locked environment:
-
-```powershell
-uv sync --locked --group dev
-uv run --no-sync python -m pytest tests/<path> -q
-uv run --no-sync python -m pytest tests -q
-```
-
-PRs targeting `dev` run the full pytest suite on Windows and Ubuntu. A full run includes test collection, so a separate `--collect-only` merge gate is unnecessary. Real game, account, and emulator flows continue to follow the author-local E2E policy and stay out of pytest CI.
+See [Testing and Verification](./testing.md) for local commands and CI coverage.
 
 ## Version Records
 
-A PR with user-visible changes adds one fragment under `changelog.d/`: `<PR number or branch>.<category>.md`. Put `project: <key>` on the first line (optional only for `dev` fragments), followed by one user-facing line of at most 50 characters. Use `python scripts/changelog.py add <category> <project> "<summary>"` or write the file directly. Describe the observable change without a project prefix, PR number, attribution, or implementation details.
+For PRs with **user-visible changes**, add a changelog fragment under `changelog.d/` instead of editing `CHANGELOG.md`, `res/version.json`, or version numbers directly.
 
-Pure documentation, CI, tests, and internal refactors use the `skip-changelog` PR label. For a feature first introduced in the current release cycle, changes within the same beta need no fragment; changes across betas use `beta-only: true` and are omitted from the stable summary. See the [fragment guide](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/changelog.d/README.md) for project keys, categories, attribution, and exceptions.
+- **Naming & format**: Name the file `<PR number or branch>.<category>.md`. Put `project: <key>` on the first line (optional only for `dev` fragments), followed by a single user-facing sentence (max 50 characters) without project prefixes, PR numbers, attribution, or internal details.
+- **Helper command**: From the repository root, run:
 
-The nightly workflow (23:30 Beijing time) compiles merged fragments into the Unreleased section of `CHANGELOG.md`. Release preparation also compiles remaining fragments. Ordinary PRs do not edit `CHANGELOG.md`, `res/version.json`, or version numbers; the release PR sets the version.
+  ```powershell
+  python scripts/changelog.py add <category> <project> "<one-line summary>"
+  ```
+
+- **When to skip**: Pure documentation, CI, test, and internal refactor PRs should use the `skip-changelog` PR label. For a feature first introduced in the current release cycle, follow-up tweaks within the same beta do not need a fragment; changes across betas should add `beta-only: true` (automatically omitted when promoting to stable). See the [fragment guide](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/changelog.d/README.md) for project keys, categories, and exceptions.
+- **Compilation**: GitHub Actions compiles merged fragments into the Unreleased section of `CHANGELOG.md` daily at 23:30 Beijing time, and release preparation handles remaining fragments and version numbers.
 
 ## Backend Comments
 
 ::: tip Overview
-Backend comments should follow **Google Python Style Guide - Docstring Conventions**, also called **Google Docstring**.
+Backend docstrings follow the **Google Python Style Guide – Docstring Conventions** (**Google Docstring**).
 :::
 
 ### Method Comments
 
 ```python
 def add_numbers(a: int, b: int) -> int:
-    """Add two numbers and return their sum.
+    """Add two integers and return their sum.
 
     Args:
-        a: The first number.
-        b: The second number.
+        a: First integer.
+        b: Second integer.
 
     Returns:
-        The sum of the numbers.
+        Sum of the two integers.
 
     Raises:
-        ValueError: The input arguments are not integers.
+        ValueError: Raised when either argument is not an integer.
     """
 
     if not all(isinstance(x, int) for x in (a, b)):
@@ -166,10 +184,7 @@ def add_numbers(a: int, b: int) -> int:
 
 ### Configuration Class Comments
 
-Configuration objects inherit from `ConfigEntry`, and semantic field blocks
-inherit from `ConfigGroup`. Type annotations define field types, while
-`Field` describes defaults, constraints, and Chinese descriptions. Use
-`default_factory` so groups and lists are independent for each instance.
+Configuration objects inherit from `ConfigEntry`, and semantic field groups inherit from `ConfigGroup`. Declare field types via type annotations and document defaults, constraints, and descriptions with `Field`. Use `default_factory` for nested groups and mutable fields so instances do not share state.
 
 ```python
 from typing import Literal
@@ -196,62 +211,48 @@ class GlobalConfig(ConfigEntry):
     Notify: NotifyFields = Field(default_factory=NotifyFields)
 ```
 
-Configuration fields and their validation rules are declared once in the
-configuration model. API input and output contracts are derived from that
-model. Runtime private state is not persisted. See
-[Configuration Framework](../core/config.md) for field types and calling
-conventions.
+Declare configuration fields and validation rules once in the configuration model—API input/output contracts are derived from it, and runtime-only state is never persisted. See [Configuration Framework](../core/config.md) for details.
 
 ## Backend Function Calls
 
 ::: tip Overview
-Use positional arguments only when the meaning is obvious at a glance. Otherwise, use keyword arguments. Boolean and multi-argument calls must use keyword arguments.
+Use positional arguments only when the meaning is obvious at a glance; otherwise use keyword arguments. Boolean and multi-argument calls must use keyword arguments.
 :::
 
-To improve readability, reduce misuse, and improve collaboration efficiency, follow these function-call rules:
+Follow these rules to keep function calls readable and safe against argument-order mistakes:
 
-### 1. Simple functions with clear meaning -> use positional arguments
+### 1. Simple functions with obvious meaning -> positional arguments
 
-When there are few parameters, usually no more than two, and the meaning is clear, positional arguments are acceptable.
-
-Example:
+Acceptable when there are at most two parameters and their roles are unambiguous:
 
 ```python
 add(1, 2)
 math.sqrt(4)
 ```
 
-### 2. Less obvious, many-parameter, or easily confused functions -> use keyword arguments
+### 2. Less obvious or easily confused calls -> keyword arguments
 
-Keyword arguments improve readability, do not rely on positional order, and are safer.
-
-Example:
+Explicit parameter names improve readability and prevent ordering bugs:
 
 ```python
 UserItem(user_id=str(uid), name=config.get("Info", "Name"), status="waiting")
 ```
 
-### 3. All boolean parameters must use keyword arguments
+### 3. All boolean parameters -> keyword arguments required
 
-Avoid unreadable calls.
-
-Not recommended:
+Avoid opaque `True` / `False` flags:
 
 ```python
+# Not recommended
 send_notification(True, False)
-```
 
-Recommended:
-
-```python
+# Recommended
 send_notification(enable=True, urgent=False)
 ```
 
-### 4. When there are more than two arguments, prefer keyword arguments
+### 4. More than two parameters -> prefer keyword arguments
 
-This improves maintainability and reduces the risk of order mistakes.
-
-Example:
+Improves maintainability and reduces argument-order errors:
 
 ```python
 connect(host="localhost", port=3306, timeout=5)

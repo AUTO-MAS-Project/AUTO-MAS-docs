@@ -64,7 +64,7 @@ Rules:
 
 - The summary is usually 1 to 4 bullets.
 - Use `Closes #n` when there is a related Issue; otherwise delete the line.
-- User-visible changes should remind maintainers to update `res/version.json`.
+- User-visible changes should include a changelog fragment under `changelog.d/` rather than editing `res/version.json` or version numbers directly.
 - State unrun checks honestly. Do not invent test results, performance data, review conclusions, or facts not provided by the user.
 
 ## OpenAPI and Generated Files

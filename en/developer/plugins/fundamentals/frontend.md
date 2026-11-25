@@ -114,7 +114,7 @@ The main program currently has only three UI languages: Chinese, English, and Ja
 
 - Routes a plugin hands over via `api_router` (FastAPI) are mounted into the host at the paths they declare and enter OpenAPI.
 - Endpoints declared with `@plugin_route` go through the generic gateway `/api/plugin/<plugin ID>/<path>` and do not enter OpenAPI.
-- The frontend's API client is generated from OpenAPI (`frontend/src/api/`). **The plugin must be enabled when you run `yarn openapi`**; otherwise the output has neither this plugin's endpoints nor its config types.
+- The frontend's API client is generated from OpenAPI (`frontend/src/api/`). **The plugin must be enabled when you run `vp run openapi`**; otherwise the output has neither this plugin's endpoints nor its config types.
 
 ## Static Registration of Adapter Pages
 
