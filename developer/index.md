@@ -7,7 +7,7 @@ outline: false
 > [!IMPORTANT] 重要提醒
 > 向 AUTO-MAS-Project 的任何仓库提交代码前，请完整阅读本页的 **AUTO-MAS 开发者社区授权协议**。
 
-首次开发，请先[配置环境](./getting-start/environment.md)，冰阅读[开发规范](./getting-start/development-specifications.md)。环境就绪后，阅读**主程序开发**或**插件开发**对应文档，了解相关信息。
+首次参与开发，请先完成[环境配置](./getting-start/environment.md)并阅读[开发规范](./getting-start/development-specifications.md)。环境准备就绪后，再根据需要继续阅读**主程序开发**或**插件开发**章节。
 
 ## AUTO-MAS 开发者社区授权协议
 
@@ -28,7 +28,6 @@ outline: false
 
   1. 无法联系到 [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 时，**AUTO-MAS Team** 相关事务由 [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 依据社区共识处理。
   2. [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 退出项目时，必须将 **AUTO-MAS Team** 的所有授权移交给另一项目开发者。
-
   3. [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 绝对多数通过时，允许取消对 [DLmaster (@DLmaster361)](https://github.com/DLmaster361) 的授权，由 [AUTO-MAS 主要开发者](https://github.com/orgs/AUTO-MAS-Project/teams/core) 重新授权给其他项目开发者。
 
-以上条款用于保证 **AUTO-MAS-Project** 项目拥有清晰的责任主体，能够对侵权者采取法律手段进行法律维权，并确保 **AUTO-MAS Team** 的权利不会被滥用。
+以上条款旨在确保 **AUTO-MAS-Project** 拥有清晰的责任主体，能够对侵权行为依法维权，同时防止 **AUTO-MAS Team** 的权利被滥用。
