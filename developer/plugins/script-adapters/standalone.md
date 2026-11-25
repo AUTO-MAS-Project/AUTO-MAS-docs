@@ -72,3 +72,28 @@ class Plugin(ScriptAdapterPlugin):
 - **插件仓库**：按插件自己的测试入口验证配置与任务。例如 MAA 测试通过 `AUTO_MAS_HOST_SOURCE` 选定主程序源码，再运行 `python -m pytest tests -q`。
 - **主程序集成**：`tests/requirements-plugins.txt` 锁定插件 wheel 的版本和 SHA256，`scripts/prepare_test_plugins.py` 将依赖装入 `.test-plugins`。升级锁定的 wheel 时同步更新版本和哈希。
 - **启停影响**：普通禁用会删除该类型的托管、账号和所声明的计划表。重新启用后需从备份恢复。卸载还会删除 `config/plugins/<插件 ID>.yaml`。在插件 README 说明备份与恢复方式。
+
+## 桌面分身
+
+全新专项通过 `ScriptTypeDecl` 接入桌面分身。启用插件后，宿主从插件注册表查找声明，托管详情、队列预览及正式派发共用能力判断。分身入口要求插件支持 `TaskMode.AUTO_PROXY`。
+
+下面以需要管理员权限的专项为例。把 `Run` 字段加入现有托管配置，并把回调传给现有的 `ScriptTypeDecl`：
+
+```python
+from auto_mas_core import DesktopSessionCheckReason, DesktopSessionRunFields, ScriptEntry
+from pydantic import Field
+
+# 加到托管配置类。如果已有 RunFields，让它继承 DesktopSessionRunFields。
+Run: DesktopSessionRunFields = Field(default_factory=DesktopSessionRunFields)
+
+def desktop_session_check(
+    config: ScriptEntry, elevated: bool
+) -> DesktopSessionCheckReason | None:
+    return None if elevated else "admin_required"
+
+# 在 ScriptTypeDecl(...) 中加入 desktop_session_check=desktop_session_check。
+```
+
+宿主在预览和正式受理时同步执行回调，取得托管配置锁后在执行前再次复核。回调只读托管配置和宿主权限。支持时返回 `None`，权限不足返回 `admin_required`，配置不兼容返回 `unsupported_config`。省略回调的插件可以在主会话执行。手动单独启动读取 `Run.ExecutionSession`，缺字段默认 `main`。迁移已有专项时保留同名字段和原有配置身份。队列按整条选择执行会话。
+
+L2、L3、L4 的编排和配置锁由主会话中的宿主管理。在分身任务中，通过 `auto_mas_core.utils.ProcessRunner.run_process()` 运行并等待上游命令，或通过 `ProcessManager.open_process()` 启动后持有该管理器，在任务收尾时调用 `await manager.kill()`。宿主使用任务上下文将这些命令送入子会话。直接调用 `subprocess` 或在 Python 进程里操作窗口时，操作发生在宿主会话。需要区分启动器退出和其派生进程仍存活的专项，可用 `retain_desktop_descendants=True` 保留进程归属，并通过 `manager.launched_process.returncode` 读取启动器退出状态。

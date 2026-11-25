@@ -6,6 +6,12 @@ date: 2026-08-18
 
 # MaaEnd Configuration Guide
 
+## Desktop session
+
+**Conditional.** Use a PC (Win32) controller. Run emulator tasks in the main session.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## What is MaaEnd?
 
 MaaEnd is a third-party automation tool for Arknights: Endfield. Based on visual AI technology, it can automatically complete repetitive daily tasks such as Protocol Space.

@@ -1,5 +1,11 @@
 # MAA Configuration Guide
 
+## Desktop session
+
+**Unsupported.** Run in the main session.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## What is MAA?
 
 MAA is a third-party Arknights tool that can handle repetitive tasks such as daily automation and Integrated Strategies credit farming.
