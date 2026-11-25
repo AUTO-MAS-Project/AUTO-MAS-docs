@@ -139,13 +139,13 @@
 | 资源名称                   | 路径                                                             | 原始许可引用（未公布相关许可协议的，给出原始仓库链接）                                                                                                                                   |
 | :------------------------- | :--------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 空状态占位图（历史资源，当前 dev 已移除） | `frontend/src/assets/NoData.png`                                 |                                                                                                                                                                                          |
-| MAA 脚本类型标识图         | `frontend/src/assets/MAA.png`                                    | [MAA关于LOGO的声明](https://github.com/MaaAssistantArknights/MaaAssistantArknights#%E5%A3%B0%E6%98%8E)                                                                                   |
+| MAA 脚本类型标识图         | `frontend/src/assets/MAA.png`                                    | [MAA 关于 LOGO 的声明](https://github.com/MaaAssistantArknights/MaaAssistantArknights#%E5%A3%B0%E6%98%8E)                                                                                |
 | SRC 脚本类型标识图         | `frontend/src/assets/SRC.png`                                    | [StarRailCopilot](https://github.com/LmeSzinc/StarRailCopilot)                                                                                                                           |
 | MaaEnd 脚本类型标识图      | `frontend/src/assets/MaaEnd.png`                                 | [MaaEnd](https://github.com/MaaEnd/MaaEnd)                                                                                                                                               |
 | M9A 脚本类型标识图         | `frontend/src/assets/M9A.png`                                    | [M9A](https://github.com/MAA1999/M9A)                                                                                                                                                    |
 | ok-ww 脚本类型标识图       | `frontend/src/assets/ok-ww.ico`                                  | [ok-wuthering-waves](https://github.com/ok-oldking/ok-wuthering-waves)                                                                                                                   |
 | OK-NTE 脚本类型标识图      | `frontend/src/assets/ok-nte.ico`                                 | [ok-nte](https://github.com/BnanZ0/ok-nte)                                                                                                                                               |
-| HSR 脚本类型标识图         | `frontend/src/assets/hsr.png`                                    | [March7thAssistant](https://github.com/moesnow/March7thAssistant)与[StarRailAssistant](https://github.com/Shasnow/StarRailAssistant)的多引擎整合入口所用标识，同时遵循两个上游仓库的规定 |
+| HSR 脚本类型标识图         | `frontend/src/assets/hsr.png`                                    | [March7thAssistant](https://github.com/moesnow/March7thAssistant) 与 [StarRailAssistant](https://github.com/Shasnow/StarRailAssistant) 的多引擎整合入口所用标识，同时遵循两个上游仓库的规定 |
 | MaaFW / MFW 脚本类型标识图 | `frontend/src/assets/maafw.png`、`frontend/src/assets/maafw.svg` | [MaaFramework](https://github.com/MaaXYZ/MaaFramework)                                                                                                                                   |
 
 ### 4.3 权利状态待核实的资源
@@ -165,7 +165,7 @@
 > **重要提示**
 >
 > - 模板仅为便利，**不构成对本协议义务的限缩或替代**。使用者仍须遵守本协议全部条款。
-> - 本模板**仅覆盖非商业使用场景**，商业使用须事先联系商业权利联系人取得书面授权
+> - 本模板**仅覆盖非商业使用场景**，商业使用须事先联系商业权利联系人取得书面授权。
 > - 本模板**不适用于**第 4.2 节外部引入资源（该等资源请遵循其原始许可）。
 > - 第 4.3 节权利状态待核实的资源**不得**出现在任何对外分发物或公开模板中。
 > - 同时引用多项美术资源时，可合并为表格形式，但每项须保留独立的资源标识与著作权人信息。
@@ -291,7 +291,7 @@ https://doc.auto-mas.top/disclosure/assets-license
 </ul>
 <p>
   本资源不适用 GNU AGPL，<strong>仅限非商业使用</strong>。
-  不得将本资源用于任何商业目的；商业使用须事先取得书面授权 （联系：<a
+  不得将本资源用于任何商业目的；商业使用须事先取得书面授权（联系：<a
     href="mailto:DLmaster_361@163.com"
     >DLmaster_361@163.com</a
   >）。

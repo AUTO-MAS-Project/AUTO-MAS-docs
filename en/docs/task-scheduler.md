@@ -37,23 +37,23 @@ In **Schedule list** (定时列表), click **Add schedule** (添加定时). Choo
 [![Schedule status, weekdays, and execution time](/docs/img/tutorial-20261104/queue-timer.png)](/docs/img/tutorial-20261104/queue-timer.png)
 
 ::: tip Enable both settings
-The queue's scheduled-run setting must be Yes and the individual schedule row must be Enabled. Changes save immediately; reload the page to check them.
+The queue's **Scheduled run** setting must be **Yes** and the individual schedule row's **Status** must be **Enabled**. Changes save immediately; reload the page to check them.
 :::
 
 ::: warning Startup and schedules trigger separately
 **Run at startup** and **Scheduled run** can both take effect. **First startup each day** limits startup triggers; it does not limit the queue to one run for the whole day. If startup coincides with a scheduled time, the same queue may be triggered twice. To run only at scheduled times, set **Run at startup** to **Never**.
 :::
 
-A cycle queue (循环队列) repeats according to each task's cycle settings. Choose it when you need repeated task cycles rather than scheduled runs of the whole queue.
+A **cycle queue** (循环队列) repeats according to each task's cycle settings. Choose it when you need repeated task cycles rather than scheduled runs of the whole queue.
 
 ### 3. Add configured managed scripts
 
 Click **Add task** (添加任务) and select a configured managed script. If there are no managed scripts to select, complete [Managed Script Configuration](/en/docs/script-guide/) first.
 
 ::: tip Common setups
-- To run after boot, start AUTO-MAS with Windows and select Run every time or First startup each day.
-- To run at specific times, keep the app running and enable both scheduled-run settings.
-- For MAA infrastructure changes, schedule MAA shortly before the new layout should take effect.
+- **Run after boot**: Start AUTO-MAS with Windows, then set **Run at startup** to **Run every time** or **First startup each day**.
+- **Run on a schedule**: Keep the app running and enable both scheduled-run settings.
+- **Pair with MAA custom infrastructure**: Schedule MAA shortly before the new shift layout should take effect.
 :::
 
 ## Run order in auto-proxy mode

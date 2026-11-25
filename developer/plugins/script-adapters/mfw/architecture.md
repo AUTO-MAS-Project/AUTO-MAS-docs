@@ -9,7 +9,7 @@ MFW 位于 `app/task/MaaFW/`，根据项目接口导入、更新并执行 MaaFra
 3. **执行通用引擎逻辑**：`MaaFW/tools/core/` 处理接口解析、任务快照、运行计划、解释器管理、项目载荷和更新。worker 在独立虚拟环境内运行，其 `app.*` 导入闭包限制在 `tools/core/`，第三方依赖限于 `maafw` 和 `BASE_RUNTIME_PACKAGES`，相关约束由 `tests/task/test_maafw_core.py` 检查。
 4. **提供操作界面**：`frontend/src/views/EditView/` 下的 MFW 托管页、账号页和风味页面展示导入、配置与运行状态。风味登记在 `frontend/src/composables/useMaaFWFlavor.ts`。Electron 问题包由 `frontend/electron/services/maafwIssueReportService.ts` 导出。
 
-API 业务单向依赖引擎和宿主接入模块。更新器在宿主进程中运行；引擎核心中供 worker 使用的代码需保持独立。worker 的工作目录是应用根，`PYTHONSAFEPATH` 只设置给 worker，项目 agent 仍按项目配置解析同级模块。
+API 业务单向依赖引擎和宿主接入模块。更新器在宿主进程中运行；引擎核心中供 worker 使用的代码需保持独立。worker 的工作目录是应用根目录，`PYTHONSAFEPATH` 只设置给 worker，项目 agent 仍按项目配置解析同级模块。
 
 ## 一次导入
 

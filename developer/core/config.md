@@ -9,7 +9,7 @@ AUTO-MAS 主程序使用自研的配置框架，统一处理配置声明、校�
 ### 源码文件结构
 
 ::: tip 提示
-仅开发或研究配置框架具体实现方法时阅读，首次贡献者建议直接跳过本段
+仅开发或研究配置框架具体实现方法时阅读，首次贡献者建议直接跳过本段。
 :::
 
 - `app/config/`
@@ -198,7 +198,7 @@ ScriptConfig（L1）
 
 `ConfigNode` 是配置对象（`ConfigEntry`）和配置集合（`ConfigCollection`）的父类，定义了配置节点通用的方法。
 
-配置节点类基于 `Pydantic` 实现，不仅可以用于构造配置实例，还可以用作 `fastapi` 接口的类型声明。
+配置节点类基于 `Pydantic` 实现，不仅可以用于构造配置实例，还可以用作 `FastAPI` 接口的类型声明。
 
 - **属性**
 
@@ -213,7 +213,7 @@ ScriptConfig（L1）
 
 - **构造**
 
-  配置节点构造后返回的是冷态配置实例，冷态配置实例仅具有 Pydantic 实例的基本能力，配置框架相关能力都无法使用，可用作 `fastapi` 返回值。
+  配置节点构造后返回的是冷态配置实例，冷态配置实例仅具有 Pydantic 实例的基本能力，配置框架相关能力都无法使用，可用作 `FastAPI` 返回值。
 
   - 从字典构造
 
@@ -254,8 +254,8 @@ ScriptConfig（L1）
 
   ```python
   await <节点>.activate(
-    regenerate_uuids=<是否为所有子配置节点重新生成 UUID>,
-    fast_init=<是否尝试快速激活>
+      regenerate_uuids=<是否为所有子配置节点重新生成 UUID>,
+      fast_init=<是否尝试快速激活>,
   )
   ```
 
@@ -317,7 +317,7 @@ ScriptConfig（L1）
     ```
 
     - `mode=`：指定导出模式：
-      - `"json"`：将所有字段转为 JSON 文件支持的表示方式
+      - `"json"`：将所有字段转为 JSON 文件支持的表示方式。
       - `"python"`：保留 Python 原生类型。
     - `audience=`：指定 JSON 模式的导出用途：
       - `"api"` 是默认值，用于接口输出。包含虚拟字段和触发器字段，按界面规则隐藏或掩码字段，加密字段以明文导出。
@@ -403,9 +403,9 @@ class <配置对象类>(ConfigEntry):
 
   ```python
   <任务 UUID 或 None> = <配置对象>.write_trigger(
-    group = <分组名>,
-    field = <字段名>,
-    value = <命令值>
+      group=<分组名>,
+      field=<字段名>,
+      value=<命令值>,
   )
   ```
 
@@ -418,7 +418,7 @@ class <配置对象类>(ConfigEntry):
 
 - **构造**
 
-  除[配置节点 | Node](#config-node)中说明的构造参数外。集合的完整构造还接受以下参数：
+  除[配置节点 | Node](#config-node)中说明的构造参数外，集合的完整构造还接受以下参数：
 
   ```python
   <实例名> = ConfigCollection[<成员类型>].build(
@@ -475,7 +475,7 @@ class <配置对象类>(ConfigEntry):
   await <配置集合>.commit()
   ```
 
-  - `order=`：按目标顺序排列的 UUID 对象或 `CollectionOrderItem` 序列，必须包含集合中的全部成员，且每个 UUID 只出现一次
+  - `order=`：按目标顺序排列的 UUID 对象或 `CollectionOrderItem` 序列，必须包含集合中的全部成员，且每个 UUID 只出现一次。
 
 - **动态成员类型**
 
@@ -547,7 +547,7 @@ _本节中的读写指直接对字段对象的读写，导出指生成 API 返�
 | `KeyboardKeyString`     | 按键名转为小写，非法输入回退到字段声明的默认值。声明时应提供合法键位作为默认值                                                                                                                                                               |
 | `WindowsNameString`     | 清理 Windows 名称中的非法字符和首尾空白及点号，长度限制为 255 个字符，空名称或保留名回退为 `"默认用户名"`                                                                                                                                    |
 | `CliArgumentString`     | 检查命令行参数语法，合法时保留原字符串，语法错误时清空                                                                                                                                                                                       |
-| `CliArgumentListString` | 用于在同一个字段里为不同用途保存多组启动参数，格式为`<程序相对路径 1>%<命令行参数 1>\|<程序相对路径 2>%<命令行参数 2>\|...`。`\|` 分隔各组，每组的 `<程序相对路径>%` 可省略，每组首个 `%` 后的内容均视为参数。校验时跳过空段，检查参数合法性 |
+| `CliArgumentListString` | 用于在同一个字段里为不同用途保存多组启动参数，格式为 `<程序相对路径 1>%<命令行参数 1>\|<程序相对路径 2>%<命令行参数 2>\|...`。`\|` 分隔各组，每组的 `<程序相对路径>%` 可省略，每组首个 `%` 后的内容均视为参数。校验时跳过空段，检查参数合法性 |
 
 ### 路径字段
 
@@ -588,18 +588,18 @@ _本节中的读写指直接对字段对象的读写，导出指生成 API 返�
 
     - 目录路径项：排除目录本身及其下级路径
     - `PathBlockPreset.ROOTS`：文件系统根目录
-    - `PathBlockPreset.SYSTEM` ： Windows 系统目录及其上、下级路径
-    - `PathBlockPreset.PROGRAM_FILES_ROOTS`： `Program Files` 与 `Program Files (x86)` 目录
+    - `PathBlockPreset.SYSTEM`：Windows 系统目录及其上、下级路径
+    - `PathBlockPreset.PROGRAM_FILES_ROOTS`：`Program Files` 与 `Program Files (x86)` 目录
     - `PathBlockPreset.APP`：AUTO-MAS 工作目录及其上、下级路径
 
-    还可以直接传入预设的目录元组常量，`SYSTEM_BLOCKED_DIRS` 包含 `ROOTS`、`SYSTEM` 和 `PROGRAM_FILES_ROOTS`；`STANDARD_BLOCKED_DIRS` 在此基础上加入 `APP`
+    还可以直接传入预设的目录元组常量，`SYSTEM_BLOCKED_DIRS` 包含 `ROOTS`、`SYSTEM` 和 `PROGRAM_FILES_ROOTS`；`STANDARD_BLOCKED_DIRS` 在此基础上加入 `APP`。
 
 ### 日期时间字段
 
 为防止开发者忘记处理字段的时区，以及更便捷地处理不同地区服务器的不同跨天时间点，配置框架为原有的 `datetime` 添加了自动时区处理能力。_例如，若某服务器在北京时间凌晨四点切换为下一天，可以将对应的日期字段设定为 `UTC+4`，截取日期时就能直接区分不同的服务器日期。_
 
 - **写入**：带时区的输入自动换算成 UTC 再保存，无时区的输入按 UTC 解释。
-- **读取**时，自动换算为预设时区。
+- **读取**：自动换算为预设时区。
 - **导出**：直接使用 UTC 时区值。
 
 ```python
@@ -619,7 +619,7 @@ _本节中的读写指直接对字段对象的读写，导出指生成 API 返�
 框架允许不同的系统采用不同的加密方案：
 
 - Windows：Windows DPAPI 按设备加密，密文可在同一台设备上由不同用户解密。
-- 其他系统：尚未实现
+- 其他系统：尚未实现。
 
 ```python
 <字段名>: Annotated[str, encrypted()] = <默认字符串>
@@ -651,7 +651,7 @@ _本节中的读写指直接对字段对象的读写，导出指生成 API 返�
 - `display_field=`：界面选项的展示字段路径，如 `"Info.Name"`。选项值仍是成员 UUID。
 - `on_delete=`：目标被删除，或重载、替换成员类型后不再符合引用约束时采用的策略。目标变更和关联的配置修改在同一事务内执行。
 
-  - `RefDeleteAction.SET_DEFAULT`：默认策略，将引用改回 `default=` 指定的值
+  - `RefDeleteAction.SET_DEFAULT`：默认策略，将引用改回 `default=` 指定的值。
   - `RefDeleteAction.RESTRICT`：拒绝使引用失效的操作。
   - `RefDeleteAction.CASCADE`：删除持有引用的 Entry，要求它是集合成员。
   - `RefDeleteAction.CUSTOM`：调用 `on_delete_callback=` 指定的处理方法。
@@ -691,10 +691,10 @@ class <配置对象类型>(ConfigEntry):
 ```python
 class <配置对象类型>(ConfigEntry):
     class <分组类型>(ConfigGroup):
-    <字段名>: Trigger = trigger(
-        timeout=<执行时限>,
-        description=<字段描述>,
-    )
+        <字段名>: Trigger = trigger(
+            timeout=<执行时限>,
+            description=<字段描述>,
+        )
 
     <分组名>: <分组类型>
 
@@ -867,7 +867,7 @@ def <回调函数>(sender, event):
 
 退订需要在原来的配置类或实例上使用同一回调对象和相同的过滤参数。
 
-重新定义同名函数不会自动更新旧的订阅，而是会创建新的订阅。框架按函数对象识别订阅，所以只要旧函数仍被引用，新旧回调就可能同时收到事件。要替换旧回调，需要在函数名被重新绑定前，退订原订阅。不能直接在函数重新定义时直接使用 `@disconnect(...)`，退订装饰器作用于它装饰的函数，这会尝试退订新的函数。
+重新定义同名函数不会自动更新旧的订阅，而是会创建新的订阅。框架按函数对象识别订阅，所以只要旧函数仍被引用，新旧回调就可能同时收到事件。要替换旧回调，需要在函数名被重新绑定前，退订原订阅。不能在函数重新定义时直接使用 `@disconnect(...)`，退订装饰器作用于它装饰的函数，这会尝试退订新的函数。
 
 ### 信号的事务
 
@@ -878,7 +878,7 @@ def <回调函数>(sender, event):
 
 ## 自动持久化与导出
 
-通过 `file=` 绑定 YAML 文件的配置实例能够自动持久化，当配置实例发生修改时，若改实例的根节点进行过持久化登记，就会自动持久化到对应文件。
+通过 `file=` 绑定 YAML 文件的配置实例能够自动持久化，当配置实例发生修改时，若该实例的根节点进行过持久化登记，就会自动持久化到对应文件。
 
 修改生效后会等待一段时间再正式持久化，以实现短时间内多次修改合并处理，避免频繁修改时反复写入文件消耗存储寿命。
 
@@ -1007,7 +1007,6 @@ async def <更新路由函数>(body: <更新请求模型>) -> OutBase:
 考虑到配置字段与前端页面的强关联，配置框架具备主动向前端推送页面变化通知的功能。在配置查询中，会一并给出此次查询对应的页面 UUID，下次该配置发生变化时，会告知前端涉及的页面 UUID。
 
 后端通过 WebSocket 通知前端页面变化。若连接断开，前端每 5 秒重新查询当前可见页面正在使用的配置，重连后停止轮询。
-配置界面实时同步
 
 查询响应的 `uiSources` 用于传递本次查询对应的界面 UUID 列表。一般查询单个配置对象时填 Entry 的 UUID，查询集合列表时填 Collection 的 UUID，如果结果依赖多个节点，就把它们的 UUID 一起填入。
 

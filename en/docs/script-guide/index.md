@@ -14,6 +14,8 @@ Arknights - MaaAssistantArknights
 - Supports multi-account management for official and Bilibili servers
 - Supports stage configuration through weekly plans
 
+---
+
 ### [MaaEnd](/en/docs/script-guide/maaend)
 
 Arknights: Endfield - MaaEnd Assistant
@@ -30,7 +32,7 @@ Reverse: 1999 - M9A
 
 - Supports daily automation, event farming, automatic Artificial Somnambulism, and more
 - Supports MuMu and LDPlayer emulators
-- Added as an MFW script: the directory is recognised automatically, start / close game and official-server account switching are inserted for you
+- Added as an MFW script: the directory is recognized automatically, and start/close game plus official-server account switching are inserted for you
 
 ---
 
@@ -69,7 +71,7 @@ Honkai: Star Rail - March7thAssistant (M7A) + StarRailAssistant (SRA)
 
 Genshin Impact - BetterGI
 
-- Native GUI configuration; accounts are managed natively by BetterGI, complex settings are done in BetterGI's interface
+- Native GUI configuration: accounts are managed natively by BetterGI, and complex settings are configured in BetterGI's interface
 - Manages the One Dragon built-in config groups (8 toggles) and custom config groups independently per account
 - Supports reward party, combat party, and auto-battle strategy fields, auto-reading combat scripts under `User/AutoFight`
 - Account switching, notifications, and extra scripts can each be configured independently

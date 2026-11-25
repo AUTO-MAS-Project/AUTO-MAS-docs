@@ -32,22 +32,22 @@ from auto_mas_core import (
 
 class DemoConfig(PluginConfig):
     class General(ConfigGroup):
-        enabled: bool = Field(default=True, description="启用")
-        interval: int = Field(default=5, ge=1, le=60, description="检查间隔（分钟）")
+        enabled: bool = Field(default=True, description="Enable")
+        interval: int = Field(default=5, ge=1, le=60, description="Check interval (minutes)")
         mode: Literal["always", "failed_only", "never"] = Field(
-            default="always", description="通知策略"
+            default="always", description="Notification policy"
         )
-        token: Annotated[str, encrypted()] = Field(default="", description="访问令牌")
+        token: Annotated[str, encrypted()] = Field(default="", description="Access token")
 
     class Action(ConfigGroup):
-        send_test: Trigger = trigger(timeout=120, description="发送测试通知")
+        send_test: Trigger = trigger(timeout=120, description="Send test notification")
 
-    general: General = Field(default_factory=General, description="常规")
-    action: Action = Field(default_factory=Action, description="操作")
+    general: General = Field(default_factory=General, description="General")
+    action: Action = Field(default_factory=Action, description="Actions")
 
     @ui_visibility("action.send_test")
     def _vis_send_test(self) -> UiVisibility:
-        # 没启用时按钮置灰
+        # Disable the button when the feature is not enabled
         return UiVisibility.SHOW if self.general.enabled else UiVisibility.DISABLE
 
     @trigger_field("action.send_test", finish_on_cancel=True)
@@ -55,7 +55,7 @@ class DemoConfig(PluginConfig):
         from auto_mas_core.notify import Notify, NotifyPayload
 
         await Notify.send_global(
-            NotifyPayload(title="测试", text=f"策略：{self.general.mode}"),
+            NotifyPayload(title="Test", text=f"Policy: {self.general.mode}"),
             include_system=True,
         )
 
@@ -72,7 +72,7 @@ Key points:
 
 - The config class extends `PluginConfig`, and you set it on the `BasePlugin` subclass with `config_class`.
 - **Groups:** each field in the config class annotated with a `ConfigGroup` subclass is a group; in the example, `general` and `action`. The settings page is divided into blocks by group.
-- **Fields:** inside a group are ordinary pydantic fields. Types, defaults, and constraints such as `ge`/`le` are all validated by pydantic.
+- **Fields:** inside a group are ordinary Pydantic fields. Types, defaults, and constraints such as `ge`/`le` are all validated by Pydantic.
 - The group name `ui` is taken by the host; do not use it.
 - Read with `self.config.general.interval`. To write, assign and then `await self.config.commit()`; see [Core Capabilities](./index.md).
 
@@ -112,7 +112,7 @@ The control width is determined by type and fixed by the frontend: buttons and s
 ```python
 from auto_mas_core import ui
 
-# 放在 Annotated 里
+# Place inside Annotated
 note: Annotated[str, ui(widget="input")] = Field(default="")
 ```
 
@@ -145,7 +145,7 @@ The frontend only recognizes the `endpoint` values below. Any other value shows 
 | `/api/plugin/options/plans` | Plans | None |
 | `/api/info/combox/plan` | General plans | None |
 
-A dropdown with an `endpoint` gets an extra "Not linked" (「不关联」) option, whose value is `"-"`; make the field's default `"-"`. When the dependency field's value is `"-"` or empty, the device dropdown does not request the endpoint and has only the "Not linked" option.
+A dropdown with an `endpoint` gets an extra "Not linked" option, whose value is `"-"`; make the field's default `"-"`. When the dependency field's value is `"-"` or empty, the device dropdown does not request the endpoint and has only the "Not linked" option.
 
 ## Visibility and Read-only
 
@@ -161,11 +161,11 @@ A dropdown with an `endpoint` gets an extra "Not linked" (「不关联」) optio
 There are two ways to declare it. A field may use only one; declaring both raises `TypeError` when the class is created:
 
 ```python
-# 常量：放在 Annotated 里，字段或整个分组都可以
+# Static: place inside Annotated on a field or an entire group
 debug: Annotated[bool, ui(visibility=UiVisibility.HIDE)] = Field(default=False)
 cache: Annotated[CacheFields, ui(visibility=UiVisibility.HIDE)] = Field(default_factory=CacheFields)
 
-# 动态：配置类上的同步方法，按其他字段的值决定
+# Dynamic: a synchronous method on the config class that depends on other fields
 @ui_visibility("general.token")
 def _vis_token(self) -> UiVisibility:
     return UiVisibility.SHOW if self.general.mode != "never" else UiVisibility.HIDE
@@ -220,7 +220,7 @@ Query the UUID to distinguish success, failure, cancellation, and timeout. See t
 
 ## UI Text
 
-Labels in the UI do not come from pydantic's `description`; they come from the plugin package's language files. If not found, the field name or group name is shown directly.
+Labels in the UI do not come from Pydantic's `description`; they come from the plugin package's language files. If not found, the field name or group name is shown directly.
 
 Language files go in the package's `i18n/` directory: `zh_CN.json`, `en.json`, and `ja.json` (`zh-CN.json`, `en-US.json`, and `ja-JP.json` are also accepted). A file is a flat JSON object. Every key must start with `plugins.<plugin name>.`, and every value must be a string.
 
@@ -233,15 +233,15 @@ Language files go in the package's `i18n/` directory: `zh_CN.json`, `en.json`, a
 
 ```json
 {
-  "plugins.demo.config.general.label": "常规",
-  "plugins.demo.config.general.interval.label": "检查间隔（分钟）",
-  "plugins.demo.config.general.mode.label": "通知策略",
-  "plugins.demo.config.general.mode.tip": "决定什么时候发通知",
-  "plugins.demo.config.general.mode.options.always": "总是",
-  "plugins.demo.config.general.mode.options.failed_only": "仅失败时",
-  "plugins.demo.config.general.mode.options.never": "从不",
-  "plugins.demo.config.action.label": "操作",
-  "plugins.demo.config.action.send_test.label": "发送测试通知"
+  "plugins.demo.config.general.label": "General",
+  "plugins.demo.config.general.interval.label": "Check Interval (minutes)",
+  "plugins.demo.config.general.mode.label": "Notification Policy",
+  "plugins.demo.config.general.mode.tip": "Decides when to send notifications",
+  "plugins.demo.config.general.mode.options.always": "Always",
+  "plugins.demo.config.general.mode.options.failed_only": "On failure only",
+  "plugins.demo.config.general.mode.options.never": "Never",
+  "plugins.demo.config.action.label": "Actions",
+  "plugins.demo.config.action.send_test.label": "Send Test Notification"
 }
 ```
 
@@ -251,12 +251,12 @@ An empty object, duplicate keys, or keys without the prefix make the language re
 
 - "Save" on the settings page submits the values of all current groups to `/api/plugin_config/update`, and the backend re-validates them with your `config_class`. On a validation failure it returns an error and writes nothing.
 - The frontend only applies control-level range limits; the backend validation is what counts.
-- When the plugin is not enabled or has not declared `config_class`, the settings page shows an empty state, and the save endpoint returns "plugin not enabled or has no config of its own" (「插件未启用或无自有配置」).
+- When the plugin is not enabled or has not declared `config_class`, the settings page shows an empty state, and the save endpoint returns an error indicating that the plugin is not enabled or has no config of its own.
 
 ## Development Tips
 
 1. Use `Literal[...]` for enumerations; the UI automatically becomes a dropdown.
 2. Use `Annotated[str, encrypted()]` for secrets and tokens.
 3. Put state that is only for internal use in a `HIDE` group so it does not appear in the UI.
-4. Write the conditions for dynamic visibility in `@ui_visibility` methods, keeping them synchronous and free of IO.
+4. Write the conditions for dynamic visibility in `@ui_visibility` methods, keeping them synchronous and free of I/O.
 5. Always put UI text in the language files; treat `description` as a code comment only.

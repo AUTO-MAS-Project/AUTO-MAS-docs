@@ -17,7 +17,7 @@ The AUTO-MAS adaptation handles the repetitive parts: starting a task, monitorin
 
 ## Quick Start
 
-1. Download [OK-WW from its official repository](https://github.com/ok-oldking/ok-wuthering-waves) and extract it. A path without Chinese characters is recommended. Open OK-WW once and complete its basic setup.
+1. Download [OK-WW from its official repository](https://github.com/ok-oldking/ok-wuthering-waves) and extract it. A path without non-ASCII characters is recommended. Open OK-WW once and complete its basic setup.
 2. Open **Managed scripts** → **New managed script** and select **ok-ww**.
 3. Set **ok-ww path** to the directory containing `ok-ww.exe`, not the executable itself.
 4. Return to the managed-script list and click **Configure OK-WW** for this managed script. Save its basic configuration in the native GUI before adding an account. Existing accounts can also open a configuration session from their account page.
@@ -37,7 +37,7 @@ The account editor offers **Shared configuration**, **Independent configuration*
 
 As a shortcut: choose **Shared configuration** for shared settings, **Independent configuration** for per-account high-frequency settings, and **Native** when you want to keep the native OK-WW configuration and let MAS mainly schedule it.
 
-> **Native does not mean that MAS never reads or writes files.** It means that MAS uses the external script's native configuration as its source. When Override Standard Configuration is enabled, MAS still applies a temporary override to the high-frequency fields for that run.
+> **Native does not mean that MAS never reads or writes files.** It means that MAS uses the external script's native configuration as its source. When **Override standard configuration** is enabled, MAS still applies a temporary override to the high-frequency fields for that run.
 
 ## Override Standard Configuration
 
@@ -46,11 +46,11 @@ The **Override standard configuration** switch controls the high-frequency task 
 - **Enabled**: regardless of the selected source, the panel overrides the high-frequency fields for the next run.
 - **Disabled**: the task uses the complete settings from the selected source. Native keeps the full native OK-WW configuration.
 
-Override Standard Configuration only covers fields exposed by MAS. It does not replace the full OK-WW configuration. To run entirely from complex settings in the OK-WW GUI, choose **Native** and disable this option.
+**Override standard configuration** only covers fields exposed by MAS. It does not replace the full OK-WW configuration. To run entirely from complex settings in the OK-WW GUI, choose **Native** and disable this option.
 
 ## When Configuration Is Restored
 
-Override Standard Configuration is a **temporary runtime override**. It does not permanently rewrite the original OK-WW configuration:
+**Override standard configuration** is a **temporary runtime override**. It does not permanently rewrite the original OK-WW configuration:
 
 1. Before each account's task, MAS backs up the original files under OK-WW `working/configs`.
 2. During the task, MAS may write the selected account or override configuration.
@@ -83,7 +83,7 @@ No. It only overrides settings during the current task. MAS restores the origina
 
 ### Which source should I choose?
 
-Choose **Managed level (shared config)** for shared settings, **Account level (independent config)** for different high-frequency settings per account, and **Native** when the complex settings are maintained in the OK-WW GUI. Disable Override Standard Configuration if Native must use the complete native settings.
+Choose **Managed level (shared config)** for shared settings, **Account level (independent config)** for different high-frequency settings per account, and **Native** when the complex settings are maintained in the OK-WW GUI. Disable **Override standard configuration** if you want **Native** mode to use the complete native settings.
 
 ### Why is my game path rejected?
 

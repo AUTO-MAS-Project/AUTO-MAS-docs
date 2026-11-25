@@ -27,7 +27,7 @@ AUTO-MAS/
 ```
 
 - `plugins/<plugin ID>/` is the project root. Name the directory after the plugin ID.
-- `src/` must contain exactly one top-level package. Its name is the plugin's import name. With zero or several, the directory is skipped.
+- `src/` must contain exactly one top-level package. Its name is the plugin's import name. If there are zero or multiple packages, the directory is skipped.
 - The package must be a regular package with an `__init__.py`. All plugin code must live inside it. Importing modules outside the package makes loading fail.
 - The main program's Git ignores every directory under `plugins/` except `auto_mas_core`. Commit your plugin in its own repository.
 
@@ -41,7 +41,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "auto-mas-hello-demo"
 version = "0.1.0"
-description = "AUTO-MAS 最小插件示例"
+description = "Minimal AUTO-MAS plugin example"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 keywords = ["auto-mas-plugin", "auto-mas-id:hello_demo"]
@@ -77,10 +77,10 @@ The file that `readme` points to must exist. Otherwise the whole project fails t
 
 # Hello Demo
 
-AUTO-MAS 最小插件示例。
+Minimal AUTO-MAS plugin example.
 ```
 
-The comment at the top sets the name, description, and tags shown in the Plugin Center (插件中心) and the marketplace. You can leave it out during local development. When it is missing, the plugin ID is used as the name, `description` as the description, and no tags are shown. Add it before publishing; the format and the consequences of omitting it are in [Publishing Plugins](./publish.md).
+The comment at the top sets the name, description, and tags shown in the Plugin Center and the marketplace. You can leave it out during local development. When it is missing, the plugin ID is used as the name, `description` as the description, and no tags are shown. Add it before publishing; the format and the consequences of omitting it are in [Publishing Plugins](./publish.md).
 
 ## Entry Point
 
@@ -105,10 +105,10 @@ logger = get_logger("HelloDemo")
 
 class Plugin(BasePlugin):
     async def on_enable(self) -> None:
-        logger.info("hello_demo 已启用")
+        logger.info("hello_demo enabled")
 
     async def on_disable(self) -> None:
-        logger.info("hello_demo 已停用")
+        logger.info("hello_demo disabled")
 ```
 
 - The host only recognizes `PLUGIN` exported from the package. It must be a subclass of `BasePlugin` (the class itself, not an instance). If it is missing or the wrong type, the plugin ends up in "load failed".
@@ -131,30 +131,30 @@ An instance is created on enable and discarded after disable. Do not put busines
 ## Enabling the Plugin
 
 1. Start (or restart) the backend and the frontend. On startup the backend scans `plugins/` and registers new plugins.
-2. Open the Plugin Center (「插件中心」), find "你好示例" (Hello Demo), whose source shows "Local" (「本地」). Turn on the switch in the "Enabled" (「已启用」) column of that row.
+2. Open the Plugin Center, find "Hello Demo" (whose source shows "Local"), and turn on the switch in the "Enabled" column of that row.
 3. Check the backend log `debug/app.log`. You should see a line like this:
 
 ```text
-... | INFO     | HelloDemo | hello_demo 已启用
+... | INFO     | HelloDemo | hello_demo enabled
 ```
 
 The enabled state is saved and applied automatically the next time the backend starts.
 
 ::: tip
-A plugin directory added while the backend is running is also discovered and registered, but until the backend restarts its state is "Uninstalled" (「已卸载」) and the "Enabled" switch is unavailable. Restart the backend once after creating a new plugin.
+A plugin directory added while the backend is running is also discovered and registered, but until the backend restarts its state is "Uninstalled" and the "Enabled" switch is unavailable. Restart the backend once after creating a new plugin.
 :::
 
 If the plugin does not appear, the problem is in the discovery stage. A project with the wrong `keywords` is skipped silently with no log. A missing `pyproject.toml` or `src/`, a wrong number of top-level packages under `src/`, or a missing `readme` file only produces DEBUG-level output on the backend console; `debug/app.log` records INFO and above only, so you will not see it there.
 
-If the state is "Load failed" (「加载失败」), the Error column in the Plugin Center and `debug/app.log` contain the import error. Common causes: `PLUGIN` is not exported, or the code imports a module outside the package. After fixing the code of a plugin in "Load failed", restart the backend.
+If the state is "Load failed", the Error column in the Plugin Center and `debug/app.log` contain the import error. Common causes: `PLUGIN` is not exported, or the code imports a module outside the package. After fixing the code of a plugin in "Load failed", restart the backend.
 
 ## Applying Source Changes
 
-The backend watches the `plugins/` directory. After you save a `.py` or `.pyi` file and stop editing for about 0.75 seconds, the "Code status" (「代码状态」) in the expanded details of that plugin in the Plugin Center becomes `needs_reload`. **The host does not swap code automatically.** Click "Reload" (「重载」) in that row's "More actions" (「更多操作」) menu yourself.
+The backend watches the `plugins/` directory. After you save a `.py` or `.pyi` file and stop editing for about 0.75 seconds, the "Code status" in the expanded details of that plugin in the Plugin Center becomes `needs_reload`. **The host does not swap code automatically.** Click "Reload" in that row's "More actions" menu yourself.
 
 - When an enabled plugin reloads, the host runs the old instance's `on_reload`, then `on_disable`, re-imports the source, then the new instance's `on_enable`. Local source is imported without the `.pyc` cache, so the latest file is always read.
 - Changing only metadata in `pyproject.toml`, such as the version or package name, is also marked `needs_reload`.
-- If the reload fails, the plugin goes to "Runtime fault" (「运行异常」). Fix it and click "Reload" again. Turning on the "Enabled" switch at that point uses the old code from the last successful import.
+- If the reload fails, the plugin goes to "Runtime fault". Fix it and click "Reload" again. Turning on the "Enabled" switch at that point uses the old code from the last successful import.
 - Only changes to `.py`, `.pyi`, `.toml`, and `.json` files trigger rediscovery. Editing only the README does not.
 - The watcher ignores `.git`, `__pycache__`, `build`, `dist`, `node_modules`, `pypi`, `site-packages`, and `.egg-info`, `.dist-info`, `.data` directories.
 

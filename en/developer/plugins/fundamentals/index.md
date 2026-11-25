@@ -11,7 +11,7 @@ The core capabilities you need for plugin development live in three places:
 - **Host:** the real implementation behind those exports. The SDK does not provide a standalone host; plugins can only run inside AUTO-MAS.
 
 ::: tip
-The `ctx` of the old docs (`ctx.logger`, `ctx.event`, `ctx.cache`, `ctx.runtime`) no longer exists. Plugins no longer receive a `PluginContext`. Where each capability went is covered in the sections below and in [Event System](./event.md).
+The `ctx` of the old docs (`ctx.logger`, `ctx.event`, `ctx.cache`, `ctx.runtime`) no longer exists, and plugins no longer receive a `PluginContext`. See the sections below and [Event System](./event.md) for where each capability moved.
 :::
 
 ## Minimal Plugin
@@ -27,10 +27,10 @@ logger = get_logger("demo")
 
 class PLUGIN(BasePlugin):
     async def on_enable(self) -> None:
-        logger.info(f"{self.plugin_name} 已启用")
+        logger.info(f"{self.plugin_name} enabled")
 
     async def on_disable(self) -> None:
-        logger.info(f"{self.plugin_name} 已停用")
+        logger.info(f"{self.plugin_name} disabled")
 ```
 
 The loader checks that `PLUGIN` is a `BasePlugin` subclass and reads `requires` and `wants` from the class. If the package declares `PLUGIN_API_VERSION`, its major version must match the host's.
@@ -85,7 +85,7 @@ class PLUGIN(BasePlugin):
 To read config, just read attributes. To write, assign and then `await commit()`:
 
 ```python
-# General 是 MyConfig 里声明的分组，字段怎么写见「配置声明」
+# `general` is a group declared in MyConfig; see "Configuration Schema" for field declarations
 self.config.general.interval = 10
 await self.config.commit()
 ```
@@ -106,7 +106,7 @@ async def refresh(self) -> None:
 async def on_enable(self) -> None:
     handle = self.background_tasks.spawn(lambda: self.refresh())
     if handle is None:
-        # 任务组已关闭，或并发数/保留数已满
+        # The task group is closed, or the concurrency/retention limit has been reached
         return
 ```
 
@@ -129,7 +129,7 @@ async def on_enable(self) -> None:
 
 ```python
 info = self.record.info
-logger.info(f"{self.plugin_name} {info.version} 来源={info.source}")
+logger.info(f"{self.plugin_name} {info.version} source={info.source}")
 ```
 
 Commonly used fields of `info`: `plugin_name`, `package_name`, `version`, `source` (`installed` or `local`), `state`, `last_error`, `is_core`, and `is_local`. `self.record` holds only a weak reference. Accessing it after the registry entry has been reclaimed raises `RuntimeError`, so do not cache it long-term in the background.
@@ -168,11 +168,11 @@ On disable and uninstall, the host stops admitting new calls and waits for in-fl
 ```python
 from auto_mas_core.utils import get_logger
 
-logger = get_logger("我的插件")
-logger.debug("调试信息")
-logger.info("常规信息")
-logger.warning("警告")
-logger.error("错误")
+logger = get_logger("my_plugin")
+logger.debug("Debug message")
+logger.info("Info message")
+logger.warning("Warning message")
+logger.error("Error message")
 ```
 
 `get_logger` returns the host's loguru logger; the module name marks the source. Before writing a log line you can use `sanitize_log_message(text)` to strip sensitive parameters such as tokens from the text.
@@ -248,7 +248,7 @@ The `timeout` of `run_process` defaults to 60 seconds.
 
 ### auto_mas_core.services
 
-Exports four host singletons.
+Exports host service singletons:
 
 | Name | Purpose |
 | --- | --- |
@@ -271,7 +271,7 @@ if Downloads.request(request, owner="my_plugin"):
 ```
 
 - `request()` returns `False` when rejected (capacity busy), and raises `RuntimeError` if the download center is closed.
-- `key` can replace the URL as the resource key, so a changed URL is not mistaken for a new resource. File identity is determined in the order `rid`, `content_hash`, empty identity.
+- `key` can replace the URL as the resource key, so a changed URL is not mistaken for a new resource. File identity is resolved in the order: `rid`, `content_hash`, or none.
 - Call `release()` when done. When the last user releases, an unfinished download is cancelled.
 - `query(request)` takes a snapshot immediately, and `list(owner=...)` lists one user's downloads.
 
@@ -283,11 +283,11 @@ Config commands use [configuration triggers](./schema.md#triggers).
 from auto_mas_core.notify import Notify, NotifyPayload
 
 result = await Notify.send_global(
-    NotifyPayload(title="通知标题", text="通知正文"),
+    NotifyPayload(title="Notification title", text="Notification body"),
     include_system=True,
 )
 if result.attempted == 0:
-    ...  # 没有可用渠道，并不代表已投递
+    ...  # No available channels; does not mean the message was delivered
 ```
 
 | Method | Purpose |
@@ -327,7 +327,7 @@ class PLUGIN(BasePlugin):
 
 ## Sync and Async
 
-- Lifecycle hooks, `Downloads.wait`, `Notify.*`, and `ProcessRunner.run_process` are coroutines and must be `await`ed.
+- Lifecycle hooks, `Downloads.wait`, `Notify.*`, and `ProcessRunner.run_process` are coroutines and must be awaited.
 - A background task's `factory` must return a coroutine, such as `lambda: self.refresh()`.
 - A `plugin_route` handler can be sync or async. A sync function runs directly in the event loop, so use async or a background task for slow operations.
 

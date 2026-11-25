@@ -126,7 +126,7 @@ When a managed script or account references another host config collection (plan
 
 ### Dedicated API
 
-Hand a FastAPI router to `api_router`. Routes are mounted into the host at the paths they declare, so the adapter's existing `/api/scripts/...` paths can be kept unchanged; put new endpoints under `/api/plugin/<plugin ID>/...`. These paths are removed when the plugin is disabled.
+Assign a FastAPI router to `api_router`. Routes are mounted into the host at the paths they declare, so an adapter's existing `/api/scripts/...` paths can be kept unchanged; put new endpoints under `/api/plugin/<plugin ID>/...`. These routes are removed when the plugin is disabled.
 
 ## Frontend Pages
 
@@ -182,8 +182,8 @@ Do it in this order.
 
 ### 2. Keep the identity of the old data
 
-- Do not change the class names of the config classes. The `type:` in the config file stores the class name (things like `WhimboxConfig` and `MaaUserConfig`); if the class name is unchanged, old managed scripts are read back as they were.
-- Keep UIDs, order, and field names unchanged. When the structure must change, convert it at load time instead of rebuilding: on activation, Whimbox converts the old `UserData` to `users`, and the accounts remain the same ones.
+- Do not change the class names of the config classes. The `type:` field in the config file stores the class name (such as `WhimboxConfig` and `MaaUserConfig`); if the class name stays unchanged, old managed scripts are read back as they were.
+- Keep UIDs, order, and field names unchanged. When the structure must change, convert it at load time instead of rebuilding: on activation, Whimbox converts the old `UserData` to `users`, so existing accounts keep their identity.
 
 ### 3. Tell the host which plugin the old type belongs to
 
@@ -206,11 +206,11 @@ Configs before v1.8 were saved per directory and have no collection index. You a
         required["whimbox_adapter"] = "auto-mas-whimbox-adapter"
 ```
 
-Every time the host starts and loads config (not only on a version upgrade), it scans the indexes `ScriptConfig.json`, `PlanConfig.json`, `scripts.yaml`, and `plans.yaml`. When it finds these types, it installs, loads, and enables the matching plugin **before** the domain config is activated. If the plugin is already installed, or local source with the same ID exists, it does not reinstall and only adds loading and enabling. If installation or enabling fails, it raises, config loading aborts, and managed scripts are never activated without their plugin.
+Every time the host starts and loads config (not only on a version upgrade), it scans the indexes `ScriptConfig.json`, `PlanConfig.json`, `scripts.yaml`, and `plans.yaml`. When it finds these types, it installs, loads, and enables the matching plugin **before** the domain config is activated. If the plugin is already installed, or local source with the same ID exists, it skips reinstallation and proceeds directly to loading and enabling. If installation or enabling fails, an exception is raised, config loading aborts, and managed scripts are never activated without their plugin.
 
 ### 4. Remove the built-in implementation from the host
 
-When Whimbox was moved out (commit `e7970529a`, #2039), the main program changed the following places, which you can use as a checklist:
+When Whimbox was moved out (commit `e7970529a`, #2039), the main program updated the following locations, which you can use as a checklist:
 
 | Location | Action |
 | --- | --- |
@@ -234,12 +234,12 @@ When Whimbox was moved out (commit `e7970529a`, #2039), the main program changed
 
 ### 6. Verify the old-managed-script upgrade with the wheel from PyPI
 
-You must do this in an environment **without local adapter source**. Local source overrides a distribution with the same ID, and leaving it in place means you never exercise the real install path.
+You must do this in an environment **without local adapter source**. Local source overrides a distribution with the same ID, and leaving it in place means you will not exercise the real installation path.
 
 1. Stop the backend and move the `plugins/<plugin ID>/` source project out of the plugin scan directory.
 2. Prepare a sanitized old-version config (the `config` directory from before the upgrade).
-3. Start the candidate main program and confirm the plugin was installed automatically from PyPI on first start.
-4. Restart once and check that the UIDs, order, and settings of managed scripts and accounts are all still there.
+3. Start the candidate main program and confirm the plugin is installed automatically from PyPI on first start.
+4. Restart once and check that the UIDs, order, and settings of managed scripts and accounts are all preserved.
 
 ## Testing
 

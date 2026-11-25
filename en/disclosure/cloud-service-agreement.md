@@ -4,7 +4,7 @@
 
 ### 1. Acceptance and Changes
 
-1. **Agreement formation**: Welcome to AUTO-MAS cloud services (the "Service"). The Service covers all cloud products and features provided by the AUTO-MAS project team (the "Project Team"). This agreement is a legal document between you and the Project Team regarding use of the above services. **Once you check agree, log in, or use the Service, you are deemed to have fully understood and accepted all content of this agreement.**
+1. **Agreement formation**: Welcome to AUTO-MAS cloud services (the "Service"). The Service covers all cloud products and features provided by the AUTO-MAS project team (the "Project Team"). This agreement is a legal document between you and the Project Team regarding use of the above services. **Once you check "Agree", log in, or use the Service, you are deemed to have fully understood and accepted all content of this agreement.**
 2. **Agreement revision**: The Project Team may revise this agreement according to laws, regulations, updates, or operational needs. **The updated agreement takes effect 7 days after publication.** For major rights changes, we will provide prominent notice through popups, in-site messages, email, or similar methods. **If you do not agree with the revision, stop using the Service immediately. Continued use means you accept the revised agreement.**
 
 ### 2. Account and Identity Authentication
@@ -65,6 +65,6 @@
 
 ### 8. Governing Law and Dispute Resolution
 
-1. **Governing law**: Formation, validity, interpretation, performance, and dispute resolution of this agreement are governed by **the laws of Mainland China of the People's Republic of China**.
+1. **Governing law**: Formation, validity, interpretation, performance, and dispute resolution of this agreement are governed by **the laws of the Mainland of the People's Republic of China**.
 2. **Jurisdiction**: For disputes arising from this agreement, the parties should first negotiate amicably. **If negotiation fails, either party may file a lawsuit with the people's court having jurisdiction where the Project Team is located.**
 3. **Severability**: If any provision of this agreement is held invalid or unenforceable by a competent authority, the remaining provisions continue in effect.

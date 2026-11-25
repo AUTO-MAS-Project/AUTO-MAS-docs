@@ -412,7 +412,7 @@ Entry subclasses can override group or collection fields. Narrowing mutable fiel
 
   - `value=` selects the command.
     - `None` performs no operation and returns `None`.
-    - `True` starts the task and returns its UUID. If it is already running, return the existing UUID.
+    - `True` starts the task and returns its UUID. If it is already running, it returns the existing UUID.
     - `False` requests cancellation and returns the current task UUID, or `None` if idle.
 
 #### Configuration Collection | Collection
@@ -431,7 +431,7 @@ Entry subclasses can override group or collection fields. Narrowing mutable fiel
   )
   ```
 
-  - `entry_types=` registers one entry class or a list of classes. If omitted, use the collection subclass's default types.
+  - `entry_types=` registers one entry class or a list of classes. If omitted, the collection subclass's default types are used.
   - `name=` registers a unique lookup name for a root collection. `ref(...)` uses this name independently of the YAML filename.
   - `order=` is the cold collection's ordered list of member UUIDs and type names.
   - `data=` maps member UUIDs to cold member configuration.
@@ -484,7 +484,7 @@ Entry subclasses can override group or collection fields. Narrowing mutable fiel
 
   If `T` in `ConfigCollection[T].build(...)` is one `ConfigEntry` class, a type registered dynamically must be `T` or a subclass.
 
-  A successful **type reload** or **type replacement** soft-deletes old instances and creates new ones. Reading fields or modifying a soft-deleted instance through the framework raises `DeletedNodeError`. After a reload, resolve instances by UUID and bind their instance subscriptions again. The framework leaves old instance subscriptions on the old instances.
+  A successful **type reload** or **type replacement** soft-deletes old instances and creates new ones. Reading fields or modifying a soft-deleted instance through the framework raises `DeletedNodeError`. After a reload, resolve instances by UUID and bind their instance subscriptions again. Old instance subscriptions are not migrated to the new instances.
 
   - **Register a member type**
 

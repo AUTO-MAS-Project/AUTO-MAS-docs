@@ -18,7 +18,7 @@ The plugin system's configuration is stored separately from the main program's o
 Plugin packages installed from the marketplace, and their dependencies, live in `plugins/pypi/site-packages`. That is not configuration; do not edit it by hand.
 
 ::: tip
-The registry and the marketplace catalog are maintained by the host, and their fields change between versions. To enable or disable a plugin, use the Plugin Center (插件中心), not the YAML. `enabled` in the registry is the user's enable choice, and the backend uses it to enable plugins automatically at startup.
+The registry and the marketplace catalog are maintained by the host, and their fields change between versions. To enable or disable a plugin, use the Plugin Center rather than editing the YAML directly. `enabled` in the registry stores the user's enable choice, and the backend uses it to enable plugins automatically at startup.
 :::
 
 ## A Plugin's Own Config
@@ -33,10 +33,10 @@ from pydantic import Field
 
 class DemoConfig(PluginConfig):
     class Basic(ConfigGroup):
-        greeting: str = Field(default="你好", description="问候语")
-        repeat: int = Field(default=1, description="重复次数")
+        greeting: str = Field(default="Hello", description="Greeting message")
+        repeat: int = Field(default=1, description="Repeat count")
 
-    basic: Basic = Field(default_factory=Basic, description="基础设置")
+    basic: Basic = Field(default_factory=Basic, description="Basic settings")
 
 
 class Plugin(BasePlugin):
@@ -51,9 +51,9 @@ When the host enables the plugin, it:
 
 1. Builds the config instance with `config/plugins/<plugin ID>.yaml` as its storage file, and reads the existing content if the file already exists.
 2. Passes the config in when constructing the plugin instance; the plugin accesses it as `self.config`.
-3. While the plugin is enabled, the gear button on that row in the Plugin Center opens the "Plugin Settings" (「插件设置」) page, which renders a form from your config declaration and writes it back to this file on save. While the plugin is not enabled, this page cannot read the config.
+3. While the plugin is enabled, the gear button on that row in the Plugin Center opens the "Plugin Settings" page, which renders a form from your config declaration and writes it back to this file on save. While the plugin is not enabled, this page cannot read the config.
 
-You do not handle file reading and writing yourself; you only declare. For how to declare fields (`ConfigGroup`, `ConfigEntry`, `ui(...)`, and so on), see the MAA adapter's [`MaaPluginConfig`](https://github.com/AUTO-MAS-Project/AUTO-MAS-MAA-Adapter/blob/master/src/maa_adapter/config/plugin.py) and the SDK [README](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/plugins/auto_mas_core/README.md).
+You do not handle file I/O yourself—just declare the schema. For how to declare fields (`ConfigGroup`, `ConfigEntry`, `ui(...)`, and so on), see the MAA adapter's [`MaaPluginConfig`](https://github.com/AUTO-MAS-Project/AUTO-MAS-MAA-Adapter/blob/master/src/maa_adapter/config/plugin.py) and the SDK [README](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/plugins/auto_mas_core/README.md).
 
 ::: warning
 Collection fields in a config class cannot set `name=`; otherwise enabling raises an error.
@@ -68,5 +68,5 @@ Collection fields in a config class cannot set `name=`; otherwise enabling raise
 | Uninstall | **Removed** | `config/plugins/<plugin ID>.yaml` is **deleted** | The distribution installed from the marketplace is removed |
 
 - **Disabling an adapter plugin clears data.** A script-type adapter (such as MAA or Whimbox) revokes the managed type it registered when disabled, and all managed scripts, accounts, and linked plans under that type are cleared with it. A game-type adapter clears the matching game and device configuration. The UI shows a dialog listing the affected scope before disabling. Back up before you act. A plugin that only provides ordinary features and registers no managed or game type does not affect other configuration when disabled.
-- **Uninstall is only available for plugins installed from the marketplace.** The "Uninstall" menu item is greyed out for local source plugins and for the core plugin `auto_mas_core`. The UI asks for confirmation before uninstalling, and uninstalling cannot be undone. If deleting the distribution fails during uninstall, the registry entry is kept and marked "Load failed", and you can retry.
+- **Uninstall is only available for plugins installed from the marketplace.** The "Uninstall" menu item is grayed out for local source plugins and for the core plugin `auto_mas_core`. The UI asks for confirmation before uninstalling, and uninstalling cannot be undone. If deleting the distribution fails during uninstall, the registry entry is kept and marked "Load failed", and you can retry.
 - **Deleting the local source directory does not delete the config.** After the directory is gone, the registry entry is marked `package_removed` (package missing), and `config/plugins/<plugin ID>.yaml` stays as it was.

@@ -15,7 +15,7 @@ MFW 是 AUTO-MAS 运行 MaaFramework 项目的通用引擎，位于 `app/task/Ma
 ## 术语
 
 - **项目与导入**
-  - **项目接口**：项目根的 `interface.json`，遵循 ProjectInterface（PI）协议。
+  - **项目接口**：项目根目录的 `interface.json`，遵循 ProjectInterface（PI）协议。
   - **外壳**：项目的图形或命令行程序，例如 MFAAvalonia、MXU、MFW-PyQt6、MaaPiCli。MAS 通过 MFW 引擎运行项目。
   - **来源目录**：用户选择导入的目录，记录在 `Info.Path`。
   - **投影**：按项目接口和投影规则选取导入或更新所需文件。

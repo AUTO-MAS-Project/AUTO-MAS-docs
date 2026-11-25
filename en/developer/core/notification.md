@@ -136,7 +136,7 @@ from app.models.notification import NotificationImage, image_reference
 
 `app/core/notify/manager.py` reads configuration and assembles senders. `app/core/notify/content.py` renders content for each target. `app/core/notify/dispatch.py` sends messages and combines results.
 
-1. **Prepare targets.** The host checks enabled channels in the current scope and builds a `ChannelTarget` for each recipient. Each target captures the destination, content capabilities, and required transport settings for the dispatch. Stable IDs are used for retry and display names are stored separately.
+1. **Prepare targets.** The host checks enabled channels in the current scope and builds a `ChannelTarget` for each recipient. Each target captures the destination, content capabilities, and required transport settings for the dispatch. Stable IDs (used for retries) and display names are stored separately.
 2. **Render content.** Choose the first available format in the target's preference order, then apply its title, signature, image, and summary handling. When the body exceeds the target's limit, the renderer can use the supplied fallback summary according to the target's policy. A rendering failure is recorded for that target.
 3. **Send.** Adapters in `app/core/notify/channels/` encode the protocol and attempt delivery. Retryable failures are retried up to the caller's limit. Each retry reuses the rendered content and target snapshot. Within a configuration transaction, dispatch runs in order in the same coroutine.
 4. **Combine results.** Return results in input order. Include channel discovery and target preparation failures while allowing other resolved targets to proceed.
@@ -184,7 +184,7 @@ The report entry point lives in `app/core/notify/manager.py`. `app/core/notify/t
   - `Notify.send_statistics()` is for sending standalone statistics and returns the dispatch result.
   - `Notify.dispatch_task_notification()` is for task code that already has the message and targets. It uses the host notification lifecycle.
 
-A task report briefly waits for a community sign-in summary to include. If sign-in finishes later, the coordinator sends the summary only to targets that have yet to receive it. Standalone sign-in notifications use `Notify.community` with the existing sign-in results. Callers submit results through their own entry points, and the host tracks which targets received the summary.
+A task report waits briefly to merge a community sign-in summary. If sign-in finishes later, the coordinator sends the summary only to targets that have yet to receive it. Standalone sign-in notifications use `Notify.community` with the existing sign-in results. Callers submit results through their own entry points, and the host tracks which targets received the summary.
 
 ## Extend Built-in Channels
 

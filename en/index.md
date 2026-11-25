@@ -42,9 +42,11 @@ If you run several accounts, you know how this goes: editing script configs one 
 
 **AUTO-MAS** takes that work off your hands. It does not replace MAA, M9A, or any other script. It drives them: swaps configs for you, launches them in order, watches their logs to tell a finished run from a hang, retries what failed, and records the results.
 
-- **Reliable**: it watches logs and handles errors as they happen, so tasks actually finish instead of only looking finished.
-- **Less work**: no hand-editing config files. A few clicks in the interface covers it.
-- **Works with almost anything**: any automation script fits, as long as it starts running on launch and writes logs.
+- **Reliable**: Watches script logs from start to finish to verify that every task actually completes.
+- **Less work**: No hand-editing config files. Accounts under a managed script can share one configuration, or each managed script can use its native configuration directly.
+- **Simple**: Dedicated support for mainstream scripts keeps setup simple and unlocks richer features; for general scripts, detailed MaaFramework guides and one-click presets from the template sharing site are ready to use.
+- **Universal**: Works with almost any automation script, as long as it starts running on launch and writes logs.
+- **More built in**: Includes scheduling queues, scheduled launches, virtual display support, and more to come!
 
 ## Special Notice
 

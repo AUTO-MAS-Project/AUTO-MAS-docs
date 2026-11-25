@@ -1,7 +1,7 @@
 # Service System
 
 ::: warning
-This page follows the `dev` branch implementation as of 2026-11-18. The plugin system is still changing; the interfaces are whatever your installed AUTO-MAS source says.
+This page follows the `dev` branch implementation as of 2026-11-18. The plugin system is still evolving; refer to your installed AUTO-MAS source for the exact interfaces.
 :::
 
 Services let plugins call each other's methods by name, without importing each other's code.
@@ -21,7 +21,7 @@ The old `ctx.provide` / `ctx.set` / `ctx.get` / `ctx.inject`, `ctx.service.miss(
 | Service name | A string; a namespace is recommended, such as `arknights.stage_info` |
 | Service | A method on the provider plugin. The consumer gets a callable for that method |
 | `requires` | Hard dependency. If the service is missing, this plugin cannot be enabled; when the provider is disabled, this plugin is disabled along with it |
-| `wants` | Optional dependency. If the service is missing, this plugin is enabled as usual and you degrade on your own |
+| `wants` | Optional dependency. If the service is missing, this plugin is enabled as usual and handles graceful degradation on its own |
 
 A service name can have only one provider.
 
@@ -68,10 +68,10 @@ class PLUGIN(BasePlugin):
 
     async def on_enable(self) -> None:
         now = self.services.require("clock.now")
-        logger.info(f"现在是 {await now()}")
+        logger.info(f"Current time: {await now()}")
 ```
 
-- Write `requires` as a tuple or list. **Do not write it as a string:** `requires = "clock.now"` is split into single characters.
+- Write `requires` as a tuple or list. **Do not write it as a string:** writing `requires = "clock.now"` iterates over individual characters.
 - When this plugin is enabled, the host first enables the plugins that provide these services, so `on_enable` can always get them.
 - `require(name)` raises `PluginError` when the service does not exist, and `payload["service"]` is the service name.
 
@@ -90,12 +90,12 @@ class PLUGIN(BasePlugin):
     async def build_report(self) -> str:
         now = self.services.get("clock.now")
         if now is None:
-            return "报告（无时间）"
+            return "Report (no timestamp)"
         try:
-            return f"报告 {await now()}"
+            return f"Report {await now()}"
         except PluginError:
-            # 提供方正在停用或重载，调用被拒绝
-            return "报告（无时间）"
+            # Provider is being disabled or reloaded; the call was rejected
+            return "Report (no timestamp)"
 ```
 
 - `get(name, default=None)` returns the default when it cannot get the service, and does not raise.
@@ -104,7 +104,7 @@ class PLUGIN(BasePlugin):
 
 ### Return values of calls
 
-The callable returned by `get` / `require` keeps the sync or async form of the original method: an async method must be `await`ed, and a sync method returns the result directly.
+The callable returned by `get` / `require` keeps the sync or async form of the original method: an async method must be awaited, and a sync method returns the result directly.
 
 ## What Happens on Enable, Disable, and Reload
 
@@ -133,13 +133,13 @@ For services in `wants`:
 - When the provider is enabled, disabled, or reloaded, you are **not** notified and not reloaded.
 - The host only records which optional services were missing at the time; there is no public query interface.
 
-So the pattern for optional dependencies is fixed: `get` each time you use it, check for empty, and degrade.
+So the pattern for optional dependencies is fixed: call `get` each time you use it, check for `None`, and degrade gracefully.
 
 ## When a Call Is Rejected
 
 A service call goes through the provider's call admission:
 
-- The provider is being disabled, uninstalled, or reloaded: new calls are rejected with a subclass of `PluginError`, with the message "plugin is being released and no longer accepts calls" (「插件正在释放，不再受理调用」). Calls already in progress are waited for until they end.
+- The provider is being disabled, uninstalled, or reloaded: new calls are rejected with a subclass of `PluginError` indicating that the plugin is being released and no longer accepts calls. Calls already in progress are waited for until they end.
 - The program is exiting: `get` returns the default, and `require` raises.
 
 So when calling another plugin's service for a long time from a background task, handle call failures and `get` again on the next loop.

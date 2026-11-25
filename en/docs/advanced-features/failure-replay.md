@@ -52,7 +52,7 @@ Select **Settings** in the left navigation, open the **Features** tab at the top
 
 [![Failure replay settings and default video capacity in the Chinese interface](/docs/img/tutorial-context-20261105-3c9448bdf/failure-replay-settings.png)](/docs/img/tutorial-context-20261105-3c9448bdf/failure-replay-settings.png)
 
-This example does not connect to OBS. The password input and save button only show where to enter a password; no password was saved, connection checked, or replay saved or played. Video capacity defaults to **1024 MiB** and is configured separately in the table below.
+This example does not connect to OBS. The password input and save button only show where to enter a password; no password was saved, no connection check was run, and no replay was saved or played. Video capacity defaults to **1024 MiB** and is configured separately in the table below.
 
 | Setting | What to enter |
 | --- | --- |
@@ -104,7 +104,7 @@ If OBS is unavailable, the connection fails, or saving fails, task notices and l
 2. Open the failed execution record and expand **Attachments (N)** in its log window.
 3. Play the video in the window, or click **Download** beside the attachment and open the saved file in a compatible player.
 
-Current versions have no separate failure-replay list or associated-replay button. Tests and diagnostics without an account record remain only in the OBS output directory, outside history attachments.
+Current versions do not have a separate failure-replay list or an associated-replay button. Tests and diagnostics without an account record remain only in the OBS output directory, outside history attachments.
 
 If the attachment says it was not saved or was reclaimed because of the storage limit, check capacity and the OBS original folder. Missing files and archive failures have their own warnings; logs and statistics remain available.
 
@@ -117,7 +117,7 @@ If the attachment says it was not saved or was reclaimed because of the storage 
 
 Videos are limited by **total size**, not copy count. A video larger than the whole limit may not be archived. Saving a lower limit immediately starts cleanup. Capacity cleanup removes videos while preserving the record's logs and statistics; expiration of a history record removes its attachments too.
 
-**Export a data backup includes history attachments that are still available at export time**, but not originals in the OBS output directory. Backups can contain game footage and account information; keep them private. To report a failure, download the relevant video and provide its matching log.
+**Exporting a data backup includes history attachments that are still available at export time**, but not originals in the OBS output directory. Backups can contain game footage and account information; keep them private. To report a failure, download the relevant video and provide its matching log.
 
 The OBS original folder can continue to grow after MAS reclaims its copies. Removing a MAS copy does not free the space used by an OBS original.
 

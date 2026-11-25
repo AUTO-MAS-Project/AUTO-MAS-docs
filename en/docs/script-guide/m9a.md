@@ -1,7 +1,7 @@
 # M9A Configuration Guide
 
 ::: tip Tip
-M9A is now one kind of [MFW script](/en/docs/script-guide/maafw): pick the M9A directory and AUTO-MAS recognises it and treats it as M9A. The managed-script page, account page, updates and the embedded copy all work like any other MFW project; this page only covers what is specific to M9A.
+M9A is now one kind of [MFW script](/en/docs/script-guide/maafw): pick the M9A directory and AUTO-MAS recognizes it and treats it as M9A. The managed-script page, account page, updates, and the embedded copy all work like any other MFW project; this page only covers what is specific to M9A.
 :::
 
 ## What is M9A?
@@ -28,7 +28,7 @@ You **do not** need to open M9A once by hand first, nor install the .NET runtime
 ## Configure the managed script
 
 1. Go to **Managed scripts**, click **New managed script** and choose **MaaFW** (choosing **M9A** does the same; the two only differ in the default name).
-2. Under **Project directory**, click **Pick a local directory** and select the extracted M9A directory. AUTO-MAS imports it as its own copy, recognises it as M9A, and the script type becomes **M9A** automatically.
+2. Under **Project directory**, click **Pick a local directory** and select the extracted M9A directory. AUTO-MAS imports it as its own copy, recognizes it as M9A, and the script type becomes **M9A** automatically.
 3. Pick the server under **Game resource** (official / Bilibili / global…), and choose the emulator and instance under **Emulators**.
 4. Everything else — run configuration, project update (GitHub / MirrorChyan, auto update before a run) — is described in the [MFW Project Configuration Guide](/en/docs/script-guide/maafw).
 
@@ -62,7 +62,7 @@ When the managed script's game resource is the official server and an account ha
 
 ### Once a day / once a month
 
-**Skip once done today** / **Skip once done this month** under **Run configuration** on the managed-script page replace the old M9A script's "Psychube once a day" and "Limbo once a month" switches: add **每日心相（意志解析）** to the daily list and **自动深眠**, **自动醒梦** to the monthly list, and they are skipped automatically after succeeding once that day / month. Any other task can be added as well.
+**Skip once done today** / **Skip once done this month** under **Run configuration** on the managed-script page replace the old M9A script's "Psychube once a day" and "Limbo once a month" switches: add **每日心相（意志解析）** to the daily list and **自动深眠** and **自动醒梦** to the monthly list, and they are skipped automatically after succeeding once that day / month. Any other task can be added as well.
 
 ## Upgrading from the old M9A script
 
@@ -72,18 +72,18 @@ The **M9A script** in older versions of AUTO-MAS was a separate adapter. It is m
 - The old "server" was per account, the new one is per managed script: the managed script takes the server used by most of its enabled accounts; accounts on a different server are **disabled** with the reason written in their note — move them to another managed script (or change the managed script's resource) and re-enable them.
 - Old automatic-update settings migrate to project updates. Current automatic updates run before a task; disabled updates remain **Off**. Check the source and project-specific CDK after migration: routine updates do not fall back to AUTO-MAS's own update credentials.
 - The old "run time limit" was a log-stall threshold; the new one is a hard limit on the whole run, so it is set to 120 minutes across the board.
-- The configuration is backed up before migrating as `config/ScriptConfig.json.m9a-legacy-<timestamp>.bak` (the last three are kept); a notification listing the results pops up after start-up.
+- The configuration is backed up before migrating as `config/ScriptConfig.json.m9a-legacy-<timestamp>.bak` (the last three are kept); a notification listing the results pops up after startup.
 - Config backups made by the old adapter (`data/<managed script ID>/M9ABackups/`) are left in place and no longer shown under Config restore.
 
 ::: warning The first run after migration
-Imports a copy from the original M9A directory; duration depends on project size and disk performance. Keep the source while source following is enabled, or when it may be needed to rebuild a missing copy.
+AUTO-MAS imports a copy from the original M9A directory; how long this takes depends on project size and disk performance. Keep the source while source following is enabled, or when it may be needed to rebuild a missing copy.
 :::
 
 ## FAQ
 
 ### I created a generic MFW script — why did it turn into M9A?
 
-The project decides the type: if the `interface.json` in the directory is M9A's (MirrorChyan rid `M9A`, or GitHub pointing at `MAA1999/M9A`), the managed script is recognised as M9A and gets automatic start / close game and account switching. After a successful import, the directory is locked. Create a new managed script to use a different project.
+The project decides the type: if the `interface.json` in the directory is M9A's (MirrorChyan rid `M9A`, or GitHub pointing at `MAA1999/M9A`), the managed script is recognized as M9A and gets automatic start / close game and account switching. After a successful import, the directory is locked. Create a new managed script to use a different project.
 
 ### A task failed — how do I look into it?
 

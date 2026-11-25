@@ -2,12 +2,13 @@
 
 Adapters that manage a script's native configuration describe task configuration in two layers: the **base** and the **overlay**. During a task, the overlay overrides base fields to produce the effective configuration:
 
-
+```text
 task_config = base ⊕ overlay
+```
 
 The `overlay` has higher precedence than `base`. Without an overlay, the task uses the base directly. The overlay exists only for the task run and does not change the base source. This page is the semantic contract for developers and documentation maintainers.
 
-Availability of the three base sources and the regular-configuration override depends on each adapter's UI and implementation. A compatibility field is not evidence of an effective switch; see [Adapter Boundaries](#adapter-boundaries). The configuration framework's transaction workspace is also distinct from this business overlay; see [Configuration Framework](../../core/config.md).
+Availability of the three base sources and **Override Standard Configuration** depends on each adapter's UI and implementation. A compatibility field is not evidence of an effective switch; see [Adapter Boundaries](#adapter-boundaries). The configuration framework's transaction workspace is also distinct from this business overlay; see [Configuration Framework](../../core/config.md).
 
 ## Core Entities
 
@@ -33,7 +34,7 @@ The base is the main task configuration. It persists on disk across tasks and ha
 | **Account level (independent configuration)** | Account | Each account has its own independent base configuration | Account |
 | **Native** | No MAS level | The base comes directly from the external script; MAS does not maintain a parallel copy | External script |
 
-Managed-script level and Account level are storage levels for base. Native is a third source alongside them, not another MAS level.
+Managed-script level and Account level are storage levels for the base layer. Native is a third source alongside them, not another MAS level.
 
 ### Boundaries of the Three Sources
 
@@ -41,7 +42,7 @@ The source determines the base owner, not every field that will be effective dur
 
 - Managed-script level means that the base can be shared by multiple accounts. It does not guarantee identical final runtime configurations.
 - Account level isolates the base per account. It does not prevent that account from using an overlay.
-- Native means that MAS uses the external script's existing configuration as base and does not mirror or maintain a parallel model.
+- Native means that MAS uses the external script's existing configuration as the base and does not mirror or maintain a parallel model.
 
 Shared configuration therefore does not mean that changing one file always produces the same runtime result for every account. An account with an enabled overlay still uses its own override fields for that run.
 
@@ -65,7 +66,7 @@ The layers compose as follows:
 | Account level (independent configuration) | Use the independent base | Independent base + the current account's overlay |
 | Native | Use the external script's native configuration | Native configuration + MAS standard-field overrides |
 
-“Override” is temporary for the task run and must not be implemented as a permanent write to base. Only a deliberate save in the external script's own configuration UI belongs to the native base.
+"Override" is temporary for the task run and must not be implemented as a permanent write to the base. Only a deliberate save in the external script's own configuration UI belongs to the native base.
 
 ## Resolution Flow
 
@@ -90,7 +91,7 @@ The current implementations have these exceptions. The presence of a field does 
 | BetterGI | The UI offers independent and native configuration. The legacy `shared` value uses the current account's independent configuration, without sharing between accounts. |
 | HSR | The base comes from shared plans, account plans, or upstream native configuration. There is no per-account `ConfigFile` copy, and runs do not consume `Info.IfQuickConfig`. |
 | BAAH | Runs use the file bound by the account's `Info.ConfigName`, not `Info.Base` or `Info.IfQuickConfig`. Managed emulator settings, stage plans, and event priority have separate rules; a source value does not guarantee that configuration files stay unchanged. |
-| Whimbox | Both `shared` and `independent` currently use this account's page settings; they do not establish sharing between accounts. With `native`, enabling overrides temporarily writes the panel's values and restores them afterwards. |
+| Whimbox | Both `shared` and `independent` currently use the current account's page settings; they do not establish sharing between accounts. With `native`, enabling overrides temporarily writes the panel's values and restores them afterwards. |
 
 ## The zzz-od Model
 
@@ -107,11 +108,11 @@ Therefore:
 Use these terms consistently:
 
 - `base`: Base layer; describe it to users as base configuration.
-- `overlay`: Overlay layer; expose it to users as “Override Standard Configuration”.
+- `overlay`: Overlay layer; expose it to users as "Override Standard Configuration".
 - Managed script and Account.
 - Base sources: Managed-script level (shared configuration), Account level (independent configuration), and Native.
 
-The words “script” and “user” remain valid in ordinary contexts, such as “external script configuration” or “credentials entered by the user”. They must not be used as names for the MAS entities or base sources above.
+The words "script" and "user" remain valid in ordinary contexts, such as "external script configuration" or "credentials entered by the user". They must not be used as names for the MAS entities or base sources above.
 
 ## Related Discussion
 

@@ -14,8 +14,8 @@ In short, it runs your whole multi-account batch in one go.
 
 1. Go to the [download page](/en/download/auto-mas) and get the latest package.
 2. Install it according to the package type:
-  - Installer: extract the archive and run `AUTO-MAS-Setup.exe`, then follow the installer.
-  - Portable: extract the archive to wherever you want it installed, then run `AUTO-MAS.exe` to start the app.
+   - Installer: extract the archive and run `AUTO-MAS-Setup.exe`, then follow the installer.
+   - Portable: extract the archive to wherever you want it installed, then run `AUTO-MAS.exe` to start the app.
 
 ::: tip What those words in the filename mean
 
@@ -65,8 +65,14 @@ Almost every setting in the app comes with a note next to it. Work through each 
 
 Two things worth remembering for when something goes wrong:
 
-- **To back up configuration**: use **Settings → Advanced → Export a data backup**. The export contains sensitive configuration in plaintext; keep it private and do not attach it to bug reports. For a manual backup, exit the app first, then copy `data`, `config`, and `history` from the installation directory. Credentials copied in encrypted form may need to be entered again after moving computers or reinstalling Windows; see [password storage](/en/docs/FAQ#are-my-account-passwords-safe). Back up script installations, emulators, and game data separately. Custom appearances and standalone mascots are stored in the Windows user-data directory and do not move with the installation folder; keep their ZIP packages separately.
-- **To report an error**: use **Settings → Advanced → Export a log archive**. Initialization failure pages also offer log export. Raw logs are at `debug/app.log` (backend), `debug/frontend.log` (interface), and `debug/runtime/` (Runtime) in the installation directory. Check attachments and remove account details, credentials, and other private information before sharing.
+- **To back up configuration**:
+  - **Recommended**: Use **Settings → Advanced → Export a data backup**. The export contains sensitive configuration in plaintext—keep it private and do not attach it to bug reports.
+  - **Manual backup**: Exit the app first, then copy `data`, `config`, and `history` from the installation directory. Credentials copied in encrypted form may need to be entered again after moving computers or reinstalling Windows; see [password storage](/en/docs/FAQ#are-my-account-passwords-safe).
+  - **Back up separately**: Script installations, emulators, and game data must be backed up on their own. Custom appearances and standalone mascots are stored in the Windows user-data directory and do not move with the installation folder, so keep their ZIP packages separately.
+- **To report an error**:
+  - **Recommended**: Use **Settings → Advanced → Export a log archive** (initialization failure pages also offer log export).
+  - **Raw log locations**: `debug/app.log` (backend), `debug/frontend.log` (interface), and `debug/runtime/` (Runtime) in the installation directory.
+  - **Privacy check**: Review attachments and remove account details, credentials, and other private information before sharing.
 
 ### Find the backup and log export entries
 

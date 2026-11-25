@@ -99,7 +99,7 @@ The sending address and the recipient address can be the same. Mailing yourself 
 - Do not share it with anyone, and rotate it now and then.
 - Some providers show it **only once**, so save it as soon as you get it. Some expire, and notifications silently stop when they do, so replace it before then.
 - It is stored encrypted on your machine, tied to your Windows account. **After changing computers or reinstalling Windows, you have to enter it again.**
-  :::
+:::
 
 ## ServerChan (Push to Your Phone)
 
@@ -147,11 +147,52 @@ You do have to register WeCom, but that is a one-time step just to obtain a bot 
 
 ## China Mobile 5G SMS
 
-This channel requires a China Mobile number, a phone that supports 5G messaging, and an activated 5G messaging service.
+### Prerequisites
 
-1. Obtain the Channel API Key from the **新消息ClawBot** service in your phone’s messaging app. Phone-side examples and the SMS authorization method are in the [Chinese guide](/docs/advanced-features/notification#中国移动新消息).
-2. Open **Settings → Notifications → China Mobile 5G SMS**.
-3. Enter the complete Channel API Key and enable the channel. Do not add spaces, line breaks, or other text from the message.
+Before using China Mobile 5G SMS (中国移动新消息), make sure that:
+
+1. Your SIM card uses a China Mobile number.
+2. Your phone supports 5G Messaging (RCS / 5G 消息).
+3. The 5G Messaging service is activated on your line.
+
+### Step 1: Obtain a Channel API Key
+
+The Channel API Key is the credential used to connect to China Mobile 5G Messaging. You can obtain it using either method below.
+
+#### Method 1: Via the "新消息ClawBot" App Account
+
+**Note: Screenshots are from a Xiaomi phone; menus on other brands may differ slightly.**
+
+1. Confirm that your active SIM card is a China Mobile number.
+2. Open your phone's system Messaging settings and go to **App Accounts** (应用号).
+   ![cmcc-1](../../../docs/img/cmcc-nermsg/1.jpg)
+3. Search for and open **新消息ClawBot**.
+   ![cmcc-2](../../../docs/img/cmcc-nermsg/2.jpg)
+   If 5G Messaging is not yet activated, follow the on-screen prompts to enable it.
+4. Locate and copy the **Channel API Key** inside **新消息ClawBot**.
+   ![cmcc-3](../../../docs/img/cmcc-nermsg/3.jpg)
+
+   A valid Channel API Key usually starts with `ak_` or `app_`. Make sure you copy the complete key without extra spaces, line breaks, or surrounding text from the message.
+
+#### Method 2: Via SMS Authorization
+
+1. Using your China Mobile number, send an SMS containing `绑定龙虾` to `12520098`.
+2. Wait for the reply SMS.
+3. Open the reply SMS and tap **立即授权** (Authorize Now).
+4. Follow the on-screen instructions to complete authorization and copy your Channel API Key.
+
+### Step 2: Configure China Mobile 5G SMS
+
+1. Open AUTO-MAS and go to **Settings > Notifications** (设置 > 通知设置).
+2. Open the **China Mobile 5G SMS** (中国移动5G短信) channel.
+3. Paste the Channel API Key you copied in Step 1 into the input field and enable the channel.
 4. Send a test notification and confirm delivery on your phone.
 
-The current channel supports **global notifications only**; it has no per-account entry. Task-result delivery still follows the global notification timing setting. Keep the API Key private, including in screenshots and diagnostic attachments.
+::: tip Configuration Scope
+China Mobile 5G SMS currently supports **global notifications only** and has no per-account configuration entry. Whether task results are sent still depends on the global **Task result timing** (推送任务结果时机) setting.
+:::
+
+### Security Notes
+
+- The Channel API Key is a sensitive credential. Do not expose it in screenshots, logs, repositories, or public chats.
+- Do not add leading or trailing spaces or extra characters when pasting the key.

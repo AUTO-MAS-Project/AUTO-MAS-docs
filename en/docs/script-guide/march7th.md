@@ -65,10 +65,10 @@ Once you pick the script root directory, the paths under **script configuration*
 8. Find the account you just created, click **Edit**, and enter the **General Script** configuration page.
 ![AUTO-MAS configuration 8](/docs/img/script-guide/March7thAssistan/AUTO-MAA-8.png)
 
-9. Find **General Configuration** in the upper-right corner and click it. When the general script configuration screen appears and March7thAssistant is launched, the general script can be configured normally.
+9. Find **General Configuration** in the upper-right corner and click it. When the general script configuration overlay appears and March7thAssistant launches, you can configure it normally.
 ![AUTO-MAS configuration 9](/docs/img/script-guide/March7thAssistan/AUTO-MAA-9.png)
 
-10. After configuring **March7thAssistant**, click **Save Configuration**, then click **Save Changes** again. March7thAssistant is now fully configured in MAS.
+10. After configuring **March7thAssistant**, click **Save Configuration**, then click **Save Changes** again. March7thAssistant is now fully configured in AUTO-MAS.
 ![AUTO-MAS configuration 10](/docs/img/script-guide/March7thAssistan/AUTO-MAA-10.png)
 
 11. To start **March7thAssistant** automatically on a schedule, read [Scheduling Queues](/en/docs/task-scheduler).
