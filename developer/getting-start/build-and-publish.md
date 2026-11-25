@@ -1,72 +1,78 @@
 # 构建与发布
 
-本页已过时，等待重写。
+::: warning 提示
+本页部分内容仍在持续整理更新中，具体流程与参数请以主仓库最新的工作流和脚本为准。
+:::
 
 ## 本地构建
 
 执行本地构建前，请先完成[环境配置](./environment.md)。
 
+在仓库根目录执行以下命令：
+
 ```powershell
-Set-Location frontend
-yarn install --immutable
-yarn build
+cd frontend
+vp install --frozen-lockfile
+vp run build
 ```
 
-仅编译 Windows x64 发行版，不预置 Runtime，不会自动发布。相关产物位置：
+该命令仅编译 Windows x64 桌面包，不内置 Runtime，也不会触发发布。构建完成后，可直接运行的程序位于 `frontend/dist/win-unpacked/`。
 
-- Windows x64
-  - 可直接运行的软件包：`frontend/dist/win-unpacked/`
+## CI 构建
 
-## CI 构筑
+当 PR 创建、更新或重新打开，以及代码推送到 `dev` 或 `main` 时，[CI 构建产物][ci-package]工作流会自动生成未签名的 Windows x64 便携 ZIP 包（仅修改 Markdown 或 `docs/` 时会自动跳过）。你也可以在 GitHub Actions 中手动触发该工作流，并在运行详情页的 Artifacts 区域下载构建产物。
 
-「CI 构建产物」会在 PR 打开、更新或重新打开，以及推送到 `dev` 或 `main` 时生成未签名的 Windows x64 便携 ZIP。仅修改 Markdown 或 `docs/` 的自动触发会跳过构建。也可以在 GitHub Actions 手动运行，并在运行详情的 Artifacts 下载 ZIP。[CI 构建产物][ci-package]
+| 构建模式 | 适用场景 | 包含内容与后端来源 |
+| --- | --- | --- |
+| 普通验证包 | 验证 PR 或指定分支的代码 | 包含本次构建的前端与 Electron，包内 `repo/` 预置同一提交的后端代码；Runtime 需另行准备。 |
+| Alpha 测试包 | 在 `dev` 手动运行并勾选 `alpha` | 附带校验过的 Runtime，启动时从 `dev` 准备后端。桌面端版本号为 `vX.Y.Z-alpha.<运行编号>`，包内 `build-source.json` 会记录前端提交、后端分支、Runtime 版本和 SHA-256。 |
 
-| 模式         | 何时使用                        | 包内内容与后端来源                                                                                                                                             |
-| ------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 普通验证包   | 验证 PR 或指定分支的代码        | 前端和 Electron 来自本次构建，包内 `repo/` 预置同一提交的后端。Runtime 需另行准备。                                                                            |
-| Alpha 测试包 | 在 `dev` 手动运行并勾选 `alpha` | 随附校验过的 Runtime，启动时从 `dev` 准备后端。桌面端使用 `vX.Y.Z-alpha.<运行编号>`，包内 `build-source.json` 记录前端提交、后端分支、Runtime 版本和 SHA-256。 |
-
-涉及 Electron 或打包时，优先下载对应提交的验证包检查。其余 PR 验证按改动范围选择，参见[测试与验证](./testing.md)和[主仓 CI 检查说明][ci-skill]。
+如果改动涉及 Electron 或打包配置，建议优先下载对应提交的验证包实测。其他 PR 验证方式可参考[测试与验证](./testing.md)和[主仓 CI 检查说明][ci-skill]。
 
 ## 维护者发版
 
-主程序发版需要维护者在 GitHub Actions 手动触发两次。先运行「准备发版」，由 CI 生成发版 PR。审核并合并该 PR 后，再运行「构建并发布应用程序」，由 CI 完成构建、签名、创建 GitHub Release 和分发。常规 PR 和推送会按上一节的条件生成验证包，定时任务负责入账更新日志碎片。[准备发版][prepare-release] · [构建并发布应用程序][build-app]
+主程序发版由维护者在 GitHub Actions 分两步手动触发：先运行[准备发版][prepare-release]生成发版 PR，审核合并后再运行[构建并发布应用程序][build-app]，由 CI 自动完成构建、签名、创建 GitHub Release 与多渠道分发。
 
 ### 1. 准备并审核发版 PR
 
-日常改动按[版本记录](./development-specifications.md#版本记录)提交碎片。`dev` 每天北京时间 23:30 入账已合并的碎片，发布线上的剩余碎片由「准备发版」处理。版本号和生成的版本文件统一在发版 PR 中更新。[更新日志入账][absorb-changelog]
+日常改动按[版本记录](./development-specifications.md#版本记录)提交更新日志碎片。[更新日志入账][absorb-changelog]工作流每天北京时间 23:30 会汇总 `dev` 上已合并的碎片，其余待入账碎片会在「准备发版」时统一处理，版本号与版本文件也在发版 PR 中一并更新。
 
-在 GitHub Actions 运行「准备发版」，从 `dev` 或目标发布线最新已发布版本对应的 `release/<版本>` 分支启动。工作流根据所选分支可达的 tag 计算版本，编译剩余碎片、同步版本文件，并向所选分支创建 `Release <版本>` PR。[准备发版][prepare-release]
+在 GitHub Actions 中从 `dev` 或目标发布线最新正式版对应的 `release/<版本>` 分支触发[准备发版][prepare-release]后，工作流会根据可达 tag 计算版本号、汇总剩余碎片、同步版本文件，并自动创建 `Release <版本>` PR。
 
-| `kind`     | 用途                                 | 版本规则                                                                        |
-| ---------- | ------------------------------------ | ------------------------------------------------------------------------------- |
-| `beta`     | 在 `dev` 发布公测                    | 已有公测时递增 `beta.N`。上次为正式版时，开启下一次版本的 `beta.1`。            |
-| `stable`   | 在 `dev` 准备转正                    | 将最后一个 `vX.Y.Z-beta.N` 转为 `vX.Y.Z`。                                      |
-| `patch`    | 从目标发布线的最新正式版分支发布补丁 | 在该正式版上递增 `Z`。                                                          |
-| `explicit` | 手动指定版本                         | 填写 `version`。版本须大于当前分支可达的最新版本号，且不能与仓库已有 tag 重号。 |
+| `kind` 参数 | 用途 | 版本计算规则 |
+| --- | --- | --- |
+| `beta` | 在 `dev` 发布公测版 | 已有公测版时递增 `beta.N`；若上一版本为正式版，则开启下个版本的 `beta.1`。 |
+| `stable` | 在 `dev` 准备正式版 | 将最近的 `vX.Y.Z-beta.N` 转为正式版 `vX.Y.Z`。 |
+| `patch` | 在最新正式版分支发布补丁 | 在该正式版基础上递增修订号 `Z`。 |
+| `explicit` | 手动指定版本号 | 需填写 `version`，且必须大于当前分支可达的最新版本，不能与已有 tag 冲突。 |
 
-合并发版 PR 前，核对版本号、公告、亮点，以及工作流摘要中需要人工确认的提交。转正时由维护者按分支规范把已审核的 `dev` 版本合入 `main`，再从 `main` 发布。公测从 `dev` 发布，补丁从已合并发版 PR 的 `release/*` 发布。[主仓分支规范][branch-rules]
+合并发版 PR 前，请仔细核对版本号、发布公告、更新亮点以及工作流摘要中提示需人工确认的提交：
+
+- **正式版**：由维护者按[主仓分支规范][branch-rules]将已审核的 `dev` 合入 `main`，再从 `main` 发布。
+- **公测版**：直接从 `dev` 发布。
+- **补丁版**：从已合并发版 PR 的 `release/*` 分支发布。
 
 ### 2. 构建、签名与分发
 
-在包含发版 PR 的发布分支上手动运行「构建并发布应用程序」。工作流会校验版本和公告，检查待入账的碎片、重复 tag 以及同名发布分支。若发版 PR 合并后又有改动进入「未发布」，先重新运行「准备发版」。工作流配置与参数以所选分支上的版本为准。[发布工作流][build-app]
+在已合并发版 PR 的分支上手动触发[构建并发布应用程序][build-app]。工作流会先校验版本号、公告、待入账碎片、重复 tag 和同名发布分支（若合并后又有新改动进入「未发布」，需先重新运行「准备发版」），随后依次完成以下流程（具体配置以所选分支上的工作流为准）：
 
-1. 读取 `res/runtime-version.txt`，从 Runtime 的独立发行版下载 exe，校验 SHA-256 后放入桌面包。这个版本是安装包内置的 Runtime，完整初始化还会检查线上版本。[Runtime 版本说明][local-build]
-2. 通过 SignPath 签名 `AUTO-MAS.exe`，再用 Inno Setup 制作安装程序。正式版和补丁版的安装程序也经 SignPath 签名，公测版只签名主程序。工作流等待签名完成后继续。[发布工作流][build-app]
-3. 生成 `AUTO-MAS-<版本>-x64.zip`（便携包）和 `AUTO-MAS-Setup-<版本>-x64.zip`（安装包），创建版本 tag 与 `release/<版本>`，并把两个 ZIP 上传至 GitHub Release。工作流另行触发 CNB 分发，随后把安装包推送到自建源与 Mirror 酱。[发布工作流][build-app]
+1. **打包内置 Runtime**：读取 `res/runtime-version.txt`，从独立发行版下载对应 Runtime 可执行文件，校验 SHA-256 后打入桌面包（详见 [Runtime 版本说明][local-build]；完整初始化时仍会检查线上版本）。
+2. **签名与制作安装包**：通过 SignPath 为 `AUTO-MAS.exe` 签名，再使用 Inno Setup 打包安装程序。正式版与补丁版的安装程序也会经 SignPath 签名，公测版仅签名主程序。
+3. **归档与多渠道分发**：生成便携包 `AUTO-MAS-<版本>-x64.zip` 与安装包 `AUTO-MAS-Setup-<版本>-x64.zip`，自动创建版本 tag 与 `release/<版本>` 分支，并上传至 GitHub Release；随后触发 CNB 分发，并将安装包推送到自建源与 Mirror 酱。
 
-CNB 分发使用发版所选分支的配置。当前 `dev` 中的 `.cnb.yml` 为 `main` 和 `dev` 定义了发布入口。从 `release/*` 发补丁时，请查看所选分支的 CNB 配置，确认各渠道的实际发布结果。[CNB 配置][cnb-config]
+补充说明：
 
-当前 `dev` 的自建源上传参数为 `datacenter_upload_mode`，默认 `r2`，也可选 `tus`。自建源的公测版只更新公测渠道，正式版和补丁版同时更新正式与公测渠道。[自建源发布配置][build-app]
-
-Runtime 由 `AUTO-MAS-Runtime` 仓库独立发版。主仓的「构建并签名 Runtime」接收该仓的发版请求，核对源码提交和 tag 后构建并签名，再将产物交回 Runtime 发版流程。主程序发版直接使用已发布的 Runtime。[Runtime 签名工作流][runtime-signing]
+- **CNB 分发**：使用发版所选分支的 [CNB 配置][cnb-config]。目前 `dev` 中的 `.cnb.yml` 为 `main` 和 `dev` 定义了发布入口；从 `release/*` 发补丁时，请先确认该分支的 CNB 配置及各渠道发布情况。
+- **自建源上传**：当前 `dev` 的上传参数为 `datacenter_upload_mode`（默认 `r2`，可选 `tus`）。公测版仅更新公测渠道，正式版与补丁版会同时更新正式与公测渠道。
+- **Runtime 发版**：Runtime 在 `AUTO-MAS-Runtime` 仓库独立发版；主仓的[构建并签名 Runtime][runtime-signing]工作流负责核对源码提交与 tag、完成构建签名并将产物交回 Runtime 发版流程，主程序发版直接复用已发布的 Runtime。
 
 ### 3. 已发布版本的后端热更新
 
-已安装的发行版通过 Runtime 跟踪自身的 `release/<版本>`，并继续使用安装包内的前端。小范围纯后端修复先合入 `dev`，再通过 cherry-pick PR 合入对应发行版分支，避免带入其他 `dev` 提交。涉及前端或 Electron 的修复须随新的桌面包发布。需要推出新版本号的补丁时，从该发布线上最新的正式版分支重新走准备与发布流程。[主仓分支规范][branch-rules]
+已安装的发行版会通过 Runtime 跟踪自身对应的 `release/<版本>` 分支，继续沿用安装包内的前端。
 
-[frontend-package]: https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/frontend/package.json
-[local-build-script]: https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/scripts/build-local-package.ps1
+- **纯后端小范围修复**：先合入 `dev`，再按[主仓分支规范][branch-rules]通过 Cherry Pick PR 同步到对应 `release/<版本>` 分支，避免带入无关改动。
+- **涉及前端或 Electron 的修复**：无法通过热更新下发，必须随新的桌面包发布；若需推出新版本号的补丁，请从该发布线最新的正式版分支重新走完准备与发布流程。
+
 [local-build]: https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/scripts/README.md
 [ci-package]: https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/.github/workflows/ci-package.yml
 [ci-skill]: https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/.agents/skills/mas-ci-checks/SKILL.md
