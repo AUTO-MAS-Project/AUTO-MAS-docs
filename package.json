@@ -21,13 +21,5 @@
     "typescript": "^5.5.3",
     "vitepress": "^1.6.3"
   },
-  "private": true,
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "esbuild"
-    ],
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
-  }
+  "private": true
 }

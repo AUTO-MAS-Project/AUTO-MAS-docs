@@ -29,15 +29,15 @@ AUTO-MAS Docs 是一个基于 **VitePress** 构建的文档站点，提供 **[AU
 
 ## 本地开发
 
-以下命令均在仓库根目录运行，建议使用 Node.js 20。
+以下命令均在仓库根目录运行。
 
 ### 选择包管理器
 
-| 包管理器             | 锁文件              | 安装命令                         |
-| -------------------- | ------------------- | -------------------------------- |
-| npm（推荐）          | `package-lock.json` | `npm ci`                         |
-| pnpm 8.6.0           | `pnpm-lock.yaml`    | `pnpm install --frozen-lockfile` |
-| Yarn Classic 1.22.22 | `yarn.lock`         | `yarn install --frozen-lockfile` |
+| 包管理器                            | 锁文件              | 本地安装       | 严格按锁文件安装                 |
+| ----------------------------------- | ------------------- | -------------- | -------------------------------- |
+| npm（推荐）                         | `package-lock.json` | `npm install`  | `npm ci`                         |
+| pnpm 11（Node.js 22.13 或更新版本） | `pnpm-lock.yaml`    | `pnpm install` | `pnpm install --frozen-lockfile` |
+| Yarn Classic 1.22.22                | `yarn.lock`         | `yarn install` | `yarn install --frozen-lockfile` |
 
 ### 开发与验证命令
 
