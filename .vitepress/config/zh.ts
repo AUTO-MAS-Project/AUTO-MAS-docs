@@ -37,6 +37,7 @@ export const zhThemeConfig = {
                         items: [
                             { text: "游戏签到工具", link: "/docs/advanced-features/game-sign" },
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
+                            { text: "桌面分身", link: "/docs/advanced-features/desktop-session" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
                             { text: "失败回放", link: "/docs/advanced-features/failure-replay" },
                             { text: "MCP 服务", link: "/docs/advanced-features/mcp" },

@@ -6,6 +6,12 @@ date: 2026-06-17
 
 # HSR Honkai Star Rail Configuration Guide
 
+## Desktop session
+
+**Supported.** Use March7thAssistant or SRA with the PC client.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## What the HSR Script Type Is For
 
 Honkai: Star Rail has two widely used third-party scripts, and each is better at different things:

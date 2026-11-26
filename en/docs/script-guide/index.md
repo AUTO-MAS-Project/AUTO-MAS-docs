@@ -4,6 +4,33 @@ Find the game you play below, open its guide, and follow along.
 
 Your game is not in the list? See [General Scheduling](/en/docs/script-guide/general). As long as the script can start running a task on startup and writes a log, AUTO-MAS can manage it.
 
+## Desktop Session compatibility {#desktop-session}
+
+Desktop Session is an experimental feature for Windows x64 desktop builds. The table reflects the development build at commit `be8ef6d5c`. Run emulator games and their managed scripts in the main session.
+
+A queue can run in Desktop Session if every managed script meets the conditions below and its completion action is set to **Do nothing**. See the [Desktop Session guide](/en/docs/advanced-features/desktop-session) for startup and troubleshooting.
+
+| Managed script | Desktop Session | Conditions and notes |
+| --- | --- | --- |
+| [MAA](/en/docs/script-guide/maa#desktop-session) | Unsupported | Run in the main session. |
+| [MaaEnd](/en/docs/script-guide/maaend#desktop-session) | Conditional | Use a PC (Win32) controller. Run emulator tasks in the main session. |
+| SRC | Unsupported | Run in the main session. |
+| [M9A](/en/docs/script-guide/m9a#desktop-session) | Depends on the MFW controller | Run the usual ADB configuration in the main session. |
+| [MFW projects](/en/docs/script-guide/maafw#desktop-session) | Conditional | Use a Win32 controller. Run ADB and other controllers in the main session. |
+| [General scripts](/en/docs/script-guide/general#desktop-session) | Conditional | Use it for PC tasks only. If MAS launches the game, use an executable or URL. Keep emulator tasks in the main session even if the script starts the emulator itself. |
+| [ok-ww](/en/docs/script-guide/okww#desktop-session) | Supported | For the Wuthering Waves PC client. |
+| ok-nte | Supported | For the Neverness to Everness PC client. |
+| [HSR](/en/docs/script-guide/hsr#desktop-session) | Supported | Use March7thAssistant or SRA with the PC client. |
+| [BetterGI](/en/docs/script-guide/bettergi#desktop-session) | Conditional | Turn off update takeover. If BetterGI is configured to run with administrator privileges, start AUTO-MAS as administrator. |
+| Zenless Zone Zero One Dragon (ZZZ-OD) | Conditional | Start AUTO-MAS as administrator. The script's post-task shutdown is skipped in the desktop session. |
+| BAAH | Unsupported | Run in the main session. |
+| Whimbox | Conditional | Run AUTO-MAS as administrator. Requires the Desktop Session plugin API and Whimbox Adapter 0.1.2 or later. |
+| MSS | Unsupported | Run in the main session. |
+
+Windows verification used the same 0.1.2 wheel and the plugin manager to upgrade from 0.1.1 on two SDK 5.9.0b1 hosts. The host with the Desktop Session API supports session selection. The older host runs Whimbox in the main session and preserves the saved selection for a later host upgrade.
+
+On Windows 11, the elevated AUTO-MAS 5.9.0-beta.1 host (commit `46d8a148f`) ran adapter 0.1.2 with Whimbox App 2.0.6 and backend 3.1.5. Dispatching a single script or a queue from Desktop Session started the Whimbox backend in the child session. Starting a single script after restarting AUTO-MAS also used its saved session. A same-name process on the main desktop survived both task cancellation and disconnection. The game was not installed for this test.
+
 ## Guide Index
 
 ### [MAA](/en/docs/script-guide/maa)

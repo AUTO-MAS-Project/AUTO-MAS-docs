@@ -18,6 +18,12 @@ If your script is not in the template list, you have to write the monitoring rul
 General scheduling is also usually less stable than a script AUTO-MAS supports directly. That is how the mechanism works, so go easy on the people who share configs.
 :::
 
+## Desktop session
+
+**Conditional.** Use it for PC tasks only. If MAS launches the game, use an executable or URL. Keep emulator tasks in the main session even if the script starts the emulator itself.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## How It Works
 
 Understand these two things and you can diagnose most problems yourself.

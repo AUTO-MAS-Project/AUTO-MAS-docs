@@ -6,6 +6,12 @@ date: 2026-08-27
 
 # BetterGI Configuration Guide
 
+## Desktop session
+
+**Conditional.** Turn off update takeover. If BetterGI is configured to run with administrator privileges, start AUTO-MAS as administrator.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## Two things to know first
 
 **BetterGI** is a third-party tool for Genshin Impact. It can run One Dragon (daily commissions, resin clearing, Ley Line Outcrops, domains, world boss kills, etc.) and many advanced features. It works in a **native GUI configuration** mode: accounts are managed natively by BetterGI, and complex settings are configured inside BetterGI's own interface.

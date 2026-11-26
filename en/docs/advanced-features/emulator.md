@@ -2,6 +2,8 @@
 
 Register an emulator, then select its configuration and device number in the managed-script settings. AUTO-MAS fills connection information for supported scripts and starts or closes instances as required by the task.
 
+Run emulator games and their managed scripts in the main session. See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) when choosing tasks for a desktop session.
+
 ::: info Version and demonstration scope
 This page follows **dev after v5.8.0-beta.3 (d49cff7c5)**. The automatic-path screenshot marks the search entry only; no installation search or import was performed. The manual path created an isolated configuration, selected MuMu, and checked the saved type after reload. No real executable was selected, and no emulator or game was started. The screenshots show the Chinese interface.
 :::

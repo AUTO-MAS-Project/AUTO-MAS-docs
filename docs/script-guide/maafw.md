@@ -9,6 +9,12 @@
 带有 `interface.json` 的 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 项目，可以尝试用 **MFW 脚本**接入 AUTO-MAS。项目自己的界面可以是 MFAAvalonia、MXU、MFW-PyQt6 或 MaaPiCli；AUTO-MAS 运行时不启动这层界面。[M9A](/docs/script-guide/m9a) 等项目会在导入后自动识别为对应的风味类型。
 :::
 
+## 桌面分身
+
+**有条件支持。** 选择 Win32 控制器。使用 ADB 等其他控制器的任务请在主会话运行。
+
+适用版本和队列要求见[桌面分身支持表](/docs/script-guide/#desktop-session)。
+
 ## 什么是 MFW 脚本
 
 MaaFramework 生态里的项目都长一个样：一份 `interface.json` 声明控制器、资源和任务，一个 `resource/` 目录放识别用的图片与流程，有的还带一个 Agent（Python 脚本或可执行文件）处理复杂逻辑，外面再套一层界面程序。

@@ -6,6 +6,12 @@ date: 2026-08-18
 
 # OK-WW Configuration Guide
 
+## Desktop session
+
+**Supported.** For the Wuthering Waves PC client.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## Two things to know first
 
 **OK-WW** is a third-party automation tool for Wuthering Waves. It is part of the **ok-script family**. **OkNte**, used for Neverness to Everness, is a separate project; this page only covers OK-WW.

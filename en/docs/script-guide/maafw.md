@@ -8,6 +8,12 @@ Text was checked against **the dev version following v5.8.0-beta.3**. Older scre
 A [MaaFramework](https://github.com/MaaXYZ/MaaFramework) project with an `interface.json` can be added to AUTO-MAS as an **MFW script**. AUTO-MAS does not launch the project's own UI. Some projects, including [M9A](/en/docs/script-guide/m9a), are recognized as a project-specific flavor after import.
 :::
 
+## Desktop session
+
+**Conditional.** Select a Win32 controller. Run tasks using ADB or other controllers in the main session.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## Before you start
 
 Download a Windows release package for your system from the project's release page and extract it. Select the folder that **directly contains** `interface.json`. You can usually leave the project's own UI closed. Some Agents perform additional setup on first run; follow the project's release notes if they do.

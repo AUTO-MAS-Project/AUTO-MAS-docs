@@ -252,3 +252,28 @@ You must do this in an environment **without local adapter source**. Local sourc
 - Uninstalling also deletes the plugin's own settings file `config/plugins/<plugin ID>.yaml`.
 
 State this in the plugin README and remind users to back up first.
+
+## Desktop Session
+
+New adapters opt in to Desktop Session through `ScriptTypeDecl`. The host looks up the enabled adapter and uses its declaration for script details, queue previews, and dispatch. Desktop Session dispatch requires `TaskMode.AUTO_PROXY`.
+
+For example, an adapter that requires an elevated host adds the `Run` field to its existing script config and passes the callback to its existing `ScriptTypeDecl`:
+
+```python
+from auto_mas_core import DesktopSessionCheckReason, DesktopSessionRunFields, ScriptEntry
+from pydantic import Field
+
+# Add to the script config class. If it already has RunFields, inherit DesktopSessionRunFields.
+Run: DesktopSessionRunFields = Field(default_factory=DesktopSessionRunFields)
+
+def desktop_session_check(
+    config: ScriptEntry, elevated: bool
+) -> DesktopSessionCheckReason | None:
+    return None if elevated else "admin_required"
+
+# Add desktop_session_check=desktop_session_check to ScriptTypeDecl(...).
+```
+
+The host runs the callback synchronously during preview and admission, then checks again after acquiring the script configuration lock. The callback only reads script settings and host privileges. Return `None` to allow the run, `admin_required` if elevation is required, or `unsupported_config` for an incompatible configuration. Adapters without a callback can run in the main session. Manual single-script starts read `Run.ExecutionSession`, which defaults to `main` when missing. Preserve the field path and existing config identities when migrating an adapter. A queue has one execution session for the entire run.
+
+The host in the main session handles L2, L3, and L4 orchestration and configuration locks. During a Desktop Session task, use `auto_mas_core.utils.ProcessRunner.run_process()` to run and await an upstream command, or keep the `ProcessManager` used by `open_process()` and call `await manager.kill()` during cleanup. The host uses the task context to start these commands in the child session. Direct calls to `subprocess` and in-process window operations run in the host session. If an adapter needs to tell a launcher exit apart from its descendants staying alive, use `retain_desktop_descendants=True` to retain ownership and read the launcher's exit status through `manager.launched_process.returncode`.

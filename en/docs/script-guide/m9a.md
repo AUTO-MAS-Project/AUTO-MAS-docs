@@ -4,6 +4,12 @@
 M9A is now one kind of [MFW script](/en/docs/script-guide/maafw): pick the M9A directory and AUTO-MAS recognises it and treats it as M9A. The managed-script page, account page, updates and the embedded copy all work like any other MFW project; this page only covers what is specific to M9A.
 :::
 
+## Desktop session
+
+Desktop Session availability depends on the MFW controller type. Run the usual ADB configuration in the main session.
+
+See the [Desktop Session compatibility table](/en/docs/script-guide/#desktop-session) for the applicable build and queue requirements.
+
 ## What is M9A?
 
 M9A is a third-party tool for Reverse: 1999. It handles repetitive work such as daily automation, Artificial Somnambulism, and event farming.
