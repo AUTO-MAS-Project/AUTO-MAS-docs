@@ -65,4 +65,4 @@ AUTO-MAS 主仓库包含 Python 后端、Vue 渲染端和 Electron 桌面外壳�
 | `res/`                                                                   | 主程序随附的资源和版本信息。                                           |
 | `tests/`、`frontend/e2e/`                                                | Python 测试与 Playwright 测试。前端的 `*.test.ts` 与被测模块就近放置。 |
 | `pyproject.toml`、`uv.lock`、`.python-version`                           | Python 项目和依赖声明、依赖锁文件、解释器版本。                        |
-| `frontend/package.json`、`frontend/yarn.lock`、`frontend/vite.config.ts` | 前端依赖和命令、依赖锁文件、Vite 配置。                                |
+| `frontend/package.json`、`frontend/yarn.lock`、`frontend/vite.config.ts` | 前端依赖和脚本、依赖锁文件、Vite+（`vp`）配置。                       |

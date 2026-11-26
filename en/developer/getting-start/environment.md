@@ -1,49 +1,54 @@
 # Environment Setup
 
-Core and plugin development share this environment. Start the local AUTO-MAS host before developing or debugging a plugin.
+Set up a local AUTO-MAS development environment before working on the core application or debugging plugins.
 
 ## Technology Stack
 
 ### Backend
 
 - **Python**: 3.12.x
-- **Environment and dependency management**: uv (`pyproject.toml` + `uv.lock`)
+- **Environment & dependency management**: uv (`pyproject.toml` + `uv.lock`)
 - **Web framework**: FastAPI
-- **Realtime communication**: WebSockets 15.0.1
-- **Logging**: Loguru 0.7.3
-- **Image processing**: OpenCV, Pillow, PyAutoGUI
-- **OCR**: RapidOCR (ONNX Runtime)
+- **Realtime communication**: WebSockets
 
 ### Frontend
 
 - **Framework**: Vue 3 + TypeScript
 - **UI component library**: Ant Design Vue 4.x
 - **Desktop**: Electron
-- **Build tool**: Vite Plus (Vite)
+- **Unified toolchain**: Vite+ (`vp` CLI — integrates Vite, Node.js and package manager environment management, building, linting, formatting, and testing)
 - **Routing**: Vue Router 4
 - **State management**: Pinia 3.x
 
 ## Environment Requirements
 
-### Required Software
+You only need to install the 4 tools below. Python, Node.js, and Yarn are managed automatically by `uv` and `vp`, so you do not need to install or configure them separately.
 
-1. **uv**
-   - Follow the [official uv installation guide](https://docs.astral.sh/uv/getting-started/installation/). On Windows, run `winget install --id=astral-sh.uv -e`, then reopen your terminal.
-   - The root `.python-version` file selects the Python version (currently 3.12.13). uv downloads it if it is missing, so a separate Python installation is not required.
-2. **Node.js 22.18+**
-   - Download: https://nodejs.org/
-   - Node.js 24 LTS is recommended, matching the current frontend checks.
-3. **Yarn** (recommended)
-   - The project uses Yarn 4. Enable it through Corepack: `corepack enable`
-   - After entering `frontend`, you can directly use the Yarn version declared by the repository.
-4. **Git**
-   - Download: https://git-scm.com/downloads
-5. **VC runtime**
-   - Download: [Latest supported Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
+### 1. uv (Backend Toolchain)
+
+- **Installation**: Follow the [official uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+  - Windows (PowerShell): Run `winget install --id=astral-sh.uv -e`, then reopen your terminal.
+- **Recommended version**: 0.12+
+- **Note**: uv automatically installs and manages Python 3.12 (currently `3.12.13`) based on `.python-version`, so a separate Python installation is not required.
+
+### 2. Vite+ / `vp` (Frontend Unified Toolchain)
+
+- **Installation**: Follow the [official Vite+ documentation](https://viteplus.dev/).
+  - Windows (PowerShell): Run `irm https://vite.plus/ps1 | iex` (or download and run `vp-setup.exe` from the website), then reopen your terminal.
+  - macOS / Linux: Run `curl -fsSL https://vite.plus | bash`.
+- **Note**: `vp` automatically manages the Node.js runtime and package manager (Yarn) required by the frontend, and provides unified commands for dependency installation, scripts, linting, formatting, and testing. **You do not need to install Node.js separately or run `corepack enable`.**
+
+### 3. Git
+
+- **Installation**: Download and install from the [Git website](https://git-scm.com/downloads).
+
+### 4. Visual C++ Redistributable (Windows)
+
+- **Installation**: Download and install the [latest supported Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
 ## Quick Start
 
-Commands below are provided for both PowerShell and Bash. Select the tab matching your terminal. Run commands from the repository root unless a step explicitly enters `frontend`.
+Run all commands from the repository root unless a step explicitly switches to `frontend`.
 
 ### 1. Clone the Project
 
@@ -61,18 +66,10 @@ cd AUTO-MAS
 
 :::
 
-Before making changes, create a development branch from the latest upstream `dev` as described in the [development specifications](./development-specifications.md).
-
-::: tip Agent Development Prerequisite
-
-If an AI assistant participates in development, first confirm that the main repository contains and loads `.agents/skills/mas-skills/SKILL.md`. If project-owned Skills are missing, complete the main repository content first. Do not let the AI assistant start work directly.
-
-:::
+When you are ready to make changes, create a development branch from the latest upstream `dev`. See [Git Branches](./development-specifications.md#git-branches).
 
 ### 2. Backend Environment Setup
 
-**Sync the Python environment and dependencies**
-
 ::: code-group
 
 ```powershell [PowerShell]
@@ -87,113 +84,153 @@ uv sync --locked
 
 :::
 
-uv selects Python from `.python-version`, creates or reuses `.venv` in the repository root, and installs dependencies from `uv.lock`. The development dependency group, including Ruff and pytest, is installed by default. `--locked` checks that the lockfile matches `pyproject.toml` without rewriting it.
+`uv sync --locked` selects Python from `.python-version`, creates or reuses `.venv` in the repository root, and installs both runtime and development dependencies (including Ruff and pytest) strictly according to `uv.lock` without rewriting the lockfile.
 
-Use `pyproject.toml` and `uv.lock` for development. You do not need to create or activate a virtual environment manually or run `pip install -r requirements.txt`. Select `.venv\Scripts\python.exe` as your IDE's Python interpreter. Run `uv sync --locked` again after pulling code to sync dependencies.
+In day-to-day development, you do not need to create or activate a virtual environment manually or run `pip install -r requirements.txt`:
+
+- Select `.venv\Scripts\python.exe` as your IDE's Python interpreter.
+- Run `uv sync --locked` again whenever you pull new changes to keep dependencies in sync.
 
 ### 3. Frontend Environment Setup
 
-**Enter the frontend directory and install dependencies**
-
 ::: code-group
 
 ```powershell [PowerShell]
 cd frontend
-yarn install
+vp --version
+vp install
 ```
 
 ```bash [Bash]
 cd frontend
-yarn install
+vp --version
+vp install
 ```
 
 :::
 
-If the Electron binary download is slow or fails, select the npmmirror source before installing:
+`vp install` automatically prepares the Node.js and Yarn environment required by the repository and installs all frontend dependencies.
+
+If downloading the Electron binary is slow or fails, temporarily set the npmmirror mirror before installing:
 
 ::: code-group
 
 ```powershell [PowerShell]
 $env:ELECTRON_MIRROR = "https://npmmirror.com/mirrors/electron/"
-yarn install
+vp install
 ```
 
 ```bash [Bash]
-ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" yarn install
+ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" vp install
 ```
 
 :::
 
-The PowerShell setting lasts for the current terminal session; the Bash setting affects only this command. Neither option requires `cross-env` to have been installed or changes global configuration.
+The PowerShell variable only lasts for the current terminal session, and the Bash prefix only applies to that single command. Neither modifies global system settings.
+
+#### Common `vp` Commands for the Frontend
+
+The frontend uses `vp` (Vite+) as its unified toolchain. Common commands (run from `frontend/`):
+
+| Task | Command | Notes |
+| --- | --- | --- |
+| Install / sync dependencies | `vp install` | Delegates to the repository's Yarn version automatically; use `vp install --frozen-lockfile` in CI or for strict lockfile installs |
+| Run project scripts | `vp run <script>` | Runs scripts defined in `package.json`, such as `vp run dev:frontend`, `vp run dev:fullstack`, and `vp run build` |
+| Check & format code | `vp check` | Runs lint and format checks together (or run `vp lint` / `vp fmt` individually) |
+| Run frontend unit tests | `vp test` | Runs Vitest unit tests |
+| Run local dependency binaries | `vp exec <command>` | Invokes locally installed CLI tools, such as `vp exec playwright ...` |
+| Inspect managed environment | `vp env` | Shows the Node.js and package manager versions currently managed by `vp` |
 
 ### 4. Start the App
 
 ::: tip Administrator Privileges
 
-Run the terminal or IDE as administrator when debugging features that require elevated access, such as game or emulator control. The development backend does not elevate itself.
+Run your terminal or IDE as administrator when debugging features that require elevated access, such as game or emulator control. The development backend does not elevate itself automatically.
 
-If you use a JetBrains IDE or VS Code, start the IDE as administrator so terminals opened inside it also have administrator privileges.
+If you use a JetBrains IDE or VS Code, launching the IDE as administrator grants elevated privileges to terminals opened inside it as well.
 
 :::
 
-Both options below run backend code from your current local checkout. Choose one.
+Both options below run your local backend code. Choose whichever fits your workflow.
 
 #### 4.1 Start Backend and Frontend Separately
 
-1. **Start the backend service from the repository root**
+Recommended when debugging both frontend and backend code, or when setting backend breakpoints in your IDE.
 
-::: code-group
+1. **Start the backend service**
 
-```powershell [PowerShell]
-uv run --locked python main.py
-```
+   From the repository root:
 
-```bash [Bash]
-uv run --locked python main.py
-```
+   ::: code-group
 
-:::
+   ```powershell [PowerShell]
+   uv run --locked python main.py
+   ```
 
-The backend defaults to development mode when launched from source and does not read `.env`. It listens on `http://127.0.0.1:36164` by default. Open `http://127.0.0.1:36164/docs` to inspect the API and keep the terminal running. The packaged application uses port `36163` by default.
+   ```bash [Bash]
+   uv run --locked python main.py
+   ```
+
+   :::
+
+   When launched from source, the backend starts in development mode and listens on `http://127.0.0.1:36164` (open `http://127.0.0.1:36164/docs` to inspect the API; packaged builds use port `36163` by default). Keep this terminal running.
 
 2. **Start the frontend service**
 
-Open a new terminal at the repository root:
+   Open a second terminal at the repository root and run:
 
-::: code-group
+   ::: code-group
 
-```powershell [PowerShell]
-cd frontend
-yarn dev:frontend
-```
+   ```powershell [PowerShell]
+   cd frontend
+   vp run dev:frontend
+   ```
 
-```bash [Bash]
-cd frontend
-yarn dev:frontend
-```
+   ```bash [Bash]
+   cd frontend
+   vp run dev:frontend
+   ```
 
-:::
+   :::
 
-The frontend server starts at `http://localhost:5173`. The Electron window connects to the development backend running in the first terminal.
-
-`yarn dev:frontend` starts only the frontend. Synchronize Python dependencies and start the backend first.
+   The frontend dev server starts at `http://localhost:5173`, and the Electron window automatically connects to the running backend. Note that `vp run dev:frontend` only starts the frontend—make sure the backend is already running first.
 
 #### 4.2 Start Backend and Frontend Together
 
-Open a terminal at the repository root and run:
+If you do not need backend breakpoints and just want to launch the whole app quickly, run from the repository root:
 
 ```powershell
 cd frontend
-yarn dev:fullstack
+vp run dev:fullstack
 ```
 
-On Windows, this option starts the frontend and uses Runtime to supervise the local development backend. Use the two-terminal method for backend breakpoints or on systems without Runtime.
+On Windows, this command automatically downloads **AUTO-MAS Runtime** to start and supervise your local backend.
+
+If downloading Runtime fails, you can download and specify it manually:
+
+1. Check `res/runtime-version.txt` for the required Runtime version.
+2. Download `auto-mas-runtime-<version>.exe` from the [AUTO-MAS-Runtime releases page](https://github.com/AUTO-MAS-Project/AUTO-MAS-Runtime/releases).
+3. Set `AUTO_MAS_RUNTIME_EXE` in your terminal before starting the app:
+
+   ```powershell
+   $env:AUTO_MAS_RUNTIME_EXE = 'D:\Tools\AUTO-MAS-Runtime\auto-mas-runtime.exe'
+   cd frontend
+   vp run dev:fullstack
+   ```
+
+To restore automatic Runtime selection, run `Remove-Item Env:AUTO_MAS_RUNTIME_EXE` in that terminal and restart.
+
+::: info Note
+IDE backend breakpoints are not available in fullstack mode. Use [4.1 Start Backend and Frontend Separately](#_4-1-start-backend-and-frontend-separately) when debugging backend code with breakpoints.
+:::
 
 ## Debugging in the IDE
 
-In VS Code, select the repository’s `.venv` Python interpreter and debug `main.py` with the repository root as the working directory. In a second terminal, run `yarn dev:frontend` from `frontend/`. Once the host is running, see [Local Plugin Development and Debugging](/en/developer/plugins/fundamentals/develop) for plugin entry points and reload.
+In VS Code, select `.venv\Scripts\python.exe` as the Python interpreter and debug `main.py` with the repository root as the working directory. In a second terminal, run `vp run dev:frontend` inside `frontend/`.
 
-To save the backend launch settings, add this configuration to `.vscode/launch.json`. Start VS Code as administrator if the features you are debugging require elevated access.
+Once the host is running, see [Local Plugin Development and Debugging](/en/developer/plugins/fundamentals/develop) for plugin entry points and hot reload.
+
+You can save the backend launch configuration below to `.vscode/launch.json` (start VS Code as administrator if debugging features that require elevated privileges):
 
 ```json
 {
@@ -211,54 +248,47 @@ To save the backend launch settings, add this configuration to `.vscode/launch.j
 }
 ```
 
-## Project Structure
-
-See [Project Structure](/en/developer/core/project-structure) for the repository layout and module responsibilities.
-
 ## FAQ
 
 ### Q: Do I still need to activate the Python virtual environment?
 
-**A**: No. Start the backend in the project environment with `uv run --locked python main.py`. Select `.venv\Scripts\python.exe` as your IDE's interpreter.
+**A**: No. `uv run --locked python main.py` runs inside the project virtual environment automatically. In your IDE, simply select `.venv\Scripts\python.exe`.
 
-### Q: The uv command cannot be found
+### Q: The `uv` command cannot be found?
 
-**A**: Reopen your terminal after installing uv, then run `uv --version`. If it is still unavailable, check that its installation directory is on PATH using the [official uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+**A**: Close and reopen your terminal after installing uv, then run `uv --version`. If it is still not found, check that its installation directory is in `PATH` using the [official uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
-### Q: uv sync --locked says the lockfile needs updating
+### Q: The `vp` command cannot be found?
 
-**A**: First confirm that `pyproject.toml`, `uv.lock`, and `.python-version` come from the same checkout. If you intentionally changed dependency declarations, run `uv lock` from the repository root, then verify with `uv sync --locked`. Commit the dependency declarations and lockfile together. Do not delete `uv.lock` to bypass the error.
+**A**: Reopen your terminal after installing Vite+ and run `vp --version`. If it is still unavailable, verify that the Vite+ installation directory is on `PATH` or reinstall from the [official Vite+ documentation](https://viteplus.dev/). You can also run `vp env` to inspect the managed Node.js and package manager state.
 
-### Q: yarn install fails
+### Q: `uv sync --locked` says the lockfile needs updating?
 
-**A**: Try:
+**A**: First verify that `pyproject.toml`, `uv.lock`, and `.python-version` come from the same checkout. If you intentionally updated dependency declarations, run `uv lock` at the repository root, verify with `uv sync --locked`, and commit both files together. Never delete `uv.lock` to bypass the error.
 
-1. Clear cache: `yarn cache clean`
-2. Delete `node_modules`, keeping the repository's `yarn.lock`
-3. Install again: `yarn install`
-4. If the Electron binary download is slow or fails, select the mirror as shown in [Frontend Environment Setup](#_3-frontend-environment-setup), then retry.
+### Q: `vp install` fails when installing frontend dependencies?
 
-### Q: Backend startup fails due to insufficient permissions
+**A**: Try the following steps:
 
-**A**: AUTO-MAS requires administrator privileges. Run as administrator:
+1. Delete `frontend/node_modules` (keep the repository's `yarn.lock`).
+2. Run `vp install` again (if you suspect a corrupted cache, run `yarn cache clean` inside `frontend/` first).
+3. If the Electron binary download is slow or fails, configure `ELECTRON_MIRROR` as shown in [Frontend Environment Setup](#_3-frontend-environment-setup) and retry.
 
-- Open PowerShell or Git Bash as administrator
-- Or start VS Code as administrator
+### Q: Backend startup or emulator control fails with insufficient permissions?
 
-### Q: Electron window cannot open
+**A**: Features that control games or emulators require administrator privileges. Try:
 
-**A**: Check:
+- Opening PowerShell or Git Bash as administrator before starting the backend; or
+- Starting VS Code / JetBrains IDE as administrator.
 
-1. Whether the frontend dev server is running normally at `http://localhost:5173`
-2. Confirm the backend is running at `http://127.0.0.1:36164/docs`. For a separate frontend, use `yarn dev:frontend`.
-3. Error output in the terminal
+### Q: The Electron window fails to open?
 
-## License
+**A**: Check the following in order:
 
-This project is open source under the [AGPL-3.0 License](https://www.gnu.org/licenses/agpl-3.0.txt).
-
-When using, distributing, or modifying this software, comply with AGPL-3.0 and the supplementary terms in the project README.
+1. Confirm the frontend dev server is running at `http://localhost:5173`.
+2. Confirm the backend is running at `http://127.0.0.1:36164/docs`. Use `vp run dev:frontend` when starting the frontend separately.
+3. Inspect the terminal output for error messages.
 
 ---
 
-Thank you for contributing to AUTO-MAS.
+**Thank you for contributing to AUTO-MAS!** 🎉

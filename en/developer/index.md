@@ -7,7 +7,7 @@ outline: false
 > [!IMPORTANT] Read before contributing code
 > Before submitting code to any AUTO-MAS-Project repository, read the full **AUTO-MAS Developer Community Authorization Agreement** on this page.
 
-If this is your first contribution, follow [Environment Setup](./getting-start/environment.md) to run AUTO-MAS locally and consult the [Development Standards](./getting-start/development-specifications.md) before submitting changes. Core and plugin developers use the same environment. Once it is running, use the sidebar to find the module you want to work on under Core Application Development or Plugin Development.
+If this is your first time contributing, start with [Environment Setup](./getting-start/environment.md) and read the [Development Standards](./getting-start/development-specifications.md). Once your local environment is ready, continue with **Core Application Development** or **Plugin Development** in the sidebar.
 
 ## AUTO-MAS Developer Community Authorization Agreement
 
