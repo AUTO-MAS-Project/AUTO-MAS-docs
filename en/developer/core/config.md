@@ -195,7 +195,7 @@ ScriptConfig (L1)
 
 ### Usage
 
-#### Configuration Node | Node {#config-node}
+#### Configuration Node | Node
 
 `ConfigNode` is the common parent of configuration entries (`ConfigEntry`) and collections (`ConfigCollection`). It defines the operations they share.
 
@@ -368,7 +368,7 @@ Entry subclasses can override group or collection fields. Narrowing mutable fiel
 
 - **Construction**
 
-  In addition to the methods under [Configuration Node](#config-node), construct an entry by passing group field names directly.
+  In addition to the methods under [Configuration Node](#configuration-node-node), construct an entry by passing group field names directly.
 
   ```python
   <instance> = <entry class>(<group field name>=<group instance>)
@@ -419,7 +419,7 @@ Entry subclasses can override group or collection fields. Narrowing mutable fiel
 
 - **Construction**
 
-  In addition to the [Configuration Node](#config-node) parameters, full collection construction accepts the following.
+  In addition to the [Configuration Node](#configuration-node-node) parameters, full collection construction accepts the following.
 
   ```python
   <instance> = ConfigCollection[<member type>].build(

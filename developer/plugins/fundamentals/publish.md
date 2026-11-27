@@ -1,79 +1,197 @@
-# 发布插件
+# 打包与发布
 
-插件先作为 Python 发行包发布到 PyPI，再由市场目录读取发行元数据。客户端通过目录展示名称、版本和更新说明，通过插件安装器安装并启用。源码调试见[开发与调试](./develop.md)。
+插件开发者将发行包上传到 PyPI 后，用户才能在插件市场中发现并安装插件。为保证插件发行包可以被用户正确识别，需要按照特定的规范发布插件。
 
-## 准备发行包
+## 准备发布
 
-1. **确认身份**：核对 `pyproject.toml` 的包名、`auto-mas-plugin` 和唯一的 `auto-mas-id:<插件 ID>`。
-2. **确认依赖**：保留 `auto-mas-core` 依赖，按实际验证过的宿主和 Python 版本声明兼容范围。安装器会将宿主自带的 SDK 纳入求解。
-3. **更新版本**：使用新的 PEP 440 版本，并核对 README、语言文件等需要随包交付的资源。
-4. **构建与校验**：在插件项目根目录构建发行包，再检查 `dist/` 中的产物和元数据。
+在插件项目根目录按规范编撰 `pyproject.toml` 和 `README.md`，以确保相关信息可以被正确识别。
 
-   ```sh
-   uv build
-   uvx twine check --strict dist/*
-   ```
+### Python 项目配置文件
 
-   独立构建和发布选项见 [uv 打包说明](https://docs.astral.sh/uv/guides/package/)。
+以下模板使用 Setuptools 构建发行包，从 `src/` 发现插件的导入包，并将 `README.md` 写入发行元数据。
 
-## README 里的市场声明
+```toml
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
 
-通过 `readme = "README.md"` 将 README 放入发行元数据。市场声明是 README 起始位置的 HTML 注释。
+[project]
+name = "<发行包名>"
+version = "<发行版本>"
+description = "<发行包简介>"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = "<Python 版本范围>"
+license = "<SPDX 许可证标识>"
+license-files = ["<许可证文件路径>"]
+authors = [{ name = "<作者名称>" }]
+keywords = ["auto-mas-plugin", "auto-mas-id:<插件 ID>"]
+dependencies = ["auto-mas-core<SDK 版本范围>", "<其他运行依赖，可省略>"]
+
+[project.urls]
+Homepage = "<项目主页 URL>"
+Repository = "<源码仓库 URL>"
+Documentation = "<插件文档 URL>"
+Issues = "<问题反馈 URL>"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["<导入包名>", "<导入包名>.*"]
+
+[tool.setuptools.package-data]
+"<导入包名>" = ["<包内资源匹配模式>"]
+```
+
+- `<发行包名>`：合法的 PyPI 项目名。要求包名规范化后包含 `automas` 或 `auto-mas`，建议采用 `auto-mas-<插件名>`。
+- `keywords =`：用于识别插件发行包的关键词列表
+  - `auto-mas-plugin`：必须存在。
+  - `auto-mas-id:<插件 ID>`：有且仅有一个，插件 ID 须可用作文件名。
+- `<发行版本>`：本次发布的 PEP 440 版本，例如 `1.2.0`。
+- `<Python 版本范围>`：与目标宿主的 Python 版本匹配，建议采用 `>=3.12,<3.13`。
+- `<SDK 版本范围>`：填写插件实际验证过的 SDK 版本约束，建议采用 `>=5,<6`。
+- `[project.urls]`：该段落按需填写，允许省略。
+- `<导入包名>`：与 `src/` 下包含 `__init__.py` 的顶层目录名一致。
+- `<包内资源匹配模式>`：相对于导入包的资源路径或匹配模式，例如 `i18n/*.json`。可填写多个模式，无额外资源时可省略 `[tool.setuptools.package-data]`。
+
+### 自述文件
+
+由于 PyPI 元数据无法承载所有的插件描述信息，部分描述信息需要在 `README.md` 开头使用 `auto-mas:i18n` 声明，发行时随自述文件写入 PyPI 的项目长描述。
 
 ```markdown
 <!-- auto-mas:i18n
 {
-  "display_name_i18n": {"zh_CN": "<插件名称>", "en": "<English name>"},
-  "description_i18n": {"zh_CN": "<插件简介>", "en": "<English description>"},
-  "tags_i18n": {"zh_CN": ["<标签>"], "en": ["<English tag>"]}
+  "display_name_i18n": {
+    "<语言键>": "<插件市场显示名称>"
+  },
+  "description_i18n": {
+    "<语言键>": "<插件市场简介>"
+  },
+  "tags_i18n": {
+    "<语言键>": ["<市场标签>"]
+  }
 }
 -->
+
+# <插件名称>
+
+<插件的用途和主要功能>
+
+## 运行环境
+
+- AUTO-MAS：<支持的宿主版本范围>
+- <需要的外部软件或其他运行条件>
+
+## 安装与使用
+
+1. 在 AUTO-MAS 插件中心安装并启用「<插件市场显示名称>」。
+2. <打开哪个页面以及需要填写的配置>
+3. <运行插件主要功能的操作步骤>
+
+## 问题反馈
+
+<问题反馈入口和反馈时需要提供的信息>
 ```
 
-- **显示信息**
+## 构建与检查发行包
 
-  - `display_name_i18n`、`description_i18n`：语言到名称和简介的映射，每项至少有一种非空语言。
-  - `tags_i18n`：语言到字符串数组的映射。
-  - 使用合法 JSON。语言键可用 `zh_CN`、`en`、`ja`，客户端按语言回退。
+1. **构建发行包**：在插件仓库根目录使用目标 Python 版本运行以下命令，生成 wheel 和源码包，并检查发行元数据。
 
-- **项目链接**
+   ```powershell
+   python -m pip install build twine
+   python -m build
+   python -m twine check --strict dist/*
+   ```
 
-  - `project.urls` 中的文档、主页、源码和更新日志链接使用真实的 HTTP 或 HTTPS 地址。
-  - 发布前检查 README 作为发行描述时仍以声明开头。目录要求有效声明，本地源码缺失时可用插件 ID 和简短描述展示。
+2. **检查 wheel 内容**：打开 `dist/` 中本次构建的 wheel，确认顶层包入口会导出 `PLUGIN`，运行所需的资源均已打包。检查 `.dist-info/METADATA` 中的版本、依赖、身份关键词和长描述是否与本次发布声明一致。
 
-## 在插件市场显示更新日志
+## 发布到 PyPI
 
-在项目根目录的 `CHANGELOG.md` 使用与发行版本一致的二级标题。将可公开读取的文件链接写入 `[project.urls]`。
+以下 GitHub Actions 工作流由 `v<发行版本>` 标签触发。构建任务检查标签与 `project.version` 是否一致，生成并校验 wheel 和源码包。上传任务取得该次构建的产物，通过 PyPI Trusted Publishing 上传。
 
-```toml
-[project.urls]
-Changelog = "https://github.com/<仓库所有者>/<插件仓库>/blob/<分支>/CHANGELOG.md"
+### 工作流模板
+
+```yaml
+name: 构建并发布 PyPI 包
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: 构建与校验
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "<构建用 Python 版本>"
+      - name: 检查发布标签
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          project = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))["project"]
+          expected_tag = f"v{project['version']}"
+          if os.environ["RELEASE_TAG"] != expected_tag:
+              raise SystemExit(f"发布标签应为 {expected_tag}")
+          PY
+      - name: 构建并校验发行包
+        run: |
+          python -m pip install build==1.6.1 twine==7.0.0
+          python -m build
+          python -m twine check --strict dist/*
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: python-distributions
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: 发布到 PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: "<GitHub 发布环境名>"
+      url: "https://pypi.org/project/<发行包名>/"
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: python-distributions
+          path: dist/
+      - name: 使用 Trusted Publishing 上传
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086
 ```
 
-目录生成器按已发布版本从对应章节读取说明。发布后可在[公开插件目录](https://data.auto-mas.top/api/v1/files/auto-mas/Client/plugins/download)核对条目的 `version` 和 `changelog`。
+- `<构建用 Python 版本>`：与插件的 `requires-python` 和目标宿主匹配，例如 `3.12`。
+- `<GitHub 发布环境名>`：与 GitHub 仓库中创建的环境一致，例如 `pypi`。
+- `<发行包名>`：填写 `pyproject.toml` 的 `project.name`。
 
-## 上传发行包
+### 使用方法
 
-- **手动上传**
+1. **保存工作流**：替换占位符，将文件保存到插件仓库的 `.github/workflows/<工作流文件名>`。在仓库的 **Settings → Environments** 创建与模板一致的发布环境。
+2. **配置可信发布者**：已有 PyPI 项目时，进入项目的 **Manage → Publishing**。首次发布时，进入 PyPI 账号的 **Publishing**，添加待使用的发布者并填写发行包名。选择 GitHub Actions，填写 GitHub 仓库所有者、仓库名、工作流文件名和发布环境名。
+3. **推送发布标签**：确认当前提交包含工作流和本次发布版本，创建并推送对应版本标签。
 
-  - 在插件自己的项目中上传已检查的产物。受限测试可使用 TestPyPI。
-  - 用 `uv publish` 或 `twine upload` 执行上传，凭据由发布环境提供。
+   ```powershell
+   git tag "v<发行版本>"
+   git push "<插件仓库远端名>" "v<发行版本>"
+   ```
 
-- **Trusted Publishing**
+4. **确认发布结果**：在 GitHub Actions 查看「构建与校验」和「发布到 PyPI」的结果，再到 PyPI 项目页核对版本和发行文件。
 
-  - 在 PyPI 的发布设置中登记仓库所有者、仓库、工作流文件名及所用的 GitHub 环境。
-  - 分开构建与发布任务。发布任务只下载和发布本次构建产物，并向发布任务授予所需的 `id-token: write`。
-  - 平台配置和首次发布方式见 [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)。
+## 插件市场收录
 
-## 数据站目录什么时候收录
+[插件目录工作流](https://github.com/AUTO-MAS-Project/AUTO-MAS-Plugin-Index)每 30 分钟刷新已收录和手工补录的插件，每天 UTC 00:07（北京时间 08:07）额外扫描新候选，采集成功后发布变更到 [AUTO-MAS 数据分享中心](https://data.auto-mas.top/files/auto-mas/Client/plugins)。客户端优先使用来自数据中心的插件目录，无法获取时自行从 PyPI 搜索。
 
-[AUTO-MAS-Plugin-Index](https://github.com/AUTO-MAS-Project/AUTO-MAS-Plugin-Index) 负责读取 PyPI 元数据并生成目录。包名包含 `auto-mas` 或 `automas` 时可被自动发现，其他包名由维护者补录候选。收录仍要求合法关键词和完整的市场声明。
-
-客户端优先使用有效的数据站目录。目录不可用时回退到 PyPI 和镜像检索。PyPI 已出现新版本而客户端仍显示旧目录时，先核对公开目录中的版本和更新日志。
-
-## 验证发布结果
-
-1. **检查 PyPI**：核对项目页的新版本、发行包和元数据。可通过 `https://pypi.org/pypi/<发行包名>/json` 检查 `info.version`、`info.keywords` 和 `info.description`。
-2. **检查目录**：在公开插件目录按 `package_name` 查找包，核对名称、版本、标签和更新说明。
-3. **检查实际安装**：移出同 ID 的源码项目，用独立测试配置从插件市场安装，按提示完成后端重启。再检查插件来源、版本、启用状态和最小业务流程。
-4. **处理问题版本**：如果已发布版本需要撤回，按 [PyPI Yank 指南](https://docs.pypi.org/project-management/yanking/)标记该发行版，并发布更高版本的修复包。
+插件发布后，如需加快收录，可联系项目组手动触发目录刷新，首次发布最短约 30 分钟后可被发现。

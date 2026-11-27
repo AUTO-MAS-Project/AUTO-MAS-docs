@@ -378,7 +378,7 @@ prepare: async () => {
 
 需要一个现在没有的插入点：在 `maafwFlavorTypes.ts` 的 `MaaFWFlavorSlotContextMap` 加名字，并在公共页面对应位置放 `<MaaFWFlavorSlot>`。不要在公共页面里写 `type === 'X'` 分支，也不要往描述对象里加布尔开关；这两条没有自动检查拦着，靠评审把关。
 
-## 接入计划表 {#plan-table}
+## 接入计划表
 
 风味要让账号引用一张按星期或轮换日出不同配置的计划表时，除了上面的步骤，还要多做下面几步。逐项都能在 MSS 里找到对应代码。
 

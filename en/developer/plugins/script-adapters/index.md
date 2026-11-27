@@ -5,7 +5,7 @@ Specialized script adaptation must connect configuration, schema, API, task sche
 ## Choose an adapter type
 
 - [Standalone script plugin](/en/developer/plugins/script-adapters/standalone): use the plugin SDK when integrating an independently distributed script such as MAA. The backend adapter lives in its own repository; any host pages still ship with the desktop application.
-- [Built-in script adapter](#built-in-adapters): maintain an integration that lives in the main repository.
+- [Built-in script adapter](#built-in-script-adapters): maintain an integration that lives in the main repository.
 - [MFW flavor adapter](./mfw/develop.md): extend a MaaFramework project using MFW’s flavor hooks. These adapters live in the main repository; see the [MFW design docs](./mfw/index.md) for the shared framework.
 
 ## Black-Box Premise
@@ -22,7 +22,7 @@ Decide capability ownership first: **work the script owns** (in-game actions, ta
 
 See the main repository at `.agents/skills/mas-script-specialized-adapter/references/blackbox-boundary.md` for the full criteria, the allow/deny lists, and the reporting requirement.
 
-## Built-in Script Adapters {#built-in-adapters}
+## Built-in Script Adapters
 
 Locate the existing adapter under `app/task/`, then follow its configuration registration, dispatch path, and frontend entry point. Keep those pieces aligned when changing a feature. See [Task Scheduling](../../core/scheduling.md) to find the owner of locks and cleanup, and [Script Configuration Semantics](./config-semantics.md) before changing how effective settings are selected.
 

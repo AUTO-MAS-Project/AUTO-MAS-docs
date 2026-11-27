@@ -1,60 +1,101 @@
-# Plugin Host and Runtime
+# Plugin Lifecycle
 
-A package declares its capabilities. The host decides when to load them, make them callable, and withdraw them. Start with the [minimal plugin](./index.md), then use this page to understand how source projects, distributions, installation environments, and runtime instances fit together.
+The host coordinates plugin loading, enablement, disabling, reload, uninstall, and shutdown in `app/core/plugin/manager.py`. Plugin classes override asynchronous hooks defined by `BasePlugin` as needed. The host calls the implementations on the plugin instance.
 
-## From project to runtime instance
+This page uses plugins installed from the market as its example. To remove a local source plugin, manage its source project on disk. Move that project out of the host's scan paths before using the market to install or update a distribution with the same plugin ID.
 
-In a source checkout the host scans `plugins/<id>/`; with Runtime, user source plugins stay in the installation root’s `plugins/` and installed distributions are under `plugins/pypi/site-packages/`. The SDK comes from the running backend's source tree (`repo/plugins/auto_mas_core/` under Runtime). This is why switching backend versions does not replace the user’s plugin directory.
+- **Lifecycle hooks.** The `BasePlugin` implementations are empty. A plugin can override an empty hook directly.
+- **Upstream and downstream services.** Upstream providers supply the services listed in the current plugin's `requires`. Downstream dependents list services supplied by the current plugin in their own `requires`.
 
-| Identity | Example | Purpose |
-| --- | --- | --- |
-| Plugin ID | `mumu_adapter` | Registry identity, translation namespace, and candidate selection |
-| PyPI distribution name | `auto-mas-mumu-adapter` | Installation, versions, and dependency resolution |
-| Python import package | `mumu_adapter` | The package the host imports to read `PLUGIN` |
-| Game type key | `mumu` | Identifies saved game configurations of that type |
+## Load
 
-1. The host scans source projects and installed distributions. A source project needs `pyproject.toml` and `src/` with a single regular top-level package. Distribution discovery reads the `auto-mas-plugin` and `auto-mas-id:<id>` metadata markers. Do not infer the import name from the distribution name.
-2. Discovery updates the registry from metadata before plugin code is loaded. A source project takes precedence over a distribution with the same ID. When verifying a wheel, move the source project out of the scan paths, restart, and confirm that the registry selects the installed package.
-3. On load, the host imports the package and reads the class exported as `PLUGIN`. The plugin distribution version, declared SDK dependency range, and host `PLUGIN_API_VERSION` are separate. Follow the [development guide](./develop.md) for declarations and package resources, then enable the plugin in Plugin Center.
+The host uses `app/plugin/runtime/loader.py` to import the plugin package and obtain the class it will instantiate during enablement.
 
-## Enable, disable, and reload
+1. **Import the plugin package.** The host uses the import package name and source in the registry entry to locate the top-level Python package and execute its `__init__.py`. The plugin exports its class as `PLUGIN` in that file.
+2. **Validate the plugin.** The host checks that `PLUGIN` is a subclass of `BasePlugin`. If the plugin exports `PLUGIN_API_VERSION`, the host checks that the major protocol version matches.
 
-The host binds infrastructure and performs prechecks, enables required service providers, and activates configuration before running the plugin’s enable hook. Adapter types must be registered before their instances are activated so the configuration framework can use the concrete classes. Services and endpoints become available once enabling succeeds. See [Core Capabilities](./index.md) and [Services](./service.md).
+- **Load results**
+  - `disabled` indicates a successful load. The plugin can be enabled, reloaded, or uninstalled. The host retains the plugin class and records the service names declared in `requires` and `wants`.
+  - `fault_load` indicates an import or validation failure. The plugin can be uninstalled. The host records the error for display in the Plugin Center.
 
-On teardown, the host rejects new managed calls and waits for in-flight work to settle before removing resources. HTTP endpoints, services, and managed adapter calls share this lifecycle. A synchronous call remains tracked until its worker returns. Put environment checks in `pre_enable` and allocate business resources in `on_enable`. Cover failure cleanup, disable, and process exit. If a managed call needs its own plugin to stop, arrange a separate lifecycle request so the call does not wait for itself to drain.
+## Enable
 
-The call gate tracks in-flight calls rather than scheduling the plugin's business work. Blocking synchronous HTTP handlers run in a worker thread. Cancelling an HTTP request does not release its registration until that worker exits. In a supported self-disable path the gate excludes the initiating call from the drain and still waits for other calls; an independently spawned task has its own identity.
+The host creates an instance of the loaded plugin class and registers the capabilities the plugin provides.
 
-Reload coordinates affected plugins in dependency order and registers replacement types while preserving config identity. Ordinary disable and uninstall may remove configurations owned by an adapter type. Plugin Center shows the impact first, and the host rejects removal when affected configs are locked. Use a disposable profile to verify enable, reload, disable, and uninstall. See [Configuration](./schema.md) and [Events](./event.md) for committed changes and UI refreshes.
+1. **Create the instance.** The host checks that the upstream providers are loaded. If the plugin declares `config_class`, the host builds the plugin configuration before activation. It passes the registry entry and configuration to the constructor, with `None` as the configuration argument when the class declares no configuration. It then binds the service resolver and background task group.
+2. **Prepare to enable.** The host calls `pre_enable()` on the plugin instance. The plugin can check its runtime prerequisites, such as external programs or environment settings. Put work that needs required services or active plugin configuration in `on_enable()`.
+3. **Enable upstream plugins.** The host recursively enables providers for the services listed in `requires` and reuses upstream plugins that are already enabled. It then activates the current plugin's configuration if the plugin declares one.
+4. **Enable the plugin.** The host calls `on_enable()`. The plugin can read its configuration, call required upstream services, create clients, or subscribe to signals.
+5. **Register capabilities.** The host registers the plugin's services, HTTP routes, and adapter types.
 
-| Operation | What the host changes | What the plugin author implements |
-| --- | --- | --- |
-| Load | Imports the package, validates the exported class and reads its declarations. | Keep module import limited to declarations. Acquire resources in lifecycle hooks. |
-| Enable | Resolves required services, activates config, then exposes services and HTTP routes. | Check requirements in `pre_enable`; start business resources in `on_enable`. |
-| Disable | Drains calls and tasks, unregisters capabilities, and releases the running instance. | Close resources in `on_disable`. |
-| Unload | Runs the relevant teardown, then removes the loaded class and module references. | Use `pre_unload` and `on_unload` for unload-specific checks and cleanup. |
-| Reload | Coordinates downstream teardown, loads the replacement class, and restores the dependency tree. | Validate and clean up the old instance in the reload hooks. Recreate runtime resources on enable. |
+- **Enable results**
+  - `enabled` indicates successful enablement. The plugin can be disabled, reloaded, or uninstalled. The host retains the instance, and callers can use its registered capabilities.
+  - `fault_runtime` indicates an enablement failure after `pre_enable()` succeeds. You can retry enablement, reload, or uninstall. The host withdraws registrations made during the operation, cleans up the instance, and records the error.
+  - **Preparation failure.** If checking dependencies, creating the instance, or calling `pre_enable()` fails, the host reports the error and retains the previous state. You can retry enablement after fixing the error.
 
-Inspect the registry state and error after failure. A load fault points to package structure, SDK compatibility, or import. A runtime fault points to enable, disable, or reload. Use `on_fail_cleanup` for the business resources you already acquired. The host rolls back its own registrations. Process exit calls `on_teardown` to close resources while keeping the configured enable state for the next launch.
+## Disable
 
-## Market, installation, and updates
+The host withdraws the plugin's capabilities and releases its instance. The loaded class is available for the next enable.
 
-The market catalog is independent of the local registry. It tries the data site, official PyPI, then mirror indexes. The first complete result replaces the catalog. If they all fail, the catalog stays unchanged. Catalog changes do not install, disable, or downgrade a local package. If a release is missing, check its metadata and whether the index has picked it up. See [Publishing Plugins](./publish.md).
+1. **Prepare to disable.** The host pauses new calls to the current plugin and its downstream dependents and waits for in-flight work. It checks whether any adapter configuration about to be released is in use. The host then calls `pre_disable()`, where the plugin can check that operations such as configuration sessions have finished.
+2. **Disable downstream plugins.** The host recursively disables enabled downstream dependents along the required service relationships.
+3. **Disable the plugin.** The host removes the instance's background task group and calls `on_disable()`. The plugin can close clients, external processes, or subscriptions established during enablement.
+4. **Unregister capabilities.** The host saves and releases the plugin configuration, unregisters services, HTTP routes, and adapter types, and releases the instance.
 
-The installer resolves the plugin environment’s dependencies together. When loaded dependencies need changes, the host stages a candidate environment and waits for a backend restart. It completes the handoff after the new process confirms successful loading and can recover the old environment on failure. In Runtime mode, the SDK follows the backend source, while installed user plugins live at the installation root and survive backend updates. Desktop application updates, Runtime backend updates, and plugin installation have separate lifecycles. Do not replace host files or change the shared installation environment from plugin code. See [Plugin Center Actions](./frontend.md#plugin-center-actions) for status and restart coordination.
+- **Disable results**
+  - `disabled` indicates successful disabling. You can enable, reload, or uninstall the plugin.
+  - `fault_runtime` indicates a failure during disabling. You can retry enablement, reload, or uninstall. The host runs failure cleanup and records the error.
+  - **Preparation failure.** If the adapter configuration check or `pre_disable()` fails, the host retains the previous state. You can retry disabling after fixing the error.
 
-### Compatibility checks and startup after an update
+## Reload
 
-- **Plugin updates:** resolve against the current host and its locked dependencies, preserving constraints from installed plugins, including disabled ones. The plugin environment must not overwrite host dependencies or the host SDK.
-- **Application updates:** preflight uses the target version's `pyproject.toml`, `uv.lock`, and `.python-version`. A compatible combination may include plugin upgrades. On startup, the host scans metadata without importing old plugin code, prepares and validates the joint environment, then loads and enables plugins according to their saved intent. If preparation fails, preserve the old environment and config for recovery; a successful preflight alone does not mean the new host has started.
-- **Runtime updates:** replacing the Runtime executable has its own version and integrity flow and can run without the backend. Runtime supervises the backend; plugin dependency resolution belongs to the backend host.
+The host imports the current plugin class again. Enabled downstream dependents are disabled during the reload and then enabled again in dependency order.
 
-Under Runtime, core health and business readiness are separate: health can report the process before plugin and configuration preparation finishes. The frontend waits for `businessStatus` before activating business features.
+1. **Prepare to reload.** The host pauses calls to the current plugin and its downstream dependents, waits for in-flight work, and checks whether adapter configuration is in use. It calls `pre_reload()` on an existing instance so the plugin can check whether its current work permits a reload.
+2. **Disable downstream plugins.** The host recursively disables enabled downstream dependents and records the affected plugins and their dependency relationships.
+3. **Reload the plugin.** If an instance exists, the host calls `on_reload()` on it so the plugin can save state across the reload. If the plugin was enabled before the reload, the host disables it. The host then reimports the package, validates the entry point, and records the newly loaded class. It reenables the plugin if it was enabled before the reload.
+4. **Restore downstream plugins.** The host restores the downstream plugins disabled by this operation in upstream-to-downstream order. If a downstream plugin fails to recover, the host marks it as `fault_runtime` and continues with the other branches.
 
-## Background tasks, downloads, and prefetch
+- **Reload results**
+  - `enabled` indicates a successful reload that restored the plugin to an enabled state. You can disable, reload, or uninstall it.
+  - `disabled` indicates a successful reload with the plugin in a disabled state. You can enable, reload, or uninstall it.
+  - `fault_runtime` indicates a failure during reload. You can retry enablement, reload, or uninstall. The host runs failure cleanup and records the error.
+  - **Preparation failure.** If the adapter configuration check or `pre_reload()` fails, the host retains the previous state. You can retry reloading after fixing the error.
 
-Use `self.background_tasks` for plugin-owned asynchronous work. Use [configuration triggers](./schema.md#triggers) for work initiated by settings buttons; the configuration manager owns that execution. Keep blocking work off the event loop. Use the task handle described in [Core Capabilities](./index.md) to wait for or take a plugin-owned result. Keep long-lived tasks within the host lifecycle.
+## Uninstall
 
-Use `auto_mas_core.services.Downloads` for shared file downloads. Construct `DownloadRequest(url=...)`, acquire a reference with `Downloads.request(request, owner=...)`, read the completed snapshot with `await Downloads.wait(request)`, and release the reference with `await Downloads.release(request.cache_key, owner=...)`. The default resource key is the original URL. Use a stable, plugin-namespaced `key` when a signed URL changes. Content identity uses `rid`, then `content_hash`, then no identifier. Supply a distinct identity when changing the content behind one key. Set `downloader` when a resource needs a specific host downloader. Continue to wait only if `request` accepted the reference. Check the snapshot’s state before using its path.
+The host releases plugin runtime resources and removes the distribution, plugin configuration file, and registry entry. The Plugin Center shows which adapter configurations may be affected.
 
-A script adapter can declare an async `ScriptTypeDecl.prefetch_check` that computes a `list[DownloadRequest]` from script configuration. Return an empty list when there is nothing to prefetch. L2 manages the references. L3 checks the requirements again under the config lock and can read the resource-key-to-path mapping from the task’s `prefetch_paths` argument. The mapping is not automatically forwarded to L4. See [Standalone Adapters](../script-adapters/standalone.md) for script integration.
+1. **Prepare to uninstall.** The host pauses calls to the current plugin and its downstream dependents and waits for in-flight work. It calls `pre_unload()` on any existing instance so the plugin can check that files it manages can be cleaned up.
+2. **Unload downstream plugins.** The host follows required service relationships to recursively unload downstream plugins, releasing their runtime resources and removing their registry entries. Distribution and configuration file removal applies to the selected plugin.
+3. **Uninstall the selected plugin.** The host retains a reference to any instance present at the start of the operation. If the plugin was enabled, the host disables it first. If the host retained an instance, it then calls `on_unload()` on it. The plugin can remove resources needed only while it is installed, such as its own caches. Finally, the host releases the plugin class, removes the distribution and configuration file, and removes the registry entry.
+
+- **Uninstall results**
+  - **Success.** The plugin can be installed again from the market.
+  - `fault_load` indicates an error releasing runtime state or removing the distribution or configuration file. The host records the error in the retained registry entry. You can retry uninstalling.
+  - **Preparation failure.** If `pre_unload()` fails, the host reports the error and retains the previous state. You can retry uninstalling after fixing the error.
+
+## Failure Cleanup
+
+When a lifecycle operation enters failure cleanup, the host rolls back registrations and releases resources for the affected plugin.
+
+1. **Roll back host registrations.** The host unregisters services and HTTP routes, releases plugin configuration, and removes the instance's background task group.
+2. **Clean up plugin resources.** When cleanup requires the original instance, the host rolls back any adapter registrations, then calls `on_fail_cleanup(during, lifecycle_context, exc)`. The plugin can release resources it acquired before the operation failed.
+   - `during` identifies the lifecycle stage that failed.
+   - `lifecycle_context` describes the operation's lifecycle context.
+   - `exc` is the exception that triggered cleanup.
+3. **Release the instance and record the error.** The host releases the plugin instance and writes the error to its registry entry.
+
+- **Cleanup result.** The host records the fault state for the operation. See each operation's results for the available next actions.
+
+## Shutdown
+
+The host shuts down enabled plugins in dependency order and saves the configuration for its next startup.
+
+1. **Stop accepting calls.** The host closes service and HTTP call entry points and waits for in-flight calls to finish.
+2. **Shut down downstream plugins first.** The host processes downstream dependents before upstream providers. For each enabled plugin instance, it removes the background task group, then calls `on_teardown()`. The plugin can close external processes, connections, and subscriptions.
+3. **Save configuration.** The host saves configuration as part of backend shutdown and preserves the desired enabled state in each plugin's registry entry.
+
+- **Shutdown results**
+  - **Cleanup completed.** At the next startup, the host loads plugins again and restores the saved enabled selections.
+  - **Cleanup failed.** If a plugin's `on_teardown()` raises an error, the host logs it and continues with the other plugins.

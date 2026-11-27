@@ -372,7 +372,6 @@ Stack Exchange 已经成长到[超过一百个网站](https://stackexchange.com/
 
 ## 如何解读答案
 
-<a id="rtfm"></a>
 ### RTFM 和 STFW：如何知道你已完全搞砸了
 
 有一个古老而神圣的传统：如果你收到`RTFM（Read The Fucking Manual）`的回应，回答者认为你**应该去读他妈的手册**。当然，基本上他是对的，你应该去读一读。
@@ -467,7 +466,7 @@ Jeff Bigler 的观察总结和这个相关也值得一读 (**[tact filters](http
 <a id="q3"></a>
 >问题：如何设定我的 shell 提示？？
 
-回答：如果你有足够的智慧提这个问题，你也该有足够的智慧去 [RTFM](#rtfm)，然后自己去找出来。
+回答：如果你有足够的智慧提这个问题，你也该有足够的智慧去 [RTFM](#rtfm-和-stfw-如何知道你已完全搞砸了)，然后自己去找出来。
 
 <a id="q4"></a>
 > 问题：我可以用 Bass-o-matic 文件转换工具将 AcmeCorp 文件转换为 TeX 格式吗？
@@ -516,7 +515,7 @@ Jeff Bigler 的观察总结和这个相关也值得一读 (**[tact filters](http
 
 > 我可以在哪儿找到关于 Foonly Flurbamatic 的资料？
 
-这种问法无非想得到 [STFW](#rtfm) 这样的回答。
+这种问法无非想得到 [STFW](#rtfm-和-stfw-如何知道你已完全搞砸了) 这样的回答。
 
 **聪明问题**：
 

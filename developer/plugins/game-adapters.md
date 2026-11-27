@@ -37,9 +37,9 @@ class Plugin(GameAdapterPlugin):
 ## 控制设备
 
 1. **建立设备条目**：控制器提供设备枚举、刷新和运行状态。保持同一设备的身份稳定，原有托管和账号才能在刷新后继续使用绑定。
-2. **声明可操作项**：`GameDeviceEntry` 提供 `action.open`、`action.close`、`action.show`、`action.hide`、`action.minimize` 和 `action.maximize` 的处理器。插件实现支持的操作，通过配置字段的[触发器与界面提示](./fundamentals/schema.md#触发器)控制按钮。模拟器可扩展 ADB、维护和环境调整能力。
+2. **声明可操作项**：`GameDeviceEntry` 提供 `action.open`、`action.close`、`action.show`、`action.hide`、`action.minimize` 和 `action.maximize` 的处理器。插件实现支持的操作，通过[触发器字段](../core/config.md#触发器字段)与[界面元数据](../core/config.md#界面元数据)控制按钮。模拟器可扩展 ADB、维护和环境调整能力。
 3. **校验操作请求**：手动触发器传入设备 UUID 和 `TRIGGER_TICKET`，调度任务传入设备订阅票。多个不同按钮可能操作同一设备，控制器负责判断各动作能否执行。
-4. **刷新运行状态**：设备占用或运行状态改变后调用 `runtime_changed()`，使宿主重新读取配置快照。相关界面见[配置界面的实时同步](./fundamentals/frontend.md#配置界面的实时同步)。
+4. **刷新运行状态**：设备占用或运行状态改变后调用 `runtime_changed()`，使宿主重新读取配置快照。相关界面见[配置界面同步机制](../core/config.md#配置界面同步机制)。
 
 ### 调试宿主接口
 

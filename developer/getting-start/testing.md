@@ -71,7 +71,7 @@ uv run --no-sync python scripts/prepare_test_plugins.py
 
 目前面向 `dev` 的 PR 在 CI 中主要校验 E2E 启动器、测试配置隔离与种子数据（详见 [前端检查工作流](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/.github/workflows/format-check.yml)），具体的端到端场景由开发者在本机按改动范围挑选执行。
 
-### 运行方法 {#playwright-运行方法}
+### 运行方法
 
 1. **准备环境**
 
@@ -113,7 +113,7 @@ uv run --no-sync python scripts/prepare_test_plugins.py
 - 编写断言时，从用户操作和最小可观察结果出发，等待界面状态、API 响应或 WebSocket 事件。验证持久化时，可通过比对隔离目录中的配置文件、离开页面再返回，或在需要时重启后端来确认。新增或修改用例后，先制造对应故障确认用例确实会失败，再还原代码重跑通过。
 - 一次性排查脚本留在本地即可；长期保留的用例与 PR 验证记录请遵循[测试提交与维护规范](./development-specifications.md#测试提交与维护规范)。如需协助挑选、运行或整理 E2E 结果，可参考 [mas-e2e](https://github.com/AUTO-MAS-Project/AUTO-MAS/blob/dev/.agents/skills/mas-e2e/SKILL.md)。
 
-## `@real`（本机真实环境测试） {#real}
+## `@real`（本机真实环境测试）
 
 `@real` 是由 PR 作者在自己电脑上运行的端到端测试。它会使用本机已配置好的托管、账号以及实际安装的脚本、游戏和模拟器，通过 AUTO-MAS 公开入口跑通真实调度。
 
@@ -125,7 +125,7 @@ uv run --no-sync python scripts/prepare_test_plugins.py
 
 ### 运行方法
 
-开始前，请先完成 [Playwright 运行方法](#playwright-运行方法) 中的依赖准备，确保系统已安装 PowerShell 7（`pwsh`），并提前在 AUTO-MAS 中配好可正常运行的托管与启用账号（若托管关联了计划或模拟器，也需一并配好）。
+开始前，请先完成 [Playwright 运行方法](#运行方法-1) 中的依赖准备，确保系统已安装 PowerShell 7（`pwsh`），并提前在 AUTO-MAS 中配好可正常运行的托管与启用账号（若托管关联了计划或模拟器，也需一并配好）。
 
 1. **运行单个目标**
 

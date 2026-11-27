@@ -169,7 +169,7 @@ Then change two registrations:
 1. `frontend/src/plugins/scriptAdapters.ts`: import the entry (`import whimbox from '@/views/whimbox/entry'`) and add it to the `adapters` array.
 2. `frontend/src/utils/scriptMetadata.ts`: add a line to `SCRIPT_METADATA`: `Whimbox: SCRIPT_PLUGIN_METADATA.Whimbox`. The create card and the edit page routes both read their metadata from `SCRIPT_METADATA`; without this line they will not appear.
 
-`type` must match the backend's `script_type_key`. The frontend's `ScriptType` comes from the generated `ScriptCreateIn` enum, so OpenAPI must be regenerated while the plugin is enabled for type checking to recognize the key. The entry for creating a managed script is opened according to the types the backend currently has enabled, and the card does not appear when the plugin is not enabled. For an adapter that uses plan tables, add a `plan` section as well; see `frontend/src/views/maa/entry.ts` for how. For more detail, see [Frontend and Backend Integration](../fundamentals/frontend.md).
+`type` must match the backend's `script_type_key`. The frontend's `ScriptType` comes from the generated `ScriptCreateIn` enum, so OpenAPI must be regenerated while the plugin is enabled for type checking to recognize the key. The entry for creating a managed script is opened according to the types the backend currently has enabled, and the card does not appear when the plugin is not enabled. For an adapter that uses plan tables, add a `plan` section as well; see `frontend/src/views/maa/entry.ts` for how. For API generation steps, see [Generate the Frontend API Client](../../core/api.md#generate-the-frontend-api-client).
 
 ## Migrating an Old Built-in Adapter into a Plugin
 

@@ -194,7 +194,7 @@ ScriptConfig（L1）
 
 ### 使用方法
 
-#### 配置节点 | Node {#config-node}
+#### 配置节点 | Node
 
 `ConfigNode` 是配置对象（`ConfigEntry`）和配置集合（`ConfigCollection`）的父类，定义了配置节点通用的方法。
 
@@ -367,7 +367,7 @@ class <配置对象类>(ConfigEntry):
 
 - **构造**
 
-  除[配置节点 | Node](#config-node)中说明的构造方法外，Entry 还可以按分组字段名直接传参构造。
+  除[配置节点 | Node](#配置节点-node)中说明的构造方法外，Entry 还可以按分组字段名直接传参构造。
 
   ```python
   <实例名> = <配置对象类>(<分组字段名>=<分组实例>, ...)
@@ -418,7 +418,7 @@ class <配置对象类>(ConfigEntry):
 
 - **构造**
 
-  除[配置节点 | Node](#config-node)中说明的构造参数外。集合的完整构造还接受以下参数：
+  除[配置节点 | Node](#配置节点-node)中说明的构造参数外。集合的完整构造还接受以下参数：
 
   ```python
   <实例名> = ConfigCollection[<成员类型>].build(

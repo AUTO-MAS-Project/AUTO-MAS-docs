@@ -5,7 +5,7 @@
 ## 选择适配方式
 
 - **独立专项适配**：上游有自己的运行入口、配置和分发，例如 MAA 和奇想盒。后端由[独立专项插件](./standalone.md)提供，专项页面随主程序构建。
-- **主程序内置专项**：需要维护现存内置类型时，从[配置、注册和调度](#built-in-adapters)查找实现。
+- **主程序内置专项**：需要维护现存内置类型时，从[配置、注册和调度](#主程序内置专项)查找实现。
 - **MFW 风味专项**：上游是基于 MaaFramework 项目接口的脚本，通用 MFW 已覆盖导入和执行，专项只需补充个别能力。接入见[风味专项开发](./mfw/develop.md)。
 
 ## 确定适配边界
@@ -17,7 +17,7 @@
 
 具体判据见主程序仓库 `.agents/skills/mas-script-specialized-adapter/references/blackbox-boundary.md`。
 
-## 主程序内置专项 {#built-in-adapters}
+## 主程序内置专项
 
 1. **找到类型注册**：从 `app/task/builtin_registration.py` 和对应的 `app/task/<专项>/registration.py` 查找类型声明。先看最接近的架构，例如 SRC、MaaEnd、General 或 ok-script 家族。
 2. **接入配置与页面**：在托管和账号配置中明确字段的所有者和用途；配置生效规则见[专项配置语义](./config-semantics.md)。同时检查新建入口、编辑页面和路由。后端 Schema 变更后按[前端开发](../../core/api.md)重新生成接口定义。

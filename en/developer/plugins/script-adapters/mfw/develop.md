@@ -392,7 +392,7 @@ From shallow to deep; use the shallower one when it will do:
 
 If you need a slot that does not exist yet: add the name to `MaaFWFlavorSlotContextMap` in `maafwFlavorTypes.ts`, and place `<MaaFWFlavorSlot>` at the corresponding spot in the shared page. Do not write `type === 'X'` branches in shared pages, and do not add boolean switches to the descriptor object; neither has an automated check, and both rely on review.
 
-## When You Need a Plan Table (MSS as the Example) {#plan-table}
+## When You Need a Plan Table (MSS as the Example)
 
 When a flavor needs accounts to reference a plan table that gives a different configuration by weekday or rotation day, beyond the steps above you must do the following extra steps. Each one has matching code in MSS.
 

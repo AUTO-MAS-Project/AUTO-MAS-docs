@@ -11,9 +11,6 @@ function developerSidebar(locale: "zh" | "en"): DefaultTheme.SidebarItem[] {
         link: prefix + path,
     });
 
-    const pluginRuntime = page("宿主与运行机制", "Host and Runtime", "/developer/plugins/fundamentals/runtime");
-    const pluginDevelop = page("开发与调试", "Development and Debugging", "/developer/plugins/fundamentals/develop");
-
     return [
         page("导读", "Developer Guide", "/developer/"),
         {
@@ -43,12 +40,11 @@ function developerSidebar(locale: "zh" | "en"): DefaultTheme.SidebarItem[] {
                     ...page("插件基础", "Plugin Fundamentals", "/developer/plugins/fundamentals/"),
                     collapsed: true,
                     items: [
-                        ...(locale === "zh" ? [pluginDevelop, pluginRuntime] : [pluginRuntime, pluginDevelop]),
-                        page("配置声明", "Configuration Schema", "/developer/plugins/fundamentals/schema"),
-                        page("配置文件与数据", "Configuration Files and Data", "/developer/plugins/fundamentals/config-files"),
-                        page("事件系统", "Event System", "/developer/plugins/fundamentals/event"),
-                        page("服务系统", "Service System", "/developer/plugins/fundamentals/service"),
-                        page("前后端对接", "Frontend and Backend Integration", "/developer/plugins/fundamentals/frontend"),
+                        page("开发与调试", "Development and Debugging", "/developer/plugins/fundamentals/develop"),
+                        page("插件生命周期", "Plugin Lifecycle", "/developer/plugins/fundamentals/runtime"),
+                        page("声明插件能力", "Declare Plugin Capabilities", "/developer/plugins/fundamentals/service"),
+                        page("登记专项适配", "Register Adapter Types", "/developer/plugins/fundamentals/register-adapters"),
+                        page("调用宿主能力", "Use Host Capabilities", "/developer/plugins/fundamentals/host-capabilities"),
                         page("打包与发布", "Packaging and Publishing", "/developer/plugins/fundamentals/publish"),
                     ],
                 },
@@ -58,7 +54,7 @@ function developerSidebar(locale: "zh" | "en"): DefaultTheme.SidebarItem[] {
                     collapsed: true,
                     items: [
                         page("独立脚本插件", "Standalone Script Plugins", "/developer/plugins/script-adapters/standalone"),
-                        page("主程序内置专项", "Built-in Script Adapters", "/developer/plugins/script-adapters/#built-in-adapters"),
+                        page("主程序内置专项", "Built-in Script Adapters", locale === "zh" ? "/developer/plugins/script-adapters/#主程序内置专项" : "/developer/plugins/script-adapters/#built-in-script-adapters"),
                         page("专项配置语义", "Script Configuration Semantics", "/developer/plugins/script-adapters/config-semantics"),
                         {
                             ...page("MFW 风味专项", "MFW Flavor Adapters", locale === "zh" ? "/developer/plugins/script-adapters/mfw/" : "/developer/plugins/script-adapters/mfw/develop"),

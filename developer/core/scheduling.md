@@ -147,118 +147,14 @@ L4 的生命周期由 `app/task/mode_worker.py` 中的 `ModeWorker` 提供，专
 
 ## 查询状态与结果
 
-任务管理器提供当前运行信息和近期终态，历史服务提供已经归档的执行记录。查询当前任务时使用创建任务返回的任务 UUID，查询历史详情和附件时使用历史服务返回的记录 UUID 或附件 UUID。
-
-### 查询运行任务
-
-后端通过 `from app.core import TaskManager` 使用以下方法。HTTP 入口位于 `app/api/dispatch.py`。
-
-- **读取运行快照**
-
-  ```python
-  <运行快照> = TaskManager.get_runtime_snapshot()
-  ```
-
-  - `<运行快照>`：`TaskRuntimeSnapshot`，其中 `tasks` 包含当前运行的任务、各自的任务信息树和日志基线。
-  - HTTP 使用 `GET /api/dispatch/runtime-snapshot`。调度台在首次连接和重连时读取快照。
-
-- **读取完整任务信息树**
-
-  ```python
-  <任务信息树> = TaskManager.get_task(<任务 UUID>)
-  ```
-
-  - `<任务 UUID>`：本次运行的 UUID，可传 UUID 对象或字符串。
-  - `<任务信息树>`：包含完整节点和日志的字典。先查运行中的任务，再查内存保留的近期终态。两处都找不到时返回 `None`。
-  - HTTP 使用 `POST /api/dispatch/get`。请求体含 `taskId` 时查询指定任务，传入空对象 `{}` 时查询当前运行的任务。响应的 `index` 列出任务 UUID，`data` 按任务 UUID 提供对应信息树。
-
-- **读取单次任务的状态摘要**
-
-  ```python
-  <任务状态> = TaskManager.get_task_status(<任务 UUID 字符串>)
-  ```
-
-  - `<任务 UUID 字符串>`：本次运行的 UUID 字符串。
-  - `<任务状态>`：`TaskStatusOut`，包含运行状态、模式、触发原因和结果摘要。未找到指定任务时返回 `None`。
-  - `running`：任务已受理或正在运行。
-  - `success`：任务成功结束。
-  - `error`：任务以异常结束。
-  - `cancelled`：任务已取消。
-  - HTTP 使用 `GET /api/dispatch/task/{task_id}`，适合轮询状态或读取近期终态。状态摘要省去日志内容，找不到任务时响应的业务 `code` 为 `404`。
-
-### 接收运行更新
-
-调度台的运行数据由 `frontend/src/composables/useTaskRuntimeState.ts` 统一维护。它在首次连接和重连时读取 HTTP 快照，通过主 WebSocket 持续接收变化。
-
-- **发现新任务**
-
-  - `task.created`：以 `TaskManager` 为订阅 ID。收到新任务的 UUID 后，开始跟踪该次运行。
-
-- **跟踪指定任务**
-
-  - `task.info.updated`：以任务 UUID 为订阅 ID，更新任务信息树的状态和结构。
-  - `task.log.updated`：以任务 UUID 为订阅 ID，按序号追加或替换日志。缺少日志基线或序号不连续时重新读取快照。
-  - `task.notice`：以任务 UUID 为订阅 ID，接收本次运行中的提示。
-  - `task.completed`：以任务 UUID 为订阅 ID，接收任务终态和结果摘要。
-
-### 查询历史结果
-
-后端通过 `from app.core import History` 读取持久化历史。历史页面的 HTTP 入口位于 `app/api/history.py`。
-
-- **按日期查询记录索引和统计**
-
-  ```python
-  <分组结果> = await History.search(
-      start_date=<开始日期>,
-      end_date=<结束日期>,
-      mode=<分组方式>,
-  )
-  ```
-
-  - `start_date=`、`end_date=`：传入 `date` 对象，起止日期均包含在查询范围内。
-  - `mode=`：指定结果的分组方式。
-  - `"DAILY"`：按日分组。
-  - `"WEEKLY"`：按周分组，以该周周一的日期作为键。
-  - `"MONTHLY"`：按月分组，以该月第一天的日期作为键。
-  - `<分组结果>`：按分组日期和账号名称组织，每组的 `index` 列出记录，`data` 提供汇总统计。后续读取详情时使用索引项的 `id`。
-  - HTTP 使用 `POST /api/history/search`，在请求体中提供 `start_date`、`end_date` 和 `mode`，日期使用 `YYYY-MM-DD` 字符串。
-
-- **按记录 UUID 读取详情**
-
-  ```python
-  <历史详情> = await History.get_detail(record_id=<历史记录 UUID>)
-  ```
-
-  - `record_id=`：历史索引项的 `id`，类型为 UUID。
-  - `<历史详情>`：`HistoryDetail`，包含执行结果、统计、日志正文或不可用原因，以及附件列表。
-  - HTTP 使用 `POST /api/history/detail`，请求体中的 `recordId` 填历史记录 UUID。
-
-- **按附件 UUID 读取文件**
-
-  ```python
-  <附件文件> = await History.get_attachment(attachment_id=<附件 UUID>)
-  ```
-
-  - `attachment_id=`：历史详情的附件列表中，目标附件的 `id`，类型为 UUID。
-  - `<附件文件>`：`HistoryAttachmentFile`，包含附件信息和本地文件路径。
-  - HTTP 使用 `GET /api/history/attachments/{attachment_id}` 获取文件。图片和视频默认以内联方式返回，可传入 `download=true` 下载。
-
-- **读取概览使用的统计**
-
-  ```python
-  <最近托管结果> = await History.get_latest_script_results(script_names=<托管名称列表>)
-  <账号执行概览> = await History.get_overview(day=<查询日期>)
-  ```
-
-  - `script_names=`：按托管名称查找最近一条历史记录，返回对应的执行时间和结果状态。托管状态概览通过 `GET /api/info/scripts/status` 同时提供排期配置和最近结果。
-  - `day=`：传入 `date` 对象，按账号汇总当天的执行次数、异常记录和最近执行时间。代理概览通过 `POST /api/info/get/overview` 返回。
+后端执行链已持有任务节点时，可以按[配置框架](./config.md#配置节点-node)直接读取节点的字段和子集合。前端通过本节的 HTTP 接口获取运行状态和结果。
 
 ### 任务信息树
 
-任务信息树定义在 `app/models/task.py`，用于保存本次任务的执行清单、当前状态和日志。受理时，队列项被解析成托管，`TaskItem` 直接持有各次托管执行。树中的节点复用[配置框架](./config.md)的配置对象、有序集合和虚拟字段，在内存中维护。
+任务信息树定义在 `app/models/task.py`，保存单次任务的执行清单、状态、结果和日志。各节点使用配置对象和有序集合，任务根直接包含本次执行的托管。
 
 ```text
-TaskItem <任务运行 UUID>
+TaskItem <任务 UUID>
 └─ scripts | ConfigCollection[TaskScriptItem]
    └─ TaskScriptItem <托管运行 UUID>
       └─ users | ConfigCollection[TaskUserItem]
@@ -268,27 +164,90 @@ TaskItem <任务运行 UUID>
 ```
 
 - **任务 | `TaskItem`**
-
-  - `info`：保存本次任务的名称、运行模式、触发原因和整轮状态。
-  - `execution`：保存受理时确定的队列运行前脚本、运行后脚本、完成后操作和延迟时间，供本轮执行使用。
-  - `current.index`：当前托管运行节点的 UUID，可以用它在 `scripts` 中查找该节点。尚未选定托管时为 `None`。
-
+  - `info`：本次任务的名称、模式、触发原因和整体状态。
+  - `execution`：受理时确定的运行前后脚本和完成后操作。
+  - `current.index`：当前托管的运行节点 UUID，尚未选定时为 `None`。
+  - `current.log`：当前正在运行的脚本日志，
 - **托管执行 | `TaskScriptItem`**
-
-  - `info`：保存原托管的 `script_id`、专项类型、名称、本次执行状态和传入该节点的参数。
-  - `current.index`：当前账号运行节点的 UUID，可以用它在 `users` 中查找该节点。尚未选定账号时为 `None`。
-  - `current.log`：托管级流程日志，例如等待配置锁或设备时的提示。
-
+  - `info`：原托管 `script_id`、专项类型、名称、本次执行状态和参数。
+  - `current.index`：当前账号的运行节点 UUID，尚未选定时为 `None`。
+  - `current.log`：托管级流程日志，例如等待配置锁或设备的提示。
 - **账号执行 | `TaskUserItem`**
-
-  - `info`：保存原账号的 `user_id`、名称、本次执行状态和传入该节点的参数。打开共享配置时，`user_id` 为 `"default"`。
-  - `logs`：本次账号执行产生的日志记录集合，可以包含多条记录。
-
+  - `info`：原账号 `user_id`、名称、本次执行状态和参数。共享配置会话使用 `"default"`。
+  - `logs`：本次账号执行产生的日志记录集合。
 - **日志记录 | `LogRecord`**
+  - `info`：日志记录的开始时间、阶段和状态说明。
+  - `info.content`：按行保存的日志正文。
 
-  - `info.start_time`、`info.phase`、`info.status`：记录的开始时间、阶段和状态说明。
-  - `info.content`：按行保存的日志正文，使用 `append_content()` 追加。
+`info.result` 是逐级计算的运行结果摘要，账号汇总日志记录，托管汇总账号结果，任务根汇总托管结果和账号完成数。
 
-`scripts`、`users` 和 `logs` 都用运行节点的 `uid` 索引。回查原配置时使用 `info.script_id` 或 `info.user_id`。例如，同一个托管在队列中出现两次，会生成两个 `TaskScriptItem`。它们的 `info.script_id` 相同，各自有独立的 `uid`、状态和日志。
+### 任务信息接口
 
-`info.status` 由执行层更新。`info.result` 是根据下层信息计算的摘要：账号从日志记录生成结果，托管汇总账号结果，任务再汇总各托管结果与账号完成数。专项插件执行链中，任务根的 `current.log` 根据两级 `current.index` 选择当前账号最近一条日志。已选定托管且账号尚无日志时，显示该托管的流程日志。
+接口定义在 `app/api/dispatch.py`。指定任务时使用创建任务接口返回的 `taskId`。完整任务树和状态摘要均可查询内存中保留的近期终态，最多保留 200 条，单条自任务结束起最多保留 30 分钟。
+
+#### 读取完整任务信息树
+
+`POST /api/dispatch/get`
+
+**请求体 | `TaskGetIn`**
+
+```json
+{ "taskId": "<任务 UUID>" }
+```
+
+- `taskId`：可选，省略或传入 `null` 表示查询当前运行的所有任务
+
+  - `<任务 UUID>`：查询该任务的完整信息树，含各节点的日志正文。
+
+**返回体 | `TaskGetOut`**
+
+- `index`：查询结果的索引，每项的 `uid` 是任务 UUID。
+- `data`：以任务 UUID 为键，值为对应的任务信息树。
+- `code`：业务状态码。
+  - `200`：查询成功。
+  - `400`：任务 UUID 格式错误。
+  - `404`：指定的任务已不在运行列表和近期终态中。
+
+#### 读取单个任务状态摘要
+
+`GET /api/dispatch/task/<任务 UUID>`
+
+**请求参数**
+
+- `<任务 UUID>`：必填，指示要查询任务。
+
+**返回体 | `TaskStatusOut`**
+
+- `taskId`：本次查询的任务 UUID。
+- `status`：本次任务的状态。
+  - `running`：任务已受理或正在运行。树中的 `pending` 也映射为此值。
+  - `success`：任务成功结束。
+  - `error`：任务以异常结束。查无任务时也返回此值，通过 `code` 区分。
+  - `cancelled`：任务已取消。
+- `mode`、`trigger`：任务的运行模式和触发原因。
+- `detail`：任务树根节点的结果摘要。
+- `code`：业务状态码。
+  - `200`：查询成功。
+  - `404`：找不到该任务。
+
+#### 读取当前任务快照
+
+调度台在首次连接或恢复连接时使用该接口取得当前运行任务和日志基线。
+
+`GET /api/dispatch/runtime-snapshot`
+
+**请求参数**
+
+无。
+
+**返回体 | `TaskRuntimeSnapshot`**
+
+- `tasks`：当前运行任务的快照列表，每项的主要字段如下
+  - `taskId`：任务 UUID。
+  - `task`：完整的任务信息树。
+  - `mode`、`trigger`：任务的运行模式和触发原因。
+  - `stopping`：任务是否正在停止。
+  - `scripts`：任务关联的托管列表，每项包含原托管 UUID `scriptId` 和专项类型 `scriptType`。
+  - `log`：当前日志正文。当前账号已有日志时可取其最近一条日志记录，也可显示当前托管的流程日志。
+  - `logSeq`：当前日志的基线序号，`null` 表示当前正文无法作为追加基线。
+  - `logFirstLine`：当前日志在来源中的起始行号。

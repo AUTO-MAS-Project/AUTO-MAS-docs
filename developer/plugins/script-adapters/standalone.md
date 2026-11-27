@@ -47,15 +47,15 @@ class Plugin(ScriptAdapterPlugin):
 
 ## 实现配置、调度与接口
 
-1. **声明配置字段**：复用 SDK 的配置节点和 UI 提示。托管、账号引用计划表等宿主配置集合时，在插件的 `pre_enable()` 中绑定配置类的 `related_config`。宿主随后激活领域配置并恢复引用。参见[配置声明](../fundamentals/schema.md)。
+1. **声明配置字段**：复用 SDK 的配置节点和 UI 提示。托管、账号引用计划表等宿主配置集合时，在插件的 `pre_enable()` 中绑定配置类的 `related_config`。宿主随后激活领域配置并恢复引用。参见[配置框架](../../core/config.md)。
 2. **接入任务展开**：按声明的模式展开账号和脚本任务。通过上游入口执行专项操作，在正常结束及异常路径恢复临时配置和资源。配置的生效顺序见[专项配置语义](./config-semantics.md)。
-3. **挂载专用接口**：需要生成前端类型时，将 FastAPI 路由交给 `api_router`。只需通用网关的插件接口可以使用 `@plugin_route`。参见[插件的 HTTP 接口](../fundamentals/frontend.md#插件的-http-接口)。
+3. **挂载专用接口**：需要生成前端类型时，将 FastAPI 路由交给 `api_router`。只需通用网关的插件接口可以使用 `@plugin_route`。参见[接口声明](../fundamentals/service.md#接口声明)。
 
 ## 前端页面
 
 1. **声明页面入口**：在主程序 `frontend/src/views/<专项>/entry.ts` 提供 `ScriptFrontendAdapter`。`pluginId` 使用后端插件 ID，`type` 使用 `script_type_key`。在 `editors` 中登记托管和账号编辑页，按需提供 `routes` 与 `plan`。可参照 `frontend/src/views/maa/entry.ts`。
 2. **登记专项**：将入口加入 `frontend/src/plugins/scriptAdapters.ts` 的 `adapters`，再从 `SCRIPT_PLUGIN_METADATA` 取该类型的元数据登记进 `frontend/src/utils/scriptMetadata.ts`。后端启用类型后，新建托管才会显示其入口。
-3. **生成并验证 API 定义**：启用插件并启动后端，按[前端开发](../../core/api.md)生成接口定义。检查托管新建、编辑、账号编辑以及计划表配置。配置页的其它接入见[前端与后端的对接](../fundamentals/frontend.md)。
+3. **生成并验证 API 定义**：启用插件并启动后端，按[前端开发](../../core/api.md)生成接口定义。检查托管新建、编辑、账号编辑以及计划表配置。
 
 ## 从内置专项迁出
 
@@ -64,7 +64,7 @@ class Plugin(ScriptAdapterPlugin):
 1. **确定发行边界**：明确目标主程序版本和实际发布的最低 SDK 版本，用对应发行包验证。插件从 SDK 导入宿主能力。
 2. **保留配置身份**：保留用于持久化的类型名、UID、顺序和仍有效的字段。必须调整结构时在加载阶段转换，并让已有引用继续指向同一对象。
 3. **登记升级依赖**：在主程序 `app/core/config/plugin_upgrade.py` 的 `_ADAPTER_PLUGINS` 中，将配置索引中的现有托管、计划表类型名映射到插件 ID 和发行包名。支持早期目录格式时同步更新 `required_adapter_plugins()` 的探测范围。宿主根据这些信息在领域配置激活前加载插件。
-4. **切换宿主入口**：移除内置类型注册和重复的专项实现，把调用改到插件声明或[服务](../fundamentals/service.md)。更新静态前端登记，并重新生成 API 定义。
+4. **切换宿主入口**：移除内置类型注册和重复的专项实现，把调用改到插件声明或[服务](../fundamentals/service.md#服务声明)。更新静态前端登记，并重新生成 API 定义。
 5. **按顺序验证与发布**：先交付插件 wheel，再交付移除内置实现的主程序版本。使用脱敏旧配置副本，并移出同 ID 的本地源码，检查启动能加载发行包，重启前后托管、账号和计划表的 UID、顺序、设置及引用都正确。
 
 ## 开发验证

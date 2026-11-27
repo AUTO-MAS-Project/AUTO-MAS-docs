@@ -4,13 +4,13 @@
 >
 > Copyright (C) 2001, 2006, 2014 Eric S. Raymond, Rick Moen.
 
-## Translations {#translations}
+## Translations
 
 Translations: [Brazilo-Portuguese](http://blogofscience.com/perguntas.html), [Chinese (Traditional)](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way), [Czech](http://scientificachievements.com/jak-se-ptat-chytry-zpusob/), [Dutch](http://docs.jaspervries.nl/smart-questions/), [Estonian](http://glory4cars.com/edu/kuidas-esitada-kusimusi-nutikas-viis/), [French](http://www.gnurou.org/documents/smart-questions-fr.html), [Georgian](http://maxo127.narod.ru/Geo/Articles/smart-questions_ge.html), [German](https://www.privatkreditsofort.ch/wie-man-fragen-richtig-stellt/), [Greek](http://www.dionyziz.com/howto-smart-questions-gr/), [Hindi](http://kntuniversity.org/how-to-ask-questions-the-smart-way/), [Hungarian](http://www.forallworld.com/milyen-kerdeseket-okosan/), [Indonesion](https://www.chameleonjohn.com/translations/smart-questions-Indonesian), [Japanese](http://www.ranvis.com/articles/smart-questions.ja.html), [Lithuanian](http://myscres.com/articles/kaip-uzduoti-klausimus-protinga-buda.html), [Polish](http://rtfm.killfile.pl), [Portuguese](https://www.homeyou.com/~edu/perguntar-de-forma-inteligente), [Russian](http://maddog.sitengine.ru/smart-question-ru.html), [Spanish](http://www.sindominio.net/ayuda/preguntas-inteligentes.html), [Ukrainian](http://eustudiesweb.com/yak-staviti-zapitannya-rozumno/), [Uzbek](http://www.bestcarzin.com/blog/smart-questions-uzb/).
 
 If you want to copy, mirror, translate, or excerpt this document, please see my [copying policy](http://www.catb.org/~esr/copying.html).
 
-## Disclaimer {#disclaimer}
+## Disclaimer
 
 Many project websites link to this document in their sections on how to get help. That's fine, it's the use we intended — but if you are a webmaster creating such a link for your project page, please display prominently near the link notice that *we are not a help desk for your project!*
 
@@ -18,7 +18,7 @@ We have learned the hard way that without such a notice, we will repeatedly be p
 
 If you're reading this document because you need help, and you walk away with the impression you can get it directly from the authors of this document, *you* are one of the idiots we are talking about. Don't ask *us* questions. We'll just ignore you. We are here to show you how to get help from people who actually know about the software or hardware you're dealing with, but 99.9% of the time that will not be us. Unless you know for *certain* that one of the authors is an expert on what you're dealing with, leave us alone and everybody will be happier.
 
-## Introduction {#intro}
+## Introduction
 
 In the world of [hackers](http://www.catb.org/~esr/faqs/hacker-howto.html), the kind of answers you get to your technical questions depends as much on the way you ask the questions as on the difficulty of developing the answer. This guide will teach you how to ask questions in a way more likely to get you a satisfactory answer.
 
@@ -42,7 +42,7 @@ If you decide to come to us for help, you don't want to be one of the losers. Yo
 
 (Improvements to this guide are welcome. You can mail suggestions to [esr@thyrsus.com](mailto:esr@thyrsus.com) or [respond-auto@linuxmafia.com](mailto:respond-auto@linuxmafia.com). Note however that this document is not intended to be a general guide to [netiquette](http://www.ietf.org/rfc/rfc1855.txt), and we will generally reject suggestions that are not specifically related to eliciting useful answers in a technical forum.)
 
-## Before You Ask {#before}
+## Before You Ask
 
 Before asking a technical question by e-mail, or in a newsgroup, or on a website chat board, do the following:
 
@@ -68,9 +68,9 @@ Never assume you are *entitled* to an answer. You are not; you aren't, after all
 
 On the other hand, making it clear that you are able and willing to help in the process of developing the solution is a very good start. “Would someone provide a pointer?”, “What is my example missing?”, and “What site should I have checked?” are more likely to get answered than “Please post the exact procedure I should use.” because you're making it clear that you're truly willing to complete the process if someone can just point you in the right direction.
 
-## When You Ask {#asking}
+## When You Ask
 
-### Choose your forum carefully {#forum}
+### Choose your forum carefully
 
 Be sensitive in choosing where you ask your question. You are likely to be ignored, or written off as a loser, if you:
 
@@ -95,7 +95,7 @@ In general, questions to a well-selected public forum are more likely to get use
 
 Understandably, skilled hackers and authors of popular software are already receiving more than their fair share of mis-targeted messages. By adding to the flood, you could in extreme cases even be the straw that breaks the camel's back — quite a few times, contributors to popular projects have withdrawn their support because collateral damage in the form of useless e-mail traffic to their personal accounts became unbearable.
 
-### Stack Overflow {#stackoverflow}
+### Stack Overflow
 
 Search, *then* ask on Stack Exchange
 
@@ -113,7 +113,7 @@ Stack Exchange has grown to [over 100 sites](http://stackexchange.com/sites), bu
 
 Several projects have their own specific sites, including Android, Ubuntu, TeX/LaTeX, and SharePoint. Check the Stack Exchange site for an up-to-date list.
 
-### Web and IRC forums {#usefora}
+### Web and IRC forums
 
 Your local user group, or your Linux distribution, may advertise a Web forum or IRC channel where newbies can get help. (In non-English-speaking countries newbie forums are still more likely to be mailing lists.) These are good first places to ask, especially if you think you may have tripped over a relatively simple or common problem. An advertised IRC channel is an open invitation to ask questions there and often get answers in real time.
 
@@ -125,7 +125,7 @@ There is an increasing tendency for projects to do user support over a Web forum
 
 In IRC, it's probably best not to dump a long problem description on the channel first thing; some people interpret this as channel-flooding. Best to utter a one-line problem description in a way pitched to start a conversation on the channel.
 
-### As a second step, use project mailing lists {#uselists}
+### As a second step, use project mailing lists
 
 When a project has a development mailing list, write to the mailing list, not to individual developers, even if you believe you know who can best answer your question. Check the documentation of the project and its homepage for the address of a project mailing list, and use it. There are several good reasons for this policy:
 
@@ -140,7 +140,7 @@ However, if you are *sure* your question is non-trivial, and you get no answer i
 
 If you cannot find a project's mailing list address, but only see the address of the maintainer of the project, go ahead and write to the maintainer. But even in that case, don't assume that the mailing list doesn't exist. Mention in your e-mail that you tried and could not find the appropriate mailing list. Also mention that you don't object to having your message forwarded to other people. (Many people believe that private e-mail should remain private, even if there is nothing secret in it. By allowing your message to be forwarded you give your correspondent a choice about how to handle your e-mail.)
 
-### Use meaningful, specific subject headers {#bespecific}
+### Use meaningful, specific subject headers
 
 On mailing lists, newsgroups or Web forums, the subject header is your golden opportunity to attract qualified experts' attention in around 50 characters or fewer. Don't waste it on babble like “Please help me” (let alone “PLEASE HELP ME!!!!”; messages with subjects like that get discarded by reflex). Don't try to impress us with the depth of your anguish; use the space for a super-concise problem description instead.
 
@@ -170,13 +170,13 @@ Changing the subject is not sufficient. Mutt, and probably other mail readers, l
 
 On Web forums the rules of good practice are slightly different, because messages are usually much more tightly bound to specific discussion threads and often invisible outside those threads. Changing the subject when asking a question in reply is not essential. Not all forums even allow separate subject lines on replies, and nearly nobody reads them when they do. However, asking a question in a reply is a dubious practice in itself, because it will only be seen by those who are watching this thread. So, unless you are sure you *want* to ask only the people currently active in the thread, start a new one.
 
-### Make it easy to reply {#easyreply}
+### Make it easy to reply
 
 Finishing your query with “Please send your reply to... ” makes it quite unlikely you will get an answer. If you can't be bothered to take even the few seconds required to set up a correct Reply-To header in your mail agent, we can't be bothered to take even a few seconds to think about your problem. If your mail program doesn't permit this, [get a better mail program](http://linuxmafia.com/faq/Mail/muas.html). If your operating system doesn't support any e-mail programs that permit this, get a better operating system.
 
 In Web forums, asking for a reply by e-mail is outright rude, unless you believe the information may be sensitive (and somebody will, for some unknown reason, let you but not the whole forum know it). If you want an e-mail copy when somebody replies in the thread, request that the Web forum send it; this feature is supported almost everywhere under options like “watch this thread”, “send e-mail on answers”, etc.
 
-### Write in clear, grammatical, correctly-spelled language {#writewell}
+### Write in clear, grammatical, correctly-spelled language
 
 We've found by experience that people who are careless and sloppy writers are usually also careless and sloppy at thinking and coding (often enough to bet on, anyway). Answering questions for careless and sloppy thinkers is not rewarding; we'd rather spend our time elsewhere.
 
@@ -195,7 +195,7 @@ If you are writing in English but it is a second language for you, it is good fo
 - I am familiar with the technical terms, but some slang expressions and idioms are difficult for me.
 - I've posted my question in $LANGUAGE and English. I'll be glad to translate responses, if you only use one or the other.
 
-### Send questions in accessible, standard formats {#formats}
+### Send questions in accessible, standard formats
 
 If you make your question artificially hard to read, it is more likely to be passed over in favor of one that isn't. So:
 
@@ -210,7 +210,7 @@ If you make your question artificially hard to read, it is more likely to be pas
 
 If you're using a graphical-user-interface mail client such as Netscape Messenger, MS Outlook, or their ilk, beware that it may violate these rules when used with its default settings. Most such clients have a menu-based “View Source” command. Use this on something in your sent-mail folder, verifying sending of plain text without unnecessary attached crud.
 
-### Be precise and informative about your problem {#beprecise}
+### Be precise and informative about your problem
 
 - Describe the symptoms of your problem or bug carefully and clearly.
 - Describe the environment in which it occurs (machine, OS, application, whatever). Provide your vendor's distribution and release level (e.g.: “Fedora Core 7”, “Slackware 9.1”, etc.).
@@ -225,23 +225,23 @@ Giving hackers the ability to reproduce the problem in a controlled environment 
 
 Simon Tatham has written an excellent essay entitled [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html). I strongly recommend that you read it.
 
-### Volume is not precision {#volume}
+### Volume is not precision
 
 You need to be precise and informative. This end is not served by simply dumping huge volumes of code or data into a help request. If you have a large, complicated test case that is breaking a program, try to trim it and make it as small as possible.
 
 This is useful for at least three reasons. One: being seen to invest effort in simplifying the question makes it more likely you'll get an answer, Two: simplifying the question makes it more likely you'll get a *useful* answer. Three: In the process of refining your bug report, you may develop a fix or workaround yourself.
 
-### Don't rush to claim that you have found a bug {#idm368}
+### Don't rush to claim that you have found a bug
 
 When you are having problems with a piece of software, don't claim you have found a bug unless you are very, *very* sure of your ground. Hint: unless you can provide a source-code patch that fixes the problem, or a regression test against a previous version that demonstrates incorrect behavior, you are probably not sure enough. This applies to webpages and documentation, too; if you have found a documentation “bug”, you should supply replacement text and which pages it should go on.
 
-Remember, there are many other users that are not experiencing your problem. Otherwise you would have learned about it while reading the documentation and searching the Web (you did do that before complaining, [didn't you](#before)?). This means that very probably it is you who are doing something wrong, not the software.
+Remember, there are many other users that are not experiencing your problem. Otherwise you would have learned about it while reading the documentation and searching the Web (you did do that before complaining, [didn't you](#before-you-ask)?). This means that very probably it is you who are doing something wrong, not the software.
 
 The people who wrote the software work very hard to make it work as well as possible. If you claim you have found a bug, you'll be impugning their competence, which may offend some of them even if you are correct. It's especially undiplomatic to yell “bug” in the Subject line.
 
 When asking your question, it is best to write as though you assume *you* are doing something wrong, even if you are privately pretty sure you have found an actual bug. If there really is a bug, you will hear about it in the answer. Play it so the maintainers will want to apologize to you if the bug is real, rather than so that you will owe them an apology if you have messed up.
 
-### Grovelling is not a substitute for doing your homework {#idm379}
+### Grovelling is not a substitute for doing your homework
 
 Some people who get that they shouldn't behave rudely or arrogantly, demanding an answer, retreat to the opposite extreme of grovelling. “I know I'm just a pathetic newbie loser, but...”. This is distracting and unhelpful. It's especially annoying when it's coupled with vagueness about the actual problem.
 
@@ -249,7 +249,7 @@ Don't waste your time, or ours, on crude primate politics. Instead, present the 
 
 Sometimes Web forums have separate places for newbie questions. If you feel you do have a newbie question, just go there. But don't grovel there either.
 
-### Describe the problem's symptoms, not your guesses {#symptoms}
+### Describe the problem's symptoms, not your guesses
 
 It's not useful to tell hackers what you think is causing your problem. (If your diagnostic theories were such hot stuff, would you be consulting others for help?) So, make sure you're telling them the raw symptoms of what goes wrong, rather than your interpretations and theories. Let them do the interpretation and diagnosis. If you feel it's important to state your guess, clearly label it as such and describe why that answer isn't working for you.
 
@@ -263,7 +263,7 @@ My home-built K6/233 on an FIC-PA2007 motherboard (VIA Apollo VP2 chipset) with 
 
 Since the preceding point seems to be a tough one for many people to grasp, here's a phrase to remind you: "All diagnosticians are from Missouri." That US state's official motto is "Show me" (earned in 1899, when Congressman Willard D. Vandiver said "I come from a country that raises corn and cotton and cockleburs and Democrats, and frothy eloquence neither convinces nor satisfies me. I'm from Missouri. You've got to show me.") In diagnosticians' case, it's not a matter of skepticism, but rather a literal, functional need to see whatever is as close as possible to the same raw evidence that you see, rather than your surmises and summaries. Show us.
 
-### Describe your problem's symptoms in chronological order {#chronology}
+### Describe your problem's symptoms in chronological order
 
 The clues most useful in figuring out something that went wrong often lie in the events immediately prior. So, your account should describe precisely what you did, and what the machine and software did, leading up to the blowup. In the case of command-line processes, having a session log (e.g., using the script utility) and quoting the relevant twenty or so lines is very useful.
 
@@ -271,7 +271,7 @@ If the program that blew up on you has diagnostic options (such as -v for verbos
 
 If your account ends up being long (more than about four paragraphs), it might be useful to succinctly state the problem up top, then follow with the chronological tale. That way, hackers will know what to watch for in reading your account.
 
-### Describe the goal, not the step {#goal}
+### Describe the goal, not the step
 
 If you are trying to find out how to do something (as opposed to reporting a bug), begin by describing the goal. Only then describe the particular step towards it that you are blocked on.
 
@@ -287,7 +287,7 @@ I'm trying to replace the color table on an image with values of my choosing. Ri
 
 The second version of the question is smart. It allows an answer that suggests a tool better suited to the task.
 
-### Don't ask people to reply by private e-mail {#noprivate}
+### Don't ask people to reply by private e-mail
 
 Hackers believe solving problems should be a public, transparent process during which a first try at an answer can and should be corrected if someone more knowledgeable notices that it is incomplete or incorrect. Also, helpers get some of their reward for being respondents from being seen to be competent and knowledgeable by their peers.
 
@@ -295,7 +295,7 @@ When you ask for a private reply, you are disrupting both the process and the re
 
 There is one limited exception to this rule. If you think the question is such that you are likely to get many answers that are all closely similar, then the magic words are “e-mail me and I'll summarize the answers for the group”. It is courteous to try and save the mailing list or newsgroup a flood of substantially identical postings — but you have to keep the promise to summarize.
 
-### Be explicit about your question {#explicit}
+### Be explicit about your question
 
 Open-ended questions tend to be perceived as open-ended time sinks. Those people most likely to be able to give you a useful answer are also the busiest people (if only because they take on the most work themselves). People like that are allergic to open-ended time sinks, thus they tend to be allergic to open-ended questions.
 
@@ -305,29 +305,29 @@ To understand the world the experts live in, think of expertise as an abundant r
 
 So it is useful to frame your question to minimize the time commitment required for an expert to field it — but this is often not the same thing as simplifying the question. Thus, for example, “Would you give me a pointer to a good explanation of X?” is usually a smarter question than “Would you explain X, please?”. If you have some malfunctioning code, it is usually smarter to ask for someone to explain what's wrong with it than it is to ask someone to fix it.
 
-### When asking about code {#code}
+### When asking about code
 
 Don't ask others to debug your broken code without giving a hint what sort of problem they should be searching for. Posting a few hundred lines of code, saying "it doesn't work", will get you ignored. Posting a dozen lines of code, saying "after line 7 I was expecting to see `<x>`, but `<y>` occurred instead" is much more likely to get you a response.
 
-The most effective way to be precise about a code problem is to provide a minimal bug-demonstrating test case. What's a minimal test case? It's an illustration of the problem; just enough code to exhibit the undesirable behavior and no more. How do you make a minimal test case? If you know what line or section of code is producing the problematic behavior, make a copy of it and add just enough supporting code to produce a complete example (i.e. enough that the source is acceptable to the compiler/interpreter/whatever application processes it). If you can't narrow it down to a particular section, make a copy of the source and start removing chunks that don't affect the problematic behavior. The smaller your minimal test case is, the better (see [the section called “Volume is not precision”](#volume)).
+The most effective way to be precise about a code problem is to provide a minimal bug-demonstrating test case. What's a minimal test case? It's an illustration of the problem; just enough code to exhibit the undesirable behavior and no more. How do you make a minimal test case? If you know what line or section of code is producing the problematic behavior, make a copy of it and add just enough supporting code to produce a complete example (i.e. enough that the source is acceptable to the compiler/interpreter/whatever application processes it). If you can't narrow it down to a particular section, make a copy of the source and start removing chunks that don't affect the problematic behavior. The smaller your minimal test case is, the better (see [the section called “Volume is not precision”](#volume-is-not-precision)).
 
 Generating a really small minimal test case will not always be possible, but trying to is good discipline. It may help you learn what you need to solve the problem on your own — and even when it doesn't, hackers like to see that you have tried. It will make them more cooperative.
 
 If you simply want a code review, say as much up front, and be sure to mention what areas you think might particularly need review and why.
 
-### Don't post homework questions {#homework}
+### Don't post homework questions
 
 Hackers are good at spotting homework questions; most of us have done them ourselves. Those questions are for *you* to work out, so that you will learn from the experience. It is OK to ask for hints, but not for entire solutions.
 
 If you suspect you have been passed a homework question, but can't solve it anyway, try asking in a user group forum or (as a last resort) in a “user” list/forum of a project. While the hackers *will* spot it, some of the advanced users may at least give you a hint.
 
-### Prune pointless queries {#prune}
+### Prune pointless queries
 
 Resist the temptation to close your request for help with semantically-null questions like “Can anyone help me?” or “Is there an answer?” First: if you've written your problem description halfway competently, such tacked-on questions are at best superfluous. Second: because they are superfluous, hackers find them annoying — and are likely to return logically impeccable but dismissive answers like “Yes, you can be helped” and “No, there is no help for you.”
 
 In general, asking yes-or-no questions is a good thing to avoid unless you want a [yes-or-no answer](http://homepage.ntlworld.com./jonathan.deboynepollard/FGA/questions-with-yes-or-no-answers.html).
 
-### Don't flag your question as “Urgent”, even if it is for you {#urgent}
+### Don't flag your question as “Urgent”, even if it is for you
 
 That's your problem, not ours. Claiming urgency is very likely to be counter-productive: most hackers will simply delete such messages as rude and selfish attempts to elicit immediate and special attention. Furthermore, the word 'Urgent' (and other similar attempts to grab attention in the subject line) often triggers spam filters - your intended recipients might never see it at all!
 
@@ -337,7 +337,7 @@ This is a very risky thing to do, however, because the hackers' metric for what 
 
 If you find this mysterious, re-read the rest of this how-to repeatedly until you understand it before posting anything at all.
 
-### Courtesy never hurts, and sometimes helps {#courtesy}
+### Courtesy never hurts, and sometimes helps
 
 Be courteous. Use “Please” and “Thanks for your attention” or “Thanks for your consideration”. Make it clear you appreciate the time people spend helping you for free.
 
@@ -347,7 +347,7 @@ However, if you've got your technical ducks in a row, politeness does increase y
 
 (We must note that the only serious objection we've received from veteran hackers to this HOWTO is with respect to our previous recommendation to use “Thanks in advance”. Some hackers feel this connotes an intention not to thank anybody afterwards. Our recommendation is to either say “Thanks in advance” first *and* thank respondents afterwards, or express courtesy in a different way, such as by saying “Thanks for your attention” or “Thanks for your consideration”.)
 
-### Follow up with a brief note on the solution {#followup}
+### Follow up with a brief note on the solution
 
 Send a note after the problem has been solved to all who helped you; let them know how it came out and thank them again for their help. If the problem attracted general interest in a mailing list or newsgroup, it's appropriate to post the followup there.
 
@@ -365,9 +365,9 @@ Consider how you might be able to prevent others from having the same problem in
 
 Among hackers, this sort of good followup behavior is actually more important than conventional politeness. It's how you get a reputation for playing well with others, which can be a very valuable asset.
 
-## How To Interpret Answers {#answers}
+## How To Interpret Answers
 
-### RTFM and STFW: How To Tell You've Seriously Screwed Up {#rtfm}
+### RTFM and STFW: How To Tell You've Seriously Screwed Up
 
 There is an ancient and hallowed tradition: if you get a reply that reads “RTFM”, the person who sent it thinks you should have Read The Fucking Manual. He or she is almost certainly right. Go read it.
 
@@ -379,13 +379,13 @@ Often, the person telling you to do a search has the manual or the web page with
 
 You shouldn't be offended by this; by hacker standards, your respondent is showing you a rough kind of respect simply by not ignoring you. You should instead be thankful for this grandmotherly kindness.
 
-### If you don't understand... {#lesser}
+### If you don't understand...
 
 If you don't understand the answer, do not immediately bounce back a demand for clarification. Use the same tools that you used to try and answer your original question (manuals, FAQs, the Web, skilled friends) to understand the answer. Then, if you still need to ask for clarification, exhibit what you have learned.
 
 For example, suppose I tell you: “It sounds like you've got a stuck zentry; you'll need to clear it.” Then: here's a *bad* followup question: “What's a zentry?” Here's a *good* followup question: “OK, I read the man page and zentries are only mentioned under the -z and -p switches. Neither of them says anything about clearing zentries. Is it one of these or am I missing something here?”
 
-### Dealing with rudeness {#keepcool}
+### Dealing with rudeness
 
 Much of what looks like rudeness in hacker circles is not intended to give offense. Rather, it's the product of the direct, cut-through-the-bullshit communications style that is natural to people who are more concerned about solving problems than making others feel warm and fuzzy.
 
@@ -399,7 +399,7 @@ Jeff Bigler's observations about [tact filters](http://www.mit.edu/~jcb/tact.htm
 
 In the next section, we'll talk about a different issue; the kind of “rudeness” you'll see when *you* misbehave.
 
-## On Not Reacting Like A Loser {#not_losing}
+## On Not Reacting Like A Loser
 
 Odds are you'll screw up a few times on hacker community forums — in ways detailed in this article, or similar. And you'll be told exactly how you screwed up, possibly with colourful asides. In public.
 
@@ -421,7 +421,7 @@ These flamers are either lamers who don't have a clue but believe themselves to 
 
 Don't let yourself be drawn into a flamewar, either. Most flames are best ignored — after you've checked whether they are really flames, not pointers to the ways in which you have screwed up, and not cleverly ciphered answers to your real question (this happens as well).
 
-## Questions Not To Ask {#classic}
+## Questions Not To Ask
 
 Here are some classic stupid questions, and what hackers are thinking when they don't answer them.
 
@@ -459,7 +459,7 @@ Here are some classic stupid questions, and what hackers are thinking when they 
 
 **Q:** How can I configure my shell prompt?
 
-**A:** If you're smart enough to ask this question, you're smart enough to [RTFM](#rtfm) and find out yourself.
+**A:** If you're smart enough to ask this question, you're smart enough to [RTFM](#rtfm-and-stfw-how-to-tell-you-ve-seriously-screwed-up) and find out yourself.
 
 <a id="idm568"></a><a id="idm569"></a>
 
@@ -505,13 +505,13 @@ Note: questions about installing Linux may be appropriate if you're on a forum o
 
 **A:** You're a lowlife for wanting to do such things and a moron for asking a hacker to help you.
 
-## Good and Bad Questions {#examples}
+## Good and Bad Questions
 
 Finally, I'm going to illustrate how to ask questions in a smart way by example; pairs of questions about the same problem, one asked in a stupid way and one in a smart way.
 
 **Stupid:** Where can I find out stuff about the Foonly Flurbamatic?
 
-This question just begs for ["STFW"](#rtfm) as a reply.
+This question just begs for ["STFW"](#rtfm-and-stfw-how-to-tell-you-ve-seriously-screwed-up) as a reply.
 
 **Smart:** I used Google to try to find “Foonly Flurbamatic 2600” on the Web, but I got no useful hits. Can I get a pointer to programming information on this device?
 
@@ -543,7 +543,7 @@ Afterwards, when I thanked everyone and remarked how well the process had worked
 
 Hackers are in some ways a very ruthless meritocracy; I'm certain he was right, and that if I *had* behaved like a sponge I would have been flamed or ignored no matter who I was. His suggestion that I write up the whole incident as instruction to others led directly to the composition of this guide.
 
-## If You Can't Get An Answer {#idm659}
+## If You Can't Get An Answer
 
 If you can't get an answer, please don't take it personally that we don't feel we can help you. Sometimes the members of the asked group may simply not know the answer. No response is not the same as being ignored, though admittedly it's hard to spot the difference from outside.
 
@@ -557,7 +557,7 @@ There are also plenty of commercial companies you can contract with for help, bo
 
 For popular software like Linux, there are at least 10,000 users per developer. It's just not possible for one person to handle the support calls from over 10,000 users. Remember that even if you have to pay for support, you are still paying much less than if you had to buy the software as well (and support for closed-source software is usually more expensive and less competent than support for open-source software).
 
-## How To Answer Questions in a Helpful Way {#idm667}
+## How To Answer Questions in a Helpful Way
 
 *Be gentle.* Problem-related stress can make people seem rude or stupid even when they're not.
 
@@ -579,12 +579,12 @@ Answer the actual question! If the querent has been so thorough as to do his or 
 
 If you did research to answer the question, *demonstrate your skills rather than writing as though you pulled the answer out of your butt.* Answering one good question is like feeding a hungry person one meal, but teaching them research skills by example is showing them how to grow food for a lifetime.
 
-## Related Resources {#idm690}
+## Related Resources
 
 If you need instruction in the basics of how personal computers, Unix, and the Internet work, see [The Unix and Internet Fundamentals HOWTO](http://en.tldp.org/HOWTO/Unix-and-Internet-Fundamentals-HOWTO/).
 
 When you release software or write patches for software, try to follow the guidelines in the [Software Release Practice HOWTO](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/index.html).
 
-## Acknowledgements {#idm696}
+## Acknowledgements
 
 Evelyn Mitchell contributed some example stupid questions and inspired the “How To Give A Good Answer” section. Mikhail Ramendik contributed some particularly valuable suggestions for improvements.
