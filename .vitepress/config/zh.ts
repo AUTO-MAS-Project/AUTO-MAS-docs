@@ -39,6 +39,7 @@ export const zhThemeConfig = {
                             { text: "模拟器管理", link: "/docs/advanced-features/emulator" },
                             { text: "桌面分身", link: "/docs/advanced-features/desktop-session" },
                             { text: "推送通知", link: "/docs/advanced-features/notification" },
+                            { text: "QQ 机器人主动操作", link: "/docs/advanced-features/notification#qq-bot-commands" },
                             { text: "失败回放", link: "/docs/advanced-features/failure-replay" },
                             { text: "MCP 服务", link: "/docs/advanced-features/mcp" },
                             { text: "自定义外观包", link: "/docs/advanced-features/appearance" },
